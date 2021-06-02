@@ -1,0 +1,68 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="LoginTextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="boxStrokeColor">#00848d</item>
+        <item name="boxStrokeWidth">2dp</item>
+    </style>
+
+    <style name="subtext_style" parent="@android:style/TextAppearance.Small">
+        <item name="android:fontFamily">@font/arimo_bold</item>
+        <item name="android:textSize">@dimen/medium_text_low</item>
+        <item name="android:textColor">@color/txt_sub_color</item>
+    </style>
+
+
+    //use for button and sub text
+
+    <style name="style_sec" parent="@android:style/TextAppearance.Small">
+        <item name="android:fontFamily">@font/arimo_bold</item>
+        <item name="android:textSize">@dimen/large_sec_text</item>
+        <item name="android:color">@color/txt_sub_color</item>
+    </style>
+
+
+    <style name="style_sec_sec" parent="@android:style/TextAppearance.Small">
+        <item name="android:fontFamily">@font/arimo_regular</item>
+        <item name="android:textSize">@dimen/large_sec_text</item>
+        <item name="android:color">@color/txt_sub_color</item>
+        <item name="android:inputType">none</item>
+    </style>
+
+    //13,bold
+
+    <style name="style_thrid" parent="@android:style/TextAppearance.Small">
+        <item name="android:fontFamily">@font/arimo_regular</item>
+        <item name="android:textSize">@dimen/medium_txt</item>
+        <item name="android:color">@color/txt_sub_color</item>
+    </style>
+
+    <style name="style_thrid_thrd" parent="@android:style/TextAppearance.Small">
+        <item name="android:fontFamily">@font/arimo_regular</item>
+        <item name="android:textSize">@dimen/medium_txt</item>
+        <item name="android:color">@color/txt_sub_color</item>
+    </style>
+
+    <style name="style_forth_frth" parent="@android:style/TextAppearance.Small">
+        <item name="android:fontFamily">@font/arimo_regular</item>
+        <item name="android:textSize">@dimen/medium_txt_low</item>
+        <item name="android:color">@color/txt_sub_color</item>
+    </style>
+
+    <style name="style_fifth_fth" parent="@android:style/TextAppearance.Small">
+        <item name="android:fontFamily">@font/arimo_regular</item>
+        <item name="android:textSize">@dimen/low_text</item>
+        <item name="android:color">@color/txt_sub_color</item>
+    </style>
+
+
+    <style name="HelperTextAppearance" parent="TextAppearance.AppCompat">
+        <item name="android:background">@drawable/text_background</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+</resources>
+
+
+
