@@ -7,5 +7,5 @@
     <color name="text_color">#90ffffff</color>
     <color name="base_color">#42A4E4</color>
     <color name="txt_sub_color">#8C9293</color>
-
+    <color name="body_font_color">#737D7E</color>
 </resources>

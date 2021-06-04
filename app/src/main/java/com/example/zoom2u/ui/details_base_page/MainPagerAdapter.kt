@@ -1,4 +1,4 @@
-package com.example.zoom2u.ui.buttom_base_page
+package com.example.zoom2u.ui.details_base_page
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager

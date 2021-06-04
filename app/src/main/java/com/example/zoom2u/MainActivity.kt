@@ -1,4 +1,4 @@
-package com.example.zoom2u.ui
+package com.example.zoom2u
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,4 +9,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
     }
+
+
+
 }

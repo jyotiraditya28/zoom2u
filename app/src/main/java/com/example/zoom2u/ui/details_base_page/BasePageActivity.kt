@@ -1,4 +1,4 @@
-package com.example.zoom2u.ui.buttom_base_page
+package com.example.zoom2u.ui.details_base_page
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,7 +10,7 @@ import com.example.zoom2u.R
 import com.example.zoom2u.databinding.ActivityBasepageBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class BasepageActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItemSelectedListener {
+class BasePageActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItemSelectedListener {
     lateinit var binding:ActivityBasepageBinding
     private lateinit var mainPagerAdapter: MainPagerAdapter
 
@@ -21,7 +21,12 @@ class BasepageActivity : AppCompatActivity(),  BottomNavigationView.OnNavigation
 
         mainPagerAdapter = MainPagerAdapter(supportFragmentManager)
 
-        mainPagerAdapter.setItems(arrayListOf(MainScreen.LOGS, MainScreen.PROGRESS, MainScreen.PROFILE,MainScreen.WORK))
+        mainPagerAdapter.setItems(arrayListOf(
+            MainScreen.LOGS,
+            MainScreen.PROGRESS,
+            MainScreen.PROFILE,
+            MainScreen.WORK
+        ))
 
         val defaultScreen = MainScreen.LOGS
         scrollToScreen(defaultScreen)

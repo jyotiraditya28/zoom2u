@@ -1,4 +1,4 @@
-package com.example.zoom2u.ui.buttom_base_page.home_page
+package com.example.zoom2u.ui.details_base_page.home.home_fragment
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.zoom2u.databinding.IconItemBinding
 
 class IconAdpter(val context :Context,private val dataList: List<Icon>) : RecyclerView.Adapter<IconAdpter.BindingViewHolder>() {
-//snxon
+
     override fun getItemCount(): Int {
         return dataList.size
     }

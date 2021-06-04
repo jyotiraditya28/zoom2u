@@ -9,17 +9,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Zoom2u">
-        <activity android:name=".ui.buttom_base_page.BasepageActivity">
+        <activity android:name=".ui.log_in.LogInActivity"></activity>
+        <activity android:name=".ui.sign_up.SignUpActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-
         </activity>
-        <activity android:name=".ui.MainActivity" />
-        <activity android:name=".ui.log_in.Log_in_activity" />
-        <activity android:name=".ui.sign_up.Sign_up_activity" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <activity android:name=".ui.details_base_page.home.pricing_payment.PricingPaymentActivity" />
+        <activity android:name=".ui.details_base_page.home.map_page.MapActivity" />
+        <activity android:name=".ui.details_base_page.home.delivery_details.DeliveryDetailsActivity" />
+        <activity android:name=".ui.details_base_page.BasePageActivity"></activity>
+        <activity android:name=".MainActivity" />
     </application>
 
 </manifest>
