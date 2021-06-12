@@ -7,7 +7,6 @@
     </style>
 
 
-
     <style name="style_15_bold" parent="@android:style/TextAppearance.Small">
         <item name="android:fontFamily">@font/arimo_bold</item>
         <item name="android:textSize">@dimen/large_sec_text</item>
@@ -61,6 +60,18 @@
         <item name="android:singleLine">true</item>
         <item name="color">@color/black</item>
     </style>
+
+    <style name="MyCustomTabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabTextAppearance">@style/MyCustomTabText</item>
+        <item name="tabSelectedTextColor">@color/black</item>
+    </style>
+
+    <style name="MyCustomTabText" parent="TextAppearance.AppCompat.Button">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/body_font_color</item>
+    </style>
+
 
 </resources>
 

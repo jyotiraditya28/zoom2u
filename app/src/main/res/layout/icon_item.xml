@@ -1,47 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="icon"
             type="com.example.zoom2u.ui.details_base_page.home.home_fragment.Icon" />
     </data>
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="120dp"
         app:cardBackgroundColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
 
         <RelativeLayout
-            android:layout_width="70dp"
+            android:layout_width="90dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@color/white">
+            android:layout_gravity="center">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layout_doc"
-                android:layout_width="70dp"
-                android:layout_height="55dp"
-                android:background="@drawable/image_backround"
-                android:gravity="center"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
-                android:layout_marginTop="5dp"
-                android:elevation="10dp">
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            <RelativeLayout
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/layout_doc_ll"
+                    android:layout_width="75dp"
+                    android:layout_height="60dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/image_background"
+                    android:elevation="5dp"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/image_thumb_nail"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        app:imagefor="@{icon.image}" />
+
+                </LinearLayout>
 
                 <ImageView
-                    android:id="@+id/image_thumb_nail"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@{icon.image}" />
+                    android:id="@+id/load_more_icon"
+                    android:elevation="5dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/lode_more_icon"
+                    app:srcCompat="@drawable/ic_add"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"/>
 
-            </LinearLayout>
 
+            </RelativeLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
             <TextView
                 android:id="@+id/text1"
                 style="@style/style_11_bold"
@@ -49,12 +73,11 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/layout_doc"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="2dp"
-                android:text="@{icon.text}"
+                android:layout_marginTop="5dp"
                 android:inputType="textMultiLine"
-                android:maxLines="2"
-                android:textAlignment="center"
-               />
+                android:minLines="2"
+                android:text="@{icon.text}"
+                android:textAlignment="center" />
 
 
         </RelativeLayout>

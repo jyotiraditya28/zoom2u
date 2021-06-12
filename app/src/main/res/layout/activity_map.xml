@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data />
@@ -7,136 +8,157 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/base_color">
+        android:layout_height="match_parent">
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/wlcm"
-            style="@style/style_15_bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
-            android:text="Hi David s."
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="25dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl1"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:background="@drawable/map_background"
             app:layout_constraintTop_toTopOf="parent"
+            >
 
-            />
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/chat_btn"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="5dp"
-            android:src="@drawable/ic_baseline_message_24"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/back_btn"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_margin="10dp"
+                android:src="@drawable/ic_back_white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
 
+                />
+
+
+
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/zoom2u_header"
+                android:layout_width="90dp"
+                android:layout_height="20dp"
+                android:layout_margin="15dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:src="@drawable/logo_new"
+                />
+
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/chat_btn"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_margin="10dp"
+                android:src="@drawable/ic_chat_white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/people_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="120dp"
-            android:layout_marginEnd="20dp"
-            app:cardElevation="30dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="17dp"
             android:background="@drawable/white_background"
+            app:cardElevation="10dp"
+            android:layout_marginTop="150dp"
             app:layout_constraintTop_toTopOf="parent">
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl"
-                android:layout_marginTop="10dp"
-                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
+                >
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/start_txt"
-                    style="@style/style_13_bold"
-                    android:layout_width="wrap_content"
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
-                    android:text="55 Miller St. Pyrmont,NSW"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toEndOf="@+id/relMain"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/end_txt"
-                    style="@style/style_13_bold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:text="55 Miller St. Pyrmont,NSW"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/relMain" />
-
-                <RelativeLayout
-                    android:id="@+id/relMain"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:gravity="center"
-                    android:layout_weight="1"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent">
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/start_txt"
+                        style="@style/style_13_bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:text="55 Miller St. Pyrmont,NSW"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toEndOf="@+id/relMain"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/end_txt"
+                        style="@style/style_13_bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="55 Miller St. Pyrmont,NSW"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/relMain" />
+
+                    <RelativeLayout
+                        android:id="@+id/relMain"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
 
 
-                    <com.google.android.material.imageview.ShapeableImageView
-                        android:id="@+id/imageViewStatus"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/in_progress_icon" />
-
-                    <View
-                        android:id="@+id/textViewJobStatus"
-                        android:layout_width="2dp"
-                        android:layout_height="40dp"
-                        android:layout_below="@id/imageViewStatus"
-                        android:layout_centerHorizontal="true"
-                        android:background="@color/body_font_color" />
-
-                    <com.google.android.material.imageview.ShapeableImageView
-                        android:id="@+id/end_icon"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_below="@+id/textViewJobStatus"
-                        android:src="@drawable/in_progress_icon" />
-
-                </RelativeLayout>
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/imageViewStatus"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_pickupicon" />
 
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/textViewJobStatus"
+                            android:layout_width="1dp"
+                            android:layout_height="30dp"
+                            android:layout_below="@id/imageViewStatus"
+                            android:layout_centerHorizontal="true"
+                            android:src="@drawable/ic_broken_line" />
+
+
+
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/end_icon"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_below="@+id/textViewJobStatus"
+                            android:src="@drawable/ic_dropofficon" />
+
+                    </RelativeLayout>
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <View
                     android:id="@+id/line"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:elevation="30dp"
                     android:layout_margin="10dp"
-                    android:background="@color/body_font_color"
+                    android:background="@color/line_color"
+                    android:elevation="30dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/cl" />
-
 
 
                 <com.google.android.material.imageview.ShapeableImageView
@@ -144,10 +166,10 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_margin="10dp"
-                    android:src="@drawable/in_progress_icon"
+                    android:src="@drawable/ic_documents"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/line"
-                    app:layout_constraintStart_toStartOf="parent"/>
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/line" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/document_txt"
@@ -159,8 +181,8 @@
                     android:text="Document"
                     android:textColor="@color/black"
                     android:textStyle="bold"
-                    app:layout_constraintTop_toBottomOf="@+id/line"
-                    app:layout_constraintStart_toEndOf="@+id/document_icon" />
+                    app:layout_constraintStart_toEndOf="@+id/document_icon"
+                    app:layout_constraintTop_toBottomOf="@+id/line" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/document_txt_desc"
@@ -168,19 +190,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:layout_marginBottom="10dp"
                     android:layout_marginTop="1dp"
+                    android:layout_marginBottom="10dp"
                     android:text="55 Miller St. Pyrmont,NSW"
-                    app:layout_constraintTop_toBottomOf="@+id/document_txt"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/document_icon"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    app:layout_constraintTop_toBottomOf="@+id/document_txt" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
-
 
 
         </androidx.cardview.widget.CardView>
@@ -189,18 +206,20 @@
             android:id="@+id/map"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintWidth_percent="0.35" />
+            android:layout_height="0dp"
+            android:layout_marginTop="250dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <Button
             android:id="@+id/delivery_details_btn"
+            style="@style/style_15_bold"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_margin="20dp"
-            android:background="@drawable/chip_backgrnd"
+            android:background="@drawable/chip_background"
             android:text="Add Delivery Details"
             android:textColor="@color/white"
-            style="@style/style_15_bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>

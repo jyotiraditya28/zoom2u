@@ -3,21 +3,22 @@
 
     <item
         android:id="@+id/client_overview"
-        android:icon="@drawable/ic_baseline_location_on_24"
-        android:title="tlt_clt_ov" />
+        android:icon="@drawable/ic_home_icon"
+        android:title="Home"
+        />
 
     <item
         android:id="@+id/client_contact"
-        android:icon="@drawable/ic_site"
-        android:title="tlt_clt_contact" />
+        android:icon="@drawable/ic_bookings_icon"
+        android:title="Booking" />
 
     <item
         android:id="@+id/client_site"
-        android:icon="@drawable/ic_site"
-        android:title="tlt_clt_site" />
+        android:icon="@drawable/ic_history_icon"
+        android:title="History" />
 
     <item
         android:id="@+id/work_history"
-        android:icon="@drawable/ic_site"
-        android:title="Work History" />
+        android:icon="@drawable/ic_profile_icon"
+        android:title="Profile" />
 </menu>

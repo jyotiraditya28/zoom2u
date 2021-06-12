@@ -4,7 +4,8 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.zoom2u.databinding.PriceItemBinding
+import com.example.zoom2u.databinding.ItemPriceBinding
+
 
 class PriceAdpter(val context : Context, private val dataList: List<Price>) : RecyclerView.Adapter<PriceAdpter.BindingViewHolder>() {
 
@@ -13,8 +14,8 @@ class PriceAdpter(val context : Context, private val dataList: List<Price>) : Re
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BindingViewHolder {
-        val rootView: PriceItemBinding =
-            PriceItemBinding.inflate(LayoutInflater.from(context), parent, false)
+        val rootView: ItemPriceBinding =
+            ItemPriceBinding.inflate(LayoutInflater.from(context), parent, false)
         return BindingViewHolder(rootView)
     }
 
@@ -28,7 +29,7 @@ class PriceAdpter(val context : Context, private val dataList: List<Price>) : Re
     }
 
 
-    class BindingViewHolder(val itemBinding: PriceItemBinding) :
+    class BindingViewHolder(val itemBinding: ItemPriceBinding) :
         RecyclerView.ViewHolder(itemBinding.root)
 
 

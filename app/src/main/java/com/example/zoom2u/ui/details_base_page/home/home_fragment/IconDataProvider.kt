@@ -12,15 +12,12 @@ object IconDataProvider {
     }
 
     init {
-        addIcon(R.drawable.ic_baseline_folder_24,"Documents")
-        addIcon(R.drawable.ic_baseline_computer_24,"Satchel,laptops")
-        addIcon(R.drawable.ic_site,"Small box")
-        addIcon(R.drawable.ic_site,"Cakes, flowers,delicates")
-        addIcon(R.drawable.ic_baseline_folder_24,"Large box")
-        addIcon(R.drawable.ic_site,"Large items")
-        addIcon(R.drawable.ic_site,"Small box")
-        addIcon(R.drawable.ic_site,"Cakes, flowers,delicates")
-        addIcon(R.drawable.ic_baseline_folder_24,"Large box")
-        addIcon(R.drawable.ic_site,"Large items")
+        addIcon(R.drawable.ic_documents,"Documents")
+        addIcon(R.drawable.ic_satchel_and_laptops,"Satchel,laptops")
+        addIcon(R.drawable.ic_small_box,"Small box")
+        addIcon(R.drawable.ic_cakes_flowers_delicates,"Cakes, flowers,delicates")
+        addIcon(R.drawable.ic_large_box,"Large box")
+        addIcon(R.drawable.ic_large_items,"Large items")
+
     }
 }
