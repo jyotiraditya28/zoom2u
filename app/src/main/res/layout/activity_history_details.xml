@@ -5,7 +5,7 @@
     android:background="@color/card_view_color"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.details_base_page.history.history_details.HistoryDetailsActivity">
+    tools:context=".application.ui.details_base_page.history.history_details.HistoryDetailsActivity">
 
 
 

@@ -22,6 +22,7 @@
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/navigation"
+            app:itemTextColor="@color/black"
             android:layout_width="0dp"
             app:tabMode="scrollable"
             style="@style/style_15_bold"

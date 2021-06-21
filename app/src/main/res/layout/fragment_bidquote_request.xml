@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".ui.details_base_page.bid_quote_request.BidquoteRequestFragment">
+        tools:context=".application.ui.details_base_page.bid_quote_request.BidquoteRequestFragment">
 
 
         <Button

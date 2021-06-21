@@ -5,7 +5,7 @@
     <data>
          <variable
             name="chat"
-            type="com.example.zoom2u.ui.chat.Chat" />
+            type="com.example.zoom2u.application.ui.chat.Chat" />
 
     </data>
 

@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".ui.bid_request.active_bid_request.active_bid_page.active_biddetails.BidDetailsFragment">
+    tools:context=".application.ui.bid_request.active_bid_request.active_bid_page.active_biddetails.BidDetailsFragment">
 
     <LinearLayout
         android:id="@+id/ll1"

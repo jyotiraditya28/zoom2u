@@ -7,7 +7,7 @@
 
         <variable
             name="price"
-            type="com.example.zoom2u.ui.details_base_page.home.pricing_payment.Price" />
+            type="com.example.zoom2u.application.ui.details_base_page.home.pricing_payment.Price" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -19,7 +19,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/border">
+            android:background="@drawable/border3side">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl1"

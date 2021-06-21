@@ -7,15 +7,33 @@
          location permissions for the "MyLocation" functionality.
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".utility.Zoom2u"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Zoom2u">
-        <activity android:name=".ui.details_base_page.profile.change_price.PriceChangeActivity"></activity>
+
+        <activity android:name=".application.spalsh_screen.SplashScreenActivity"
+            android:screenOrientation="fullSensor"
+            android:stateNotNeeded="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+        <activity android:name=".application.ui.details_base_page.profile.chnage_password.ChangePassActivity" />
+        <activity android:name=".application.ui.log_in.forgot_password.ForgotPasswordActivity" />
+        <activity android:name=".application.ui.details_base_page.home.DocDimensionActivity" />
+        <activity android:name=".application.ui.details_base_page.profile.my_location.add_location.AddLocationActivity" />
+        <activity android:name=".application.ui.details_base_page.profile.my_location.edit_location.EditLocationActivity" />
+        <activity android:name=".application.ui.details_base_page.profile.my_location.MyLocationActivity" />
+        <activity android:name=".application.ui.details_base_page.profile.change_price.PriceChangeActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -28,28 +46,20 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity
-            android:name=".MapsActivity1"
-            android:label="@string/title_activity_maps1" />
-        <activity android:name=".ui.bid_request.active_bid_request.active_bid_page.ActiveBidActivity" />
-        <activity android:name=".ui.bid_request.BidRequestActivity" />
-        <activity android:name=".ui.qutote_request.QuoteRequestActivity" />
-        <activity android:name=".ui.chat.MessageActivity" />
-        <activity android:name=".ui.chat.ChatActivity" />
-        <activity android:name=".ui.details_base_page.history.history_details.HistoryDetailsActivity" />
-        <activity android:name=".ui.log_in.LogInActivity" />
-        <activity android:name=".ui.sign_up.SignUpActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        <activity android:name=".application.ui.bid_request.active_bid_request.active_bid_page.ActiveBidActivity" />
+        <activity android:name=".application.ui.bid_request.BidRequestActivity" />
+        <activity android:name=".application.ui.qutote_request.QuoteRequestActivity" />
+    <!--    <activity android:name=".application.ui.chat.MessageActivity" />-->
+        <activity android:name=".application.ui.chat.ChatActivity" />
+        <activity android:name=".application.ui.details_base_page.history.history_details.HistoryDetailsActivity" />
+        <activity android:name=".application.ui.log_in.LogInActivity">
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
-        <activity android:name=".ui.details_base_page.home.pricing_payment.PricingPaymentActivity" />
-        <activity android:name=".ui.details_base_page.home.map_page.MapActivity" />
-        <activity android:name=".ui.details_base_page.home.delivery_details.DeliveryDetailsActivity" />
-        <activity android:name=".ui.details_base_page.BasePageActivity" />
-        <activity android:name=".MainActivity" />
+        <activity android:name=".application.ui.sign_up.SignUpActivity" />
+        <activity android:name=".application.ui.details_base_page.home.pricing_payment.PricingPaymentActivity" />
+        <activity android:name=".application.ui.details_base_page.home.map_page.MapActivity" />
+        <activity android:name=".application.ui.details_base_page.home.delivery_details.DeliveryDetailsActivity" />
+        <activity android:name=".application.ui.details_base_page.BasePageActivity" />
     </application>
 
 </manifest>

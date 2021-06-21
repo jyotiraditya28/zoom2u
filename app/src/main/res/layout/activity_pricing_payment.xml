@@ -11,14 +11,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/card_view_color"
-        tools:context=".ui.details_base_page.pricing_payment.PricingPaymentFragment">
+        tools:context=".application.ui.details_base_page.pricing_payment.PricingPaymentFragment">
 
 
         <com.google.android.material.imageview.ShapeableImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_margin="15dp"
-            android:src="@drawable/ic_baseline_arrow_back_ios_24"
+            android:src="@drawable/ic_arrow_back"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
 

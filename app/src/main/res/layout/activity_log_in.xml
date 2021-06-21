@@ -59,6 +59,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:hint="Email"
+            app:errorIconDrawable="@null"
             app:boxStrokeWidth="0dp"
             app:boxStrokeWidthFocused="0dp"
             app:hintTextColor="@color/black"
@@ -69,6 +70,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/email"
                 style="@style/login_signup_text"
+                android:importantForAutofill="no"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -80,6 +82,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:hint="Password"
+            app:errorIconDrawable="@null"
             app:boxStrokeWidth="0dp"
             app:boxStrokeWidthFocused="0dp"
             app:hintTextColor="@color/black"
@@ -91,6 +94,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/pass"
                 style="@style/login_signup_text"
+                android:importantForAutofill="no"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword" />
