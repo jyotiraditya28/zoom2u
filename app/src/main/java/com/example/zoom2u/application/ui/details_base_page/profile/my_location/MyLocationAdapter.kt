@@ -4,13 +4,13 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.zoom2u.application.ui.details_base_page.profile.my_location.model.MyLocationResponse
+import com.example.zoom2u.application.ui.details_base_page.profile.my_location.model.MyLocationResAndEditLocationReq
 import com.example.zoom2u.databinding.ItemMyLocationBinding
 
-class MyLocationAdapter (val context: Context, private var dataList: List<MyLocationResponse>, private val onItemClick:(MyLocationResponse) -> Unit) :
+class MyLocationAdapter (val context: Context, private var dataList: List<MyLocationResAndEditLocationReq>, private val onItemClick:(MyLocationResAndEditLocationReq) -> Unit) :
     RecyclerView.Adapter<MyLocationAdapter.BindingViewHolder>() {
 
-    fun updateRecords(dataList: List<MyLocationResponse>) {
+    fun updateRecords(dataList: List<MyLocationResAndEditLocationReq>) {
        this.dataList = dataList
         notifyDataSetChanged()
     }
@@ -29,7 +29,7 @@ class MyLocationAdapter (val context: Context, private var dataList: List<MyLoca
 
     override fun onBindViewHolder(holder: BindingViewHolder, position: Int) {
 
-        val myLocation:MyLocationResponse = dataList[position]
+        val myLocation:MyLocationResAndEditLocationReq = dataList[position]
         holder.itemBinding.mylocation= myLocation
         holder.itemBinding.editLocation.setOnClickListener {
             onItemClick(myLocation)

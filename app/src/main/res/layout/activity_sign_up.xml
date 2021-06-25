@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
 
     <data/>
 
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/parent_cl"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -175,7 +177,7 @@
                     android:id="@+id/where_find_us"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="5dp"
                     android:hint="Where did you find us?"
                     app:hintTextColor="@color/txt_sub_color"
                     app:boxStrokeWidth="0dp"
@@ -185,21 +187,26 @@
                     app:layout_constraintTop_toBottomOf="@+id/phone_header">
 
 
-                    <EditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/find_us"
-                        android:layout_width="match_parent"
-                        android:layout_height="60dp"
-                        style="@style/login_signup_text"
                         android:clickable="true"
-                        android:dropDownHeight="140dp"
-                        android:dropDownVerticalOffset="-5dp"
-                        android:inputType="text"
-                        android:paddingRight="10dp"
-                        android:singleLine="true"
+                        android:editable="false"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/login_signup_text"
                         android:drawableRight="@drawable/ic_down"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <Spinner
+                    android:id="@+id/spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:spinnerMode="dropdown"
+                    android:dropDownVerticalOffset="5dp"
+                    android:background="@android:color/transparent"
+                    app:layout_constraintTop_toBottomOf="@+id/where_find_us"
+                    />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/pass_header"

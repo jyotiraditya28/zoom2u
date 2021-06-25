@@ -6,12 +6,9 @@ import kotlinx.parcelize.Parcelize
 import java.io.Serializable
 
 @Parcelize
-data class MyLocationResponse(
-
-    val `$id`: String?=null,
-    val `$type`: String?=null,
-    val DefaultDropoff: Boolean?=null,
-    val DefaultPickup: Boolean?=null,
+data class MyLocationResAndEditLocationReq(
+    var DefaultDropoff: Boolean?=null,
+    var DefaultPickup: Boolean?=null,
     val Location: location?=null,
     val PreferredLocationId: Int?=null
 ) : Parcelable {
@@ -19,12 +16,12 @@ data class MyLocationResponse(
     data class location(
         val `$id`: String?=null,
         val `$type`: String?=null,
-        val Address: String?=null,
+        var Address: String?=null,
         val GPSX: String?=null,
         val GPSY: String?=null,
-        val ContactName: String?=null,
-        val Phone: String?=null,
-        val Email: String?=null,
+        var ContactName: String?=null,
+        var Phone: String?=null,
+        var Email: String?=null,
         val Notes: String?=null,
         val Suburb: String?=null,
         val GpsCoordinates: gpsCoordinates?=null,

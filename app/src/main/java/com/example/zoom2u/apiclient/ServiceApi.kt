@@ -35,8 +35,8 @@ interface ServiceApi {
     fun getWithJsonArray(@Url url:String, @HeaderMap  map:Map<String, String>):Single<Response<JsonArray>>
 
     @POST
-    fun zoom2uCall2(@Url url:String ,@HeaderMap  map:Map<String, String>,@Body request:JsonObject):Single<Response<JsonObject>>
+    fun postBodyJsonArray(@Url url:String, @HeaderMap  map:Map<String, String>, @Body request:JsonObject?):Single<Response<JsonObject>>
 
     @POST
-    fun postWithStringBody(@Url url:String ,@HeaderMap  map:Map<String, String>,@Body request:String):Single<Response<JsonArray>>
+    fun postWithJsonBody(@Url url:String ,@HeaderMap  map:Map<String, String>,@Body request:JsonObject?):Single<Response<JsonArray>>
 }

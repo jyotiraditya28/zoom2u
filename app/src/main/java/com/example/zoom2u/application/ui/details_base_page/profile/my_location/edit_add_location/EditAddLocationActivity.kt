@@ -2,21 +2,21 @@ package com.example.zoom2u.application.ui.details_base_page.profile.my_location.
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import com.example.zoom2u.R
 import com.example.zoom2u.apiclient.ApiClient
 import com.example.zoom2u.apiclient.ServiceApi
-import com.example.zoom2u.application.ui.details_base_page.profile.my_location.model.MyLocationResponse
-import com.example.zoom2u.application.ui.log_in.LoginRepository
-import com.example.zoom2u.application.ui.log_in.LoginViewModel
+import com.example.zoom2u.application.ui.details_base_page.profile.my_location.model.MyLocationResAndEditLocationReq
 import com.example.zoom2u.databinding.ActivityEditLocationBinding
+import com.example.zoom2u.utility.AppUtility
 
 class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
     lateinit var binding: ActivityEditLocationBinding
-    private var  isEdit: Boolean =false
-    private var myLocationResponse: MyLocationResponse? = null
+    private var isEdit: Boolean = false
+    private var myLocationResponse: MyLocationResAndEditLocationReq? = null
 
     lateinit var viewModel: EditAddLocationViewModel
     private var repository: EditAddLocationRepository? = null
@@ -27,7 +27,7 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
 
 
         if (intent.hasExtra("EditAddLocation")) {
-           isEdit= intent.getBooleanExtra("EditAddLocation", false)
+            isEdit = intent.getBooleanExtra("EditAddLocation", false)
             if (isEdit) {
                 binding.header.text = "Edit Location"
                 binding.removeCl.visibility = View.VISIBLE
@@ -46,13 +46,25 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
 
         viewModel = ViewModelProviders.of(this).get(EditAddLocationViewModel::class.java)
         val serviceApi: ServiceApi = ApiClient.getServices()
-        repository = EditAddLocationRepository(serviceApi,this)
+        repository = EditAddLocationRepository(serviceApi, this)
         viewModel.repository = repository
 
 
+        viewModel.getEditAddLocSuccess()?.observe(this) {
+            if (!TextUtils.isEmpty(it)) {
+                AppUtility.progressBarDissMiss()
+                if (it != "") {
+
+
+                }
+            }
+
+
+        }
+
     }
 
-    fun setEditDataview(myLocationResponse: MyLocationResponse?) {
+    fun setEditDataview(myLocationResponse: MyLocationResAndEditLocationReq?) {
 
         binding.name.setText(myLocationResponse?.Location?.ContactName)
         binding.email.setText(myLocationResponse?.Location?.Email)
@@ -69,20 +81,20 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
 
 
             }
-            R.id.save_change_btn->{
-               var location :MyLocationResponse.location= MyLocationResponse.location(ContactName = binding.name.text.toString().trim(),
-                   Phone = binding.phone.text.toString().trim(),Email = binding.email.text.toString().trim(),
-                    Address = binding.address.text.toString().trim())
+            R.id.save_change_btn -> {
+                myLocationResponse?.DefaultPickup = binding.pickupCheckBox.isChecked
+                myLocationResponse?.DefaultDropoff = binding.dropOffCheckBox.isChecked
 
-                var myLocationResponse :MyLocationResponse= MyLocationResponse(DefaultDropoff = binding.dropOffCheckBox.isChecked,DefaultPickup = binding.pickupCheckBox.isChecked,
-                     Location =location)
+                myLocationResponse?.Location?.Address = binding.address.text.toString().trim()
+                myLocationResponse?.Location?.ContactName = binding.name.text.toString().trim()
+                myLocationResponse?.Location?.Email = binding.email.text.toString().trim()
+                myLocationResponse?.Location?.Phone = binding.phone.text.toString().trim()
 
-
-                if(isEdit){
+                if (isEdit) {
                     viewModel.getEditAddLocation(myLocationResponse)
-               }else{
+                } else {
 
-               }
+                }
             }
         }
 

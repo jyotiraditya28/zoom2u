@@ -6,10 +6,12 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.os.Build
+import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import android.widget.ListPopupWindow
 import android.widget.Spinner
 import androidx.core.app.ActivityCompat
@@ -25,11 +27,6 @@ class AppUtility {
 
         var progressDialog: ProgressDialog? = null
 
-        fun getJsonObject(params: String): JsonObject {
-            val parser = JsonParser()
-            return parser.parse(params).asJsonObject
-        }
-
 
         var emailPattern = ("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
                 + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")
@@ -39,15 +36,15 @@ class AppUtility {
             validateTxtField.setBackgroundResource(R.drawable.blankbox)
         }
 
-        fun spinnerPopUpWindow(spinner: Spinner?, context: Context) {
+        fun spinnerPopUpWindow(spinner: Spinner?) {
             try {
                 val popup = Spinner::class.java.getDeclaredField("mPopup")
                 popup.isAccessible = true
                 val popupWindow = popup[spinner] as ListPopupWindow
-                popupWindow.height = getintToPX(140, context)
+                popupWindow.height = getintToPX(140)
 
                 popupWindow.setBackgroundDrawable(
-                    context.resources.getDrawable(android.R.drawable.dialog_holo_light_frame)
+                    Zoom2u.getInstance()?.resources?.getDrawable(android.R.drawable.dialog_holo_light_frame)
                 )
             } catch (e: NoClassDefFoundError) {
                 e.message
@@ -62,11 +59,11 @@ class AppUtility {
         }
 
 
-        fun getintToPX(i: Int, context: Context): Int {
+        fun getintToPX(i: Int): Int {
             return TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP,
                 i.toFloat(),
-                context.resources?.displayMetrics
+                Zoom2u.getInstance()?.resources?.displayMetrics
             )
                 .toInt()
         }
@@ -154,26 +151,42 @@ class AppUtility {
         }
 
         fun isInternetConnected(): Boolean {
-            val cm =Zoom2u.getInstance()
+            val cm = Zoom2u.getInstance()
                 ?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             val networkInfo = cm.activeNetworkInfo
             return networkInfo != null && networkInfo.isConnected
         }
 
-     fun fullScreenMode(window: Window){
-        val currentApiVersion = Build.VERSION.SDK_INT
+        fun fullScreenMode(window: Window) {
+            val currentApiVersion = Build.VERSION.SDK_INT
 
-         val flags: Int = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                 or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                 or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                 or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                 or View.SYSTEM_UI_FLAG_FULLSCREEN
-                 or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
-         if(currentApiVersion >= Build.VERSION_CODES.KITKAT)
-             window.decorView.systemUiVisibility = flags
+            val flags: Int = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    or View.SYSTEM_UI_FLAG_FULLSCREEN
+                    or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
+            if (currentApiVersion >= Build.VERSION_CODES.KITKAT)
+                window.decorView.systemUiVisibility = flags
+        }
 
 
-     }
+        fun getJsonObject(params: String?): JsonObject? {
+            val parser = JsonParser()
+            return parser.parse(params).asJsonObject
+        }
 
+        fun hideSoftKeyboard(activity: Activity) {
+            try {
+                val inputMethodManager = activity.getSystemService(
+                    Activity.INPUT_METHOD_SERVICE
+                ) as InputMethodManager
+                inputMethodManager.hideSoftInputFromWindow(
+                    activity.currentFocus!!.windowToken, 0
+                )
+            } catch (e: java.lang.Exception) {
+                Log.e("TAG :", e.message!!)
+            }
+        }
     }
 }

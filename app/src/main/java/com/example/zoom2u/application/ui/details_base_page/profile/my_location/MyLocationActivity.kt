@@ -12,7 +12,7 @@ import com.example.zoom2u.apiclient.ApiClient
 import com.example.zoom2u.apiclient.ServiceApi
 import com.example.zoom2u.databinding.ActivityMyLocationBinding
 import com.example.zoom2u.application.ui.details_base_page.profile.my_location.edit_add_location.EditAddLocationActivity
-import com.example.zoom2u.application.ui.details_base_page.profile.my_location.model.MyLocationResponse
+import com.example.zoom2u.application.ui.details_base_page.profile.my_location.model.MyLocationResAndEditLocationReq
 import java.util.*
 
 class MyLocationActivity : AppCompatActivity() , View.OnClickListener {
@@ -53,7 +53,7 @@ class MyLocationActivity : AppCompatActivity() , View.OnClickListener {
 
     }
 
-    private fun onItemClick(myLocationResponse: MyLocationResponse) {
+    private fun onItemClick(myLocationResponse: MyLocationResAndEditLocationReq) {
         val intent = Intent(this, EditAddLocationActivity::class.java)
         intent.putExtra("EditAddLocation",true);
         intent.putExtra("EditLocation", myLocationResponse)

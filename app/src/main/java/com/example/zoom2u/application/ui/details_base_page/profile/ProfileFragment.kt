@@ -1,5 +1,6 @@
 package com.example.zoom2u.application.ui.details_base_page.profile
 
+import android.R.attr
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -84,7 +85,7 @@ class ProfileFragment : Fragment(), View.OnClickListener {
             R.id.edit -> {
                 val intent = Intent(activity, EditProfileActivity::class.java)
                 intent.putExtra("profileData", profileResponse)
-                startActivity(intent)
+                startActivityForResult(intent,2)
             }
             R.id.my_location -> {
                 val intent = Intent(activity, MyLocationActivity::class.java)
@@ -106,5 +107,13 @@ class ProfileFragment : Fragment(), View.OnClickListener {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode === 2) {
+            val profile: ProfileResponse? = data?.getParcelableExtra<ProfileResponse>("UpdateProfileData")
+            setDataToView(profile)
+        }
+    }
 
 }
