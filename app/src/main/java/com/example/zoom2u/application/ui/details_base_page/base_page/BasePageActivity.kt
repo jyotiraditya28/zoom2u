@@ -1,5 +1,6 @@
-package com.example.zoom2u.application.ui.details_base_page
+package com.example.zoom2u.application.ui.details_base_page.base_page
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
@@ -7,8 +8,14 @@ import androidx.annotation.IdRes
 import androidx.databinding.DataBindingUtil
 import androidx.viewpager.widget.ViewPager
 import com.example.zoom2u.R
+import com.example.zoom2u.application.splash_screen.LogInSignupMainActivity
+
+import com.example.zoom2u.application.ui.log_in.LoginResponce
 import com.example.zoom2u.databinding.ActivityBasepageBinding
+import com.example.zoom2u.utility.AppPreference
+import com.example.zoom2u.utility.DialogActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.gson.Gson
 
 class BasePageActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItemSelectedListener {
     lateinit var binding:ActivityBasepageBinding
@@ -72,5 +79,19 @@ class BasePageActivity : AppCompatActivity(),  BottomNavigationView.OnNavigation
 
     }
 
+
+    override fun onBackPressed() {
+        DialogActivity.confirmDialogView(this, "Are you sure!", "Are you want Logout?", onItemClick = ::onItemClick)
+
+    }
+    private fun onItemClick() {
+        val loginResponce: LoginResponce? = AppPreference.getSharedPrefInstance().getLoginResponse()
+        loginResponce?.access_token = ""
+        AppPreference.getSharedPrefInstance().setLoginResponse(Gson().toJson(loginResponce))
+
+        val intent = Intent(this, LogInSignupMainActivity::class.java)
+        startActivity(intent)
+        this.finish()
+    }
 
 }

@@ -1,15 +1,19 @@
 package com.example.zoom2u.utility
 
+import com.example.zoom2u.application.ui.details_base_page.profile.ProfileResponse
 import com.example.zoom2u.application.ui.log_in.LoginResponce
 
 interface SharedPref {
 
-   fun setLoginData()
 
 
     fun setLoginResponse(res: String?)
 
     fun getLoginResponse(): LoginResponce?
 
-    fun removeLoginResponce()
+    fun removeLoginResponse()
+
+    fun setProfileData(res: String?)
+
+    fun getProfileData(): ProfileResponse?
 }

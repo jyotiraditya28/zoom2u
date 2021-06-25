@@ -1,4 +1,4 @@
-package com.example.zoom2u.application.ui.details_base_page
+package com.example.zoom2u.application.ui.details_base_page.base_page
 
 import androidx.annotation.IdRes
 import androidx.annotation.StringRes
@@ -13,10 +13,10 @@ enum class MainScreen(@IdRes val menuItemId: Int,
                       @StringRes val titleStringId: Int,
                       val fragment: Fragment
 ) {
-    LOGS(R.id.client_overview, R.string.home, HomeFragment()),
-    PROGRESS(R.id.client_contact,  R.string.home, HistoryFragment()),
-    PROFILE(R.id.client_site,  R.string.home, BidquoteRequestFragment()),
-    WORK(R.id.work_history,  R.string.home, ProfileFragment())
+    LOGS(R.id.navigation_home, R.string.home, HomeFragment()),
+    PROGRESS(R.id.navigation_booking,  R.string.booking,BidquoteRequestFragment() ),
+    PROFILE(R.id.navigation_history,  R.string.history, HistoryFragment()),
+    WORK(R.id.navigation_profile,  R.string.profile, ProfileFragment())
 }
 
 fun getMainScreenForMenuItem(menuItemId: Int): MainScreen? {

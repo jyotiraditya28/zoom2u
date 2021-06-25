@@ -8,9 +8,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.zoom2u.databinding.ItemDeliveryHistoryBinding
 
-class HistoryItemAdapter(val context: Context, private val dataList: List<HistoryItem>, private val onItemClick:(HistoryItem) -> Unit) :
+class HistoryItemAdapter(val context: Context, private var dataList: List<HistoryResponse>, private val onItemClick:(HistoryResponse) -> Unit) :
     RecyclerView.Adapter<HistoryItemAdapter.BindingViewHolder>() {
 
+
+
+    fun updateRecords(dataList: List<HistoryResponse>) {
+        this.dataList = dataList
+        notifyDataSetChanged()
+    }
     override fun getItemCount(): Int {
         return dataList.size
     }
@@ -50,10 +56,10 @@ class HistoryItemAdapter(val context: Context, private val dataList: List<Histor
             holder.itemBinding.blankView.setVisibility(View.VISIBLE)
         else
             holder.itemBinding.blankView.setVisibility(View.GONE)
-        val historyItem: HistoryItem= dataList[position]
-        holder.itemBinding.historyitem= historyItem
+        val historyResponse: HistoryResponse = dataList[position]
+        holder.itemBinding.historyitem= historyResponse
         holder.itemBinding.root.setOnClickListener {
-            onItemClick(historyItem)
+            onItemClick(historyResponse)
         }
 
     }

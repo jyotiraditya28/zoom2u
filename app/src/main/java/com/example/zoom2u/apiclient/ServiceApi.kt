@@ -25,10 +25,18 @@ interface ServiceApi {
     @POST
     fun reSetPassword(@Url url:String):Single<Response<JsonObject>>
 
-    @GET
-    fun zoom2uCall(@Url url:String ,@HeaderMap  map:Map<String, String>):Single<Response<JsonObject>>
+    @POST
+    fun postWithJsonObject(@Url url:String, @HeaderMap  map:Map<String, String>):Single<Response<JsonObject>>
 
+    @GET
+    fun getWithJsonObject(@Url url:String, @HeaderMap  map:Map<String, String>):Single<Response<JsonObject>>
 
     @GET
-    fun zoom2uCall1(@Url url:String ,@HeaderMap  map:Map<String, String>):Single<Response<JsonArray>>
+    fun getWithJsonArray(@Url url:String, @HeaderMap  map:Map<String, String>):Single<Response<JsonArray>>
+
+    @POST
+    fun zoom2uCall2(@Url url:String ,@HeaderMap  map:Map<String, String>,@Body request:JsonObject):Single<Response<JsonObject>>
+
+    @POST
+    fun postWithStringBody(@Url url:String ,@HeaderMap  map:Map<String, String>,@Body request:String):Single<Response<JsonArray>>
 }

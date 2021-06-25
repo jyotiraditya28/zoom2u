@@ -6,7 +6,7 @@
 
         <variable
             name="historyitem"
-            type="com.example.zoom2u.application.ui.details_base_page.history.HistoryItem" />
+            type="com.example.zoom2u.application.ui.details_base_page.history.HistoryResponse" />
     </data>
 
 
@@ -115,7 +115,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
-                android:text="@{historyitem.name}"
+                android:text="@{historyitem.customerFirstName+' '+historyitem.customerLastName}"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/header_txt" />
@@ -151,7 +151,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
-                    android:text="55 Miller St. Pyrmont,NSW"
+                    android:text="@{historyitem.pickupSuburb}"
                     android:textStyle="bold"
                     app:layout_constraintStart_toEndOf="@+id/relMain"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -163,7 +163,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginBottom="10dp"
-                    android:text="55 Miller St. Pyrmont,NSW"
+                    android:text="@{historyitem.dropSuburb}"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/relMain" />

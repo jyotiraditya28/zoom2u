@@ -8,6 +8,9 @@
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:name=".utility.Zoom2u"
@@ -17,21 +20,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Zoom2u">
-
-        <activity android:name=".application.spalsh_screen.SplashScreenActivity"
-            android:screenOrientation="fullSensor"
-            android:stateNotNeeded="true">
+        <activity android:name=".application.splash_screen.LogInSignupMainActivity" android:theme="@style/AppTheme.Splash"/>
+        <activity android:name=".application.ui.details_base_page.BottomNavigationActivity" />
+        <activity android:name=".application.ui.details_base_page.profile.edit_profile.EditProfileActivity" />
+        <activity
+            android:name=".application.splash_screen.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity android:name=".application.ui.details_base_page.profile.chnage_password.ChangePassActivity" />
         <activity android:name=".application.ui.log_in.forgot_password.ForgotPasswordActivity" />
         <activity android:name=".application.ui.details_base_page.home.DocDimensionActivity" />
-        <activity android:name=".application.ui.details_base_page.profile.my_location.add_location.AddLocationActivity" />
-        <activity android:name=".application.ui.details_base_page.profile.my_location.edit_location.EditLocationActivity" />
+        <activity android:name=".application.ui.details_base_page.profile.my_location.edit_add_location.EditAddLocationActivity" />
         <activity android:name=".application.ui.details_base_page.profile.my_location.MyLocationActivity" />
         <activity android:name=".application.ui.details_base_page.profile.change_price.PriceChangeActivity" />
         <!--
@@ -48,18 +51,15 @@
 
         <activity android:name=".application.ui.bid_request.active_bid_request.active_bid_page.ActiveBidActivity" />
         <activity android:name=".application.ui.bid_request.BidRequestActivity" />
-        <activity android:name=".application.ui.qutote_request.QuoteRequestActivity" />
-    <!--    <activity android:name=".application.ui.chat.MessageActivity" />-->
+        <activity android:name=".application.ui.qutote_request.QuoteRequestActivity" /> <!-- <activity android:name=".application.ui.chat.MessageActivity" /> -->
         <activity android:name=".application.ui.chat.ChatActivity" />
         <activity android:name=".application.ui.details_base_page.history.history_details.HistoryDetailsActivity" />
-        <activity android:name=".application.ui.log_in.LogInActivity">
-
-        </activity>
+        <activity android:name=".application.ui.log_in.LogInActivity" />
         <activity android:name=".application.ui.sign_up.SignUpActivity" />
         <activity android:name=".application.ui.details_base_page.home.pricing_payment.PricingPaymentActivity" />
         <activity android:name=".application.ui.details_base_page.home.map_page.MapActivity" />
         <activity android:name=".application.ui.details_base_page.home.delivery_details.DeliveryDetailsActivity" />
-        <activity android:name=".application.ui.details_base_page.BasePageActivity" />
+        <activity android:name=".application.ui.details_base_page.base_page.BasePageActivity" />
     </application>
 
 </manifest>

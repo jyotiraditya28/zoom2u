@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -13,7 +12,6 @@ import com.example.zoom2u.R
 import com.example.zoom2u.apiclient.ApiClient
 import com.example.zoom2u.apiclient.ServiceApi
 
-import com.example.zoom2u.application.ui.details_base_page.BasePageActivity
 import com.example.zoom2u.application.ui.log_in.*
 import com.example.zoom2u.databinding.ActivitySignUpBinding
 import com.example.zoom2u.utility.AppUtility

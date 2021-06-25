@@ -1,8 +1,10 @@
 package com.example.zoom2u.application.ui.details_base_page.profile
 
+import android.content.Context
 import android.util.Log
 import com.example.zoom2u.apiclient.ServiceApi
 import com.example.zoom2u.utility.AppUtility
+import com.example.zoom2u.utility.DialogActivity
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.reflect.TypeToken
@@ -13,32 +15,43 @@ import io.reactivex.schedulers.Schedulers
 import retrofit2.Response
 
 
-class ProfileRepository(private var serviceApi: ServiceApi,private var onResponseCallback:(ProfileResponce) -> Unit) {
+class ProfileRepository(private var serviceApi: ServiceApi, var context: Context?) {
 
-    fun getProflie(disposable: CompositeDisposable = CompositeDisposable()) {
-        //if (AppUtility.isInternetConnected()) {
+    fun getProflie(
+        disposable: CompositeDisposable = CompositeDisposable(),
+        onSuccess: (profile: ProfileResponse) -> Unit
+    ) {
+        if (AppUtility.isInternetConnected()) {
 
-        //AppUtility.progressBarShow(context)
+             AppUtility.progressBarShow(context)
+            disposable.add(
+                serviceApi.getWithJsonArray("breeze/customer/Customers", AppUtility.getApiHeaders())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeWith(object : DisposableSingleObserver<Response<JsonArray>>() {
+                        override fun onSuccess(responce: Response<JsonArray>) {
+                            if (responce.body() != null) {
 
+                                val listType = object : TypeToken<List<ProfileResponse?>?>() {}.type
+                                val list: List<ProfileResponse> =
+                                    Gson().fromJson(responce.body(), listType)
+                                onSuccess(list[0])
+                                //AppPreference.getSharedPrefInstance().setLoginResponse(Gson().toJson(list[0]))
 
-        disposable.add(
-            serviceApi.zoom2uCall1("breeze/customer/Customers",AppUtility.getApiHeaders()).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableSingleObserver<Response<JsonArray>>() {
-                    override fun onSuccess(responce: Response<JsonArray>) {
-                        if (responce.body() != null) {
-
-                            val listType = object : TypeToken<List<ProfileResponce?>?>() {}.type
-                            val list: List<ProfileResponce> =
-                                Gson().fromJson<List<ProfileResponce>>(responce.body(), listType)
-                            onResponseCallback(list.get(0))
-
+                            }
                         }
-                    }
 
-                    override fun onError(e: Throwable) {
-                        Log.d("", "")
-                    }
-                }))
+                        override fun onError(e: Throwable) {
+                            Log.d("", "")
+                        }
+                    })
+            )
+        } else {
+            DialogActivity.alertDialogView(
+                context,
+                "No Network !",
+                "No network connection, Please try again later."
+            )
+        }
     }
 }

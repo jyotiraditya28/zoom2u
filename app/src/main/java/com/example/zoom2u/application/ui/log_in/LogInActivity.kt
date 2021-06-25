@@ -10,8 +10,9 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.zoom2u.R
 import com.example.zoom2u.apiclient.ApiClient
 import com.example.zoom2u.apiclient.ServiceApi
+import com.example.zoom2u.application.ui.details_base_page.BottomNavigationActivity
 
-import com.example.zoom2u.application.ui.details_base_page.BasePageActivity
+import com.example.zoom2u.application.ui.details_base_page.base_page.BasePageActivity
 import com.example.zoom2u.application.ui.log_in.forgot_password.ForgotPasswordActivity
 import com.example.zoom2u.application.ui.sign_up.SignUpActivity
 import com.example.zoom2u.databinding.ActivityLogInBinding
@@ -40,8 +41,21 @@ class LogInActivity : AppCompatActivity(), View.OnClickListener {
 
         viewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
         val serviceApi: ServiceApi = ApiClient.getServices()
-        repository = LoginRepository(serviceApi,this, onResponseCallback = ::onResponseCallback)
+        repository = LoginRepository(serviceApi,this)
         viewModel.repository = repository
+
+
+        viewModel.getLoginSuccess()?.observe(this) {
+            if (!TextUtils.isEmpty(it)) {
+                AppUtility.progressBarDissMiss()
+                if (it.equals("true")) {
+                    val intent = Intent(this, BottomNavigationActivity::class.java)
+                    startActivity(intent)
+                } else
+                    DialogActivity.alertDialogView(this, "Alert!", it)
+
+            }
+        }
     }
 
     override fun onClick(view: View?) {
@@ -76,15 +90,7 @@ class LogInActivity : AppCompatActivity(), View.OnClickListener {
 
     }
 
-    private fun onResponseCallback(msg : String) {
-        AppUtility.progressBarDissMiss()
-        if(msg.equals("true")){
-        val intent = Intent(this, BasePageActivity::class.java)
-        startActivity(intent)
-        }else
-            DialogActivity.alertDialogView(this, "Alert!", msg)
-            
-    }
+
 
     fun SetValidation(email: String, pass: String): Boolean {
         if (TextUtils.isEmpty(email) && TextUtils.isEmpty(pass)) {

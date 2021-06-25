@@ -9,12 +9,9 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.zoom2u.R
 import com.example.zoom2u.apiclient.ApiClient
 import com.example.zoom2u.apiclient.ServiceApi
-import com.example.zoom2u.application.ui.details_base_page.BasePageActivity
-import com.example.zoom2u.application.ui.sign_up.SignUpRepository
-import com.example.zoom2u.application.ui.sign_up.SignUpResponce
-import com.example.zoom2u.application.ui.sign_up.SignUpViewModel
+import com.example.zoom2u.application.ui.details_base_page.BottomNavigationActivity
+import com.example.zoom2u.application.ui.details_base_page.base_page.BasePageActivity
 import com.example.zoom2u.databinding.ActivityForgotPasswordBinding
-import com.example.zoom2u.databinding.ActivityLogInBinding
 import com.example.zoom2u.utility.AppUtility
 
 class ForgotPasswordActivity : AppCompatActivity() , View.OnClickListener{
@@ -37,7 +34,7 @@ class ForgotPasswordActivity : AppCompatActivity() , View.OnClickListener{
 
     private fun onResponseCallback(username :String){
         AppUtility.progressBarDissMiss()
-        val intent = Intent(this, BasePageActivity::class.java)
+        val intent = Intent(this, BottomNavigationActivity::class.java)
         startActivity(intent)
     }
     override fun onClick(view: View?) {

@@ -10,13 +10,14 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.Fragment
 import com.example.zoom2u.R
 
 class DialogActivity {
 
     companion object {
 
-        fun alertDialogView(context: Context, alertTitle: String, alertMsg: String) {
+        fun alertDialogView(context: Context?, alertTitle: String, alertMsg: String) {
 
             val viewGroup = (context as Activity).findViewById<ViewGroup>(R.id.content)
 
@@ -50,8 +51,7 @@ class DialogActivity {
 
         }
 
-        fun connfrmDialogView(context: Context, alertTitle: String, alertMsg: String, onItemClick:() -> Unit) {
-
+        fun confirmDialogView(context: Context?, alertTitle: String, alertMsg: String, onItemClick: () -> Unit) {
             val viewGroup = (context as Activity).findViewById<ViewGroup>(R.id.content)
 
             val dialogView: View =
@@ -73,13 +73,14 @@ class DialogActivity {
 
 
             val cancle: TextView = dialogView.findViewById(R.id.cancle)
-              cancle.setOnClickListener {
+            cancle.setOnClickListener {
                 alertDialog.dismiss()
             }
 
-            val ok :TextView = dialogView.findViewById(R.id.ok)
+            val ok: TextView = dialogView.findViewById(R.id.ok)
             ok.setOnClickListener {
                 onItemClick()
+                alertDialog.dismiss()
             }
 
         }

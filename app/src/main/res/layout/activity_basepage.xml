@@ -24,6 +24,7 @@
             android:id="@+id/navigation"
             app:itemTextColor="@color/black"
             android:layout_width="0dp"
+            app:labelVisibilityMode="labeled"
             app:tabMode="scrollable"
             style="@style/style_15_bold"
             android:layout_height="wrap_content"

@@ -2,22 +2,21 @@ package com.example.zoom2u.utility
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.example.zoom2u.application.ui.details_base_page.profile.ProfileResponse
 import com.example.zoom2u.application.ui.log_in.LoginResponce
 import com.google.gson.Gson
 
 object AppPreference : SharedPref {
 
+    private val Preference_name :String = "zoom2u_pref"
 
+    private var sp: SharedPreferences?=null
 
-        private val Preference_name :String = "zoom2u_pref"
+    private var editor: SharedPreferences.Editor? = null
 
-        private var sp: SharedPreferences?=null
+    private val Login_Response :String= "login_response"
 
-        private var editor: SharedPreferences.Editor? = null
-
-        private val Login_Response :String= "login_response"
-
-
+    private  val Profile:String= "Profile"
 
     fun getSharedPrefInstance(): SharedPref {
             return this
@@ -28,9 +27,6 @@ object AppPreference : SharedPref {
         editor = sp?.edit()
     }
 
-    override fun setLoginData() {
-        TODO("Not yet implemented")
-    }
 
 
     override fun setLoginResponse(res: String?) {
@@ -39,17 +35,27 @@ object AppPreference : SharedPref {
         }
 
 
-        override fun getLoginResponse(): LoginResponce {
-            val gson = Gson()
-            val res: LoginResponce =
-                gson.fromJson(sp?.getString(Login_Response, null), LoginResponce::class.java)
-            return res
-        }
+    override fun getLoginResponse(): LoginResponce? {
+        val gson = Gson()
+        return gson.fromJson(sp?.getString(Login_Response, null), LoginResponce::class.java)
+    }
 
-    override fun removeLoginResponce() {
+    override fun removeLoginResponse() {
         editor?.remove(Login_Response)
         editor?.commit()
     }
+
+    override fun setProfileData(res: String?) {
+        editor?.putString(Profile, res)
+        editor?.commit()
+    }
+
+    override fun getProfileData(): ProfileResponse? {
+        val gson = Gson()
+        return gson.fromJson(sp?.getString(Profile, null), ProfileResponse::class.java)
+    }
+
+
 
 
 }

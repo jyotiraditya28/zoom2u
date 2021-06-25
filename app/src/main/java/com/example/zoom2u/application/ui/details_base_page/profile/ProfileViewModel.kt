@@ -1,11 +1,21 @@
 package com.example.zoom2u.application.ui.details_base_page.profile
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.zoom2u.application.ui.log_in.forgot_password.ForgotPassRepository
 
 class ProfileViewModel :ViewModel(){
+    var success: MutableLiveData<ProfileResponse>? = MutableLiveData()
 
     var repository: ProfileRepository? = null
 
-    fun getProfile() = repository?.getProflie()
+    fun getProfile() = repository?.getProflie(onSuccess = ::onSuccess)
+
+    fun onSuccess(msg:ProfileResponse){
+        success?.value=msg
+
+    }
+
+    fun getProfileSuccess():MutableLiveData<ProfileResponse>?{
+        return success
+    }
 }
