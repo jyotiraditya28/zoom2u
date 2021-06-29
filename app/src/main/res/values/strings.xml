@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Zoom2u</string>
+    <string name="place_api_key">AIzaSyBKwJd0d1w6Bpi1yfE_MRY3MuHmkG7fEWE</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="home">Home</string>
@@ -23,4 +24,7 @@
     <string name="booking">Booking</string>
     <string name="history">History</string>
     <string name="profile">Profile</string>
+
+
+    <string name="google_api_key" translatable="false">AIzaSyBKwJd0d1w6Bpi1yfE_MRY3MuHmkG7fEWE</string>
 </resources>

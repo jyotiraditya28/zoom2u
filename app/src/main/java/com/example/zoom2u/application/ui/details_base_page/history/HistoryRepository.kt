@@ -19,7 +19,7 @@ class HistoryRepository(private var serviceApi: ServiceApi, var context: Context
     fun getHistoryList(disposable: CompositeDisposable = CompositeDisposable(),
                        onSuccess: (history:List<HistoryResponse>) -> Unit) {
         if (AppUtility.isInternetConnected()) {
-          AppUtility.progressBarShow(context)
+         // AppUtility.progressBarShow(context)
             disposable.add(
                 serviceApi.getWithJsonObject(
                     "breeze/customer/DeliveriesForCustomer?currentPage=1&searchText=",
@@ -47,7 +47,7 @@ class HistoryRepository(private var serviceApi: ServiceApi, var context: Context
                     })
             )
         } else {
-            DialogActivity.alertDialogView(
+            DialogActivity.alertDialogSingleButton(
                 context,
                 "No Network !",
                 "No network connection, Please try again later."

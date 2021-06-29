@@ -31,8 +31,8 @@ class MySpinnerAdapter(var context: Context?, var counting: MutableList<String>)
     }
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View? {
 
-        val view = inflator?.inflate(R.layout.spinner_item_layout,null)
-        val tv: TextView?= view?.findViewById(R.id.spinner_textview)
+        val view = inflator?.inflate(R.layout.dropdown_item,null)
+        val tv: TextView?= view?.findViewById(R.id.textView)
         tv?.text = mCounting?.get(position)
 
         return view

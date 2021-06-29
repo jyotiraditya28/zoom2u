@@ -12,6 +12,7 @@
         tools:context=".application.ui.details_base_page.profile.edit_profile.EditProfileActivity">
 
         <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/back_btn"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_margin="15dp"
@@ -65,7 +66,7 @@
                 <com.google.android.material.imageview.ShapeableImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/ic_email_icon" />
+                    android:src="@drawable/ic_cam_icon" />
 
 
             </androidx.appcompat.widget.LinearLayoutCompat>
@@ -163,7 +164,7 @@
             android:id="@+id/save_btn"
             style="@style/style_15_bold"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="50dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="10dp"

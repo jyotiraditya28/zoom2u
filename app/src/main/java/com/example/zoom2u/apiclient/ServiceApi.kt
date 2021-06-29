@@ -35,7 +35,7 @@ interface ServiceApi {
     fun getWithJsonArray(@Url url:String, @HeaderMap  map:Map<String, String>):Single<Response<JsonArray>>
 
     @POST
-    fun postBodyJsonArray(@Url url:String, @HeaderMap  map:Map<String, String>, @Body request:JsonObject?):Single<Response<JsonObject>>
+    fun postBodyJsonObject(@Url url:String, @HeaderMap  map:Map<String, String>, @Body request:JsonObject?):Single<Response<JsonObject>>
 
     @POST
     fun postWithJsonBody(@Url url:String ,@HeaderMap  map:Map<String, String>,@Body request:JsonObject?):Single<Response<JsonArray>>

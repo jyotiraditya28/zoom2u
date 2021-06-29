@@ -1,6 +1,5 @@
 package com.example.zoom2u.application.ui.details_base_page.profile
 
-import android.R.attr
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -21,7 +20,6 @@ import com.example.zoom2u.utility.AppPreference
 import com.example.zoom2u.utility.AppUtility
 import com.example.zoom2u.utility.DialogActivity
 import com.google.gson.Gson
-import com.squareup.picasso.Picasso
 
 
 class ProfileFragment : Fragment(), View.OnClickListener {
@@ -40,7 +38,7 @@ class ProfileFragment : Fragment(), View.OnClickListener {
         binding.changePass.setOnClickListener(this)
         binding.signOut.setOnClickListener(this)
         binding.edit.setOnClickListener(this)
-        viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+        viewModel = ViewModelProviders.of(requireActivity()).get(ProfileViewModel::class.java)
         val serviceApi: ServiceApi = ApiClient.getServices()
         repository = ProfileRepository(serviceApi, activity)
         viewModel.repository = repository
@@ -50,7 +48,7 @@ class ProfileFragment : Fragment(), View.OnClickListener {
         viewModel.getProfileSuccess()?.observe(viewLifecycleOwner) {
             if (it != null)
                 AppUtility.progressBarDissMiss()
-                setDataToView(it)
+            setDataToView(it)
 
         }
 
@@ -63,10 +61,10 @@ class ProfileFragment : Fragment(), View.OnClickListener {
         binding.company.text = profileResponse?.Company
         binding.phone.text = profileResponse?.Mobile
         binding.name.text = profileResponse?.FirstName + " " + profileResponse?.LastName
-        if (!profileResponse?.Photo.isNullOrEmpty())
-            Picasso.with(activity).load(profileResponse?.Photo)
-                .placeholder(R.drawable.booking_icon_background).into(binding.dp)
-
+        //  if (!profileResponse?.Photo.isNullOrEmpty())
+        /* Picasso.with(activity).load(profileResponse?.Photo)
+             .placeholder(R.drawable.profile).into(binding.dp)
+*/
 
     }
 
@@ -85,18 +83,21 @@ class ProfileFragment : Fragment(), View.OnClickListener {
             R.id.edit -> {
                 val intent = Intent(activity, EditProfileActivity::class.java)
                 intent.putExtra("profileData", profileResponse)
-                startActivityForResult(intent,2)
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                startActivityForResult(intent, 2)
             }
             R.id.my_location -> {
                 val intent = Intent(activity, MyLocationActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
                 startActivity(intent)
             }
             R.id.change_pass -> {
                 val intent = Intent(activity, ChangePassActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
                 startActivity(intent)
             }
             R.id.sign_out -> {
-                DialogActivity.confirmDialogView(
+                DialogActivity.alertDialogDoubleButton(
                     activity,
                     "Are you sure!",
                     "Are you want Logout?",
@@ -111,8 +112,10 @@ class ProfileFragment : Fragment(), View.OnClickListener {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode === 2) {
-            val profile: ProfileResponse? = data?.getParcelableExtra<ProfileResponse>("UpdateProfileData")
-            setDataToView(profile)
+            val profile: ProfileResponse? =
+                data?.getParcelableExtra<ProfileResponse>("UpdateProfileData")
+            if (profile != null)
+                setDataToView(profile)
         }
     }
 

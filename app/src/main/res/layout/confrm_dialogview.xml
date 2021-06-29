@@ -67,12 +67,13 @@
         <TextView
             android:id="@+id/cancle"
             style="@style/style_15_bold"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:gravity="center|left"
             android:paddingLeft="15dp"
+            android:paddingEnd="10dp"
             android:text="Cancel"
             android:textColor="@color/base_color"
             android:textStyle="bold" />
@@ -81,12 +82,13 @@
         <TextView
             android:id="@+id/ok"
             style="@style/style_15_bold"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:gravity="center|right"
             android:paddingRight="15dp"
+            android:paddingStart="15dp"
             android:text="Ok"
             android:textColor="@color/base_color"
             android:textStyle="bold" />

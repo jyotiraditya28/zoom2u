@@ -1,8 +1,11 @@
 package com.example.zoom2u.application.ui.details_base_page.profile.chnage_password
 
+import android.app.Activity
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import com.example.zoom2u.R
@@ -32,7 +35,7 @@ class ChangePassActivity : AppCompatActivity(), View.OnClickListener {
         AppUtility.progressBarDissMiss()
         finish()
     }else{
-        DialogActivity.alertDialogView(this, "Alert!", msg)
+        DialogActivity.alertDialogSingleButton(this, "Alert!", msg)
     }
     }
     private fun onItemClick(){
@@ -42,8 +45,9 @@ class ChangePassActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(view: View?) {
         when (view!!.id) {
             R.id.change_pass_btn->{
-               if(checkValidation(binding.currPass.text.toString(),binding.newPass.text.toString(),binding.cnfrmPass.text.toString()))
-                   DialogActivity.confirmDialogView(this,"Are you sure!","Do you want change password.",onItemClick = ::onItemClick)
+                hideKeyboard(this)
+                if(checkValidation(binding.currPass.text.toString(),binding.newPass.text.toString(),binding.cnfrmPass.text.toString()))
+                   DialogActivity.alertDialogDoubleButton(this,"Confirmation !","Are you sure you want to change password?",onItemClick = ::onItemClick)
 
             }
 
@@ -53,20 +57,20 @@ class ChangePassActivity : AppCompatActivity(), View.OnClickListener {
     private fun checkValidation(old_pass: String, new_pass: String, confrm_new_pass: String):Boolean {
 
         if (old_pass.equals("")) {
-            DialogActivity.alertDialogView(this, "Alert!", "Current should not be empty.")
+            DialogActivity.alertDialogSingleButton(this, "Alert!", "Current should not be empty.")
             AppUtility.validateTextField(binding.currPass)
             return false
         }else if (old_pass.equals("")) {
-            DialogActivity.alertDialogView(this, "Alert!", "New password should not be empty.")
+            DialogActivity.alertDialogSingleButton(this, "Alert!", "New password should not be empty.")
             AppUtility.validateTextField(binding.newPass)
             return false
         }
         else if (new_pass.length < 6) {
-            DialogActivity.alertDialogView(this, "Alert!", "New Password must be at least 6 characters long")
+            DialogActivity.alertDialogSingleButton(this, "Alert!", "New Password must be at least 6 characters long")
             AppUtility.validateTextField(binding.currPass)
             return false
         }else if (!confrm_new_pass.equals(new_pass)) {
-            DialogActivity.alertDialogView(this, "Alert!", "Password confirmation and Password must match.")
+            DialogActivity.alertDialogSingleButton(this, "Alert!", "Password confirmation and Password must match.")
             AppUtility . validateTextField (binding.currPass)
             AppUtility . validateTextField (binding.cnfrmPass)
             return false
@@ -75,5 +79,10 @@ class ChangePassActivity : AppCompatActivity(), View.OnClickListener {
 
     }
 
-
+    fun hideKeyboard(context: Context) {
+        val inputManager =
+            context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val v = (context as Activity).currentFocus ?: return
+        inputManager.hideSoftInputFromWindow(v.windowToken, 0)
+    }
 }

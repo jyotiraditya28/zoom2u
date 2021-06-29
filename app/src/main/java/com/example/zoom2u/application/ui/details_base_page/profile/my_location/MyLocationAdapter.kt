@@ -2,16 +2,21 @@ package com.example.zoom2u.application.ui.details_base_page.profile.my_location
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.zoom2u.application.ui.details_base_page.profile.my_location.model.MyLocationResAndEditLocationReq
 import com.example.zoom2u.databinding.ItemMyLocationBinding
 
-class MyLocationAdapter (val context: Context, private var dataList: List<MyLocationResAndEditLocationReq>, private val onItemClick:(MyLocationResAndEditLocationReq) -> Unit) :
+class MyLocationAdapter(
+    val context: Context,
+    private var dataList: List<MyLocationResAndEditLocationReq>,
+    private val onItemClick: (MyLocationResAndEditLocationReq) -> Unit
+) :
     RecyclerView.Adapter<MyLocationAdapter.BindingViewHolder>() {
 
     fun updateRecords(dataList: List<MyLocationResAndEditLocationReq>) {
-       this.dataList = dataList
+        this.dataList = dataList
         notifyDataSetChanged()
     }
 
@@ -29,12 +34,21 @@ class MyLocationAdapter (val context: Context, private var dataList: List<MyLoca
 
     override fun onBindViewHolder(holder: BindingViewHolder, position: Int) {
 
-        val myLocation:MyLocationResAndEditLocationReq = dataList[position]
-        holder.itemBinding.mylocation= myLocation
+        val myLocation: MyLocationResAndEditLocationReq = dataList[position]
+        holder.itemBinding.mylocation = myLocation
         holder.itemBinding.editLocation.setOnClickListener {
             onItemClick(myLocation)
         }
 
+        if (myLocation.DefaultDropoff == true)
+            holder.itemBinding.defaultDropTxt.visibility = View.VISIBLE
+        else
+            holder.itemBinding.defaultDropTxt.visibility = View.GONE
+
+        if (myLocation.DefaultPickup == true)
+            holder.itemBinding.defaultPickTxt.visibility = View.VISIBLE
+        else
+            holder.itemBinding.defaultPickTxt.visibility = View.GONE
     }
 
 

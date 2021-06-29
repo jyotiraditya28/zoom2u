@@ -48,7 +48,7 @@ class MyLocationRepository(private var serviceApi: ServiceApi,var context: Conte
                     })
             )
         } else {
-            DialogActivity.alertDialogView(
+            DialogActivity.alertDialogSingleButton(
                 context,
                 "No Network !",
                 "No network connection, Please try again later."

@@ -15,6 +15,7 @@
 
 
         <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/back_btn"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_margin="15dp"
@@ -164,7 +165,7 @@
                             android:layout_height="15dp"
                             android:layout_gravity="center"
                             android:layout_marginTop="2dp"
-                            android:src="@drawable/ic_arrow_forward" />
+                            android:src="@drawable/ic_find_me" />
 
                         <com.google.android.material.textview.MaterialTextView
                             style="@style/style_9_regular"
@@ -186,27 +187,21 @@
                     app:layout_constraintTop_toBottomOf="@+id/rl" />
 
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/text1"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/notes"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/style_15_bold"
+
+                    android:background="@android:color/transparent"
+                    android:paddingTop="5dp"
                     android:layout_marginTop="10dp"
-                    android:text="Any special delivery instruction"
-                    android:textColor="@color/body_font_color"
+
+                    android:layout_marginBottom="10dp"
+                    android:hint="Any special delivery instruction \n \n (eg. Meet me at the lobby)"
+                    style="@style/style_13_bold"
                     app:layout_constraintTop_toBottomOf="@+id/line4"
                     app:layout_constraintStart_toStartOf="parent" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/text2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    style="@style/style_15_bold"
-                    android:layout_marginTop="10dp"
-                    android:text="(eg. Meet me at the lobby)"
-                    android:textColor="@color/body_font_color"
-                    app:layout_constraintTop_toBottomOf="@+id/text1"
-                    app:layout_constraintStart_toStartOf="parent" />
 
                 <View
                     android:id="@+id/line5"
@@ -214,7 +209,7 @@
                     android:layout_height=".5dp"
                     android:layout_marginTop="10dp"
                     android:background="@color/line_color"
-                    app:layout_constraintTop_toBottomOf="@+id/text2" />
+                    app:layout_constraintTop_toBottomOf="@+id/notes" />
 
 
                 <CheckBox
@@ -223,6 +218,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:layout_marginTop="10dp"
+                    android:buttonTint="@color/base_color"
                     android:layout_gravity="center_vertical"
                     android:textSize="@dimen/medium_text"
                     android:text="Set as default pick-up location"
@@ -234,6 +230,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
+                    android:buttonTint="@color/base_color"
                     android:layout_gravity="center_vertical"
                     android:textSize="@dimen/medium_text"
                     android:text="Set as default drop-off location"

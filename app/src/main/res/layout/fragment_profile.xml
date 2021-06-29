@@ -268,6 +268,7 @@
                  app:layout_constraintTop_toBottomOf="@+id/change_pass" />
 
              <com.google.android.material.textview.MaterialTextView
+                 android:fontFamily="@font/montserrat_black"
                  android:id="@+id/sign_out"
                  style="@style/style_15_bold"
                  android:layout_width="match_parent"

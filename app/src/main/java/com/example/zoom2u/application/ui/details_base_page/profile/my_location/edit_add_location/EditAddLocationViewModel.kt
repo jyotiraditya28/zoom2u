@@ -2,23 +2,45 @@ package com.example.zoom2u.application.ui.details_base_page.profile.my_location.
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.zoom2u.application.ui.details_base_page.profile.my_location.model.AddLocationReq
 import com.example.zoom2u.application.ui.details_base_page.profile.my_location.model.MyLocationResAndEditLocationReq
 
-class EditAddLocationViewModel :ViewModel(){
-    var success: MutableLiveData<String>? = MutableLiveData("")
-
+class EditAddLocationViewModel : ViewModel() {
+    private var editSuccess: MutableLiveData<String>? = MutableLiveData("")
+    private var addSuccess: MutableLiveData<String>? = MutableLiveData("")
+    private var deleteSuccess: MutableLiveData<String>? = MutableLiveData("")
     var repository: EditAddLocationRepository? = null
 
-    fun getEditAddLocation(myLocationResponse: MyLocationResAndEditLocationReq?) = repository?.getEditAddLocation(myLocationResponse,onSuccess = ::onSuccess)
+    fun editLocation(myLocationResponse: MyLocationResAndEditLocationReq?) =
+        repository?.editLocation(myLocationResponse, onSuccess = ::editLocationSuccess)
 
+    fun addLocation(addLocationReq: AddLocationReq?) =
+        repository?.addLocation(addLocationReq, onSuccess = ::addLocationSuccess)
 
-    fun onSuccess(msg:String){
-        success?.value=msg
+    fun deleteLocation(locationId: Int?) =
+        repository?.deleteLocation(locationId, onSuccess = ::deleteLocationSuccess)
 
+    private fun editLocationSuccess(msg: String) {
+        editSuccess?.value = msg
     }
 
+    fun getEditLocationSuccess(): MutableLiveData<String>? {
+        return editSuccess
+    }
 
-    fun getEditAddLocSuccess():MutableLiveData<String>?{
-        return success
+    private fun addLocationSuccess(msg: String) {
+        addSuccess?.value = msg
+    }
+
+    fun getAddLocationSuccess(): MutableLiveData<String>? {
+        return addSuccess
+    }
+
+    private fun deleteLocationSuccess(msg: String) {
+        deleteSuccess?.value = msg
+    }
+
+    fun getDeleteLocationSuccess(): MutableLiveData<String>? {
+        return deleteSuccess
     }
 }

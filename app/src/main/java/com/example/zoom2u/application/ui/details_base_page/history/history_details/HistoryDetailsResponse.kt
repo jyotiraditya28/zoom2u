@@ -1,6 +1,11 @@
 package com.example.zoom2u.application.ui.details_base_page.history.history_details
 
-class HistoryDetailsResponse (
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+
+@Parcelize
+data class HistoryDetailsResponse(
     var `$id`: String? = null,
     var `$type`: String? = null,
     var BookingId: Int? = null,
@@ -18,14 +23,14 @@ class HistoryDetailsResponse (
     var CourierCompany: String? = null,
     var CourierLastUpdated: String? = null,
     var CourierVehicle: String? = null,
-    var CourierCurrentLocation: Any? = null,
-    var CourierCurrentLocationGeography: Any? = null,
+    var CourierCurrentLocation: CourierCurrentLocationClass? = null,
+    var CourierCurrentLocationGeogaphy: CourierCurrentLocationGeographyClass? = null,
     var PickupSuburb: String? = null,
     var PickupAddress: String? = null,
     var PickupEmail: String? = null,
     var PickupNotes: String? = null,
     var PickupPhone: String? = null,
-    var PickupSignature: String? = null,
+    var IckupSignature: String? = null,
     var PickupContactName: String? = null,
     var DeliveryPickupContactName: String? = null,
     var PickupDateTime: String? = null,
@@ -43,7 +48,7 @@ class HistoryDetailsResponse (
     var DropLocation: String? = null,
     var DeliveryDropContactName: String? = null,
     var DropLocationCompanyName: String? = null,
-    var Price: Float? = null,
+    var Price: Int? = null,
     var CourierPrice: Int? = null,
     var Status: String? = null,
     var CarrierId: Int? = null,
@@ -56,33 +61,57 @@ class HistoryDetailsResponse (
     var InvoiceId: Int? = null,
     var InvoiceNumber: String? = null,
     var Rating: Int? = null,
-    var PickupETA: Any? = null,
-    var DropETA: Any? = null,
+    var PickupETA: String? = null,
+    var DropETA: String? = null,
     var PickupActual: String? = null,
     var DropActual: String? = null,
     var Latitude: String? = null,
     var Longitude: String? = null,
     var IsOnHold: Boolean? = null,
     var IsInterstate: Boolean? = null,
-    var BookingCallHistory: List<Any>? = null,
-    var DeliveryAttemptDetails: List<Any>? = null,
+    var BookingCallHistory: List<String>? = null,
+    var DeliveryAttemptDetails: List<String>? = null,
     var OrderNumber: String? = null,
     var IsCancel: Boolean? = null,
-    var PickupSigneePosition: Any? = null,
-    var DropSigneePosition: Any? = null,
-    var DropIdentityType: Any? = null,
-    var DropIdentityNumber: Any? = null,
+    var PickupSigneePosition: Int? = null,
+    var DropSigneePosition: String? = null,
+    var DropIdentityType: String? = null,
+    var DropIdentityNumber: String? = null,
     var CarrierType: String? = null,
-    var RoutePolyline: Any? = null,
+    var RoutePolyline: String? = null,
     var RequestedDropDateTimeWindowStart: String? = null,
     var RequestedDropDateTimeWindowEnd: String? = null,
     var RequestedPickupDateTimeWindowStart: String? = null,
     var RequestedPickupDateTimeWindowEnd: String? = null,
-    var DeclarationSignature: Any? = null,
+    var DeclarationSignature: String? = null,
     var Source: String? = null,
-    var ThirdPartyCarrierBookingReference: Any? = null,
-    var ThirdPartyCarrierLabelUrl: Any? = null,
-    var ThirdPartyCarrierConsignmentNumber: Any? = null,
-    var ThirdPartyCarrierTrackingLink: Any? = null,
+    var ThirdPartyCarrierBookingReference: String? = null,
+    var ThirdPartyCarrierLabelUrl: String? = null,
+    var ThirdPartyCarrierConsignmentNumber: String? = null,
+    var ThirdPartyCarrierTrackingLink: String? = null
+) : Parcelable {
+    @Parcelize
+    data class CourierCurrentLocationClass(
+        var `$id`: String? = null,
+        var `$type`: String? = null,
+        var lat: Double? = null,
+        var lng: Double? = null
+    ) : Parcelable
 
-)
+
+    @Parcelize
+    data class CourierCurrentLocationGeographyClass(
+        var `$id`: String? = null,
+        var `$type`: String? = null,
+        var Geography: GeographyClass? = null,
+    ) : Parcelable {
+        @Parcelize
+        data class GeographyClass(
+            var `$id`: String? = null,
+            var `$type`: String? = null,
+            var coordinateSystemId: Int? = null,
+            var wellKnownText: String? = null
+        ) : Parcelable
+    }
+
+}

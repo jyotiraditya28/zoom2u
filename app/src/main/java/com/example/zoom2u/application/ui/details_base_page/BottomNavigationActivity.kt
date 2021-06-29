@@ -10,6 +10,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.zoom2u.R
 
 import com.example.zoom2u.databinding.ActivityBottomNavigationBinding
+import com.example.zoom2u.utility.AppUtility
 
 
 class BottomNavigationActivity : AppCompatActivity() {

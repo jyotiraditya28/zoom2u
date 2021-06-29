@@ -61,6 +61,11 @@
         <item name="android:color">@color/txt_sub_color</item>
     </style>
 
+    <style name="style_9_bold" parent="@android:style/TextAppearance.Small">
+        <item name="android:fontFamily">@font/arimo_bold</item>
+        <item name="android:textSize">@dimen/low_text</item>
+        <item name="android:color">@color/txt_sub_color</item>
+    </style>
 
     <style name="login_signup_text" parent="TextAppearance.AppCompat">
         <item name="android:background">@drawable/text_background</item>
@@ -106,6 +111,8 @@
         <item name="android:topBright">@android:color/transparent</item>
         <item name="android:topDark">@android:color/transparent</item>
     </style>
+
+
 
 </resources>
 

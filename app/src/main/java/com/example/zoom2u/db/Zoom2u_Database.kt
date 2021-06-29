@@ -2,14 +2,14 @@ package com.example.zoom2u.db
 
 import android.content.Context
 import androidx.room.Room
+
 import androidx.room.RoomDatabase
-import com.example.zoom2u.application.ui.details_base_page.profile.my_location.dao.MyLocationDao
 import com.example.zoom2u.utility.Zoom2uContractProvider
 
 //@Database(entities = [], version = 1,exportSchema = false)
-abstract class Zoom2u_Database :RoomDatabase(){
+abstract class Zoom2u_Database : RoomDatabase(){
 
-    abstract fun myLoaction(): MyLocationDao
+
     companion object {
 
         /** The only instance  */

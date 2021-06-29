@@ -1,20 +1,25 @@
 package com.example.zoom2u.application.ui.log_in.forgot_password
 
-import android.content.Intent
+
+import android.app.Activity
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import com.example.zoom2u.R
 import com.example.zoom2u.apiclient.ApiClient
 import com.example.zoom2u.apiclient.ServiceApi
-import com.example.zoom2u.application.ui.details_base_page.BottomNavigationActivity
-import com.example.zoom2u.application.ui.details_base_page.base_page.BasePageActivity
+
+
 import com.example.zoom2u.databinding.ActivityForgotPasswordBinding
 import com.example.zoom2u.utility.AppUtility
+import com.example.zoom2u.utility.DialogActivity
 
-class ForgotPasswordActivity : AppCompatActivity() , View.OnClickListener{
+
+class ForgotPasswordActivity : AppCompatActivity(), View.OnClickListener {
     lateinit var binding: ActivityForgotPasswordBinding
 
     lateinit var viewModel: ForgotPassViewModel
@@ -28,19 +33,58 @@ class ForgotPasswordActivity : AppCompatActivity() , View.OnClickListener{
 
         viewModel = ViewModelProviders.of(this).get(ForgotPassViewModel::class.java)
         val serviceApi: ServiceApi = ApiClient.getServices()
-        repository = ForgotPassRepository(serviceApi,this,onResponseCallback= ::onResponseCallback)
+        repository =
+            ForgotPassRepository(serviceApi, this, onResponseCallback = ::onResponseCallback)
         viewModel.repository = repository
     }
 
-    private fun onResponseCallback(username :String){
+    private fun onResponseCallback(success: String, username: String) {
+
         AppUtility.progressBarDissMiss()
-        val intent = Intent(this, BottomNavigationActivity::class.java)
-        startActivity(intent)
+        if (success == "true") {
+            DialogActivity.alertDialogOkCallback(
+                this,
+                "Success!",
+                "We've sent an email to $username with further instructions.",
+                onItemClick = ::onItemClick
+            )
+        }
+
     }
+
+    private fun onItemClick() {
+        finish()
+    }
+
     override fun onClick(view: View?) {
         when (view!!.id) {
             R.id.reset_pass_btn -> {
-                viewModel.reSetPass(binding.email.text.toString())
+                hideKeyboard(this)
+                if (setValidation(binding.email.text.toString())) {
+                    viewModel.reSetPass(binding.email.text.toString())
+                }
             }
+        }
     }
-}}
+
+    fun setValidation(email: String): Boolean {
+        if (email == "") {
+            DialogActivity.alertDialogSingleButton(this, "Alert!", "Please enter registered email.")
+            AppUtility.validateTextField(binding.email)
+            return false
+        } else if (!email.matches(("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$").toRegex())) {
+            DialogActivity.alertDialogSingleButton(this, "Alert!", "Please enter valid registered email.")
+            AppUtility.validateTextField(binding.email)
+            return false
+        }
+        return true
+
+    }
+
+    fun hideKeyboard(context: Context) {
+        val inputManager =
+            context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val v = (context as Activity).currentFocus ?: return
+        inputManager.hideSoftInputFromWindow(v.windowToken, 0)
+    }
+}

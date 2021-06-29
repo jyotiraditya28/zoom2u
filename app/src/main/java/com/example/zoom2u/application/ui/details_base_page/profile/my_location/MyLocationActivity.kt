@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.zoom2u.R
 import com.example.zoom2u.apiclient.ApiClient
 import com.example.zoom2u.apiclient.ServiceApi
+import com.example.zoom2u.application.ui.details_base_page.profile.ProfileResponse
 import com.example.zoom2u.databinding.ActivityMyLocationBinding
 import com.example.zoom2u.application.ui.details_base_page.profile.my_location.edit_add_location.EditAddLocationActivity
 import com.example.zoom2u.application.ui.details_base_page.profile.my_location.model.MyLocationResAndEditLocationReq
@@ -57,7 +58,8 @@ class MyLocationActivity : AppCompatActivity() , View.OnClickListener {
         val intent = Intent(this, EditAddLocationActivity::class.java)
         intent.putExtra("EditAddLocation",true);
         intent.putExtra("EditLocation", myLocationResponse)
-        startActivity(intent)
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+        startActivityForResult(intent,3)
     }
 
     override fun onClick(view: View?) {
@@ -65,9 +67,18 @@ class MyLocationActivity : AppCompatActivity() , View.OnClickListener {
             R.id.add_new_card -> {
                 val intent = Intent(this, EditAddLocationActivity::class.java)
                 intent.putExtra("EditAddLocation", false);
-                startActivity(intent)
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                startActivityForResult(intent,4)
 
             }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode === 3 || requestCode==4) {
+            viewModel.getMyLocation()
         }
     }
 }

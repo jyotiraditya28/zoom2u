@@ -3,8 +3,6 @@ package com.example.zoom2u.application.ui.sign_up
 import android.content.Context
 import android.util.Log
 import com.example.zoom2u.apiclient.ServiceApi
-import com.example.zoom2u.application.ui.log_in.LoginRequest
-import com.example.zoom2u.application.ui.log_in.LoginResponce
 import com.example.zoom2u.utility.AppUtility
 import com.example.zoom2u.utility.DialogActivity
 import com.google.gson.JsonObject
@@ -56,7 +54,7 @@ class SignUpRepository(
                     })
             )
         }else {
-            DialogActivity.alertDialogView(
+            DialogActivity.alertDialogSingleButton(
                 context,
                 "No Network !",
                 "No network connection, Please try again later."

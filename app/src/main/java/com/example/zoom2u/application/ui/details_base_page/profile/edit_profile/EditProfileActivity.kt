@@ -1,6 +1,8 @@
 package com.example.zoom2u.application.ui.details_base_page.profile.edit_profile
 
+import android.app.Activity
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.media.MediaScannerConnection
@@ -9,6 +11,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.text.TextUtils
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -51,7 +54,7 @@ class EditProfileActivity : AppCompatActivity(), View.OnClickListener {
         viewModel.repository = repository
 
 
-        viewModel.getProfileEditSuccess()?.observe(this) {
+        viewModel.editProfileSuccess()?.observe(this) {
             if(!TextUtils.isEmpty(it)){
                 AppUtility.progressBarDissMiss()
                 if (it!="") {
@@ -68,6 +71,7 @@ class EditProfileActivity : AppCompatActivity(), View.OnClickListener {
 
         binding.editDp.setOnClickListener(this)
         binding.saveBtn.setOnClickListener(this)
+        binding.backBtn.setOnClickListener(this)
     }
 
     private fun setDataToView(profileResponse: ProfileResponse?) {
@@ -75,8 +79,8 @@ class EditProfileActivity : AppCompatActivity(), View.OnClickListener {
         binding.lname.setText(profileResponse?.LastName)
         binding.phone.setText(profileResponse?.Mobile)
         binding.company.setText(profileResponse?.Company)
-        if(!profileResponse?.Photo.isNullOrEmpty())
-        Picasso.with(this).load(profileResponse?.Photo).placeholder(R.drawable.profile).into(binding.dp)
+       /* if(!profileResponse?.Photo.isNullOrEmpty())
+        Picasso.with(this).load(profileResponse?.Photo).placeholder(R.drawable.profile).into(binding.dp)*/
     }
 
     override fun onClick(view: View?) {
@@ -84,7 +88,11 @@ class EditProfileActivity : AppCompatActivity(), View.OnClickListener {
             R.id.edit_dp -> {
                 showPictureDialog()
             }
+            R.id.back_btn -> {
+                finish()
+            }
             R.id.save_btn -> {
+                hideKeyboard(this)
                 profileResponse?.FirstName=binding.fname.text.toString().trim()
                 profileResponse?.LastName=binding.lname.text.toString().trim()
                 profileResponse?.Company = binding.company.text.toString().trim()
@@ -112,7 +120,7 @@ class EditProfileActivity : AppCompatActivity(), View.OnClickListener {
     }
 
 
-    fun chooseImageFromGallery() {
+    private fun chooseImageFromGallery() {
         val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         startActivityForResult(galleryIntent, GALLERY)
     }
@@ -132,6 +140,7 @@ class EditProfileActivity : AppCompatActivity(), View.OnClickListener {
                     val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, contentURI)
                     saveImage(bitmap)
                     binding.dp.setImageBitmap(bitmap)
+                    //viewModel.uploadDp(bitmap)
                 } catch (e: IOException) {
                     e.printStackTrace()
                     Toast.makeText(this@EditProfileActivity, "Failed", Toast.LENGTH_SHORT).show()
@@ -141,11 +150,11 @@ class EditProfileActivity : AppCompatActivity(), View.OnClickListener {
             val thumbnail = data!!.extras!!.get("data") as Bitmap
             binding.dp.setImageBitmap(thumbnail)
             saveImage(thumbnail)
-
+            //viewModel.uploadDp(thumbnail)
         }
     }
 
-    fun saveImage(myBitmap: Bitmap): String {
+    private fun saveImage(myBitmap: Bitmap): String {
         val bytes = ByteArrayOutputStream()
         myBitmap.compress(Bitmap.CompressFormat.PNG, 90, bytes)
         val wallpaperDirectory = File(
@@ -173,5 +182,12 @@ class EditProfileActivity : AppCompatActivity(), View.OnClickListener {
 
     companion object {
         private val IMAGE_DIRECTORY = "/nalhdaf"
+    }
+
+    fun hideKeyboard(context: Context) {
+        val inputManager =
+            context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val v = (context as Activity).currentFocus ?: return
+        inputManager.hideSoftInputFromWindow(v.windowToken, 0)
     }
 }

@@ -84,11 +84,5 @@
 
         </RelativeLayout>
 
-        <RelativeLayout
-            android:id="@+id/bgMainPageOnAlert"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"
-            android:background="#29CACAD1" />
     </RelativeLayout>
 </layout>

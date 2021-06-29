@@ -17,7 +17,7 @@ class DialogActivity {
 
     companion object {
 
-        fun alertDialogView(context: Context?, alertTitle: String, alertMsg: String) {
+        fun alertDialogSingleButton(context: Context?, alertTitle: String, alertMsg: String) {
 
             val viewGroup = (context as Activity).findViewById<ViewGroup>(R.id.content)
 
@@ -51,7 +51,7 @@ class DialogActivity {
 
         }
 
-        fun confirmDialogView(context: Context?, alertTitle: String, alertMsg: String, onItemClick: () -> Unit) {
+        fun alertDialogDoubleButton(context: Context?, alertTitle: String, alertMsg: String, onItemClick: () -> Unit) {
             val viewGroup = (context as Activity).findViewById<ViewGroup>(R.id.content)
 
             val dialogView: View =
@@ -84,5 +84,43 @@ class DialogActivity {
             }
 
         }
+
+        fun alertDialogOkCallback(context: Context?, alertTitle: String, alertMsg: String,onItemClick: () -> Unit) {
+
+            val viewGroup = (context as Activity).findViewById<ViewGroup>(R.id.content)
+
+            val dialogView: View =
+                LayoutInflater.from(context).inflate(R.layout.dialogview, viewGroup, false)
+
+            val builder = AlertDialog.Builder(context)
+
+            builder.setView(dialogView)
+
+            val alertDialog = builder.create()
+            alertDialog.show()
+
+
+            val titlealert: TextView = dialogView.findViewById(R.id.titleDialog)
+            titlealert.text = alertTitle
+
+            val msgAlertDialog: TextView = dialogView.findViewById(R.id.dialogMessageText)
+            msgAlertDialog.text = alertMsg
+
+            val crrosbtn: ImageView = dialogView.findViewById(R.id.dialogDoneBtn)
+            crrosbtn.setOnClickListener {
+                alertDialog.dismiss()
+            }
+
+
+            val submitbtn: Button = dialogView.findViewById(R.id.okBtn)
+            submitbtn.setOnClickListener {
+                onItemClick()
+                alertDialog.dismiss()
+            }
+
+        }
+
+
+
     }
 }

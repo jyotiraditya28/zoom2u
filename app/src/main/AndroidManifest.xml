@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.zoom2u">
-    <!--
-         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
-         Google Maps Android API v2, but you must specify either coarse or fine
-         location permissions for the "MyLocation" functionality.
-    -->
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:name=".utility.Zoom2u"
@@ -20,11 +17,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Zoom2u">
-        <activity android:name=".application.splash_screen.LogInSignupMainActivity" android:theme="@style/AppTheme.Splash"/>
+
+        <activity android:name=".application.ui.details_base_page.profile.my_location.search_location.Location" />
+        <activity
+            android:name=".application.splash_screen.LogInSignupMainActivity"
+            android:theme="@style/AppTheme.Splash" />
         <activity android:name=".application.ui.details_base_page.BottomNavigationActivity" />
         <activity android:name=".application.ui.details_base_page.profile.edit_profile.EditProfileActivity" />
-        <activity
-            android:name=".application.splash_screen.SplashScreenActivity">
+        <activity android:name=".application.splash_screen.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -37,17 +37,10 @@
         <activity android:name=".application.ui.details_base_page.profile.my_location.edit_add_location.EditAddLocationActivity" />
         <activity android:name=".application.ui.details_base_page.profile.my_location.MyLocationActivity" />
         <activity android:name=".application.ui.details_base_page.profile.change_price.PriceChangeActivity" />
-        <!--
-             The API key for Google Maps-based APIs is defined as a string resource.
-             (See the file "res/values/google_maps_api.xml").
-             Note that the API key is linked to the encryption key used to sign the APK.
-             You need a different API key for each encryption key, including the release key that is used to
-             sign the APK for publishing.
-             You can define the keys for the debug and release targets in src/debug/ and src/release/.
-        -->
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
+            android:value="@string/google_api_key" />
 
         <activity android:name=".application.ui.bid_request.active_bid_request.active_bid_page.ActiveBidActivity" />
         <activity android:name=".application.ui.bid_request.BidRequestActivity" />

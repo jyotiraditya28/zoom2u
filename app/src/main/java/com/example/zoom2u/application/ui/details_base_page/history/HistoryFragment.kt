@@ -47,11 +47,11 @@ class HistoryFragment : Fragment() {
             if (it != null) {
                 AppUtility.progressBarDissMiss()
                 if (it.isNotEmpty()) {
-                    binding.deliveryHistoryRecycler.visibility =View.VISIBLE
+
                     adapter?.updateRecords(it)
                     binding.noHistoryText.visibility = View.GONE
                 } else
-                    binding.deliveryHistoryRecycler.visibility =View.GONE
+
                     binding.noHistoryText.visibility = View.VISIBLE
             }
 
@@ -71,6 +71,7 @@ class HistoryFragment : Fragment() {
     private fun onItemClick(historyResponse: HistoryResponse) {
         val intent = Intent(activity, HistoryDetailsActivity::class.java)
         intent.putExtra("HistoryItem", historyResponse)
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
         startActivity(intent)
     }
 }

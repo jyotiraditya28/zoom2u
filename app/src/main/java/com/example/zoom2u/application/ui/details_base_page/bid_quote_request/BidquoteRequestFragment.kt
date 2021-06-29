@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import com.example.zoom2u.R
 import com.example.zoom2u.databinding.FragmentBidquoteRequestBinding
 import com.example.zoom2u.application.ui.bid_request.BidRequestActivity
+import com.example.zoom2u.application.ui.details_base_page.profile.my_location.search_location.Location
 import com.example.zoom2u.application.ui.qutote_request.QuoteRequestActivity
 
 class BidquoteRequestFragment : Fragment() , View.OnClickListener {
@@ -34,7 +35,7 @@ class BidquoteRequestFragment : Fragment() , View.OnClickListener {
                 startActivity(intent)
             }
             R.id.button1 -> {
-                val intent = Intent(activity, QuoteRequestActivity::class.java)
+                val intent = Intent(activity, Location::class.java)
                 startActivity(intent)
             }
         }

@@ -81,7 +81,7 @@ class BasePageActivity : AppCompatActivity(),  BottomNavigationView.OnNavigation
 
 
     override fun onBackPressed() {
-        DialogActivity.confirmDialogView(this, "Are you sure!", "Are you want Logout?", onItemClick = ::onItemClick)
+        DialogActivity.alertDialogDoubleButton(this, "Are you sure!", "Are you want Logout?", onItemClick = ::onItemClick)
 
     }
     private fun onItemClick() {

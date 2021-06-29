@@ -40,18 +40,37 @@
 
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/defult_txt"
+            android:id="@+id/default_pick_txt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/style_11_regular"
+            android:textSize="7dp"
             android:text="| DEFAULT PICK-UP"
             android:layout_marginStart="10dp"
             android:layout_marginTop="23dp"
             android:textColor="@color/base_color"
             app:layout_constraintStart_toEndOf="@+id/name"
             app:layout_constraintTop_toTopOf="parent"
-
+            android:fontFamily="@font/roboto_black"
+            android:visibility="gone"
             />
+
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/default_drop_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="7dp"
+            android:text="| DEFAULT DROP-OFF"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="23dp"
+            android:textColor="@color/base_color"
+            app:layout_constraintStart_toEndOf="@+id/default_pick_txt"
+            app:layout_constraintTop_toTopOf="parent"
+            android:fontFamily="@font/roboto_black"
+            android:visibility="gone"
+            />
+
+
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/address"

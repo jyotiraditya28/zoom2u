@@ -1,9 +1,9 @@
 package com.example.zoom2u.application.splash_screen
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.example.zoom2u.R
 import com.example.zoom2u.application.ui.log_in.LogInActivity
@@ -26,10 +26,12 @@ class LogInSignupMainActivity : AppCompatActivity(), View.OnClickListener  {
         when (view!!.id) {
             R.id.loginWithEmailBtn -> {
                 val intent = Intent(this, LogInActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
                 startActivity(intent)
             }
             R.id.signUpBtn -> {
                 val intent = Intent(this, SignUpActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
                 startActivity(intent)
             }
         }

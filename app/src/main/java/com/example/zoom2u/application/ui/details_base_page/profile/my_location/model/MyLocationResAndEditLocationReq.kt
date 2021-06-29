@@ -16,9 +16,10 @@ data class MyLocationResAndEditLocationReq(
     data class location(
         val `$id`: String?=null,
         val `$type`: String?=null,
+        var Country :String?=null,
         var Address: String?=null,
-        val GPSX: String?=null,
-        val GPSY: String?=null,
+        var GPSX: Double?=null,
+        var GPSY: Double?=null,
         var ContactName: String?=null,
         var Phone: String?=null,
         var Email: String?=null,
@@ -28,8 +29,8 @@ data class MyLocationResAndEditLocationReq(
         val UnitNumber: String?=null,
         val StreetNumber: String?=null,
         val Street: String?=null,
-        val State: String?=null,
-        val Postcode: String?=null,
+        var State: String?=null,
+        var Postcode: String?=null,
         val CompanyName: String?=null
     ): Parcelable  {
         @Parcelize

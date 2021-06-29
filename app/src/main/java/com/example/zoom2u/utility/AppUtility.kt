@@ -3,10 +3,10 @@ package com.example.zoom2u.utility
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.os.Build
-import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.Window
@@ -15,12 +15,14 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ListPopupWindow
 import android.widget.Spinner
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat.getSystemService
 import com.example.zoom2u.R
 import com.example.zoom2u.application.ui.log_in.LoginResponce
 import com.google.android.material.textfield.TextInputEditText
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import java.util.*
+
 
 class AppUtility {
     companion object {
@@ -72,7 +74,7 @@ class AppUtility {
         fun progressBarShow(context: Context?) {
             progressDialog = ProgressDialog(context as Activity, R.style.progressbarstyle)
             progressDialog?.setMessage(
-                "Loding" + "..."
+                "Loading" + "..."
             )
             progressDialog?.setCancelable(false)
             progressDialog?.setCanceledOnTouchOutside(false)
@@ -176,17 +178,15 @@ class AppUtility {
             return parser.parse(params).asJsonObject
         }
 
-        fun hideSoftKeyboard(activity: Activity) {
-            try {
-                val inputMethodManager = activity.getSystemService(
-                    Activity.INPUT_METHOD_SERVICE
-                ) as InputMethodManager
-                inputMethodManager.hideSoftInputFromWindow(
-                    activity.currentFocus!!.windowToken, 0
-                )
-            } catch (e: java.lang.Exception) {
-                Log.e("TAG :", e.message!!)
-            }
+        fun hideKeyboard(activity:Activity) {
+           activity.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         }
+        fun hideKeyboard(context: Context) {
+            val inputManager =
+                context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            val v = (context as Activity).currentFocus ?: return
+            inputManager.hideSoftInputFromWindow(v.windowToken, 0)
+        }
+
     }
 }

@@ -44,7 +44,7 @@ class SplashScreenActivity : AppCompatActivity() {
 
     }
  fun LoginSuccessFully() {
-     startActivity(Intent(this@SplashScreenActivity , BottomNavigationActivity:: class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+     startActivity(Intent(this@SplashScreenActivity , BasePageActivity:: class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
      finish()
     }
 
