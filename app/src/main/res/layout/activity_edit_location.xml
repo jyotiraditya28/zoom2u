@@ -191,11 +191,9 @@
                     android:id="@+id/notes"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
                     android:background="@android:color/transparent"
                     android:paddingTop="5dp"
                     android:layout_marginTop="10dp"
-
                     android:layout_marginBottom="10dp"
                     android:hint="Any special delivery instruction \n \n (eg. Meet me at the lobby)"
                     style="@style/style_13_bold"

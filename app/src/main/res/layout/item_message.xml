@@ -7,7 +7,7 @@
 
         <variable
             name="message"
-            type="com.example.zoom2u.application.ui.chat.message.Message" />
+            type="com.zoom2u_customer.application.ui.chat.message.Message" />
     </data>
 
 

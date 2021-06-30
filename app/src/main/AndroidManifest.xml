@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.zoom2u">
+    package="com.zoom2u_customer">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -33,7 +33,7 @@
         </activity>
         <activity android:name=".application.ui.details_base_page.profile.chnage_password.ChangePassActivity" />
         <activity android:name=".application.ui.log_in.forgot_password.ForgotPasswordActivity" />
-        <activity android:name=".application.ui.details_base_page.home.DocDimensionActivity" />
+        <activity android:name="com.zoom2u_customer.application.ui.details_base_page.home.DocDimensionActivity" />
         <activity android:name=".application.ui.details_base_page.profile.my_location.edit_add_location.EditAddLocationActivity" />
         <activity android:name=".application.ui.details_base_page.profile.my_location.MyLocationActivity" />
         <activity android:name=".application.ui.details_base_page.profile.change_price.PriceChangeActivity" />

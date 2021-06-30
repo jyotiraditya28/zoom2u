@@ -5,7 +5,7 @@
     <data>
         <variable
             name="activebidoffers"
-            type="com.example.zoom2u.application.ui.bid_request.active_bid_request.active_bid_page.active_bid_offers.ActiveBidOffers" />
+            type="com.zoom2u_customer.application.ui.bid_request.active_bid_request.active_bid_page.active_bid_offers.ActiveBidOffers" />
     </data>
 
 

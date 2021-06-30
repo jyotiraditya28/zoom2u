@@ -62,7 +62,16 @@
             app:srcCompat="@drawable/ic_find_me" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
+ <!--   <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/transparent"
+        android:dropDownVerticalOffset="10dp"
+        android:paddingTop="10dp"
+        android:spinnerMode="dropdown"
+        android:layout_below="@+id/headerLayout_AddAddressView" />-->
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -71,6 +80,5 @@
         android:background="@color/white"
         android:id="@+id/recycler_AddAddressView"
         android:layout_below="@+id/headerLayout_AddAddressView" />
-
 
 </RelativeLayout>

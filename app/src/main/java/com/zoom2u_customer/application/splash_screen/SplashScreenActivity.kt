@@ -1,0 +1,57 @@
+package com.zoom2u_customer.application.splash_screen
+
+import android.content.Intent
+import android.os.Bundle
+import android.os.Handler
+import android.text.TextUtils
+import android.view.WindowManager
+import androidx.appcompat.app.AppCompatActivity
+import com.zoom2u_customer.R
+import com.zoom2u_customer.application.ui.details_base_page.base_page.BasePageActivity
+import com.zoom2u_customer.utility.AppPreference
+import com.zoom2u_customer.utility.AppUtility
+
+class SplashScreenActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_spalsh_screen)
+        AppUtility.fullScreenMode(window)
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        )
+
+        Handler().postDelayed({
+            if (AppPreference.getSharedPrefInstance().getLoginResponse()!=null) {
+                if (TextUtils.isEmpty(AppPreference.getSharedPrefInstance().getLoginResponse()?.access_token)) {
+                    val intent = Intent(this@SplashScreenActivity, LogInSignupMainActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }else {
+                    LoginSuccessFully()
+                }
+            }else{
+                val intent = Intent(this@SplashScreenActivity, LogInSignupMainActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+
+            finish()
+        }, 3000)
+
+
+
+    }
+ fun LoginSuccessFully() {
+     startActivity(Intent(this@SplashScreenActivity , BasePageActivity:: class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+     finish()
+    }
+
+
+
+
+}
+
+
+
+

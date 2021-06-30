@@ -10,7 +10,7 @@ android {
     compileSdkVersion 30
 
     defaultConfig {
-        applicationId "com.example.zoom2u"
+        applicationId "com.zoom2u_customer"
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
