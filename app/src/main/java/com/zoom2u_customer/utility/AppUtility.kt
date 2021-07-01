@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.net.ConnectivityManager
 import android.os.Build
 import android.util.TypedValue
@@ -11,6 +12,7 @@ import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.ListPopupWindow
 import android.widget.Spinner
 import androidx.core.app.ActivityCompat
@@ -19,7 +21,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.zoom2u_customer.R
-import com.zoom2u_customer.application.ui.log_in.LoginResponce
+import com.zoom2u_customer.ui.log_in.LoginResponce
 import java.util.*
 
 
@@ -187,5 +189,10 @@ class AppUtility {
             inputManager.hideSoftInputFromWindow(v.windowToken, 0)
         }
 
+        fun validateEditTextField(validateTxtField: EditText, msgStr: String?) {
+            validateTxtField.hint = msgStr
+            validateTxtField.setHintTextColor(Color.parseColor("#FF476A"))
+
+        }
     }
 }

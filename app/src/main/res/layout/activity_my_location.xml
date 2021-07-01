@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data/>
+    <data />
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/card_view_color"
-        tools:context=".application.ui.details_base_page.profile.my_location.MyLocationActivity">
+        tools:context=".ui.buttom_navigation_package.details_base_page.profile.my_location.MyLocationActivity">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/back_icon"
@@ -30,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="My Loaction"
+            android:text="@string/my_location"
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -40,33 +40,40 @@
             android:id="@+id/chat_btn"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_marginEnd="10dp"
             android:layout_marginTop="20dp"
-            android:src="@drawable/ic_chat_icon"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/ic_chat_grey"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/card"
-            android:layout_width="match_parent"
-            android:layout_height="400dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="50dp"
-            android:layout_marginEnd="10dp"
-            android:background="@drawable/white_background"
-            android:elevation="5dp"
-            app:layout_constraintTop_toBottomOf="@+id/header_txt">
 
-
-            <ScrollView
-                android:id="@+id/scrollView"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/card"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:scrollbars="vertical"
-
+                android:layout_height="400dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/white_background"
+                android:elevation="5dp"
+                app:layout_constraintTop_toBottomOf="@+id/header_txt"
                 >
+
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/no_my_location"
+                    style="@style/style_15_bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/no_my_location"
+                    android:textColor="@color/black"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                     />
 
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -74,14 +81,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     tools:listitem="@layout/item_my_location"
-                    android:background="@color/card_view_color" />
+                    android:background="@drawable/white_background"
+                    app:layout_constraintTop_toTopOf="parent"
+                    />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </ScrollView>
 
-        </androidx.cardview.widget.CardView>
 
 
         <androidx.cardview.widget.CardView
+            app:cardCornerRadius="10dp"
             android:id="@+id/add_new_card"
             android:layout_width="match_parent"
             android:layout_height="80dp"
@@ -104,30 +113,29 @@
                     android:layout_height="20dp"
                     android:layout_marginStart="10dp"
                     android:src="@drawable/ic_add_icon"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/add"
+                    style="@style/style_15_bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/style_15_bold"
-                    android:text="Add New"
                     android:layout_marginStart="10dp"
+                    android:text="@string/add_new"
                     android:textColor="@android:color/black"
                     app:layout_constraintStart_toEndOf="@+id/add_icon"
-                    app:layout_constraintTop_toTopOf="parent"
-                 />
+                    app:layout_constraintTop_toTopOf="parent" />
 
 
                 <com.google.android.material.textview.MaterialTextView
+                    style="@style/style_13_regular"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/style_13_regular"
-                    android:text="Save your favourite places"
                     android:layout_marginStart="10dp"
+                    android:text="@string/save_your_place"
                     app:layout_constraintStart_toEndOf="@+id/add_icon"
                     app:layout_constraintTop_toBottomOf="@+id/add" />
 

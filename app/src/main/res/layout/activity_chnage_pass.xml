@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".application.ui.details_base_page.profile.chnage_password.ChangePassActivity">
+        tools:context=".ui.buttom_navigation_package.details_base_page.profile.chnage_password.ChangePassActivity">
 
 
         <com.google.android.material.imageview.ShapeableImageView
@@ -44,7 +44,7 @@
             app:layout_constraintTop_toTopOf="@id/header_txt"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:src="@drawable/logo_new" />
+            android:src="@drawable/zoom2u_black_blue" />
 
 
         <com.google.android.material.textfield.TextInputLayout

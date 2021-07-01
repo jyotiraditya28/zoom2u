@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:orientation="horizontal"
         android:weightSum="2"
-        tools:context=".application.ui.details_base_page.bid_quote_request.BidquoteRequestFragment">
+        tools:context=".ui.buttom_navigation_package.details_base_page.bid_quote_request.BidquoteRequestFragment">
 
 
         <Button

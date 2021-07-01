@@ -25,7 +25,7 @@
             <ImageView
                 android:layout_width="200dp"
                 android:layout_height="53dp"
-                android:src="@drawable/logo_new"
+                android:src="@drawable/zoom2u_black_blue"
                 android:id="@+id/logoImgLoginView"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true" />

@@ -4,6 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".application.ui.details_base_page.profile.my_location.add_location.AddLocationActivity">
+    tools:context=".ui.buttom_navigation_package.details_base_page.profile.my_location.add_location.AddLocationActivity">
 
 </androidx.constraintlayout.widget.ConstraintLayout>

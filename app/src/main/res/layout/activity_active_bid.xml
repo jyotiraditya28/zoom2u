@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/card_view_color"
-        tools:context=".application.ui.bid_request.active_bid_request.active_bid_page.ActiveBidActivity">
+        tools:context=".ui.buttom_navigation_package.bid_request.active_bid_request.active_bid_page.ActiveBidActivity">
 
 
         <com.google.android.material.imageview.ShapeableImageView
@@ -39,7 +39,7 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_margin="10dp"
-            android:src="@drawable/ic_chat_icon"
+            android:src="@drawable/ic_chat_grey"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

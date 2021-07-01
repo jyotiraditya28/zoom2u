@@ -7,7 +7,7 @@
 
         <variable
             name="price"
-            type="com.zoom2u_customer.application.ui.details_base_page.home.pricing_payment.Price" />
+            type="com.zoom2u_customer.ui.buttom_navigation_package.details_base_page.home.pricing_payment.Price" />
     </data>
 
     <androidx.cardview.widget.CardView

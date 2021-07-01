@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
@@ -17,7 +18,7 @@
             android:layout_width="150dp"
             android:layout_height="80dp"
             android:layout_marginTop="50dp"
-            android:src="@drawable/logo_new"
+            android:src="@drawable/zoom2u_black_blue"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -35,7 +36,7 @@
             android:maxLines="2"
             android:inputType="textMultiLine"
             android:singleLine="false"
-            android:text="Zoom2u connects you with local drivers in your area for fast same day delivery"
+            android:text="@string/login_txt_header"
             android:textAlignment="center"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -58,7 +59,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:hint="Email"
+            android:hint="@string/email_header"
             app:errorIconDrawable="@null"
             app:boxStrokeWidth="0dp"
             app:boxStrokeWidthFocused="0dp"
@@ -81,7 +82,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:hint="Password"
+            android:hint="@string/pass_header"
             app:errorIconDrawable="@null"
             app:boxStrokeWidth="0dp"
             app:boxStrokeWidthFocused="0dp"
@@ -103,27 +104,26 @@
 
         <Button
             android:id="@+id/login_btn"
+            style="@style/style_15_bold"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="12dp"
             android:background="@drawable/chip_background"
-            android:clickable="true"
-            android:text="Login"
+            android:text="@string/login"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            style="@style/style_15_bold"
-            app:layout_constraintTop_toBottomOf="@+id/pass_header" />
+            app:layout_constraintTop_toBottomOf="@+id/pass_header"
+            tools:layout_editor_absoluteX="0dp" />
 
         <TextView
             android:id="@+id/forget_pass"
-            style="@style/style_13_bold"
+            style="@style/style_15_bold"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_marginTop="10dp"
             android:gravity="center"
-            android:text="Forgot password?"
+            android:text="@string/forget_pass"
             android:textColor="#42B4E5"
-            android:textSize="@dimen/large_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/login_btn" />
@@ -162,7 +162,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Register"
+                android:text="@string/register"
                 android:textColor="@color/black"
                  />
 

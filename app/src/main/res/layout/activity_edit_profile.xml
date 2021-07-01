@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".application.ui.details_base_page.profile.edit_profile.EditProfileActivity">
+        tools:context=".ui.buttom_navigation_package.details_base_page.profile.edit_profile.EditProfileActivity">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/back_btn"
@@ -47,8 +47,9 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/dp"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:backgroundTint="@color/base_color"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
                 android:src="@drawable/profile"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -57,7 +58,7 @@
                 android:id="@+id/edit_dp"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_margin="13dp"
+                android:layout_margin="8dp"
                 android:background="@drawable/lode_more_icon"
                 android:gravity="center"
                 app:layout_constraintBottom_toBottomOf="parent"

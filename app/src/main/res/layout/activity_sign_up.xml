@@ -16,7 +16,7 @@
             android:layout_width="110dp"
             android:layout_height="25dp"
             android:layout_marginTop="30dp"
-            android:src="@drawable/logo_new"
+            android:src="@drawable/zoom2u_black_blue"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -29,9 +29,10 @@
             android:layout_height="30dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
-            android:text="Create a New Account"
+            android:text="@string/create_acc"
             android:textAlignment="center"
             android:textColor="#42B4E5"
+            android:fontFamily="@font/montserrat_black"
             android:textSize="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -58,7 +59,7 @@
                     android:id="@+id/first_name_header"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:hint="Name"
+                    android:hint="@string/name_header"
                     app:boxStrokeWidth="0dp"
                     app:boxStrokeWidthFocused="0dp"
                     app:hintTextColor="@color/txt_sub_color"
@@ -81,7 +82,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
-                    android:hint="Last Name"
+                    android:hint="@string/last_name_header"
                     app:boxStrokeWidth="0dp"
                     app:boxStrokeWidthFocused="0dp"
                     app:hintTextColor="@color/txt_sub_color"
@@ -104,7 +105,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:hint="Company"
+                    android:hint="@string/company_header"
                     app:boxStrokeWidth="0dp"
                     app:boxStrokeWidthFocused="0dp"
                     app:hintTextColor="@color/txt_sub_color"
@@ -125,7 +126,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:hint="Email"
+                    android:hint="@string/email_header_login"
                     app:boxStrokeWidth="0dp"
                     app:boxStrokeWidthFocused="0dp"
                     app:hintTextColor="@color/txt_sub_color"
@@ -147,7 +148,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:hint="Phone number*"
+                    android:hint="@string/phone_header"
                     app:boxStrokeWidth="0dp"
                     app:boxStrokeWidthFocused="0dp"
                     app:hintTextColor="@color/txt_sub_color"
@@ -167,9 +168,9 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/where_find_us"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:hint="Where did you find us?"
+                    android:hint="@string/find_us"
                     app:boxStrokeWidth="0dp"
                     app:boxStrokeWidthFocused="0dp"
                     app:hintTextColor="@color/txt_sub_color"
@@ -196,7 +197,7 @@
                 <Spinner
                     android:id="@+id/spinner"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:background="@android:color/transparent"
                     android:dropDownVerticalOffset="10dp"
@@ -210,7 +211,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:hint="Password*"
+                    android:hint="@string/pass_header_login"
                     app:boxStrokeWidth="0dp"
                     app:boxStrokeWidthFocused="0dp"
                     app:hintTextColor="@color/txt_sub_color"
@@ -234,7 +235,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:hint="Confirm Password*"
+                    android:hint="@string/confirm_pass_header_login"
                     app:boxStrokeWidth="0dp"
                     app:boxStrokeWidthFocused="0dp"
                     app:hintTextColor="@color/txt_sub_color"
@@ -274,24 +275,25 @@
 
             <CheckBox
                 android:id="@+id/chk_terms"
+                style="@style/style_13_regular"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:buttonTint="@color/base_color"
                 android:gravity="center_vertical"
-                android:text="I Accept the customer"
-                android:textSize="@dimen/medium_text" />
+                android:text="@string/term_con"
+                android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/terms"
-                style="@style/style_13_regular"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
                 android:gravity="center_vertical"
                 android:text=" Terms and Conditions."
                 android:textColor="@color/base_color"
-                android:textSize="@dimen/medium_text" />
+                android:fontFamily="@font/montserrat_medium"
+                />
 
         </LinearLayout>
 
@@ -305,8 +307,7 @@
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="30dp"
             android:background="@drawable/chip_background"
-            android:clickable="true"
-            android:text="Sign up"
+            android:text="@string/sign_up"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textStyle="bold"
@@ -331,21 +332,21 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/signin_txt"
+                    android:id="@+id/signup_txt"
                     style="@style/style_13_regular"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Already have an account?"
+                    android:text="@string/already_acc"
                     android:textColor="@color/black" />
 
                 <TextView
-                    android:id="@+id/signin"
+                    android:id="@+id/signup"
                     style="@style/style_15_bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Sign in"
+                    android:text="@string/sign_in"
                     android:textColor="@color/black" />
 
             </LinearLayout>

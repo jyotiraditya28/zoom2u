@@ -1,7 +1,78 @@
 <resources>
     <string name="app_name">Zoom2u</string>
     <string name="place_api_key">AIzaSyBKwJd0d1w6Bpi1yfE_MRY3MuHmkG7fEWE</string>
-    <!-- TODO: Remove or change this placeholder text -->
+
+
+    <!--common-->
+    <string name="plus">+</string>
+    <string name="minus">-</string>
+    <string name="edit">Edit</string>
+    <!--login text-->
+    <string name="login_txt_header">Zoom2u connects you with local drivers in your area for fast same day deliveries.</string>
+    <string name="email_header">Email</string>
+    <string name="pass_header">Password</string>
+    <string name="login">Login</string>
+    <string name="forget_pass">Forgot password?</string>
+    <string name="register">Register</string>
+
+    <!--sign text-->
+    <string name="create_acc">Create a New Account</string>
+    <string name="name_header">Name*</string>
+    <string name="last_name_header">Last Name*</string>
+    <string name="company_header">Company</string>
+    <string name="phone_header">Phone Number*</string>
+    <string name="email_header_login">Email*</string>
+    <string name="pass_header_login">Password"</string>
+    <string name="confirm_pass_header_login">Confirm Password"</string>
+    <string name="find_us">Where did you find us?</string>
+    <string name="term_con">I Accept the customer</string>
+    <string name="sign_up">Sign up</string>
+    <string name="already_acc">Already have an account?</string>
+    <string name="sign_in">Sign in</string>
+    <string name="signup_error_msg">Something went wrong Please try again.</string>
+
+
+    <!--home page-->
+    <string name="home_header">What would you like to send today?</string>
+    <string name="delivery_redesigned">Delivery, Redesigned.</string>
+    <string name="home_text">At Zoom2u we know how important it is to know where your parcel is and when it will be delivered.</string>
+    <string name="get_a_quote">Get a Quote</string>
+
+
+
+    <!--profile page-->
+    <string name="my_profile">My Profile</string>
+    <string name="my_location">My Location</string>
+    <string name="change_pass">Change Password</string>
+    <string name="sign_out">Sign Out</string>
+
+<!--my location-->
+    <string name="no_my_location">No my location found</string>
+    <string name="default_drop">| DEFAULT DROP-OFF</string>
+    <string name="default_pick">| DEFAULT PICK-UP</string>
+    <string name="save_your_place">Save your favourite places</string>
+    <string name="add_new">Add New</string>
+
+    <!--add edit location-->
+    <string name="location_name">Contact name and business*</string>
+    <string name="email_address">Email address</string>
+    <string name="contact_number">Contact number*</string>
+    <string name="address">Address*</string>
+    <string name="pickup_location">Set as default pick-up location.</string>
+    <string name="drop_location">Set as default drop-off location.</string>
+    <string name="remove">Remove</string>
+    <string name="save_location">Save Location</string>
+    <string name="find_me">Find me</string>
+    <string name="save">Save</string>
+
+
+    <!--change password-->
+    <string name="current_pass">Current Password</string>
+    <string name="new_pass">New Password</string>
+    <string name="new_pass_cnfrm">New Password Confirmation</string>
+
+
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="home">Home</string>
     <string name="title_activity_maps1">Map</string>
@@ -13,10 +84,10 @@
     <string name="reset_pass_txt">Enter your Email and we\'ll send you a link to rest your password.</string>
     <string name="enter_email">Enter your Email</string>
     <string name="reset_pass1">Reset Password</string>
-    <string name="change_pass">Chnage Password</string>
-    <string name="current_pass">Current Password</string>
-    <string name="new_pass">New Password</string>
-    <string name="new_pass_cnfrm">New Password Confirmation</string>
+
+
+
+
     <string name="title_activity_bottom_navigation">MainActivity</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>

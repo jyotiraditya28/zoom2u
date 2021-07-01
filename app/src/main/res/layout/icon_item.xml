@@ -6,7 +6,7 @@
 
         <variable
             name="icon"
-            type="com.zoom2u_customer.application.ui.details_base_page.home.home_fragment.Icon" />
+            type="com.zoom2u_customer.ui.buttom_navigation_package.details_base_page.home.home_fragment.Icon" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -36,33 +36,33 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                <LinearLayout
-                    android:id="@+id/layout_doc_ll"
-                    android:layout_width="65dp"
-                    android:layout_height="50dp"
-                    android:layout_margin="10dp"
-                    android:elevation="5dp"
-                    android:gravity="center"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:background="@drawable/white_background"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-
-
-                    <ImageView
-                        android:id="@+id/image_thumb_nail"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_gravity="center"
-                        app:imagefor="@{icon.image}"
+                    <LinearLayout
+                        android:id="@+id/layout_doc_ll"
+                        android:layout_width="65dp"
+                        android:layout_height="50dp"
+                        android:layout_margin="10dp"
+                        android:elevation="5dp"
+                        android:gravity="center"
                         app:layout_constraintBottom_toBottomOf="parent"
+                        android:background="@drawable/white_background"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent">
 
-                </LinearLayout>
+
+
+                        <ImageView
+                            android:id="@+id/image_thumb_nail"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_gravity="center"
+                            app:imagefor="@{icon.image}"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </LinearLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <com.google.android.material.textview.MaterialTextView

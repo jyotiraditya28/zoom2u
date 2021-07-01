@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".application.ui.details_base_page.profile.ProfileFragment">
+    tools:context=".ui.buttom_navigation_package.details_base_page.profile.ProfileFragment">
 
 
         <com.google.android.material.textview.MaterialTextView
@@ -13,7 +13,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:text="Edit"
+            android:text="@string/edit"
             android:textColor="@color/base_color"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="My Profile"
+            android:text="@string/my_profile"
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -37,7 +37,7 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_margin="20dp"
-            android:src="@drawable/ic_chat_icon"
+            android:src="@drawable/ic_chat_grey"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -77,7 +77,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:textColor="@color/black"
-            android:textSize="20dp"
+            android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/dp" />
@@ -225,7 +225,7 @@
                  android:layout_marginTop="15dp"
                  android:textColor="@color/base_color"
                  android:gravity="center_vertical"
-                 android:text="My Location"
+                 android:text="@string/my_location"
                  app:layout_constraintStart_toStartOf="parent"
                  app:layout_constraintTop_toBottomOf="@+id/line5" />
 
@@ -251,7 +251,7 @@
                  android:layout_marginTop="15dp"
                  android:textColor="@color/base_color"
                  android:gravity="center_vertical"
-                 android:text="Change Password"
+                 android:text="@string/change_pass"
                  app:layout_constraintStart_toStartOf="parent"
                  app:layout_constraintTop_toBottomOf="@+id/line6" />
 
@@ -268,7 +268,7 @@
                  app:layout_constraintTop_toBottomOf="@+id/change_pass" />
 
              <com.google.android.material.textview.MaterialTextView
-                 android:fontFamily="@font/montserrat_black"
+                 android:fontFamily="@font/montserrat_bold"
                  android:id="@+id/sign_out"
                  style="@style/style_15_bold"
                  android:layout_width="match_parent"
@@ -277,7 +277,7 @@
                  android:layout_marginTop="15dp"
                  android:textColor="@color/base_color"
                  android:gravity="center_vertical"
-                 android:text="Sign Out"
+                 android:text="@string/sign_out"
                  app:layout_constraintStart_toStartOf="parent"
                  app:layout_constraintTop_toBottomOf="@+id/line7" />
 
