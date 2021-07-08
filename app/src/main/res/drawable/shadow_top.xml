@@ -3,7 +3,7 @@
     <!-- Gray shadow. -->
     <item  android:bottom="5dp">
         <shape>
-            <solid android:color="#F5F5F5" />
+            <solid android:color="@color/white" />
             <corners
                 android:bottomLeftRadius="0dp"
                 android:bottomRightRadius="0dp"
@@ -14,7 +14,7 @@
     <!-- White foreground. -->
     <item android:top="5dp" >
         <shape>
-            <solid android:color="#F5F5F5"  />
+            <solid android:color="@color/white"  />
             <corners
                 android:bottomLeftRadius="0dp"
                 android:bottomRightRadius="0dp"

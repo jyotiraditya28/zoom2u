@@ -44,7 +44,7 @@
                         android:elevation="5dp"
                         android:gravity="center"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        android:background="@drawable/white_background"
+                        android:background="@drawable/background_home_icon_shadow"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">

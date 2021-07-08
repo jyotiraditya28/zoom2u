@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import com.zoom2u_customer.R
@@ -27,7 +28,7 @@ class MyLocationActivity : AppCompatActivity() , View.OnClickListener {
 
         setAdpterView()
 
-        viewModel = ViewModelProviders.of(this).get(MyLocationViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(MyLocationViewModel::class.java)
 
         val serviceApi: ServiceApi = com.zoom2u_customer.apiclient.ApiClient.getServices()
         repository = MyLocationRepository(serviceApi, this)

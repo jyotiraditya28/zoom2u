@@ -24,12 +24,17 @@ import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.zoom2u_customer.R
+import com.zoom2u_customer.apiclient.ApiClient.Companion.getServices
+import com.zoom2u_customer.apiclient.GetAddressFromGoogleAPI.Companion.getGoogleServices
+import com.zoom2u_customer.apiclient.GoogleServiceApi
 import com.zoom2u_customer.apiclient.ServiceApi
+import com.zoom2u_customer.databinding.ActivityEditLocationBinding
 import com.zoom2u_customer.ui.buttom_navigation_package.details_base_page.profile.my_location.model.AddLocationReq
 import com.zoom2u_customer.ui.buttom_navigation_package.details_base_page.profile.my_location.model.MyLocationResAndEditLocationReq
-import com.zoom2u_customer.databinding.ActivityEditLocationBinding
+import com.zoom2u_customer.ui.buttom_navigation_package.get_location.GetLocationClass
 import com.zoom2u_customer.utility.AppUtility
 import com.zoom2u_customer.utility.DialogActivity
+import org.json.JSONObject
 import java.util.*
 
 class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
@@ -39,12 +44,17 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
     lateinit var binding: ActivityEditLocationBinding
     private var isEdit: Boolean = false
     private var myLocationResponse: MyLocationResAndEditLocationReq? = null
+    private var addLocationReq: AddLocationReq? = null
     lateinit var viewModel: EditAddLocationViewModel
     private var repository: EditAddLocationRepository? = null
+    private var getLocationClass : GetLocationClass?=null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_edit_location)
         AppUtility.hideKeyboard(this)
+
+        getLocationClass = GetLocationClass(this)
 
         if (intent.hasExtra("EditAddLocation")) {
             isEdit = intent.getBooleanExtra("EditAddLocation", false)
@@ -52,7 +62,7 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
                 binding.header.text = "Edit Location"
                 binding.removeCl.visibility = View.VISIBLE
                 myLocationResponse = intent.getParcelableExtra("EditLocation")
-                setEditDataView(myLocationResponse)
+                showEditDataView(myLocationResponse)
             } else {
                 binding.removeCl.visibility = View.GONE
                 binding.header.text = "Add Location"
@@ -68,8 +78,9 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
         binding.address.setOnClickListener(this)
 
         viewModel = ViewModelProvider(this).get(EditAddLocationViewModel::class.java)
-        val serviceApi: ServiceApi = com.zoom2u_customer.apiclient.ApiClient.getServices()
-        repository = EditAddLocationRepository(serviceApi, this)
+        val serviceApi: ServiceApi = getServices()
+        val googleServiceApi: GoogleServiceApi = getGoogleServices()
+        repository = EditAddLocationRepository(serviceApi, googleServiceApi, this)
         viewModel.repository = repository
 
 
@@ -120,16 +131,45 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
                 }
 
             }
+
+            viewModel.getDataFromGoogleSuccess()?.observe(this) {
+                if (!TextUtils.isEmpty(it)) {
+                    AppUtility.progressBarDissMiss()
+                    if (it != "") {
+
+                        val jsonObj = JSONObject(it.toString())
+                        val resultsJsonArray = jsonObj.getJSONArray("results")
+                        if (isEdit) {
+                           // myLocationResponse?.Location?.Country = address[0].countryName
+                           // myLocationResponse?.Location?.State = address[0].locality
+                            myLocationResponse?.Location?.GPSX = resultsJsonArray.getJSONObject(0).getJSONObject("geometry").getJSONObject("location").getDouble("lat")
+                            myLocationResponse?.Location?.GPSY = resultsJsonArray.getJSONObject(0).getJSONObject("geometry").getJSONObject("location").getDouble("lng")
+                            myLocationResponse?.Location?.Suburb =resultsJsonArray.getJSONObject(0).getJSONArray("address_components").getJSONObject(0).getString("short_name")
+                           // /*check again*/myLocationResponse?.Location?.Street =
+
+                        } else {
+
+                          //  addLocationReq?.Location?.State = address[0].locality
+                            addLocationReq?.Location?.Gpsx = resultsJsonArray.getJSONObject(0).getJSONObject("geometry").getJSONObject("location").getDouble("lat")
+                            addLocationReq?.Location?.Gpsy = resultsJsonArray.getJSONObject(0).getJSONObject("geometry").getJSONObject("location").getDouble("lng")
+                           addLocationReq?.Location?.Suburb = resultsJsonArray.getJSONObject(0).getJSONArray("address_components").getJSONObject(0).getString("short_name")
+                         //   /*check again*/ addLocationReq?.Location?.Street = address[0].adminArea
+                        }
+
+                    }
+                }
+
+            }
+
         }
     }
 
 
-    private fun setEditDataView(myLocationResponse: MyLocationResAndEditLocationReq?) {
-
+    private fun showEditDataView(myLocationResponse: MyLocationResAndEditLocationReq?) {
         binding.name.setText(myLocationResponse?.Location?.ContactName)
         binding.email.setText(myLocationResponse?.Location?.Email)
         binding.phone.setText(myLocationResponse?.Location?.Phone)
-        binding.address.text = myLocationResponse?.Location?.Address
+        binding.address.setText(myLocationResponse?.Location?.Address)
         binding.pickupCheckBox.isChecked = myLocationResponse?.DefaultPickup == true
         binding.dropOffCheckBox.isChecked = myLocationResponse?.DefaultDropoff == true
 
@@ -142,9 +182,6 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(view: View?) {
         when (view!!.id) {
             R.id.address -> {
-                /* dialog = LocationDialog(this)
-                 dialog?.showLocationDialog(this)*/
-
                 if (!Places.isInitialized()) {
                     val apiKey = getString(R.string.google_api_key)
                     Places.initialize(applicationContext, apiKey)
@@ -156,9 +193,10 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
                     val intent = Autocomplete.IntentBuilder(
                         AutocompleteActivityMode.FULLSCREEN, fields
                     )
-                        .setCountry("AU")
+                        //.setCountry("AU")
                         .setTypeFilter(TypeFilter.ADDRESS)
                         .build(this)
+
                     startActivityForResult(intent, placeAutocompleteRequest)
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -175,7 +213,7 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
 
             }
             R.id.find_me -> {
-                getCurrentLocation()
+                getLocationClass?.getCurrentLocation(onAddress = ::getAddress)
             }
             R.id.back_btn -> {
                 finish()
@@ -188,31 +226,24 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
                     myLocationResponse?.Location?.ContactName = binding.name.text.toString().trim()
                     myLocationResponse?.Location?.Email = binding.email.text.toString().trim()
                     myLocationResponse?.Location?.Phone = binding.phone.text.toString().trim()
+                    myLocationResponse?.Location?.Notes = binding.notes.text.toString().trim()
                     viewModel.editLocation(myLocationResponse)
                 } else {
 
-                    val location = AddLocationReq.Location1(
-                        binding.address.text.toString().trim(),
-                        binding.name.text.toString().trim(), "Australia", -25.274398, 133.775136,
-                        binding.phone.text.toString().trim(), ""
-                    )
+                    addLocationReq?.DefaultPickup = binding.pickupCheckBox.isChecked
+                    addLocationReq?.DefaultDropoff = binding.dropOffCheckBox.isChecked
 
-                    val location2 = AddLocationReq.Location2(
-                        binding.email.text.toString().trim(), "", "", "" +
-                                "", "", "", "", "", "", "",
-                        "", "", ""
-                    )
-                    val addLocationReq = AddLocationReq(
-                        binding.pickupCheckBox.isChecked, binding.dropOffCheckBox.isChecked,
-                        location, location2
-                    )
+                    addLocationReq?.Location?.Address = binding.address.text.toString().trim()
+                    addLocationReq?.Location?.CompanyName = ""
+                    addLocationReq?.Location?.ContactName = binding.name.text.toString().trim()
+                    addLocationReq?.Location?.Email = binding.email.text.toString().trim()
+                    addLocationReq?.Location?.Notes = binding.notes.text.toString().trim()
+                    addLocationReq?.Location?.Phone = binding.phone.text.toString().trim()
+                    addLocationReq?.Location?.UnitNumber = ""
+                    addLocationReq?.Location?.Suburb = ""
 
-                    if (checkValidation(
-                            binding.name.text.toString().trim(),
-                            binding.phone.text.toString().trim(),
-                            binding.address.text.toString().trim()
-                        )
-                    )
+
+                    if (checkValidation(binding.name.text.toString().trim(), binding.phone.text.toString().trim(), binding.address.text.toString().trim()))
                         viewModel.addLocation(addLocationReq)
                 }
             }
@@ -220,7 +251,15 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun checkValidation(name: String, phone: String, address: String): Boolean {
-        if (name == "") {
+        if (name == "" && phone == "" && address == "") {
+            AppUtility.validateEditTextField(
+                binding.name,
+                "Please enter a contact name & business."
+            )
+            AppUtility.validateEditTextField(binding.phone, "Please enter a valid mobile number.")
+            AppUtility.validateEditTextField(binding.address, "Please enter address.")
+            return false
+        } else if (name == "") {
             AppUtility.validateEditTextField(
                 binding.name,
                 "Please enter a contact name & business."
@@ -230,40 +269,12 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
             AppUtility.validateEditTextField(binding.phone, "Please enter a valid mobile number.")
             return false
         } else if (address == "") {
-            AppUtility.validateEditTextField(binding.phone, "Please enter address.")
+            AppUtility.validateEditTextField(binding.address, "Please enter address.")
             return false
         }
         return true
     }
 
-    private fun getCurrentLocation() {
-        if (checkPermission()) {
-            if (isLocationEnabled()) {
-                fusedLocationProviderClient.lastLocation.addOnCompleteListener { task ->
-                    val location: Location? = task.result
-                    if (location == null) {
-                        val locationRequest = LocationRequest()
-                        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-                        locationRequest.interval = 0
-                        locationRequest.fastestInterval = 0
-                        locationRequest.numUpdates = 1
-                        fusedLocationProviderClient =
-                            LocationServices.getFusedLocationProviderClient(this)
-                        fusedLocationProviderClient.requestLocationUpdates(
-                            locationRequest, locationCallback, Looper.myLooper()
-                        )
-                    } else {
-                        getAddress(location.latitude, location.longitude)
-                    }
-                }
-            } else {
-                Toast.makeText(this, "Please Turn on Your device Location", Toast.LENGTH_SHORT)
-                    .show()
-            }
-        } else {
-            requestPermission()
-        }
-    }
 
     private fun getAddress(lat: Double, long: Double) {
 
@@ -272,78 +283,42 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
 
         address[0].locality
         address[0].countryName
-        binding.address.text = address[0].getAddressLine(0)
+        binding.address.setText(address[0].getAddressLine(0))
 
         if (isEdit) {
-
-            myLocationResponse?.Location?.Country = address[0].countryName
-            myLocationResponse?.Location?.State = address[0].locality
+           // myLocationResponse?.Location?.State = address[0].adminArea
             myLocationResponse?.Location?.GPSX = address[0].latitude
             myLocationResponse?.Location?.GPSY = address[0].longitude
-
             myLocationResponse?.Location?.Postcode = address[0].postalCode
+            myLocationResponse?.Location?.Street = address[0].locality
+            myLocationResponse?.Location?.Suburb = address[0].adminArea
+        } else {
+            addLocationReq?.Location?.Country = address[0].countryName
+            addLocationReq?.Location?.State = address[0].locality
+            addLocationReq?.Location?.Gpsx = address[0].latitude
+            addLocationReq?.Location?.Gpsy = address[0].longitude
+            addLocationReq?.Location?.Postcode = address[0].postalCode
+            addLocationReq?.Location?.Street = address[0].adminArea
         }
 
     }
 
-
-    private fun checkPermission(): Boolean {
-        if (
-            ActivityCompat.checkSelfPermission(
-                this,
-                android.Manifest.permission.ACCESS_COARSE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED ||
-            ActivityCompat.checkSelfPermission(
-                this,
-                android.Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            return true
-        }
-
-        return false
-
-    }
-
-
-    private fun requestPermission() {
-
-        ActivityCompat.requestPermissions(
-            this,
-            arrayOf(
-                android.Manifest.permission.ACCESS_COARSE_LOCATION,
-                android.Manifest.permission.ACCESS_FINE_LOCATION
-            ),
-            permissionId
-        )
-    }
-
-    private fun isLocationEnabled(): Boolean {
-        val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
-            LocationManager.NETWORK_PROVIDER
-        )
-    }
-
-    private val locationCallback = object : LocationCallback() {
-        override fun onLocationResult(locationResult: LocationResult) {
-            var lastLocation: Location = locationResult.lastLocation
-        }
-    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == placeAutocompleteRequest) {
             if (resultCode == RESULT_OK) {
                 val place = Autocomplete.getPlaceFromIntent(data!!)
-                binding.address.text = place.address
-                //getAddressData()
+                binding.address.setText(place.address)
+                /*call google api for get data using selected address*/
+                viewModel.dataFromGoogle(binding.address.text.toString())
+
                 Log.i("Place API Success", "  -------------- Place -------------" + place.name)
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 val status = Autocomplete.getStatusFromIntent(
                     data!!
                 )
-                binding.address.text = ""
+                binding.address.setText("")
                 Log.i(
                     "Place API Failure",
                     "  -------------- Error -------------" + status.statusMessage
@@ -353,4 +328,56 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
             }
         }
     }
+
+    private fun getAddressData() {
+
+
+        /*try {
+            if (binding.address.text.toString() != "") {
+                var addressToGeocoderStr = ""
+                addressToGeocoderStr = binding.address.text.toString()
+                if (getaddresForNewLocations != null) getaddresForNewLocations = null
+                getaddresForNewLocations =
+                    GetAddressFromGoogleAPI.getAddressDetailGeoCoder(addressToGeocoderStr)
+                try {
+                    pickUplat = getaddresForNewLocations.get("latitude") as Double
+                    pickUpLong = getaddresForNewLocations.get("longitude") as Double
+                    countryStr = getaddresForNewLocations.get("country") as String
+                    suburbStr = getaddresForNewLocations.get("suburb") as String
+                    stateStr = getaddresForNewLocations.get("state") as String
+                    postCodeStr = getaddresForNewLocations.get("postcode") as String
+                    var setAddressTxt = getaddresForNewLocations.get("address") as String
+                    if (getaddresForNewLocations.get("streetNumber") != null) {
+                        if ((getaddresForNewLocations.get("address") as String).contains(
+                                (getaddresForNewLocations.get(
+                                    "streetNumber"
+                                ) as String)
+                            )
+                        ) setAddressTxt = setAddressTxt.replace(
+                            (getaddresForNewLocations.get("streetNumber") as String), ""
+                        ).trim { it <= ' ' }
+                    }
+                    if (setAddressTxt != "") {
+                        edtLocationdetails.setText(setAddressTxt)
+                        if (getaddresForNewLocations.get("streetNumber") != null) edtStreetNo.setText(
+                            getaddresForNewLocations.get("streetNumber") as String
+                        )
+                    }
+                    if (edtStreetNo.getText().toString() != "") edtStreetNo.setError(null)
+                } catch (e: java.lang.Exception) {
+                    e.printStackTrace()
+                    edtLocationdetails.setText("")
+                    edtStreetNo.setText("")
+                }
+            }
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+        }
+    }
+*/
+    }
+
+
+
+
 }

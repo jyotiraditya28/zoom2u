@@ -69,8 +69,8 @@ data class HistoryDetailsResponse(
     var Longitude: String? = null,
     var IsOnHold: Boolean? = null,
     var IsInterstate: Boolean? = null,
-    var BookingCallHistory: List<String>? = null,
-    var DeliveryAttemptDetails: List<String>? = null,
+    var BookingCallHistory: List<BookingCallHistoryClass>? = null,
+    //var DeliveryAttemptDetails: List<String>? = null,
     var OrderNumber: String? = null,
     var IsCancel: Boolean? = null,
     var PickupSigneePosition: Int? = null,
@@ -90,6 +90,26 @@ data class HistoryDetailsResponse(
     var ThirdPartyCarrierConsignmentNumber: String? = null,
     var ThirdPartyCarrierTrackingLink: String? = null
 ) : Parcelable {
+
+    @Parcelize
+   data class BookingCallHistoryClass(
+       var `$id`: String? = null,
+       var `$type`: String? = null,
+       var BookingCallHistoryId: Int? = null,
+       var CreatedDateTime: String? = null,
+       var Notes: String? = null,
+       var BookingId: Int? = null,
+       var UserId: String? = null,
+       var DeliveryRequest: String? = null
+   ): Parcelable
+
+
+
+
+
+
+
+
     @Parcelize
     data class CourierCurrentLocationClass(
         var `$id`: String? = null,

@@ -73,22 +73,12 @@
             android:elevation="10dp"
             android:orientation="vertical">
 
-            <ScrollView
-                android:id="@+id/scrollView"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginTop="20dp"
-                android:layout_weight="1"
-                android:scrollbars="vertical">
-
-
-                <androidx.recyclerview.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/icon_view"
+                    android:isScrollContainer="false"
                     tools:listitem="@layout/icon_item"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
-
-            </ScrollView>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -137,12 +127,12 @@
                 <Button
                     android:id="@+id/get_quote_btn"
                     style="@style/style_13_bold"
-                    android:layout_width="140dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/chip_background"
-                    android:text="@string/get_a_quote"
+                    android:text="@string/make_a_booking"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     app:layout_constraintBottom_toBottomOf="parent"

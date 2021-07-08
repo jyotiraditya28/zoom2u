@@ -7,7 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.zoom2u_customer.apiclient.ApiClient.Companion.getServices
 import com.zoom2u_customer.apiclient.ServiceApi
@@ -26,16 +26,16 @@ class HistoryFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
 
         binding = FragmentHistoryBinding.inflate(inflater, container, false)
 
         if (container != null) {
-            setAdpterView(binding, container.context)
+            setAdapterView(binding, container.context)
         }
 
-        viewModel = ViewModelProviders.of(this).get(HistoryViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(HistoryViewModel::class.java)
         val serviceApi: ServiceApi = getServices()
         repository = HistoryRepository(serviceApi, container?.context)
         viewModel.repository = repository
@@ -59,8 +59,8 @@ class HistoryFragment : Fragment() {
 
     }
 
-    fun setAdpterView(binding: FragmentHistoryBinding, context: Context) {
-        var layoutManager = GridLayoutManager(activity, 1)
+    fun setAdapterView(binding: FragmentHistoryBinding, context: Context) {
+        val layoutManager = GridLayoutManager(activity, 1)
         binding.deliveryHistoryRecycler.layoutManager = layoutManager
         adapter = HistoryItemAdapter(context, Collections.emptyList(), onItemClick = ::onItemClick)
         binding.deliveryHistoryRecycler.adapter = adapter

@@ -152,7 +152,6 @@
                     android:layout_height="1dp"
                     android:layout_margin="10dp"
                     android:background="@color/line_color"
-                    android:elevation="30dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/cl" />
 
@@ -161,7 +160,6 @@
                     android:id="@+id/scrollView"
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
-
                     android:layout_weight="1"
                     android:scrollbars="vertical"
                     app:layout_constraintStart_toStartOf="parent"
@@ -171,7 +169,8 @@
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/icon_view"
                         android:layout_width="match_parent"
-                        android:layout_height="120dp"
+                        android:layout_height="wrap_content"
+                        tools:listitem="@layout/item_map_doc"
                        />
 
                 </ScrollView>
@@ -197,8 +196,9 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_margin="20dp"
+            android:textAllCaps="false"
             android:background="@drawable/chip_background"
-            android:text="Add Delivery Details"
+            android:text="@string/add_delivery_details"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="parent" />

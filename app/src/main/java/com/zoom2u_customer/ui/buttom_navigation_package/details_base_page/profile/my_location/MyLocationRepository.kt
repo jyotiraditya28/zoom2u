@@ -2,12 +2,15 @@ package com.zoom2u_customer.ui.buttom_navigation_package.details_base_page.profi
 
 import android.content.Context
 import android.util.Log
+import android.widget.ProgressBar
+import android.widget.Toast
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.reflect.TypeToken
 import com.zoom2u_customer.apiclient.ServiceApi
 import com.zoom2u_customer.ui.buttom_navigation_package.details_base_page.profile.my_location.model.MyLocationResAndEditLocationReq
 import com.zoom2u_customer.utility.AppUtility
+import com.zoom2u_customer.utility.CustomProgressBar
 import com.zoom2u_customer.utility.DialogActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -19,7 +22,7 @@ class MyLocationRepository(private var serviceApi: ServiceApi, var context: Cont
 
     fun getMyLocation( disposable: CompositeDisposable = CompositeDisposable(),  onSuccess: (myLocationList:List<MyLocationResAndEditLocationReq>) -> Unit) {
         if (AppUtility.isInternetConnected()) {
-            AppUtility.progressBarShow(context)
+            CustomProgressBar.progressBarShow(context,"Loading...","Please wait a moment")
             disposable.add(
                 serviceApi.getWithJsonArray(
                     "breeze/customer/GetPreferredLocations",
@@ -35,15 +38,18 @@ class MyLocationRepository(private var serviceApi: ServiceApi, var context: Cont
                                     object : TypeToken<List<MyLocationResAndEditLocationReq?>?>() {}.type
                                 val list: List<MyLocationResAndEditLocationReq> =
                                     Gson().fromJson(responce.body(), listType)
-                                AppUtility.progressBarDissMiss()
+                                CustomProgressBar.dismissProgressBar()
                                 onSuccess(list)
-
-
+                            }else if(responce.errorBody()!=null){
+                                CustomProgressBar.dismissProgressBar()
+                                Toast.makeText(context, "something went wrong please try again.", Toast.LENGTH_LONG).show()
                             }
                         }
 
                         override fun onError(e: Throwable) {
+                            CustomProgressBar.dismissProgressBar()
                             Log.d("", "")
+                            Toast.makeText(context, "something went wrong please try again.", Toast.LENGTH_LONG).show()
                         }
                     })
             )

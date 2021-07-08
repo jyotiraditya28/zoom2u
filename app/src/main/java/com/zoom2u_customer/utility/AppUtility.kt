@@ -22,6 +22,7 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.zoom2u_customer.R
 import com.zoom2u_customer.ui.log_in.LoginResponce
+import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -194,5 +195,52 @@ class AppUtility {
             validateTxtField.setHintTextColor(Color.parseColor("#FF476A"))
 
         }
+
+
+        fun getDateTimeFromDeviceToServerForDate(serverDateTimeValue: String?): String? {
+            val dateTimeReturn: String? = null
+            try {
+                if (serverDateTimeValue != "") {
+                    val converter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                    converter.timeZone = TimeZone.getTimeZone("GMT")
+                    var convertedDate: Date? = Date()
+                    try {
+                        convertedDate = converter.parse(serverDateTimeValue)
+                        val dateFormatter = SimpleDateFormat("dd-MMM-yy hh:mm a")
+                        return dateFormatter.format(convertedDate)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+            }
+            return dateTimeReturn
+        }
+
+
+
+        fun getDateTime(serverDateTimeValue: String?): String? {
+            val dateTimeReturn: String? = null
+            try {
+                if (serverDateTimeValue != "") {
+                    val converter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                    converter.timeZone = TimeZone.getTimeZone("GMT")
+                    var convertedDate: Date? = Date()
+                    try {
+                        convertedDate = converter.parse(serverDateTimeValue)
+                        val dateFormatter = SimpleDateFormat("dd/MM/yyyy")
+                        return dateFormatter.format(convertedDate)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+            }
+            return dateTimeReturn
+        }
+
+
     }
 }

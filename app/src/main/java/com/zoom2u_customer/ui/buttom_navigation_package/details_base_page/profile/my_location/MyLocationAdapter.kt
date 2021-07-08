@@ -51,6 +51,10 @@ class MyLocationAdapter(
             holder.itemBinding.defaultPickTxt.visibility = View.GONE
     }
 
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
+
     class BindingViewHolder(val itemBinding: ItemMyLocationBinding) :
         RecyclerView.ViewHolder(itemBinding.root)
 }

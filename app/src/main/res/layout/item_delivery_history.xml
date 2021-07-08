@@ -14,7 +14,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#F5F5F5"
+        android:background="@color/white"
 
         >
 
@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginTop="10dp"
-            android:textSize="18dp"
+            android:textSize="18sp"
             android:layout_marginStart="15dp"
             android:textColor="@color/black"
             android:visibility="gone"
@@ -45,7 +45,7 @@
             android:layout_marginStart="15dp"
             android:layout_marginEnd="15dp"
             android:layout_marginBottom="5dp"
-            android:elevation="2dp"
+            android:elevation="5dp"
             android:background="@drawable/white_background"
             android:layout_marginTop="10dp"
             app:layout_constraintTop_toBottomOf="@+id/heading"
@@ -79,7 +79,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_margin="5dp"
-                    android:text="Document"
+                    android:text="@string/document"
                     android:textStyle="bold" />
 
             </LinearLayout>
@@ -102,7 +102,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
-                android:text="COURIER"
+                android:text="@string/courier"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/line" />

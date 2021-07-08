@@ -133,25 +133,22 @@
                     android:background="@color/line_color"
                     app:layout_constraintTop_toBottomOf="@+id/phone" />
 
-                <RelativeLayout
-                    android:id="@+id/rl"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:gravity="center_vertical"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/line3">
 
-                    <androidx.appcompat.widget.AppCompatTextView
+
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/address"
                         style="@style/style_13_bold"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_marginEnd="40dp"
                         android:background="@null"
+                        android:layout_marginTop="20dp"
                         android:gravity="center_vertical"
                         android:hint="@string/address"
+                        android:editable="false"
+                        android:clickable="true"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/line3"
+                        app:layout_constraintEnd_toStartOf="@+id/find_me"
 
                         />
 
@@ -160,8 +157,11 @@
                         android:id="@+id/find_me"
                         android:layout_width="35dp"
                         android:layout_height="30dp"
-                        android:layout_alignParentRight="true"
-                        android:orientation="vertical">
+                        android:layout_marginTop="20dp"
+                        android:orientation="vertical"
+                        app:layout_constraintStart_toEndOf="@+id/address"
+                        app:layout_constraintTop_toBottomOf="@+id/line3"
+                        app:layout_constraintEnd_toEndOf="parent">
 
                         <com.google.android.material.imageview.ShapeableImageView
                             android:layout_width="15dp"
@@ -174,12 +174,12 @@
                             style="@style/style_9_regular"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/find_us"
+                            android:text="@string/find_me"
                             android:textColor="@color/base_color" />
 
                     </LinearLayout>
 
-                </RelativeLayout>
+
 
                 <View
                     android:id="@+id/line4"
@@ -187,7 +187,7 @@
                     android:layout_height=".5dp"
                     android:layout_marginTop="5dp"
                     android:background="@color/line_color"
-                    app:layout_constraintTop_toBottomOf="@+id/rl" />
+                    app:layout_constraintTop_toBottomOf="@+id/address" />
 
 
                 <com.google.android.material.textfield.TextInputEditText

@@ -7,6 +7,10 @@
     <string name="plus">+</string>
     <string name="minus">-</string>
     <string name="edit">Edit</string>
+    <string name="document">Document</string>
+    <string name="courier">COURIER</string>
+    <string name="next">Next</string>
+
     <!--login text-->
     <string name="login_txt_header">Zoom2u connects you with local drivers in your area for fast same day deliveries.</string>
     <string name="email_header">Email</string>
@@ -31,22 +35,19 @@
     <string name="sign_in">Sign in</string>
     <string name="signup_error_msg">Something went wrong Please try again.</string>
 
-
     <!--home page-->
     <string name="home_header">What would you like to send today?</string>
     <string name="delivery_redesigned">Delivery, Redesigned.</string>
     <string name="home_text">At Zoom2u we know how important it is to know where your parcel is and when it will be delivered.</string>
     <string name="get_a_quote">Get a Quote</string>
-
-
-
+    <string name="make_a_booking">Make a booking</string>
     <!--profile page-->
     <string name="my_profile">My Profile</string>
     <string name="my_location">My Location</string>
     <string name="change_pass">Change Password</string>
     <string name="sign_out">Sign Out</string>
 
-<!--my location-->
+    <!--my location-->
     <string name="no_my_location">No my location found</string>
     <string name="default_drop">| DEFAULT DROP-OFF</string>
     <string name="default_pick">| DEFAULT PICK-UP</string>
@@ -65,14 +66,62 @@
     <string name="find_me">Find me</string>
     <string name="save">Save</string>
 
-
     <!--change password-->
     <string name="current_pass">Current Password</string>
     <string name="new_pass">New Password</string>
     <string name="new_pass_cnfrm">New Password Confirmation</string>
 
 
+    <!--Delivery History-->
+    <string name="delivery_history">Delivery history</string>
+    <string name="no_delivery_history">No Delivery History</string>
 
+    <!--history status-->
+    <string name="picked_up">Picked Up</string>
+    <string name="delivery">Delivery</string>
+    <string name="accepted">Accepted</string>
+    <string name="dropped_off">Dropped Off</string>
+
+
+    <!--history details-->
+    <string name="delivery_details">Delivery details</string>
+    <string name="pick_up_details">Pick-up Details</string>
+    <string name="drop_off_details">Drop-off Details</string>
+    <string name="pickup">Pickup</string>
+    <string name="timing">Timing</string>
+    <string name="requested">(Requested)</string>
+    <string name="Drop_off">DropOff</string>
+    <string name="actual">(Actual)</string>
+    <string name="notes">Notes</string>
+    <string name="add_delivery_details">Add Delivery Details</string>
+
+
+
+
+
+    <!--home page-->
+
+
+
+
+
+
+    <!--Delivery Details-->
+    <string name="delivery_details1">Delivery Details</string>
+    <string name="pickup_details">Pickup details</string>
+    <string name="contact_name">Contact name*</string>
+    <string name="company_name">Company name</string>
+    <string name="level_suit">Level/Unit/Suit number</string>
+    <string name="instruction">Any special delivery instructions</string>
+    <string name="house">House/Apartment</string>
+    <string name="pick_check1">Send SMS Tracking Link to Pickup Person</string>
+    <string name="pick_check2">This is no-contact pickup</string>
+    <string name="pick_check2_desc">(please provide a phone number above and provide notes regarding the location of the package)</string>
+    <string name="dropOff_details1">DropOff details</string>
+    <string name="drop_check1">Send SMS Tracking Link to DropOff Person</string>
+    <string name="drop_check2">This is no-contact dropOff</string>
+    <string name="drop_check2_desc">(please provide a phone number above and provide notes regarding the location of the package)</string>
+   
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="home">Home</string>
     <string name="title_activity_maps1">Map</string>
@@ -84,8 +133,6 @@
     <string name="reset_pass_txt">Enter your Email and we\'ll send you a link to rest your password.</string>
     <string name="enter_email">Enter your Email</string>
     <string name="reset_pass1">Reset Password</string>
-
-
 
 
     <string name="title_activity_bottom_navigation">MainActivity</string>
