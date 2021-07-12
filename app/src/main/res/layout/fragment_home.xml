@@ -76,7 +76,7 @@
             <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/icon_view"
                     android:isScrollContainer="false"
-                    tools:listitem="@layout/icon_item"
+
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
@@ -130,7 +130,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
+
                     android:background="@drawable/chip_background"
                     android:text="@string/make_a_booking"
                     android:textAllCaps="false"

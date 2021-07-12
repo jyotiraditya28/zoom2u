@@ -5,7 +5,7 @@
     <data>
         <variable
             name="icon"
-            type="com.zoom2u_customer.ui.buttom_navigation_package.details_base_page.home.home_fragment.Icon" />
+            type="com.zoom2u_customer.ui.buttom_navigation_package.base_package.home.home_fragment.Icon" />
 
     </data>
 
@@ -16,14 +16,24 @@
         android:layout_height="wrap_content"
      >
 
+        <View
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/line_color"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/document_icon"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_margin="10dp"
             app:imagefor="@{icon.image}"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/line" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/document_txt"
@@ -36,33 +46,40 @@
             android:textColor="@color/black"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/document_icon"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/line" />
+
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/document_txt_desc"
-            style="@style/style_9_regular"
-            android:layout_width="wrap_content"
+            style="@style/style_11_regular"
+            android:layout_width="0dp"
+            android:maxLines="3"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="1dp"
+            android:layout_marginEnd="20dp"
+            android:text="@{icon.desc}"
             android:layout_marginBottom="10dp"
-            android:text="55 Miller St. Pyrmont,NSW"
             app:layout_constraintStart_toEndOf="@+id/document_icon"
-            app:layout_constraintTop_toBottomOf="@+id/document_txt" />
+            app:layout_constraintTop_toBottomOf="@+id/document_txt"
+            app:layout_constraintEnd_toStartOf="@+id/count"/>
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/count"
-            style="@style/style_13_regular"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            style="@style/style_13_bold"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:minWidth="25dp"
+            android:padding="3dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="5dp"
             android:background="@drawable/text_border"
             android:gravity="center"
-            android:text="@{Integer.valueOf(icon.count).toString()}"
+            android:text="@{Integer.valueOf(icon.quantity).toString()}"
             android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/forward"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/line"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/forward"
@@ -70,9 +87,9 @@
             android:layout_height="20dp"
             android:layout_marginEnd="10dp"
             android:src="@drawable/ic_arrow_forward"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/line"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/line"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

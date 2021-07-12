@@ -2,112 +2,88 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="310dp"
     android:layout_height="wrap_content"
-    android:layout_gravity="center|top"
-    android:paddingBottom="10dp"
+    android:layout_gravity="center"
     android:background="@drawable/white_background"
     >
 
     <TextView
-        android:id="@+id/dialogMessageText"
+        android:id="@+id/dialogLogoutTitleText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
-        android:paddingTop="30dp"
-        android:lineSpacingExtra="3dp"
-        android:paddingBottom="25dp"
-        android:layout_below="@+id/titleDialog"
-        android:text="Please enter field first"
-        android:gravity="center|left"
-        android:textColor="@color/mainloginbg"
-        android:textSize="15dp" />
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
 
     <TextView
-        android:id="@+id/titleDialog"
+        android:id="@+id/dialogLogoutMessageText"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:gravity="bottom|center|left"
-        android:paddingLeft="15dp"
-        android:text="Are you Sure !"
-        android:textSize="18dp"
-        android:textColor="@color/mainloginbg"
-        android:textStyle="bold" />
+        android:layout_height="wrap_content"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
+        android:paddingBottom="20dp"
+        android:layout_below="@+id/dialogLogoutTitleText"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="15sp" />
 
-    <View android:layout_height="0.5dp"
+
+    <View
+        android:id="@+id/line"
         android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@+id/dialogLogoutMessageText"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
         android:layout_marginLeft="15dp"
-        android:layout_below="@+id/titleDialog"
-        android:layout_marginTop="7dp"
-        android:background="#FF476A"
-        android:layout_marginRight="15dp"/>
-
-<!--
-    <ImageView
-        android:id="@+id/dialogDoneBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/dialogMessageText"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="13dp"
-        android:src="@drawable/remove_icon" />
--->
+        android:layout_marginRight="15dp"
+        android:background="#FF476A" />
 
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/dialogMessageText">
-
+        android:layout_height="45dp"
+        android:layout_below="@+id/line"
+        android:orientation="horizontal"
+        android:background="@color/white"
+        android:weightSum="1"
+        android:layout_marginBottom="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginStart="5dp"
+        >
 
         <TextView
-            android:id="@+id/cancle"
-            style="@style/style_15_bold"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:gravity="center|left"
-            android:paddingLeft="15dp"
-            android:paddingEnd="10dp"
-            android:text="Cancel"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:id="@+id/cancel"
+            android:layout_weight=".5"
+            android:textSize="16sp"
+            android:gravity="center"
             android:textColor="@color/base_color"
-            android:textStyle="bold" />
+            />
+
+
+        <View
+            android:id="@+id/line2"
+            android:layout_width="0.5dp"
+            android:layout_height="match_parent"
+            android:background="#FF476A" />
+
 
 
         <TextView
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
             android:id="@+id/ok"
-            style="@style/style_15_bold"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:gravity="center|right"
-            android:paddingRight="15dp"
-            android:paddingStart="15dp"
-            android:text="Ok"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:layout_weight=".5"
+            android:layout_marginTop="1dp"
             android:textColor="@color/base_color"
-            android:textStyle="bold" />
+            />
 
-
-    </RelativeLayout>
-
-
-    <!--<Button
-        android:layout_height="wrap_content"
-        android:layout_width="80dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:text="Ok"
-        android:id="@+id/okBtn"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="10dp"
-        android:layout_below="@+id/dialogMessageText"
-        android:textColor="@drawable/textcolorselector"
-        android:background="@drawable/roundedskybluebg"/>-->
+    </LinearLayout>
 </RelativeLayout>
-

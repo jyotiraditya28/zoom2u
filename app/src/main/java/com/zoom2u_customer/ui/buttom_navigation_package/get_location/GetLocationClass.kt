@@ -8,24 +8,7 @@ import android.location.LocationManager
 import android.os.Looper
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import androidx.core.app.ActivityCompat.startActivity
-import androidx.core.app.ActivityCompat.startActivityForResult
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStore
-import androidx.lifecycle.ViewModelStoreOwner
 import com.google.android.gms.location.*
-import com.google.android.libraries.places.api.Places
-import com.google.android.libraries.places.api.model.Place
-import com.google.android.libraries.places.api.model.TypeFilter
-import com.google.android.libraries.places.widget.Autocomplete
-import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
-import com.zoom2u_customer.R
-import com.zoom2u_customer.apiclient.ApiClient
-import com.zoom2u_customer.apiclient.GetAddressFromGoogleAPI
-import com.zoom2u_customer.apiclient.GoogleServiceApi
-import com.zoom2u_customer.apiclient.ServiceApi
-import com.zoom2u_customer.ui.buttom_navigation_package.details_base_page.profile.my_location.edit_add_location.EditAddLocationRepository
-import com.zoom2u_customer.ui.buttom_navigation_package.details_base_page.profile.my_location.edit_add_location.EditAddLocationViewModel
 
 
 class GetLocationClass(val context: Context) {

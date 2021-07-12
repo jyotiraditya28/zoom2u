@@ -1,0 +1,20 @@
+package com.zoom2u_customer.ui.buttom_navigation_package.base_package.home.pricing_payment
+
+object PriceDataProvider {
+
+    val priceList: MutableList<Price> = ArrayList()
+
+    private fun addPrice(price_tag:String,price_time : String) {
+
+        val item = Price(price_tag,price_time)
+        priceList.add(item)
+    }
+
+    init {
+        addPrice("Same day","5.00pm today")
+        addPrice("Same day","5.00pm today")
+        addPrice("Same day","5.00pm today")
+        addPrice("Same day","5.00pm today")
+
+    }
+}

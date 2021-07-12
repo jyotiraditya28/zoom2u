@@ -72,7 +72,33 @@
                 android:layout_height="wrap_content">
 
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/header_txt"
+                    style="@style/style_15_bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="What size is your parcel?"
+                    android:textColor="@color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/header_txt1"
+                    style="@style/style_13_regular"
+                    android:paddingStart="30dp"
+                    android:paddingEnd="30dp"
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Choose an item that best represents the size of your parcel."
+                    android:textColor="@color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/header_txt" />
+
+              <!--  <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cl"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -154,16 +180,17 @@
                     android:background="@color/line_color"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/cl" />
-
+-->
 
                 <ScrollView
                     android:id="@+id/scrollView"
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
                     android:layout_weight="1"
+                    android:layout_marginTop="10dp"
                     android:scrollbars="vertical"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/line">
+                    app:layout_constraintTop_toBottomOf="@+id/header_txt1">
 
 
                     <androidx.recyclerview.widget.RecyclerView

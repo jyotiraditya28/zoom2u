@@ -78,8 +78,9 @@ dependencies {
 
     kapt 'androidx.room:room-compiler:2.3.0'
     implementation 'androidx.room:room-runtime:2.3.0'
-
-
     compile 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.google.android.libraries.places:places:2.4.0'
+
+
+    compile 'cn.aigestudio.wheelpicker:WheelPicker:1.1.2'
 }

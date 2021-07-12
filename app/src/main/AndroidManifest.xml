@@ -17,13 +17,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Zoom2u">
-
-        <activity android:name=".ui.buttom_navigation_package.details_base_page.profile.my_location.search_location.Location" />
+        <activity android:name=".ui.buttom_navigation_package.base_package.home.map_page.doc_dimension.DocDimensionActivity"></activity>
+        <activity android:name=".ui.buttom_navigation_package.base_package.profile.my_location.search_location.Location" />
         <activity
             android:name=".ui.splash_screen.LogInSignupMainActivity"
             android:theme="@style/AppTheme.Splash" />
-        <activity android:name=".ui.buttom_navigation_package.details_base_page.BottomNavigationActivity" />
-        <activity android:name=".ui.buttom_navigation_package.details_base_page.profile.edit_profile.EditProfileActivity" />
+        <activity android:name=".ui.buttom_navigation_package.base_package.BottomNavigationActivity" />
+        <activity android:name=".ui.buttom_navigation_package.base_package.profile.edit_profile.EditProfileActivity" />
         <activity android:name=".ui.splash_screen.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,12 +31,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.buttom_navigation_package.details_base_page.profile.chnage_password.ChangePassActivity" />
-        <activity android:name="com.zoom2u_customer.ui.log_in.forgot_password.ForgotPasswordActivity" />
-        <activity android:name="com.zoom2u_customer.ui.buttom_navigation_package.details_base_page.home.DocDimensionActivity" />
-        <activity android:name=".ui.buttom_navigation_package.details_base_page.profile.my_location.edit_add_location.EditAddLocationActivity" />
-        <activity android:name=".ui.buttom_navigation_package.details_base_page.profile.my_location.MyLocationActivity" />
-        <activity android:name=".ui.buttom_navigation_package.details_base_page.profile.change_price.PriceChangeActivity" />
+        <activity android:name=".ui.buttom_navigation_package.base_package.profile.chnage_password.ChangePassActivity" />
+        <activity android:name=".ui.log_in.forgot_password.ForgotPasswordActivity" />
+        <activity android:name=".ui.buttom_navigation_package.base_package.profile.my_location.edit_add_location.EditAddLocationActivity" />
+        <activity android:name=".ui.buttom_navigation_package.base_package.profile.my_location.MyLocationActivity" />
+        <activity android:name=".ui.buttom_navigation_package.base_package.profile.change_price.PriceChangeActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -46,13 +45,13 @@
         <activity android:name=".ui.buttom_navigation_package.bid_request.BidRequestActivity" />
         <activity android:name=".ui.buttom_navigation_package.qutote_request.QuoteRequestActivity" /> <!-- <activity android:name=".application.ui.chat.MessageActivity" /> -->
         <activity android:name=".ui.buttom_navigation_package.chat.ChatActivity" />
-        <activity android:name=".ui.buttom_navigation_package.details_base_page.history.history_details.HistoryDetailsActivity" />
-        <activity android:name="com.zoom2u_customer.ui.log_in.LogInActivity" />
-        <activity android:name="com.zoom2u_customer.ui.sign_up.SignUpActivity" />
-        <activity android:name=".ui.buttom_navigation_package.details_base_page.home.pricing_payment.PricingPaymentActivity" />
-        <activity android:name=".ui.buttom_navigation_package.details_base_page.home.map_page.MapActivity" />
-        <activity android:name=".ui.buttom_navigation_package.details_base_page.home.delivery_details.DeliveryDetailsActivity" />
-        <activity android:name=".ui.buttom_navigation_package.details_base_page.base_page.BasePageActivity" />
+        <activity android:name=".ui.buttom_navigation_package.base_package.history.history_details.HistoryDetailsActivity" />
+        <activity android:name=".ui.log_in.LogInActivity" />
+        <activity android:name=".ui.sign_up.SignUpActivity" />
+        <activity android:name=".ui.buttom_navigation_package.base_package.home.pricing_payment.PricingPaymentActivity" />
+        <activity android:name=".ui.buttom_navigation_package.base_package.home.map_page.MapActivity" />
+        <activity android:name=".ui.buttom_navigation_package.base_package.home.delivery_details.DeliveryDetailsActivity" />
+        <activity android:name=".ui.buttom_navigation_package.base_package.base_page.BasePageActivity" />
     </application>
 
 </manifest>

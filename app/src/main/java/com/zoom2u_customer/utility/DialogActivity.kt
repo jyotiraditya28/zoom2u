@@ -3,9 +3,12 @@ package com.zoom2u_customer.utility
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -30,28 +33,37 @@ class DialogActivity {
 
             val alertDialog = builder.create()
             alertDialog.show()
+            alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
+            val lp = WindowManager.LayoutParams()
 
-            val titlealert: TextView = dialogView.findViewById(R.id.titleDialog)
-            titlealert.text = alertTitle
+            lp.copyFrom(alertDialog.window!!.attributes)
+            lp.width = 600
+            alertDialog.window?.attributes = lp
+
+            val titleAlert: TextView = dialogView.findViewById(R.id.titleDialog)
+            titleAlert.text = alertTitle
 
             val msgAlertDialog: TextView = dialogView.findViewById(R.id.dialogMessageText)
             msgAlertDialog.text = alertMsg
 
-            val crrosbtn: ImageView = dialogView.findViewById(R.id.dialogDoneBtn)
-            crrosbtn.setOnClickListener {
+            val crossBtn: ImageView = dialogView.findViewById(R.id.dialogDoneBtn)
+            crossBtn.setOnClickListener {
                 alertDialog.dismiss()
             }
 
 
-            val submitbtn: Button = dialogView.findViewById(R.id.okBtn)
-            submitbtn.setOnClickListener {
+            val submitBtn: Button = dialogView.findViewById(R.id.okBtn)
+            submitBtn.setOnClickListener {
                 alertDialog.dismiss()
             }
 
         }
 
-        fun alertDialogDoubleButton(context: Context?, alertTitle: String, alertMsg: String, onItemClick: () -> Unit) {
+        fun logoutDialog(context: Context?, alertTitle: String, alertMsg: String,
+                         okText:String?,cancelText:String?,
+                         onCancelClick: ()->Unit?,
+                         onOkClick: () -> Unit) {
             val viewGroup = (context as Activity).findViewById<ViewGroup>(R.id.content)
 
             val dialogView: View =
@@ -63,23 +75,31 @@ class DialogActivity {
 
             val alertDialog = builder.create()
             alertDialog.show()
+            val lp = WindowManager.LayoutParams()
 
+            alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            lp.copyFrom(alertDialog.window!!.attributes)
+            lp.width = 600
+            alertDialog.window?.attributes = lp
 
-            val titlealert: TextView = dialogView.findViewById(R.id.titleDialog)
-            titlealert.text = alertTitle
+            val titleAlert: TextView = dialogView.findViewById(R.id.dialogLogoutTitleText)
+            titleAlert.text = alertTitle
 
-            val msgAlertDialog: TextView = dialogView.findViewById(R.id.dialogMessageText)
+            val msgAlertDialog: TextView = dialogView.findViewById(R.id.dialogLogoutMessageText)
             msgAlertDialog.text = alertMsg
 
 
-            val cancle: TextView = dialogView.findViewById(R.id.cancle)
-            cancle.setOnClickListener {
+            val cancel: TextView = dialogView.findViewById(R.id.cancel)
+            cancel.text=cancelText
+            cancel.setOnClickListener {
+                onCancelClick()
                 alertDialog.dismiss()
             }
 
             val ok: TextView = dialogView.findViewById(R.id.ok)
+            ok.text=okText
             ok.setOnClickListener {
-                onItemClick()
+                onOkClick()
                 alertDialog.dismiss()
             }
 
@@ -100,20 +120,20 @@ class DialogActivity {
             alertDialog.show()
 
 
-            val titlealert: TextView = dialogView.findViewById(R.id.titleDialog)
-            titlealert.text = alertTitle
+            val titleAlert: TextView = dialogView.findViewById(R.id.titleDialog)
+            titleAlert.text = alertTitle
 
             val msgAlertDialog: TextView = dialogView.findViewById(R.id.dialogMessageText)
             msgAlertDialog.text = alertMsg
 
-            val crrosbtn: ImageView = dialogView.findViewById(R.id.dialogDoneBtn)
-            crrosbtn.setOnClickListener {
+            val crossBtn: ImageView = dialogView.findViewById(R.id.dialogDoneBtn)
+            crossBtn.setOnClickListener {
                 alertDialog.dismiss()
             }
 
 
-            val submitbtn: Button = dialogView.findViewById(R.id.okBtn)
-            submitbtn.setOnClickListener {
+            val submitBtn: Button = dialogView.findViewById(R.id.okBtn)
+            submitBtn.setOnClickListener {
                 onItemClick()
                 alertDialog.dismiss()
             }

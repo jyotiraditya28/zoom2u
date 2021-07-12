@@ -3,6 +3,8 @@ package com.zoom2u_customer.utility
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,6 +32,7 @@ class CustomProgressBar {
             alertDialog?.window?.setLayout(350, 350)
             alertDialog?.setCancelable(false)
             alertDialog?.setCanceledOnTouchOutside(false)
+            alertDialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
             val titleAlert: TextView = dialogView.findViewById(R.id.progressTitleTxt)
             titleAlert.text = titleTxt

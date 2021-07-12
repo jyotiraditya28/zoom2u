@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/card_view_color"
-        tools:context=".ui.buttom_navigation_package.details_base_page.pricing_payment.PricingPaymentFragment">
+        tools:context=".ui.buttom_navigation_package.base_package.pricing_payment.PricingPaymentFragment">
 
 
         <com.google.android.material.imageview.ShapeableImageView
@@ -119,7 +119,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:layout_marginTop="10dp"
-                    android:background="@color/txt_sub_color"
+                    android:background="@drawable/gray_background"
                     android:gravity="center"
                     android:paddingStart="15dp"
                     android:paddingEnd="15dp"

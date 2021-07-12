@@ -13,5 +13,7 @@
     <color name="line_color">#DCDCDC</color>
     <color name="picked_up">#FFD100</color>
     <color name="signup_text_background_color">#F5F5F5</color>
-    <color name="mainloginbg">#374350</color>
+    <color name="text_color1">#374350</color>
+    <color name="calender_txt_color">#7c86a2</color>
+    <color name="color_cyan">#2B93FF</color>
 </resources>

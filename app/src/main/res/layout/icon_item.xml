@@ -6,7 +6,7 @@
 
         <variable
             name="icon"
-            type="com.zoom2u_customer.ui.buttom_navigation_package.details_base_page.home.home_fragment.Icon" />
+            type="com.zoom2u_customer.ui.buttom_navigation_package.base_package.home.home_fragment.Icon" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -105,31 +105,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/text">
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/increment"
-                    style="@style/style_15_bold"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:background="@color/base_color"
-                    android:gravity="center"
-                    android:text="+"
-                    android:textColor="@color/white"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-
-                <TextView
-                    android:id="@+id/count"
-                    style="@style/style_15_bold"
-                    android:layout_width="match_parent"
-                    android:layout_height="20dp"
-                    android:gravity="center"
-                    android:text="@{Integer.valueOf(icon.count).toString()}"
-                    app:layout_constraintEnd_toStartOf="@+id/decrement"
-                    app:layout_constraintStart_toEndOf="@id/increment"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-
-                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/decrement"
                     style="@style/style_15_bold"
                     android:layout_width="20dp"
@@ -138,8 +113,38 @@
                     android:gravity="center"
                     android:text="-"
                     android:textColor="@color/white"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+
+
+
+
+                <TextView
+                    android:id="@+id/count"
+                    style="@style/style_15_bold"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:gravity="center"
+                    android:text="@{Integer.valueOf(icon.quantity).toString()}"
+                    app:layout_constraintEnd_toStartOf="@+id/decrement"
+                    app:layout_constraintStart_toEndOf="@id/increment"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/increment"
+                    style="@style/style_15_bold"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@color/base_color"
+                    android:gravity="center"
+                    android:text="+"
+                    android:textColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 

@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/card_view_color"
-        tools:context=".ui.buttom_navigation_package.details_base_page.profile.my_location.edit_add_location.EditAddLocationActivity">
+        tools:context=".ui.buttom_navigation_package.base_package.profile.my_location.edit_add_location.EditAddLocationActivity">
 
 
         <com.google.android.material.imageview.ShapeableImageView

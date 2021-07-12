@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="price"
-            type="com.zoom2u_customer.ui.buttom_navigation_package.details_base_page.home.pricing_payment.Price" />
+            name="quoteOptionClass"
+            type="com.zoom2u_customer.ui.buttom_navigation_package.base_package.home.pricing_payment.model.QuoteOptionClass" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -37,7 +37,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="15dp"
-                    android:text="@{price.price_tag}"
+                    android:text="@{quoteOptionClass.DeliverySpeed}"
                     android:textColor="@color/black"
                     android:textSize="15dp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -51,7 +51,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="1dp"
-                    android:text="@{price.price_time}"
+                    android:text="@{quoteOptionClass.ETA}"
                     android:textSize="12dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/price_tag" />
@@ -98,6 +98,10 @@
                     app:layout_constraintTop_toTopOf="parent"
 
                     />
+
+
+
+
 
                 <Button
                     android:id="@+id/register_btn"

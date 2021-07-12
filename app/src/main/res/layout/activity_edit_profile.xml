@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.buttom_navigation_package.details_base_page.profile.edit_profile.EditProfileActivity">
+        tools:context=".ui.buttom_navigation_package.base_package.profile.edit_profile.EditProfileActivity">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/back_btn"
