@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/card_view_color"
-        tools:context=".ui.buttom_navigation_package.qutote_request.QuoteRequestActivity">
+        tools:context=".ui.bottom_navigation_package.qutote_request.QuoteRequestActivity">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/back_btn"
@@ -79,7 +79,7 @@
                         android:layout_width="15dp"
                         android:layout_height="15dp"
                         android:layout_gravity="center_vertical"
-                        android:src="@drawable/ic_pickupicon" />
+                        android:src="@drawable/ic_pickup_icon" />
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/pick_header"
@@ -187,7 +187,7 @@
                         android:layout_width="15dp"
                         android:layout_height="15dp"
                         android:layout_gravity="center_vertical"
-                        android:src="@drawable/ic_dropofficon" />
+                        android:src="@drawable/ic_drop_off_icon" />
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/drop_header"

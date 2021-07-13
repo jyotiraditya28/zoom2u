@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.zoom2u_customer.ui.buttom_navigation_package.base_package.home.map_page.doc_dimension.DocDimensionActivity">
+        tools:context="com.zoom2u_customer.ui.bottom_navigation_package.base_package.home.map_page.doc_dimension.DocDimensionActivity">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/back_icon"

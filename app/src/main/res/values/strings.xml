@@ -122,13 +122,12 @@
     <string name="weight">Weight</string>
     <string name="weight_txt">Select total weight(kg)*</string>
     <string name="weight_desc">Total weight cannot exceed 100kg, and each item cannot exceed 30kg. This is for the health and safety of our drivers. If you require extra large items moved, please use the Bid Requests feature!</string>
-   <string name="items_we_not_send">Items we cannot send interstate</string>
-   <string name="string_not_send">Authority to Leave at</string>
-   <string name="package_type">Is the package a laptop or mobile phone ?</string>
+    <string name="items_we_not_send">Items we cannot send interstate</string>
+    <string name="string_not_send">Authority to Leave at</string>
+    <string name="package_type">Is the package a laptop or mobile phone ?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="other">Other (please specify)</string>
-
 
 
     <!--Doc and Dimension-->
@@ -143,6 +142,29 @@
     <string name="width">Width*</string>
     <string name="height">Height*</string>
     <string name="confirm">Confirm</string>
+
+
+    <!--Pricing and payment-->
+    <string name="select">Select</string>
+    <string name="pricing_payment">Pricing and Payment</string>
+    <string name="delivery_feature">Show Delivery Features</string>
+    <string name="quotes_valid">Your quotes are valid for </string>
+    <string name="expired_quote">our quotes have expired. Please click</string>
+
+
+
+    <!--Booking Confirmation-->
+    <string name="booking_confirmation">Booking Confirmation</string>
+    <string name="my_package">My package</string>
+    <string name="delivery_time">Delivery time</string>
+    <string name="booking_confirmation_term_con">I Accept the customer terms and conditions.</string>
+    <string name="total">Total</string>
+    <string name="min">minutes</string>
+
+
+
+
+
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="home">Home</string>

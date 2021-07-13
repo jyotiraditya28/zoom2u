@@ -275,7 +275,7 @@
 
             <CheckBox
                 android:id="@+id/chk_terms"
-                style="@style/style_13_regular"
+                style="@style/style_13_bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -286,6 +286,7 @@
 
             <TextView
                 android:id="@+id/terms"
+                style="@style/style_13_bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"

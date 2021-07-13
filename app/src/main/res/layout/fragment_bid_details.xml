@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".ui.buttom_navigation_package.bid_request.active_bid_request.active_bid_page.active_biddetails.BidDetailsFragment">
+    tools:context=".ui.bottom_navigation_package.bid_request.active_bid_request.active_bid_page.active_biddetails.BidDetailsFragment">
 
     <LinearLayout
         android:id="@+id/ll1"
@@ -151,7 +151,7 @@
                 android:id="@+id/imageViewStatus"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/ic_pickupicon" />
+                android:src="@drawable/ic_pickup_icon" />
 
             <View
                 android:id="@+id/textViewJobStatus"
@@ -167,7 +167,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_below="@+id/textViewJobStatus"
-                android:src="@drawable/ic_dropofficon" />
+                android:src="@drawable/ic_drop_off_icon" />
 
         </RelativeLayout>
 

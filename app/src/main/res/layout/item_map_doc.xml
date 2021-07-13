@@ -5,7 +5,7 @@
     <data>
         <variable
             name="icon"
-            type="com.zoom2u_customer.ui.buttom_navigation_package.base_package.home.home_fragment.Icon" />
+            type="com.zoom2u_customer.ui.bottom_navigation_package.base_package.home.home_fragment.Icon" />
 
     </data>
 
@@ -62,35 +62,39 @@
             android:layout_marginBottom="10dp"
             app:layout_constraintStart_toEndOf="@+id/document_icon"
             app:layout_constraintTop_toBottomOf="@+id/document_txt"
-            app:layout_constraintEnd_toStartOf="@+id/count"/>
+            app:layout_constraintEnd_toStartOf="@+id/ll"/>
+
+
+        <LinearLayout
+            android:id="@+id/ll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+             android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/line"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/count"
-            style="@style/style_13_bold"
+            style="@style/style_15_bold"
             android:layout_width="wrap_content"
-            android:layout_height="25dp"
-            android:minWidth="25dp"
-            android:padding="3dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="5dp"
-            android:background="@drawable/text_border"
-            android:gravity="center"
-            android:text="@{Integer.valueOf(icon.quantity).toString()}"
-            android:textColor="@color/black"
-            app:layout_constraintEnd_toStartOf="@+id/forward"
-            app:layout_constraintTop_toBottomOf="@+id/line"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            android:text="@{Integer.valueOf(icon.quantity).toString()+'x'}"
+            android:textColor="@color/base_color"
+/>
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/forward"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_margin="10dp"
             android:src="@drawable/ic_arrow_forward"
-            app:layout_constraintBottom_toTopOf="@+id/line"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/line"/>
+           />
 
-
+        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

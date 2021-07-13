@@ -1,0 +1,24 @@
+package com.zoom2u_customer.ui.bottom_navigation_package.base_package.home.pricing_payment.model
+
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+
+@Parcelize
+class IntraStateRes(
+    var `$id`: String? = null,
+    var `$type`: String? = null,
+    var Vehicle: String? = null,
+    var Distance: String? = null,
+    var DistanceInMeters: Int? = null,
+    var QuoteOptions: List<QuoteOptionClass>? = null,
+    var IsCustomerRegistered: Boolean? = null,
+    var PricingScheme: String? = null,
+    var PricingChangeHistoryId: Int? = null,
+    var PickupLatitude: String? = null,
+    var PickupLongitude: String? = null,
+    var DropLatitude: String? = null,
+    var DropLongitude: String? = null
+
+) : Parcelable
+

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.buttom_navigation_package.base_package.profile.ProfileFragment">
+    tools:context=".ui.bottom_navigation_package.base_package.profile.ProfileFragment">
 
 
         <com.google.android.material.textview.MaterialTextView
@@ -218,7 +218,7 @@
 
              <com.google.android.material.textview.MaterialTextView
                  android:id="@+id/my_location"
-                 style="@style/style_15_bold"
+                 style="@style/style_15_regular"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
                  android:layout_marginStart="10dp"
@@ -244,7 +244,7 @@
 
              <com.google.android.material.textview.MaterialTextView
                  android:id="@+id/change_pass"
-                 style="@style/style_15_bold"
+                 style="@style/style_15_regular"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
                  android:layout_marginStart="10dp"
@@ -268,7 +268,6 @@
                  app:layout_constraintTop_toBottomOf="@+id/change_pass" />
 
              <com.google.android.material.textview.MaterialTextView
-                 android:fontFamily="@font/montserrat_bold"
                  android:id="@+id/sign_out"
                  style="@style/style_15_bold"
                  android:layout_width="match_parent"

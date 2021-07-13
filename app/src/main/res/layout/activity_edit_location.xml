@@ -10,8 +10,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/card_view_color"
-        tools:context=".ui.buttom_navigation_package.base_package.profile.my_location.edit_add_location.EditAddLocationActivity">
+        android:background="@color/white"
+        tools:context=".ui.bottom_navigation_package.base_package.profile.my_location.edit_add_location.EditAddLocationActivity">
 
 
         <com.google.android.material.imageview.ShapeableImageView
@@ -38,7 +38,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
 
-        <com.google.android.material.textview.MaterialTextView
+        <!--<com.google.android.material.textview.MaterialTextView
             android:id="@+id/save_btn"
             style="@style/style_15_bold"
             android:layout_width="wrap_content"
@@ -47,7 +47,7 @@
             android:text="@string/save"
             android:textColor="@color/base_color"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent" />-->
 
 
         <ScrollView
@@ -57,9 +57,9 @@
             android:layout_marginTop="30dp"
             android:layout_weight="1"
             android:background="@drawable/shadow_top"
-            android:elevation="5dp"
+            android:elevation="10dp"
             android:scrollbars="vertical"
-            app:layout_constraintBottom_toTopOf="@+id/ll1"
+            app:layout_constraintBottom_toTopOf="@+id/save_change_btn"
             app:layout_constraintTop_toBottomOf="@+id/header">
 
 
@@ -157,7 +157,7 @@
                         android:id="@+id/find_me"
                         android:layout_width="35dp"
                         android:layout_height="30dp"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="10dp"
                         android:orientation="vertical"
                         app:layout_constraintStart_toEndOf="@+id/address"
                         app:layout_constraintTop_toBottomOf="@+id/line3"
@@ -263,9 +263,9 @@
                         android:layout_marginTop="20dp"
                         app:layout_constraintTop_toBottomOf="@+id/line6"
                         app:layout_constraintStart_toStartOf="parent"
-                        android:textColor="@android:color/holo_red_dark"
+                        android:textColor="@color/red"
                         android:text="@string/remove"
-                        style="@style/style_15_regular" />
+                        style="@style/style_13_bold" />
 
 
                     <View
@@ -286,16 +286,6 @@
 
         </ScrollView>
 
-        <LinearLayout
-            android:id="@+id/ll1"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/white"
-            android:elevation="5dp"
-            android:gravity="center"
-            app:layout_constraintBottom_toBottomOf="parent">
-
             <Button
                 android:id="@+id/save_change_btn"
                 style="@style/style_15_bold"
@@ -305,11 +295,13 @@
                 android:layout_marginEnd="15dp"
                 android:background="@drawable/chip_background"
                 android:text="@string/save_location"
+                android:layout_marginBottom="10dp"
                 android:textAllCaps="false"
+                app:layout_constraintBottom_toBottomOf="parent"
                 android:textColor="@color/white" />
 
 
-        </LinearLayout>
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -48,7 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:fontFamily="@font/montserrat_extrabold"
+            android:fontFamily="@font/montserrat_bold"
             android:text="Hi David s."
             android:textAlignment="center"
             android:textColor="@color/white"
@@ -56,7 +56,7 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/what_you_send_today"
-            style="@style/style_11_regular"
+            style="@style/style_15_regular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
@@ -76,7 +76,7 @@
             <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/icon_view"
                     android:isScrollContainer="false"
-
+                    android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
@@ -88,13 +88,14 @@
                     android:id="@+id/line_view"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
+                    android:layout_marginTop="5dp"
                     android:background="@color/line_color"
                     app:layout_constraintTop_toTopOf="parent" />
 
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/text3"
-                    style="@style/style_15_bold"
+                    style="@style/style_15_regular"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
@@ -126,11 +127,11 @@
 
                 <Button
                     android:id="@+id/get_quote_btn"
-                    style="@style/style_13_bold"
+                    style="@style/style_13_regular"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:layout_marginTop="10dp"
-
+                    android:layout_marginBottom="5dp"
                     android:background="@drawable/chip_background"
                     android:text="@string/make_a_booking"
                     android:textAllCaps="false"

@@ -72,7 +72,7 @@
                         android:layout_width="15dp"
                         android:layout_height="15dp"
                         android:layout_gravity="center_vertical"
-                        android:src="@drawable/ic_pickupicon" />
+                        android:src="@drawable/ic_pickup_icon" />
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/register"
@@ -412,7 +412,7 @@
                             android:layout_width="15dp"
                             android:layout_height="15dp"
                             android:layout_gravity="center_vertical"
-                            android:src="@drawable/ic_dropofficon" />
+                            android:src="@drawable/ic_drop_off_icon" />
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/register1"
@@ -815,8 +815,6 @@
                             android:buttonTint="@color/base_color"
                             android:textColor="@color/black"/>
 
-
-
                     </RadioGroup>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -868,15 +866,14 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/pick_date"
+                        style="@style/style_13_bold"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="9dp"
+                        android:layout_marginTop="10dp"
                         android:background="@drawable/location_box1"
                         android:gravity="center"
-                        android:text="Select date*"
-                        android:textColor="@color/text_color1"
-                        android:textSize="14sp"
+                        android:textColor="@color/black"
                         app:layout_constraintTop_toBottomOf="@+id/date_txt"
                         />
 
@@ -898,15 +895,14 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/pick_time"
+                        style="@style/style_13_bold"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="9dp"
+                        android:layout_marginTop="10dp"
                         android:background="@drawable/location_box1"
                         android:gravity="center"
-                        android:text="Select time*"
-                        android:textColor="@color/text_color1"
-                        android:textSize="14sp"
+                        android:textColor="@color/black"
                         app:layout_constraintTop_toBottomOf="@+id/time_txt"
                         />
 
@@ -955,14 +951,14 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/date1"
+                        style="@style/style_13_bold"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="9dp"
                         android:background="@drawable/location_box1"
                         android:gravity="center"
-                        android:text="Select date*"
-                        android:textColor="@color/text_color1"
+                        android:textColor="@color/black"
                         android:textSize="14sp"
                         app:layout_constraintTop_toBottomOf="@+id/date_txt1"
                         android:visibility="gone"
@@ -986,14 +982,14 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/time1"
+                        style="@style/style_13_bold"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="9dp"
                         android:background="@drawable/location_box1"
                         android:gravity="center"
-                        android:text="Select time*"
-                        android:textColor="@color/text_color1"
+                        android:textColor="@color/black"
                         android:textSize="14sp"
                         app:layout_constraintTop_toBottomOf="@+id/time_txt1"
                         android:visibility="gone"
@@ -1023,6 +1019,7 @@
 
                     <EditText
                         android:id="@+id/total_weight"
+                        style="@style/style_13_bold"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:layout_marginTop="10dp"
@@ -1030,7 +1027,7 @@
                         android:gravity="center"
                         android:hint="@string/weight_txt"
                         android:inputType="number"
-                        android:textColor="@color/text_color1"
+                        android:textColor="@color/black"
                         android:textSize="14sp"
                        />
 

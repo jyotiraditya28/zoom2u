@@ -267,7 +267,7 @@
                                 android:id="@+id/imageViewStatus"
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
-                                android:src="@drawable/ic_pickupicon" />
+                                android:src="@drawable/ic_pickup_icon" />
 
                             <com.google.android.material.imageview.ShapeableImageView
                                 android:id="@+id/textViewJobStatus"
@@ -283,7 +283,7 @@
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
                                 android:layout_below="@+id/textViewJobStatus"
-                                android:src="@drawable/ic_dropofficon" />
+                                android:src="@drawable/ic_drop_off_icon" />
 
                         </RelativeLayout>
 

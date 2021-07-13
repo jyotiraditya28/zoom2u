@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.buttom_navigation_package.chat.ChatActivity">
+        tools:context=".ui.bottom_navigation_package.chat.ChatActivity">
 
 
         <com.google.android.material.imageview.ShapeableImageView

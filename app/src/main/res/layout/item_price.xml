@@ -7,27 +7,27 @@
 
         <variable
             name="quoteOptionClass"
-            type="com.zoom2u_customer.ui.buttom_navigation_package.base_package.home.pricing_payment.model.QuoteOptionClass" />
+            type="com.zoom2u_customer.ui.bottom_navigation_package.base_package.home.pricing_payment.model.QuoteOptionClass" />
     </data>
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="60dp"
        >
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:background="@drawable/border3side">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl1"
                 android:layout_width="0dp"
-                android:layout_height="70dp"
+                android:layout_height="60dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintWidth_percent="0.35">
+                app:layout_constraintWidth_percent="0.40">
 
 
                 <com.google.android.material.textview.MaterialTextView
@@ -39,7 +39,7 @@
                     android:layout_marginTop="15dp"
                     android:text="@{quoteOptionClass.DeliverySpeed}"
                     android:textColor="@color/black"
-                    android:textSize="15dp"
+                    android:textSize="15sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -52,13 +52,13 @@
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="1dp"
                     android:text="@{quoteOptionClass.ETA}"
-                    android:textSize="12dp"
+                    android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/price_tag" />
 
                 <com.google.android.material.imageview.ShapeableImageView
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
                     android:layout_marginEnd="10dp"
                     android:src="@drawable/ic_info_icon"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -79,11 +79,11 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl2"
                 android:layout_width="0dp"
-                android:layout_height="70dp"
+                android:layout_height="60dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/cl1"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintWidth_percent="0.65">
+                app:layout_constraintWidth_percent="0.60">
 
 
                 <com.google.android.material.textview.MaterialTextView
@@ -92,7 +92,7 @@
                     android:layout_marginStart="20dp"
                     android:text="$$"
                     android:textColor="@color/black"
-                    android:textSize="20dp"
+                    android:textSize="20sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -105,14 +105,14 @@
 
                 <Button
                     android:id="@+id/register_btn"
+                    style="@style/style_13_bold"
                     android:layout_width="120dp"
                     android:layout_height="40dp"
                     android:layout_marginEnd="10dp"
                     android:background="@drawable/chip_background"
-                    android:text="Select"
+                    android:text="@string/select"
                     android:textColor="@color/white"
-                    android:textSize="14dp"
-                    android:textStyle="bold"
+                    android:textAllCaps="false"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"/>
