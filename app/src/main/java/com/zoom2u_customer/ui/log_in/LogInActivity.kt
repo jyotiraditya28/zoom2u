@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.zoom2u_customer.R
 import com.zoom2u_customer.apiclient.ApiClient
 import com.zoom2u_customer.apiclient.ServiceApi
-import com.zoom2u_customer.ui.bottom_navigation_package.base_package.base_page.BasePageActivity
+import com.zoom2u_customer.ui.application.base_package.base_page.BasePageActivity
 import com.zoom2u_customer.ui.log_in.forgot_password.ForgotPasswordActivity
 import com.zoom2u_customer.ui.sign_up.SignUpActivity
 import com.zoom2u_customer.databinding.ActivityLogInBinding
@@ -49,6 +49,7 @@ class LogInActivity : AppCompatActivity(), View.OnClickListener {
                 if (it.equals("true")) {
                     val intent = Intent(this, BasePageActivity::class.java)
                     startActivity(intent)
+                    finish()
                 } else
                     DialogActivity.alertDialogSingleButton(this, "Alert!", it)
 
@@ -61,8 +62,6 @@ class LogInActivity : AppCompatActivity(), View.OnClickListener {
             R.id.login_btn -> {
                 setLoginData()
 
-                /* val intent = Intent(this, BasePageActivity::class.java)
-                    startActivity(intent)*/
             }
             R.id.register -> {
                 val intent = Intent(this, SignUpActivity::class.java)

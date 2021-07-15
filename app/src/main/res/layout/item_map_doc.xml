@@ -5,7 +5,7 @@
     <data>
         <variable
             name="icon"
-            type="com.zoom2u_customer.ui.bottom_navigation_package.base_package.home.home_fragment.Icon" />
+            type="com.zoom2u_customer.ui.application.base_package.home.home_fragment.Icon" />
 
     </data>
 
@@ -42,6 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
+            android:fontFamily="@font/roboto_medium"
             android:text="@{icon.text}"
             android:textColor="@color/black"
             android:textStyle="bold"

@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/card_view_color"
-        tools:context=".ui.bottom_navigation_package.qutote_request.QuoteRequestActivity">
+        tools:context=".ui.application.qutote_request.QuoteRequestActivity">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/back_btn"

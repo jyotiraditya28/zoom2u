@@ -45,11 +45,15 @@ class SignUpRepository(
                         override fun onSuccess(responce: Response<JsonObject>) {
                             if (responce.body() != null)
                                 onSignupSuccess("true")
-                             else if (responce.errorBody() != null)
-                                onSignupSuccess(R.string.signup_error_msg.toString())
-
+                            else if (responce.errorBody() != null) {
+                                AppUtility.progressBarDissMiss()
+                                DialogActivity.alertDialogSingleButton(
+                                    context,
+                                    "Unsuccessful !",
+                                    "This email id is already register use other mail id."
+                                )
+                            }
                         }
-
                         override fun onError(e: Throwable) {
                             Log.d("", "")
                             AppUtility.progressBarDissMiss()
@@ -76,7 +80,6 @@ class SignUpRepository(
         onLoginSuccess: (msg: String) -> Unit
     ) {
         if (AppUtility.isInternetConnected()) {
-            AppUtility.progressBarShow(context)
             val request: HashMap<String, String> = HashMap<String, String>()
             request["grant_type"] = loginRequest.grant_type
             request["username"] = loginRequest.username
@@ -99,8 +102,12 @@ class SignUpRepository(
                         }
 
                         override fun onError(e: Throwable) {
-                            Log.d("", "")
                             AppUtility.progressBarDissMiss()
+                            Toast.makeText(
+                                context,
+                                "something went wrong please try again.",
+                                Toast.LENGTH_LONG
+                            ).show()
                         }
 
                     })

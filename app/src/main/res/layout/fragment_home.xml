@@ -56,7 +56,7 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/what_you_send_today"
-            style="@style/style_15_regular"
+            style="@style/style_13_regular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
@@ -76,7 +76,7 @@
             <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/icon_view"
                     android:isScrollContainer="false"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="15dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
@@ -87,7 +87,7 @@
                 <View
                     android:id="@+id/line_view"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
+                    android:layout_height="0.5dp"
                     android:layout_marginTop="5dp"
                     android:background="@color/line_color"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -95,13 +95,14 @@
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/text3"
-                    style="@style/style_15_regular"
+                    style="@style/style_15_bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="5dp"
                     android:text="@string/delivery_redesigned"
                     android:textAlignment="center"
+                    android:fontFamily="@font/roboto_medium"
                     android:textColor="@color/black"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
@@ -115,6 +116,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="5dp"
                     android:inputType="textMultiLine"
+                    android:fontFamily="@font/roboto_regular"
                     android:maxLines="2"
                     android:paddingStart="40dp"
                     android:paddingEnd="40dp"

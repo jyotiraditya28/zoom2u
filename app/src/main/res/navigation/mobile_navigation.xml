@@ -7,24 +7,24 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.zoom2u_customer.ui.bottom_navigation_package.base_package.home.home_fragment.HomeFragment"
+        android:name="com.zoom2u_customer.ui.application.base_package.home.home_fragment.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/navigation_booking"
-        android:name="com.zoom2u_customer.ui.bottom_navigation_package.base_package.bid_quote_request.BidquoteRequestFragment"
+        android:name="com.zoom2u_customer.ui.application.base_package.bid_quote_request.BidquoteRequestFragment"
         android:label="@string/booking"
         tools:layout="@layout/fragment_bidquote_request" />
 
     <fragment
         android:id="@+id/navigation_history"
-        android:name="com.zoom2u_customer.ui.bottom_navigation_package.base_package.history.HistoryFragment"
+        android:name="com.zoom2u_customer.ui.application.base_package.history.HistoryFragment"
         android:label="@string/history"
         tools:layout="@layout/fragment_history" />
     <fragment
         android:id="@+id/navigation_profile"
-        android:name="com.zoom2u_customer.ui.bottom_navigation_package.base_package.profile.ProfileFragment"
+        android:name="com.zoom2u_customer.ui.application.base_package.profile.ProfileFragment"
         android:label="@string/profile"
         tools:layout="@layout/fragment_profile" />
 </navigation>

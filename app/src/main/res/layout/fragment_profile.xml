@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.bottom_navigation_package.base_package.profile.ProfileFragment">
+    tools:context=".ui.application.base_package.profile.ProfileFragment">
 
 
         <com.google.android.material.textview.MaterialTextView
@@ -207,7 +207,7 @@
              <View
                  android:id="@+id/line5"
                  android:layout_width="match_parent"
-                 android:layout_height="1dp"
+                 android:layout_height="0.5dp"
                  android:layout_marginStart="10dp"
                  android:layout_marginTop="50dp"
                  android:layout_marginEnd="10dp"
@@ -222,6 +222,7 @@
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
                  android:layout_marginStart="10dp"
+                 android:fontFamily="@font/colabmed"
                  android:layout_marginTop="15dp"
                  android:textColor="@color/base_color"
                  android:gravity="center_vertical"
@@ -233,7 +234,7 @@
              <View
                  android:id="@+id/line6"
                  android:layout_width="match_parent"
-                 android:layout_height="1dp"
+                 android:layout_height="0.5dp"
                  android:layout_marginStart="10dp"
                  android:layout_marginTop="15dp"
                  android:layout_marginEnd="10dp"
@@ -245,6 +246,7 @@
              <com.google.android.material.textview.MaterialTextView
                  android:id="@+id/change_pass"
                  style="@style/style_15_regular"
+                 android:fontFamily="@font/colabmed"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
                  android:layout_marginStart="10dp"
@@ -259,7 +261,7 @@
              <View
                  android:id="@+id/line7"
                  android:layout_width="match_parent"
-                 android:layout_height="1dp"
+                 android:layout_height="0.5dp"
                  android:layout_marginStart="10dp"
                  android:layout_marginTop="15dp"
                  android:layout_marginEnd="10dp"
@@ -270,6 +272,7 @@
              <com.google.android.material.textview.MaterialTextView
                  android:id="@+id/sign_out"
                  style="@style/style_15_bold"
+                 android:fontFamily="@font/roboto_bold"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
                  android:layout_marginStart="10dp"
@@ -284,7 +287,7 @@
              <View
                  android:id="@+id/line8"
                  android:layout_width="match_parent"
-                 android:layout_height="1dp"
+                 android:layout_height="0.5dp"
                  android:layout_marginStart="10dp"
                  android:layout_marginTop="15dp"
                  android:layout_marginEnd="10dp"

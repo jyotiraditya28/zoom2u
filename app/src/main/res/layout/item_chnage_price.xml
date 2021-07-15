@@ -6,7 +6,7 @@
 
         <variable
             name="priceChange"
-            type="com.zoom2u_customer.ui.bottom_navigation_package.base_package.profile.change_price.PriceChange" />
+            type="com.zoom2u_customer.ui.application.base_package.profile.change_price.PriceChange" />
     </data>
 
 

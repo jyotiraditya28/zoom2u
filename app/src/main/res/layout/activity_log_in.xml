@@ -89,7 +89,7 @@
             app:hintTextColor="@color/black"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/email_header"
-            app:passwordToggleEnabled="true">
+            app:endIconMode="password_toggle">
 
 
             <com.google.android.material.textfield.TextInputEditText

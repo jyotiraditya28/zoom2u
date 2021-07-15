@@ -31,27 +31,24 @@ class ForgotPasswordActivity : AppCompatActivity(), View.OnClickListener {
         viewModel = ViewModelProviders.of(this).get(ForgotPassViewModel::class.java)
         val serviceApi: ServiceApi = com.zoom2u_customer.apiclient.ApiClient.getServices()
         repository =
-            ForgotPassRepository(serviceApi, this, onResponseCallback = ::onResponseCallback)
+            ForgotPassRepository(serviceApi, this)
         viewModel.repository = repository
-    }
 
-    private fun onResponseCallback(success: String, username: String) {
-
-        AppUtility.progressBarDissMiss()
-        if (success == "true") {
-            DialogActivity.alertDialogOkCallback(
-                this,
-                "Success!",
-                "We've sent an email to $username with further instructions.",
-                onItemClick = ::onItemClick
-            )
+        viewModel.getForgetPassSuccess()?.observe(this){
+            if (!it.isNullOrEmpty()) {
+                DialogActivity.alertDialogOkCallback(
+                    this,
+                    "Success!",
+                    "We've sent an email to $it with further instructions.",
+                    onItemClick = ::onItemClick
+                )
+            }
         }
-
-    }
-
-    private fun onItemClick() {
+    } private fun onItemClick() {
         finish()
     }
+
+
 
     override fun onClick(view: View?) {
         when (view!!.id) {

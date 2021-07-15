@@ -72,7 +72,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginTop="4dp"
                     android:background="@drawable/white_background"
                     android:elevation="5dp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -82,8 +82,8 @@
                         android:id="@+id/document_icon"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:layout_marginTop="20dp"
                         android:layout_marginStart="10dp"
+                        android:layout_marginTop="20dp"
                         android:src="@drawable/ic_documents"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -113,7 +113,7 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/courier"
-                        style="@style/style_13_bold"
+                        style="@style/style_9_bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
@@ -130,10 +130,12 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="10dp"
+                        android:maxWidth="150dp"
+                        android:singleLine="true"
                         android:textColor="@color/black"
+                        android:textSize="18sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/courier" />
-
 
 
                     <com.google.android.material.textview.MaterialTextView
@@ -141,15 +143,13 @@
                         style="@style/style_13_bold"
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
-                        android:paddingStart="10dp"
-                        android:paddingEnd="10dp"
                         android:layout_marginTop="15dp"
                         android:layout_marginEnd="10dp"
-                        android:background="@color/base_color"
                         android:gravity="center"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/line" />
-
 
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -169,67 +169,68 @@
                             android:layout_marginTop="10dp"
                             android:text="@string/pick_up_details"
                             android:textColor="@color/black"
-                            android:textStyle="bold"
                             app:layout_constraintStart_toEndOf="@+id/relMain"
                             app:layout_constraintTop_toTopOf="parent" />
 
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/pick_add"
-                            style="@style/style_13_regular"
+                            style="@style/style_11_regular"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:textColor="@color/black"
-                            android:textStyle="bold"
                             app:layout_constraintStart_toEndOf="@+id/relMain"
                             app:layout_constraintTop_toBottomOf="@+id/pickup_txt" />
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/pick_date_time"
-                            style="@style/style_13_regular"
+                            style="@style/style_11_regular"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
+                            android:textColor="#979797"
                             android:textStyle="bold"
                             app:layout_constraintStart_toEndOf="@+id/relMain"
                             app:layout_constraintTop_toBottomOf="@+id/pick_add" />
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/pick_name"
-                            style="@style/style_13_regular"
+                            style="@style/style_11_regular"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:layout_marginTop="13dp"
-                            android:textStyle="bold"
+                            android:textColor="@color/black"
                             app:layout_constraintStart_toEndOf="@+id/relMain"
                             app:layout_constraintTop_toBottomOf="@+id/pick_date_time" />
 
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/pick_phone"
-                            style="@style/style_13_regular"
+                            style="@style/style_11_regular"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
+                            android:textColor="@color/black"
                             app:layout_constraintStart_toEndOf="@+id/relMain"
                             app:layout_constraintTop_toBottomOf="@+id/pick_name" />
 
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/pick_email"
-                            style="@style/style_13_regular"
+                            style="@style/style_11_regular"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
+                            android:textColor="@color/black"
                             app:layout_constraintStart_toEndOf="@+id/relMain"
                             app:layout_constraintTop_toBottomOf="@+id/pick_phone" />
 
                         <View
                             android:id="@+id/line2"
                             android:layout_width="match_parent"
-                            android:layout_height="1dp"
+                            android:layout_height="0.5dp"
                             android:layout_marginStart="40dp"
                             android:layout_marginTop="20dp"
                             android:background="@color/line_color"
@@ -243,10 +244,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
-                            android:layout_marginTop="20dp"
+                            android:layout_marginTop="18dp"
                             android:text="@string/drop_off_details"
                             android:textColor="@color/black"
-                            android:textStyle="bold"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/relMain" />
 
@@ -292,64 +292,61 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/drop_add"
-                        style="@style/style_13_regular"
+                        style="@style/style_11_regular"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="40dp"
                         android:textColor="@color/black"
-                        android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/cl" />
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/drop_date_time"
-                        style="@style/style_13_regular"
+                        style="@style/style_11_regular"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="40dp"
-                        android:textStyle="bold"
+                        android:textColor="#979797"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/drop_add" />
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/drop_name"
-                        style="@style/style_13_regular"
+                        style="@style/style_11_regular"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="40dp"
                         android:layout_marginTop="13dp"
-                        android:textStyle="bold"
+                        android:textColor="@color/black"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/drop_date_time" />
 
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/drop_phone"
-                        style="@style/style_13_regular"
+                        style="@style/style_11_regular"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="40dp"
+                        android:textColor="@color/black"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/drop_name" />
 
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/drop_email"
-                        style="@style/style_13_regular"
+                        style="@style/style_11_regular"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="40dp"
                         android:layout_marginBottom="10dp"
+                        android:textColor="@color/black"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/drop_phone" />
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/package_txt"
@@ -406,23 +403,41 @@
                             android:layout_width="match_parent"
                             android:layout_height="60dp"
                             android:weightSum="2"
+                            android:background="@drawable/border4side"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginEnd="13dp"
                             android:orientation="horizontal"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/pick_txt">
 
 
                             <com.google.android.material.imageview.ShapeableImageView
-                                android:layout_width="wrap_content"
+                                android:id="@+id/pick_image"
+                                android:layout_width="70dp"
+                                android:layout_height="55dp"
+                                android:layout_gravity="center"
+                                android:layout_weight="0.5"
+                                android:src="@mipmap/ic_box"
+                                android:layout_marginEnd="5dp"
+                                />
+
+
+                            <View
+                                android:id="@+id/line01"
+                                android:layout_width="1dp"
                                 android:layout_height="60dp"
-                                android:layout_weight="1"
-                                android:src="@mipmap/ic_box" />
+                                android:background="@color/line_color" />
+
 
                             <com.google.android.material.imageview.ShapeableImageView
                                 android:id="@+id/pick_signature"
-                                android:layout_width="wrap_content"
-                                android:layout_height="60dp"
-                                android:layout_weight="1"
-                                android:src="@mipmap/ic_box" />
+                                android:layout_width="70dp"
+                                android:layout_height="55dp"
+                                android:layout_gravity="center"
+                                android:layout_weight="0.5"
+                                android:layout_marginStart="5dp"
+                                android:src="@drawable/ic_blank_sing"
+                             />
 
                         </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -446,6 +461,7 @@
                             style="@style/style_9_regular"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textColor="@color/black"
                             android:layout_marginStart="10dp"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/pick_time_header" />
@@ -467,6 +483,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
+                            android:textColor="@color/black"
                             android:layout_marginTop="15dp"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/pick_request" />
@@ -483,6 +500,20 @@
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+
+                    <View
+                        android:id="@+id/line0"
+                        android:layout_width="1dp"
+                        android:layout_height="200dp"
+                        android:background="@color/line_color"
+                        app:layout_constraintStart_toEndOf="@+id/pick_cl"
+                        app:layout_constraintEnd_toStartOf="@+id/drop_cl"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/drop_cl"
                         android:layout_width="0dp"
@@ -492,7 +523,8 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toEndOf="@+id/pick_cl"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_marginStart="3dp">
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/drop_txt1"
@@ -513,23 +545,41 @@
                             android:layout_width="match_parent"
                             android:layout_height="60dp"
                             android:weightSum="2"
+                            android:background="@drawable/border4side"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginEnd="15dp"
                             android:orientation="horizontal"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/drop_txt1">
 
 
                             <com.google.android.material.imageview.ShapeableImageView
-                                android:layout_width="wrap_content"
+                                android:id="@+id/drop_image"
+                                android:layout_width="70dp"
+                                android:layout_height="55dp"
+                                android:layout_weight="0.5"
+                                android:src="@mipmap/ic_box"
+                                android:layout_marginEnd="5dp"/>
+
+
+                            <View
+                                android:id="@+id/line02"
+                                android:layout_width="1dp"
                                 android:layout_height="60dp"
-                                android:layout_weight="1"
-                                android:src="@mipmap/ic_box" />
+                                android:background="@color/line_color"
+                         />
+
+
 
                             <com.google.android.material.imageview.ShapeableImageView
                                 android:id="@+id/drop_signature"
-                                android:layout_width="wrap_content"
-                                android:layout_height="60dp"
-                                android:layout_weight="1"
-                                android:src="@mipmap/ic_box" />
+                                android:layout_width="70dp"
+                                android:layout_height="55dp"
+                                android:layout_gravity="center"
+                                android:layout_weight="0.5"
+                                android:src="@drawable/ic_blank_sing"
+                                android:layout_marginStart="5dp"
+                                />
 
                         </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -554,6 +604,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
+                            android:textColor="@color/black"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/drop_time_header" />
 
@@ -574,6 +625,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
+                            android:textColor="@color/black"
                             android:layout_marginTop="15dp"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/drop_request" />

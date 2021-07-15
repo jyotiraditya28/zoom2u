@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.zoom2u_customer.ui.bottom_navigation_package.base_package.home.map_page.doc_dimension.DocDimensionActivity">
+        tools:context="com.zoom2u_customer.ui.application.base_package.home.map_page.doc_dimension.DocDimensionActivity">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/back_icon"
@@ -35,21 +35,41 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+
+
+
+       <LinearLayout
+           android:id="@id/cl1"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:background="@drawable/shadow_top"
+           android:orientation="vertical"
+           android:elevation="10dp"
+           android:layout_marginTop="30dp"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintStart_toStartOf="parent"
+
+           app:layout_constraintTop_toBottomOf="@id/header_txt">
+
+
+
+
+
+
+
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/text"
             style="@style/style_13_bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="20dp"
             android:gravity="center"
             android:minLines="4"
             android:paddingStart="30dp"
             android:paddingEnd="30dp"
             android:text="We'll assume some default dimension based on the parcel selected. however if the size and weight of your parcel id higher,please adjust the dimension and weight below."
             android:textColor="@color/base_color"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/header_txt" />
+            />
 
 
         <LinearLayout
@@ -365,9 +385,9 @@
                     android:text="@string/height"
                     android:textColor="@color/black" />
 
-
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/height_cl"
+
                     android:layout_width="90dp"
                     android:layout_height="30dp"
                     android:layout_marginStart="13dp"
@@ -407,7 +427,7 @@
             </LinearLayout>
 
         </LinearLayout>
-
+       </LinearLayout>
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/total_weight1"

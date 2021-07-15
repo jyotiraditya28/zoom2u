@@ -2,6 +2,7 @@ package com.zoom2u_customer.ui.log_in
 
 import android.content.Context
 import android.util.Log
+import android.widget.Toast
 
 import com.google.gson.Gson
 import com.google.gson.JsonObject
@@ -48,8 +49,12 @@ class LoginRepository(private var serviceApi: ServiceApi, var context: Context) 
                         }
 
                         override fun onError(e: Throwable) {
-                            Log.d("", "")
                             AppUtility.progressBarDissMiss()
+                            Toast.makeText(
+                                context,
+                                "something went wrong please try again.",
+                                Toast.LENGTH_LONG
+                            ).show()
                         }
 
                     })

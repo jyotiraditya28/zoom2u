@@ -10,7 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.zoom2u_customer.R
 import com.zoom2u_customer.apiclient.ServiceApi
-import com.zoom2u_customer.ui.bottom_navigation_package.base_package.base_page.BasePageActivity
+import com.zoom2u_customer.ui.application.base_package.base_page.BasePageActivity
 import com.zoom2u_customer.ui.log_in.LogInActivity
 import com.zoom2u_customer.ui.log_in.LoginRequest
 import com.zoom2u_customer.databinding.ActivitySignUpBinding
@@ -48,7 +48,7 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener,
         }
 
         binding.spinner.onItemSelectedListener = this
-
+        categories.add("How did you find us?")
         categories.add("Google")
         categories.add("Radio Ad")
         categories.add("Newspaper")
@@ -71,15 +71,12 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener,
 
         viewModel.getSignupSuccess()?.observe(this) {
             if (!TextUtils.isEmpty(it)) {
-                //AppUtility.progressBarDissMiss()
                 if (it.equals("true")) {
                     val email = binding.email.text.toString()
                     val pass = binding.pass.text.toString()
                     viewModel.getLogin(LoginRequest(username = email, password = pass))
                     Toast.makeText(this, "You have been successfully Registered.", Toast.LENGTH_LONG).show()
-
-                } else
-                   Toast.makeText(this,it,Toast.LENGTH_LONG).show()
+                }
 
             }
         }
@@ -90,11 +87,19 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener,
                 if (it.equals("true")) {
                     val intent = Intent(this, BasePageActivity::class.java)
                     startActivity(intent)
+                    finish()
                 } else
                     DialogActivity.alertDialogSingleButton(this, "Alert!", "You have been successfully Registered please Login.")
 
             }
+
         }
+
+
+
+
+
+
     }
 
 
@@ -108,9 +113,11 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener,
                 val intent = Intent(this, LogInActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
                 startActivity(intent)
+                finish()
             }
             R.id.find_us -> {
-               binding.spinner.performClick()
+                AppUtility.hideKeyboardOnClick(this)
+                binding.spinner.performClick()
             }
 
         }
@@ -183,7 +190,10 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener,
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         val selectedText = categories[position]
-        binding.findUs.setText(selectedText)
+        if(position>0) {
+            binding.findUs.setText(selectedText)
+            binding.whereFindUs.isHintAnimationEnabled = true
+        }
     }
 
     override fun onNothingSelected(p0: AdapterView<*>?) {

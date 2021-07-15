@@ -6,7 +6,7 @@
 
         <variable
             name="historyitem"
-            type="com.zoom2u_customer.ui.bottom_navigation_package.base_package.history.HistoryResponse" />
+            type="com.zoom2u_customer.ui.application.base_package.history.HistoryResponse" />
     </data>
 
 
@@ -14,7 +14,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+
 
         >
 
@@ -96,25 +96,27 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/header_txt"
-                style="@style/style_11_regular"
+                style="@style/style_9_regular"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:text="@string/courier"
-                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/line" />
 
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/name"
-                style="@style/style_15_regular"
+                style="@style/style_15_bold"
+                android:textSize="18sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
+                android:singleLine="true"
+                android:maxWidth="150dp"
                 android:text="@{historyitem.customerFirstName+' '+historyitem.customerLastName}"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
@@ -129,7 +131,6 @@
                 android:paddingEnd="10dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="10dp"
-                android:background="@color/base_color"
                 android:gravity="center"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/line" />

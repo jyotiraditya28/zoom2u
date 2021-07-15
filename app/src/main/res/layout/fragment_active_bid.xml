@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/card_view_color"
-        tools:context=".ui.bottom_navigation_package.bid_request.active_bid_request.ActiveBidFragment">
+        tools:context=".ui.application.bid_request.active_bid_request.ActiveBidFragment">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/active_bid_recycler"

@@ -7,7 +7,7 @@ import android.text.TextUtils
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.zoom2u_customer.R
-import com.zoom2u_customer.ui.bottom_navigation_package.base_package.base_page.BasePageActivity
+import com.zoom2u_customer.ui.application.base_package.base_page.BasePageActivity
 import com.zoom2u_customer.utility.AppPreference
 import com.zoom2u_customer.utility.AppUtility
 

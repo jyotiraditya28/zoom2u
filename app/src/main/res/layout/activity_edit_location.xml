@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        tools:context=".ui.bottom_navigation_package.base_package.profile.my_location.edit_add_location.EditAddLocationActivity">
+        tools:context=".ui.application.base_package.profile.my_location.edit_add_location.EditAddLocationActivity">
 
 
         <com.google.android.material.imageview.ShapeableImageView
@@ -157,7 +157,7 @@
                         android:id="@+id/find_me"
                         android:layout_width="35dp"
                         android:layout_height="30dp"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="14dp"
                         android:orientation="vertical"
                         app:layout_constraintStart_toEndOf="@+id/address"
                         app:layout_constraintTop_toBottomOf="@+id/line3"
@@ -186,6 +186,7 @@
                     android:layout_width="match_parent"
                     android:layout_height=".5dp"
                     android:layout_marginTop="5dp"
+                    android:layout_marginEnd="30dp"
                     android:background="@color/line_color"
                     app:layout_constraintTop_toBottomOf="@+id/address" />
 
@@ -289,6 +290,7 @@
             <Button
                 android:id="@+id/save_change_btn"
                 style="@style/style_15_bold"
+                android:elevation="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginStart="15dp"

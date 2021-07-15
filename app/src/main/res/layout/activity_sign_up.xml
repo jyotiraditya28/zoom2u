@@ -171,6 +171,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:hint="@string/find_us"
+                    app:hintAnimationEnabled="false"
                     app:boxStrokeWidth="0dp"
                     app:boxStrokeWidthFocused="0dp"
                     app:hintTextColor="@color/txt_sub_color"
@@ -213,11 +214,12 @@
                     android:layout_marginTop="5dp"
                     android:hint="@string/pass_header_login"
                     app:boxStrokeWidth="0dp"
+                    app:endIconMode="password_toggle"
                     app:boxStrokeWidthFocused="0dp"
                     app:hintTextColor="@color/txt_sub_color"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/where_find_us"
-                    app:passwordToggleEnabled="true">
+                    >
 
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -241,7 +243,7 @@
                     app:hintTextColor="@color/txt_sub_color"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/pass_header"
-                    app:passwordToggleEnabled="true">
+                    app:endIconMode="password_toggle">
 
 
                     <com.google.android.material.textfield.TextInputEditText

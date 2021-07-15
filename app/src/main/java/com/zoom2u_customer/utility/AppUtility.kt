@@ -3,10 +3,14 @@ package com.zoom2u_customer.utility
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.net.ConnectivityManager
 import android.os.Build
+import android.os.StrictMode
 import android.util.TypedValue
 import android.view.View
 import android.view.Window
@@ -22,6 +26,9 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.zoom2u_customer.R
 import com.zoom2u_customer.ui.log_in.LoginResponce
+import java.io.IOException
+import java.io.InputStream
+import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -38,38 +45,6 @@ class AppUtility {
 
         fun validateTextField(validateTxtField: TextInputEditText) {
             validateTxtField.setBackgroundResource(R.drawable.blankbox)
-        }
-
-        fun spinnerPopUpWindow(spinner: Spinner?) {
-            try {
-                val popup = Spinner::class.java.getDeclaredField("mPopup")
-                popup.isAccessible = true
-                val popupWindow = popup[spinner] as ListPopupWindow
-                popupWindow.height = getintToPX(140)
-
-                popupWindow.setBackgroundDrawable(
-                    Zoom2u.getInstance()?.resources?.getDrawable(android.R.drawable.dialog_holo_light_frame)
-                )
-            } catch (e: NoClassDefFoundError) {
-                e.message
-            } catch (e: ClassCastException) {
-                e.message
-            } catch (e: NoSuchFieldException) {
-                e.message
-            } catch (e: IllegalAccessException) {
-                e.message
-            }
-
-        }
-
-
-        fun getintToPX(i: Int): Int {
-            return TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                i.toFloat(),
-                Zoom2u.getInstance()?.resources?.displayMetrics
-            )
-                .toInt()
         }
 
 
@@ -220,17 +195,15 @@ class AppUtility {
 
 
 
-        fun getDateTime(serverDateTimeValue: String?): String? {
-            val dateTimeReturn: String? = null
+        fun getDateTime(serverDateTimeValue: String?): Date {
+            var convertedDate=Date()
             try {
                 if (serverDateTimeValue != "") {
                     val converter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
                     converter.timeZone = TimeZone.getTimeZone("GMT")
-                    var convertedDate: Date? = Date()
                     try {
                         convertedDate = converter.parse(serverDateTimeValue)
-                        val dateFormatter = SimpleDateFormat("dd/MM/yyyy")
-                        return dateFormatter.format(convertedDate)
+                        return convertedDate
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }
@@ -238,9 +211,37 @@ class AppUtility {
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
             }
-            return dateTimeReturn
+            return convertedDate
         }
 
 
+
+        fun getBitmapFromURL(imagePath: String?) : Bitmap?{
+            var bitmap: Bitmap?=null
+            val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
+            StrictMode.setThreadPolicy(policy)
+            try {
+                val url = URL(imagePath)
+                bitmap= BitmapFactory.decodeStream(url.content as InputStream)
+            } catch (e: IOException) {
+
+            }
+            return bitmap
+        }
+
+
+        fun fullSizeImageView(context: Context?,photo:String){
+            val intent = Intent(context, FullSizeImageActivity::class.java)
+            intent.putExtra("Photo",photo)
+            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+            context?.startActivity(intent)
+        }
+
+        fun hideKeyboardOnClick(context: Context) {
+            val inputManager =
+                context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            val v = (context as Activity).currentFocus ?: return
+            inputManager.hideSoftInputFromWindow(v.windowToken, 0)
+        }
     }
 }
