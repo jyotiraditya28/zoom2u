@@ -17,7 +17,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Zoom2u">
-        <activity android:name=".utility.FullSizeImageActivity"></activity>
+        <activity android:name=".ui.application.base_package.home.booking_confirmation.order_confirm_hold.OrderConfirmActivity"></activity>
+        <activity android:name=".utility.FullSizeImageActivity" />
         <activity android:name=".ui.application.base_package.home.booking_confirmation.BookingConfirmationActivity" />
         <activity android:name=".ui.application.base_package.home.map_page.doc_dimension.DocDimensionActivity" />
         <activity android:name=".ui.application.base_package.profile.my_location.search_location.Location" />

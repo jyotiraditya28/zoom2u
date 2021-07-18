@@ -2,6 +2,7 @@ package com.zoom2u_customer.ui.application.base_package.profile.my_location.edit
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.zoom2u_customer.apiclient.GetAddressFromGoogle.GoogleAddressRepository
 import com.zoom2u_customer.ui.application.base_package.profile.my_location.model.AddLocationReq
 import com.zoom2u_customer.ui.application.base_package.profile.my_location.model.MyLocationResAndEditLocationReq
 
@@ -13,7 +14,7 @@ class EditAddLocationViewModel : ViewModel() {
     private var googleAddressSuccess : MutableLiveData<HashMap<String, Any>>? = MutableLiveData()
     var isForEdit:MutableLiveData<Boolean>? = MutableLiveData()
     var repository: EditAddLocationRepository? = null
-
+    var repositoryGoogleAdd : GoogleAddressRepository?=null
     fun editLocation(myLocationResponse: MyLocationResAndEditLocationReq?) =
         repository?.editLocation(myLocationResponse, onSuccess = ::editLocationSuccess)
 
@@ -24,7 +25,7 @@ class EditAddLocationViewModel : ViewModel() {
         repository?.deleteLocation(locationId, onSuccess = ::deleteLocationSuccess)
 
    fun dataFromGoogle(address: String?, isEdit: Boolean) =
-          repository?.getAddressFromGeocoder(address,isEdit,onSuccess = ::googleAddressSuccess)
+          repositoryGoogleAdd?.getAddressFromGeocoder(address,isEdit,onSuccess = ::googleAddressSuccess)
 
 
 

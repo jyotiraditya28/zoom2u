@@ -1,5 +1,6 @@
 package com.zoom2u_customer.ui.application.base_package.home.delivery_details
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.location.Geocoder
 import android.os.Bundle
@@ -16,23 +17,28 @@ import com.google.android.libraries.places.api.model.TypeFilter
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
+import com.google.gson.Gson
 import com.zoom2u_customer.R
 import com.zoom2u_customer.apiclient.ApiClient
+import com.zoom2u_customer.apiclient.GetAddressFromGoogle.GoogleAddressRepository
 import com.zoom2u_customer.apiclient.GetAddressFromGoogleAPI
 import com.zoom2u_customer.apiclient.GoogleServiceApi
 import com.zoom2u_customer.apiclient.ServiceApi
 import com.zoom2u_customer.databinding.ActivityDeliveryDatailsBinding
 import com.zoom2u_customer.ui.application.base_package.home.delivery_details.model.InterStateReq
 import com.zoom2u_customer.ui.application.base_package.home.delivery_details.model.IntraStateReq
+import com.zoom2u_customer.ui.application.base_package.home.delivery_details.model.SaveDeliveryRequestReq
 import com.zoom2u_customer.ui.application.base_package.home.delivery_details.model.ShipmentsClass
 import com.zoom2u_customer.ui.application.base_package.home.home_fragment.Icon
 import com.zoom2u_customer.ui.application.base_package.home.pricing_payment.PricingPaymentActivity
 import com.zoom2u_customer.ui.application.base_package.profile.my_location.MyLocationRepository
-import com.zoom2u_customer.ui.application.base_package.profile.my_location.edit_add_location.EditAddLocationRepository
 import com.zoom2u_customer.ui.application.base_package.profile.my_location.model.MyLocationResAndEditLocationReq
 import com.zoom2u_customer.ui.application.get_location.GetLocationClass
 import com.zoom2u_customer.utility.*
 import com.zoom2u_customer.utility.utility_custom_class.MySpinnerAdapter
+import org.json.JSONArray
+import org.json.JSONException
+import org.json.JSONObject
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -52,20 +58,33 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
     lateinit var viewModel: DeliveryDetailsViewModel
     private var categories: MutableList<String> = mutableListOf()
     private var repository: DeliveryDetailsRepository? = null
-    private var repositoryEditAdd: EditAddLocationRepository? = null
+    private var repositoryGoogleAddress: GoogleAddressRepository? = null
     private var repositoryMyLoc: MyLocationRepository? = null
     private var getLocationClass: GetLocationClass? = null
+
     private var pickState: String? = null
-    private var pickLat: String? = null
-    private var pickLang: String? = null
+    private var pickStreetNumber: String? = null
+    private var pickStreet: String? = null
+    private var pickGpx: String? = null
+    private var pickGpy: String? = null
     private var pickSuburb: String? = null
+    private var pickPostCode: String? = null
+    private var pickCountry: String? = null
+    private var pickPremisesType:String? =null
 
     private var dropState: String? = null
-    private var dropLat: String? = null
-    private var dropLang: String? = null
+    private var dropStreetNumber: String? = null
+    private var dropStreet: String? = null
+    private var dropGpx: String? = null
+    private var dropGpy: String? = null
     private var dropSuburb: String? = null
+    private var dropPostCode: String? = null
+    private var dropCountry: String? = null
+    private var dropPremisesType:String? =null
 
-
+    private var leaveAt:Int?=null
+    private var isInterstate:Boolean?=null
+    private var otherInstructions:String?=null
 
     private lateinit var itemDataList: ArrayList<Icon>
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,9 +101,9 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
         val serviceApi: ServiceApi = ApiClient.getServices()
         val googleServiceApi: GoogleServiceApi = GetAddressFromGoogleAPI.getGoogleServices()
         repositoryMyLoc = MyLocationRepository(serviceApi, this)
-        repositoryEditAdd = EditAddLocationRepository(serviceApi, googleServiceApi, this)
+        repositoryGoogleAddress = GoogleAddressRepository(googleServiceApi, this)
         viewModel.repositoryMyLoc = repositoryMyLoc
-        viewModel.repositoryEditAdd = repositoryEditAdd
+        viewModel.repositoryGoogelAddress = repositoryGoogleAddress
         viewModel.getMyLocationList()
 
 
@@ -167,45 +186,55 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
 
         }
 
-//        viewModel.getDataFromGoogleSuccess()?.observe(this) { its ->
-//            if (!TextUtils.isEmpty(its)) {
-//                AppUtility.progressBarDissMiss()
-//                if (its != "") {
-//                    viewModel.getIsForPickup()?.observe(this) {
-//                        if (it != null) {
-//                            val jsonObj = JSONObject(its.toString())
-//                            val resultsJsonArray = jsonObj.getJSONArray("results")
-//
-//                            if (it) {
-//                                pickState = resultsJsonArray.getJSONObject(0)
-//                                    .getJSONArray("address_components").getJSONObject(3)
-//                                    .getString("short_name")
-//                                showHideWeight(pickState, dropState)
-//                                // myLocationResponse?.Location?.Country = address[0].countryName
-//                                // myLocationResponse?.Location?.State = address[0].locality
-//                                // myLocationResponse?.Location?.GPSX = resultsJsonArray.getJSONObject(0).getJSONObject("geometry").getJSONObject("location").getDouble("lat")
-//                                //myLocationResponse?.Location?.GPSY = resultsJsonArray.getJSONObject(0).getJSONObject("geometry").getJSONObject("location").getDouble("lng")
-//                                //  myLocationResponse?.Location?.Suburb =resultsJsonArray.getJSONObject(0).getJSONArray("address_components").getJSONObject(0).getString("short_name")
-//                                // /*check again*/myLocationResponse?.Location?.Street =
-//
-//
-//                            } else {
-//                                dropState = resultsJsonArray.getJSONObject(0)
-//                                    .getJSONArray("address_components").getJSONObject(3)
-//                                    .getString("short_name")
-//                                showHideWeight(pickState, dropState)
-//                                //  addLocationReq?.Location?.State = address[0].locality
-//                                //   addLocationReq?.Location?.Gpsx = resultsJsonArray.getJSONObject(0).getJSONObject("geometry").getJSONObject("location").getDouble("lat")
-//                                //   addLocationReq?.Location?.Gpsy = resultsJsonArray.getJSONObject(0).getJSONObject("geometry").getJSONObject("location").getDouble("lng")
-//                                //   addLocationReq?.Location?.Suburb = resultsJsonArray.getJSONObject(0).getJSONArray("address_components").getJSONObject(0).getString("short_name")
-//                                //   /*check again*/ addLocationReq?.Location?.Street = address[0].adminArea
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//
+        viewModel.googleSuccessUsingAdd()?.observe(this) { isGoogleAdd ->
+            if (isGoogleAdd.isNotEmpty()) {
+                AppUtility.progressBarDissMiss()
+                val getAddress: HashMap<String, Any>? = isGoogleAdd
+                     if(isGoogleAdd["isTrue"] =="true"){
+
+
+                           /* myLocationResponse?.Location?.GPSX =
+                                getAddress?.get("latitude") as Double
+
+                            myLocationResponse?.Location?.GPSY =
+                                getAddress["longitude"] as Double
+*/
+                            pickState = getAddress?.get("state")?.toString()
+                             showHideWeight(pickState,dropState)
+                         /*   myLocationResponse?.Location?.Suburb =
+                                getAddress["suburb"].toString()
+
+
+                            myLocationResponse?.Location?.Postcode =
+                                getAddress["postcode"].toString()
+
+                            myLocationResponse?.Location?.Street =
+                                getAddress["suburb"].toString()
+
+
+                            myLocationResponse?.Location?.StreetNumber =
+                                getAddress["streetNumber"].toString()
+*/
+
+                        } else {
+
+                          /*  lattitude = getAddress?.get("latitude") as Double
+
+                            longitude = getAddress["longitude"] as Double
+*/
+                            dropState = getAddress?.get("state")?.toString()
+                             showHideWeight(pickState,dropState)
+                         /*   suburb =  getAddress["suburb"].toString()
+
+                            country =  getAddress["country"].toString()
+
+                            postCode =   getAddress["postcode"].toString()
+
+                            street =  getAddress["suburb"].toString()*/
+
+
+                    }  }
+        }
 
     }
 
@@ -239,8 +268,8 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
                     binding.pickCompany.setText(myLocation.Location?.CompanyName.toString())
                     binding.pickAddress.setText(myLocation.Location?.Address.toString())
                     pickState = myLocation.Location?.State.toString()
-                    pickLat = myLocation.Location?.GPSX.toString()
-                    pickLang = myLocation.Location?.GPSY.toString()
+                    pickGpx = myLocation.Location?.GPSX.toString()
+                    pickGpy = myLocation.Location?.GPSY.toString()
                     pickSuburb = myLocation.Location?.Suburb.toString()
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -290,17 +319,23 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
                 if (isBookingConfirm <= 0) {
                   /**for Intra State**/
                     if (pickState == dropState) {
+                        isInterstate=false
                         intraStateReq = getIntraState()
                         val intent = Intent(this, PricingPaymentActivity::class.java)
                         intent.putExtra("IntraStateData",intraStateReq)
+                        intent.putExtra("SaveDeliveryRequestReq",createJsonForSaveRequest().toString())
+                        intent.putParcelableArrayListExtra("IconList", itemDataList)
                         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
                         startActivity(intent)
                     }
                     /**for Inter State**/
                     else{
+                        isInterstate = true
                         interStateReq = getInterState()
                         val intent = Intent(this, PricingPaymentActivity::class.java)
                         intent.putExtra("InterStateData",interStateReq)
+                        intent.putExtra("SaveDeliveryRequestReq",createJsonForSaveRequest().toString())
+                        intent.putParcelableArrayListExtra("IconList", itemDataList)
                         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
                         startActivity(intent)
                     }
@@ -317,11 +352,13 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
             R.id.pick_address -> {
                 try {
                     val fields =
-                        listOf(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS)
+                        listOf(
+                            Place.Field.ADDRESS, Place.Field.LAT_LNG,
+                        )
                     val intent = Autocomplete.IntentBuilder(
                         AutocompleteActivityMode.FULLSCREEN, fields
                     )
-                        .setCountry("AU")
+                       .setCountry("AU")
                         .setTypeFilter(TypeFilter.ADDRESS)
                         .build(this)
                     startActivityForResult(intent, pickAutocompleteRequest)
@@ -332,11 +369,11 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
             R.id.drop_address -> {
                 try {
                     val fields =
-                        listOf(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS)
+                        listOf(Place.Field.ADDRESS, Place.Field.LAT_LNG)
                     val intent = Autocomplete.IntentBuilder(
                         AutocompleteActivityMode.FULLSCREEN, fields
                     )
-                        .setCountry("AU")
+                      .setCountry("AU")
                         .setTypeFilter(TypeFilter.ADDRESS)
                         .build(this)
                     startActivityForResult(intent, dropAutocompleteRequest)
@@ -394,17 +431,35 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
      return shipmentsList
     }
 
+    private fun getPickDateAndTimeInEta() :String{
+      return DateTimeUtil.getDateTimeFromDeviceForDeliveryETA(
+          binding.pickDate.text.toString()+" "+
+                  binding.pickTime.text.toString()
+      ).toString()
 
+    }
 
+    @SuppressLint("SimpleDateFormat")
+    fun getCurrentDateAndTimeInEta() :String{
+        val date = Date()
+        val dateFormat: DateFormat = SimpleDateFormat("EEE dd MMM yyyy")
+        val timeFormat: DateFormat = SimpleDateFormat("hh:mm aaa")
+
+        return DateTimeUtil.getDateTimeFromDeviceForDeliveryETA(
+            dateFormat.format(date)+" "+
+                    timeFormat.format(date)
+        ).toString()
+
+    }
 
     private fun getIntraState(): IntraStateReq? {
         val dropLocation=IntraStateReq.DropLocationClass("","")
         val pickLocation=IntraStateReq.PickupLocationClass("","")
-        intraStateReq=IntraStateReq("2021-07-12T17:43:39+05:30",
+        intraStateReq=IntraStateReq(getCurrentDateAndTimeInEta(),
         0,binding.dropAddress.text.toString(),
             dropLocation,"",dropState,
             dropSuburb,false,false,
-            binding.pickAddress.text.toString(),"2021-07-12T17:42:13+05:30",pickLocation,""
+            binding.pickAddress.text.toString(),getPickDateAndTimeInEta(),pickLocation,""
         ,pickState,pickSuburb,getShipmentsList()
         )
 
@@ -414,20 +469,98 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
     private fun getInterState(): InterStateReq? {
         val dropLocation=InterStateReq.DropLocationClass("","")
         val pickLocation=InterStateReq.PickupLocationClass("","")
-        interStateReq=InterStateReq("2021-07-12T17:43:39+05:30",
+        interStateReq=InterStateReq(getCurrentDateAndTimeInEta(),
             binding.dropAddress.text.toString(),
             dropLocation,"",dropState,"","",
             dropSuburb,false,false,
-            binding.pickAddress.text.toString(),"2021-07-12T17:42:13+05:30",pickLocation,""
+            binding.pickAddress.text.toString(),getPickDateAndTimeInEta(),pickLocation,""
             ,pickState,"","",pickSuburb,getShipmentsList(),binding.totalWeight.text.toString().trim()
         )
 
         return interStateReq
     }
 
+    private fun deliveryDetailsModel(): SaveDeliveryRequestReq {
 
 
-    private fun onTimeClick(hr: String?, min: String?, am_pm: String?) {
+        val authorityToLeaveForm = SaveDeliveryRequestReq.AuthorityToLeaveForm(
+            leaveAt.toString(), otherInstructions, "",
+            "", true
+        )
+        val itemList:MutableList<SaveDeliveryRequestReq.DeliveryRequestModel.Item> = ArrayList()
+
+        val item =SaveDeliveryRequestReq.DeliveryRequestModel.Item(
+            "","","","","",
+            "","",""
+        )
+        itemList.add(item)
+
+
+        val pickLocation: SaveDeliveryRequestReq.DeliveryRequestModel.PickupLocationClass =
+            SaveDeliveryRequestReq.DeliveryRequestModel.PickupLocationClass(
+                binding.pickName.text.toString(),
+                binding.pickPhone.text.toString(),
+                binding.pickEmail.text.toString(),
+                binding.pickAddress.text.toString(),
+                binding.pickInstruction.text.toString(),
+                "-33.8709706", "-33.8709706", binding.pickUnit.text.toString(),
+                "", "","",
+                pickState, "", "House", true,
+                binding.pickCompany.text.toString(), ""
+            )
+
+
+        val dropLocation: SaveDeliveryRequestReq.DeliveryRequestModel.DropLocationClass =
+            SaveDeliveryRequestReq.DeliveryRequestModel.DropLocationClass(
+                binding.dropName.text.toString(),
+                binding.dropPhone.text.toString(),
+                binding.dropEmail.text.toString(),
+                binding.dropAddress.text.toString(),
+                binding.dropInstruction.text.toString(),
+                dropGpx, dropGpy, binding.dropUnit.text.toString(),
+                "", "", "",
+                dropState, "","House", true,
+                binding.dropCompany.text.toString(), ""
+            )
+
+
+        val deliveryRequestReqModel = SaveDeliveryRequestReq.DeliveryRequestModel(
+            itemList, "", "", "",
+            "FullLoad", "", "",
+            "y", "y",
+            "None", "None",
+            "", "",
+            "Active", "9", 10,
+            "", pickLocation, dropLocation, "Bike",
+            "2021-07-16T04:44:13.932Z", "2021-07-16T04:44:13.932Z",
+            "2021-07-16T04:44:13.932Z",
+            "2021-07-16T04:44:13.932Z",
+            "2021-07-16T04:44:13.932Z",
+            "2021-07-16T04:44:13.932Z",
+            "", 0, "", "",
+            isInterstate, 0, false,
+            false, binding.pickSendSms.isChecked,
+            "", "",
+            binding.dropChkTerms.isChecked,
+            binding.dropChkTerms1.isChecked,
+            leaveAt.toString(), "",
+            false, "",
+            "", "0.5",
+            binding.isNoContactPickup.isChecked, false,
+            false, false,
+            false, false, true,
+            "", "", "laptopOrMobileNo", false,
+            "", "Standard", 1,
+            "400ccf7b-e0ac-0aab-134d-3ffc7fac5142"
+        )
+        //val interstateModel= SaveDeliveryRequestReq.InterstateModel(null,"")
+        return SaveDeliveryRequestReq(
+            authorityToLeaveForm,
+            deliveryRequestReqModel, null, getShipmentsList()
+        )
+    }
+
+    private fun onTimeClick(hr: String?, min: String?,am_pm: String?) {
         binding.pickTime.text = "$hr:$min $am_pm"
     }
 
@@ -435,6 +568,73 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
         if(!TextUtils.isEmpty(s))
         binding.pickDate.text = s.toString()
     }
+
+
+    fun createJsonForSaveRequest() :JSONObject {
+
+        val pickLocation: SaveDeliveryRequestReq.DeliveryRequestModel.PickupLocationClass =
+                SaveDeliveryRequestReq.DeliveryRequestModel.PickupLocationClass(
+                    binding.pickName.text.toString(),
+                    binding.pickPhone.text.toString(),
+                    binding.pickEmail.text.toString(),
+                    binding.pickAddress.text.toString(),
+                    binding.pickInstruction.text.toString(),
+                    "-33.8709706", "-33.8709706", binding.pickUnit.text.toString(),
+                    "", "","",
+                    pickState, "", "House", true,
+                    binding.pickCompany.text.toString(), ""
+                )
+
+
+            val dropLocation: SaveDeliveryRequestReq.DeliveryRequestModel.DropLocationClass =
+                SaveDeliveryRequestReq.DeliveryRequestModel.DropLocationClass(
+                    binding.dropName.text.toString(),
+                    binding.dropPhone.text.toString(),
+                    binding.dropEmail.text.toString(),
+                    binding.dropAddress.text.toString(),
+                    binding.dropInstruction.text.toString(),
+                    "-33.8646627", "151.2043709", binding.dropUnit.text.toString(),
+                    "", "", "",
+                    dropState, "","House", true,
+                    binding.dropCompany.text.toString(), ""
+                )
+
+            val jObjOfQuotesItem = JSONObject()
+            val jObjOfQuotesItemForDeliveryRequest = JSONObject()
+            val jObjOfQuotesItemForInterstate = JSONObject()
+            try {
+
+
+                jObjOfQuotesItemForDeliveryRequest.put(
+                    "IsInterstate",
+                    false
+                )
+                jObjOfQuotesItemForDeliveryRequest.put("PickUpDateTime",getPickDateAndTimeInEta())
+                jObjOfQuotesItemForDeliveryRequest.put(
+                    "Notes",
+                   ""
+                )
+                jObjOfQuotesItemForDeliveryRequest.put("ParentId", 0)
+                jObjOfQuotesItemForDeliveryRequest.put("Source", 9)
+                jObjOfQuotesItemForDeliveryRequest.put("DropLocation",
+                    JSONObject( Gson().toJson(dropLocation).toString())
+                )
+                jObjOfQuotesItemForDeliveryRequest.put( "PickupLocation", JSONObject( Gson().toJson(pickLocation).toString()))
+                /*if (pickOrDropView_Handler.isInterState) jObjOfQuotesItemForDeliveryRequest.put(
+                    "Weight",
+                    pickOrDropView_Handler.selectWeightYourdelivery.getText().toString().toInt()
+                )*/
+                jObjOfQuotesItem.put("_deliveryRequestModel", jObjOfQuotesItemForDeliveryRequest)
+                jObjOfQuotesItem.put("_interstateModel", jObjOfQuotesItemForInterstate)
+                jObjOfQuotesItem.put("_shipmentModel", JSONArray( Gson().toJson(getShipmentsList()).toString()))
+
+            } catch (e: JSONException) {
+                e.printStackTrace()
+            }
+        return jObjOfQuotesItem
+    }
+
+
 
     private fun getPickAddress(lat: Double, long: Double) {
 
@@ -459,41 +659,55 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
     }
 
 
+
+
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == pickAutocompleteRequest) {
-            if (resultCode == RESULT_OK) {
-                val place = Autocomplete.getPlaceFromIntent(data!!)
-                binding.pickAddress.setText(place.address)
-                viewModel.dataFromGoogle(binding.pickAddress.text.toString(), true)
+            when (resultCode) {
+                RESULT_OK -> {
+                    val place = Autocomplete.getPlaceFromIntent(data!!)
+                    binding.pickAddress.setText(place.address)
+                    viewModel.dataFromGoogle(place.address,true)
 
-            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
-                val status = Autocomplete.getStatusFromIntent(data!!)
-                binding.pickAddress.setText("")
-            } else if (resultCode == RESULT_CANCELED) {
-                Log.i("Place API Failure", "  -------------- User Cancelled -------------")
+                }
+                AutocompleteActivity.RESULT_ERROR -> {
+                    binding.pickAddress.setText("")
+                }
+                RESULT_CANCELED -> {
+                    Log.i("Place API Failure", "  -------------- User Cancelled -------------")
+                }
             }
         } else if (requestCode == dropAutocompleteRequest) {
-            if (resultCode == RESULT_OK) {
-                val place = Autocomplete.getPlaceFromIntent(data!!)
-                binding.dropAddress.setText(place.address)
-                viewModel.dataFromGoogle(binding.dropAddress.text.toString(), false)
-            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
-                val status = Autocomplete.getStatusFromIntent(data!!)
-                binding.pickAddress.setText("")
-            } else if (resultCode == RESULT_CANCELED) {
-                Log.i("Place API Failure", "  -------------- User Cancelled -------------")
+            when (resultCode) {
+                RESULT_OK -> {
+                    val place = Autocomplete.getPlaceFromIntent(data!!)
+                    binding.dropAddress.setText(place.address)
+                    viewModel.dataFromGoogle(place.address,false)
+                }
+                AutocompleteActivity.RESULT_ERROR -> {
+                    binding.pickAddress.setText("")
+                }
+                RESULT_CANCELED -> {
+                    Log.i("Place API Failure", "  -------------- User Cancelled -------------")
+                }
             }
         }
     }
 
+
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
         val selectedText = categories[position]
         binding.authorityTo.setText(selectedText)
-        if (selectedText == "Other")
+        leaveAt=position
+        if (selectedText == "Other") {
             binding.other.visibility = View.VISIBLE
-        else
+            otherInstructions = binding.other.text.toString()
+        }else {
             binding.other.visibility = View.GONE
+            otherInstructions = ""
+        }
     }
 
     override fun onNothingSelected(p0: AdapterView<*>?) {

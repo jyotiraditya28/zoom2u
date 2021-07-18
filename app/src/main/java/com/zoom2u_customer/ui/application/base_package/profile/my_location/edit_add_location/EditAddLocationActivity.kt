@@ -20,6 +20,7 @@ import com.google.android.libraries.places.widget.AutocompleteActivity
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.zoom2u_customer.R
 import com.zoom2u_customer.apiclient.ApiClient.Companion.getServices
+import com.zoom2u_customer.apiclient.GetAddressFromGoogle.GoogleAddressRepository
 import com.zoom2u_customer.apiclient.GetAddressFromGoogleAPI.Companion.getGoogleServices
 import com.zoom2u_customer.apiclient.GoogleServiceApi
 import com.zoom2u_customer.apiclient.ServiceApi
@@ -40,6 +41,7 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
     private var addLocationReq: AddLocationReq? = null
     lateinit var viewModel: EditAddLocationViewModel
     private var repository: EditAddLocationRepository? = null
+    private var repositoryGoogleAddress: GoogleAddressRepository? = null
     private var getLocationClass: GetLocationClass? = null
     private var lattitude: Double? = null
     private var longitude: Double? = null
@@ -79,9 +81,11 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
         viewModel = ViewModelProvider(this).get(EditAddLocationViewModel::class.java)
         val serviceApi: ServiceApi = getServices()
         val googleServiceApi: GoogleServiceApi = getGoogleServices()
-        repository = EditAddLocationRepository(serviceApi, googleServiceApi, this)
+        repository = EditAddLocationRepository(serviceApi,this)
         viewModel.repository = repository
 
+        repositoryGoogleAddress = GoogleAddressRepository(googleServiceApi, this)
+        viewModel.repositoryGoogleAdd=repositoryGoogleAddress
 
         viewModel.getEditLocationSuccess()?.observe(this) {
             if (!TextUtils.isEmpty(it)) {
@@ -370,17 +374,15 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
 
             myLocationResponse?.Location?.GPSX =
                 place.latLng?.latitude
+
             myLocationResponse?.Location?.GPSY =
                 place.latLng?.longitude
+
             myLocationResponse?.Location?.State =
                 place.addressComponents?.asList()?.get(3)?.shortName
 
             myLocationResponse?.Location?.Suburb =
                 place.addressComponents?.asList()?.get(1)?.shortName
-            /*country = resultsJsonArray.getJSONObject(0)
-                .getJSONArray("address_components")
-                .getJSONObject(4)
-                .getString("long_name")*/
 
             myLocationResponse?.Location?.Postcode =
                 place.addressComponents?.asList()?.get(5)?.shortName

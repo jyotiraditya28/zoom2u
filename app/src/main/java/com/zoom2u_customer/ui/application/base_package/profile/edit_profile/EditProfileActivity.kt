@@ -108,7 +108,7 @@ class EditProfileActivity : AppCompatActivity(), View.OnClickListener {
         val pictureDialogItems = arrayOf("Select image from gallery", "Capture photo from camera")
         pictureDialog.setItems(
             pictureDialogItems
-        ) { dialog, which ->
+        ) { _, which ->
             when (which) {
                 0 -> if (AppUtility.askCameraTakePicture(this))
                     chooseImageFromGallery()
@@ -181,7 +181,7 @@ class EditProfileActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     companion object {
-        private val IMAGE_DIRECTORY = "/nalhdaf"
+        private const val IMAGE_DIRECTORY = "/nalhdaf"
     }
 
 

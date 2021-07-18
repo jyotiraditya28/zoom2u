@@ -9,7 +9,7 @@ class SaveDeliveryRequestReq(
     var _authorityToLeaveForm: AuthorityToLeaveForm? = null,
     var _deliveryRequestModel: DeliveryRequestModel? = null,
     var _interstateModel: InterstateModel? = null,
-    var _shipmentModel: List<ShipmentModel>? = null,
+    var _shipmentModel: List<ShipmentsClass>? = null,
 ) : Parcelable {
     @Parcelize
     data class AuthorityToLeaveForm(
@@ -103,8 +103,8 @@ class SaveDeliveryRequestReq(
             var Email: String? = null,
             var Address: String? = null,
             var Notes: String? = null,
-            var Gpsx: Float? = null,
-            var Gpsy: Float? = null,
+            var Gpsx: String? = null,
+            var Gpsy: String? = null,
             var UnitNumber: String? = null,
             var StreetNumber: String? = null,
             var Street: String? = null,
@@ -134,7 +134,8 @@ class SaveDeliveryRequestReq(
             var Postcode: String? = null,
             var PremisesType: String? = null,
             var IsFlexible: Boolean? = null,
-            var CompanyName: String? = null
+            var CompanyName: String? = null,
+            var Country: String? = null
         ) : Parcelable
     }
 

@@ -1,7 +1,6 @@
 package com.zoom2u_customer.ui.application.base_package.profile
 
 import android.content.Context
-
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.reflect.TypeToken

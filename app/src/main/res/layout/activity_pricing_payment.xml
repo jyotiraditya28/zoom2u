@@ -110,6 +110,7 @@
                         android:id="@+id/timer"
                         style="@style/style_13_bold"
                         android:layout_width="match_parent"
+                        android:text=" 3:00"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black" />
 
@@ -158,12 +159,12 @@
                         android:textColor="@color/red" />
 
                     <LinearLayout
+                        android:id="@+id/start_timer"
                         android:layout_width="40dp"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
                         <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/start_timmer"
                             style="@style/style_13_bold"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"

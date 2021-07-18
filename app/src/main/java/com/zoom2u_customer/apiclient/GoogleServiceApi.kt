@@ -9,4 +9,7 @@ interface GoogleServiceApi {
 
     @GET
     fun getAddressFromGeocoder(@Url url:String): Single<Response<JsonObject>>
+
+
+
 }
