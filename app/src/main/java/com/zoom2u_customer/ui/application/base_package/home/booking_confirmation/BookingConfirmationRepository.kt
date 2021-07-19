@@ -23,9 +23,7 @@ class BookingConfirmationRepository(private var serviceApi: ServiceApi, var cont
         onSuccess: (msg: String) -> Unit
     ) {
         if (AppUtility.isInternetConnected()) {
-
-
-            //AppUtility.progressBarShow(context)
+            AppUtility.progressBarShow(context)
             disposable.add(
                 serviceApi.postBodyJsonObject(
                     "breeze/customer/SaveDeliveryRequest",

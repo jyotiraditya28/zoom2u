@@ -105,7 +105,6 @@
                     style="@style/style_13_bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="In 2 Hours"
                     android:layout_marginEnd="10dp"
                     android:textColor="@color/black"
                     android:layout_marginTop="20dp"
@@ -150,7 +149,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
-                        android:text="David f."
                         android:textStyle="bold"
                         app:layout_constraintStart_toEndOf="@+id/relMain"
                         app:layout_constraintTop_toBottomOf="@id/pick_details" />
@@ -161,7 +159,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
-                        android:text="55 Miller St. Pyrmont,NSW"
                         android:textStyle="bold"
                         app:layout_constraintStart_toEndOf="@+id/relMain"
                         app:layout_constraintTop_toBottomOf="@id/pick_name" />
@@ -227,7 +224,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="40dp"
-                    android:text="Martin"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/cl" />
@@ -238,7 +234,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="40dp"
-                    android:text="55 Miller St. Pyrmont,NSW"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/drop_name" />
@@ -277,7 +272,6 @@
                     android:gravity="center"
                     android:layout_marginEnd="10dp"
                     android:layout_marginTop="10dp"
-                    android:text="123$"
                     android:textColor="@color/black"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/line1" />

@@ -81,11 +81,11 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
         viewModel = ViewModelProvider(this).get(EditAddLocationViewModel::class.java)
         val serviceApi: ServiceApi = getServices()
         val googleServiceApi: GoogleServiceApi = getGoogleServices()
-        repository = EditAddLocationRepository(serviceApi,this)
+        repository = EditAddLocationRepository(serviceApi, this)
         viewModel.repository = repository
 
         repositoryGoogleAddress = GoogleAddressRepository(googleServiceApi, this)
-        viewModel.repositoryGoogleAdd=repositoryGoogleAddress
+        viewModel.repositoryGoogleAdd = repositoryGoogleAddress
 
         viewModel.getEditLocationSuccess()?.observe(this) {
             if (!TextUtils.isEmpty(it)) {
@@ -135,55 +135,113 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
 
             }
 
-            viewModel.getDataFromGoogleSuccess()?.observe(this) { isGoogleAdd ->
-                if (isGoogleAdd.isNotEmpty()) {
+            /**find add when search from place*/
+            viewModel.googleSuccessUsingAdd()?.observe(this) {
+                if (it.isNotEmpty()) {
                     AppUtility.progressBarDissMiss()
-                    viewModel.getIsForEdit()?.observe(this) { isEdit ->
-                            if (isEdit != null) {
-                                val getAddress: HashMap<String, Any>? = isGoogleAdd
-                                if (isEdit) {
-                                    myLocationResponse?.Location?.GPSX =
-                                         getAddress?.get("latitude") as Double
-
-                                     myLocationResponse?.Location?.GPSY =
-                                             getAddress["longitude"] as Double
-
-                                    myLocationResponse?.Location?.State =
-                                        getAddress["state"].toString()
-
-                                    myLocationResponse?.Location?.Suburb =
-                                         getAddress["suburb"].toString()
+                    val getAddress: HashMap<String, Any>? = it
+                    if (it["isTrue"] == "true") {
 
 
-                                    myLocationResponse?.Location?.Postcode =
-                                              getAddress["postcode"].toString()
+                        myLocationResponse?.Location?.GPSX =
+                            getAddress?.get("latitude") as Double
 
-                                    myLocationResponse?.Location?.Street =
-                                        getAddress["suburb"].toString()
+                        myLocationResponse?.Location?.GPSY =
+                            getAddress["longitude"] as Double
+
+                        myLocationResponse?.Location?.State =
+                            getAddress["state"]?.toString()
+
+                        myLocationResponse?.Location?.Suburb =
+                            getAddress["suburb"].toString()
 
 
-                                    myLocationResponse?.Location?.StreetNumber =
-                                        getAddress["streetNumber"].toString()
+                        myLocationResponse?.Location?.Postcode =
+                            getAddress["postcode"].toString()
+
+                        myLocationResponse?.Location?.Street =
+                            getAddress["suburb"].toString()
 
 
-                                } else {
+                        myLocationResponse?.Location?.StreetNumber =
+                            getAddress["streetNumber"].toString()
 
-                                    lattitude = getAddress?.get("latitude") as Double
 
-                                    longitude = getAddress["longitude"] as Double
+                    } else {
 
-                                    state =  getAddress["state"].toString()
+                        lattitude = getAddress?.get("latitude") as Double
 
-                                    suburb =  getAddress["suburb"].toString()
+                        longitude = getAddress["longitude"] as Double
 
-                                    country =  getAddress["country"].toString()
+                        state = getAddress["state"]?.toString()
 
-                                    postCode =   getAddress["postcode"].toString()
+                        suburb = getAddress["suburb"].toString()
 
-                                    street =  getAddress["suburb"].toString()
+                        country = getAddress["country"].toString()
 
-                                }
-                            } } } } } }
+                        postCode = getAddress["postcode"].toString()
+
+                        street = getAddress["suburb"].toString()
+
+
+                    }
+                }
+            }
+            /**add when find add from find me*/
+            viewModel.googleSuccessUsingLatLang()?.observe(this) {
+                if (it.isNotEmpty()) {
+                    AppUtility.progressBarDissMiss()
+                    val getAddress: HashMap<String, Any>? = it
+                    if (it["isTrue"] == "true") {
+
+
+                        myLocationResponse?.Location?.GPSX =
+                            getAddress?.get("latitude") as Double
+
+                        myLocationResponse?.Location?.GPSY =
+                            getAddress["longitude"] as Double
+
+                        myLocationResponse?.Location?.State =
+                            getAddress["state"]?.toString()
+
+                        myLocationResponse?.Location?.Suburb =
+                            getAddress["suburb"].toString()
+
+
+                        myLocationResponse?.Location?.Postcode =
+                            getAddress["postcode"].toString()
+
+                        myLocationResponse?.Location?.Street =
+                            getAddress["suburb"].toString()
+
+
+                        myLocationResponse?.Location?.StreetNumber =
+                            getAddress["streetNumber"].toString()
+
+                    } else {
+
+                        lattitude = getAddress?.get("latitude") as Double
+
+                        longitude = getAddress["longitude"] as Double
+
+                        state = getAddress["state"]?.toString()
+
+                        suburb = getAddress["suburb"].toString()
+
+                        country = getAddress["country"].toString()
+
+                        postCode = getAddress["postcode"].toString()
+
+                        street = getAddress["suburb"].toString()
+
+
+                    }
+                }
+            }
+
+
+        }
+    }
 
 
     private fun showEditDataView(myLocationResponse: MyLocationResAndEditLocationReq?) {
@@ -215,13 +273,7 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
                 try {
                     val fields =
                         listOf(
-                            Place.Field.ID,
-                            Place.Field.NAME,
-                            Place.Field.ADDRESS,
-                            Place.Field.LAT_LNG,
-                            Place.Field.ADDRESS,
-                            Place.Field.ADDRESS_COMPONENTS,
-                            Place.Field.TYPES
+                            Place.Field.ADDRESS, Place.Field.LAT_LNG
                         )
                     val intent = Autocomplete.IntentBuilder(
                         AutocompleteActivityMode.FULLSCREEN, fields
@@ -336,80 +388,36 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
     }
 
 
-    private fun getAddress(lat: Double, long: Double) {
+    private fun getAddress(lat: Double, lang: Double) {
 
         val geoCoder = Geocoder(this, Locale.getDefault())
-        val address = geoCoder.getFromLocation(lat, long, 1)
+        val address = geoCoder.getFromLocation(lat, lang, 1)
         binding.address.setText(address[0].getAddressLine(0))
-        viewModel.dataFromGoogle(address[0].getAddressLine(0), isEdit)
+        viewModel.addFromGoogleLatLang(lat.toString(), lang.toString(), isEdit)
     }
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == placeAutocompleteRequest) {
-            if (resultCode == RESULT_OK) {
-                val place = Autocomplete.getPlaceFromIntent(data!!)
-                binding.address.setText(place.address)
-                getAddressFromPlace(isEdit, place)
+            when (resultCode) {
+                RESULT_OK -> {
+                    val place = Autocomplete.getPlaceFromIntent(data!!)
+                    binding.address.setText(place.address)
+                    viewModel.addFromGoogleAdd(place.address, isEdit)
 
-            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
-                val status = Autocomplete.getStatusFromIntent(
-                    data!!
-                )
-                binding.address.setText("")
-                Log.i(
-                    "Place API Failure",
-                    "  -------------- Error -------------" + status.statusMessage
-                )
-            } else if (resultCode == RESULT_CANCELED) {
-                Log.i("Place API Failure", "  -------------- User Cancelled -------------")
+                }
+                AutocompleteActivity.RESULT_ERROR -> {
+                    binding.address.setText("")
+                }
+                RESULT_CANCELED -> {
+                    Log.i("Place API Failure", "  -------------- User Cancelled -------------")
+                }
             }
         }
     }
 
 
-    private fun getAddressFromPlace(isEdit: Boolean, place: Place) {
-        if (isEdit) {
-
-            myLocationResponse?.Location?.GPSX =
-                place.latLng?.latitude
-
-            myLocationResponse?.Location?.GPSY =
-                place.latLng?.longitude
-
-            myLocationResponse?.Location?.State =
-                place.addressComponents?.asList()?.get(3)?.shortName
-
-            myLocationResponse?.Location?.Suburb =
-                place.addressComponents?.asList()?.get(1)?.shortName
-
-            myLocationResponse?.Location?.Postcode =
-                place.addressComponents?.asList()?.get(5)?.shortName
-
-            myLocationResponse?.Location?.Street =
-                place.address
-
-            myLocationResponse?.Location?.StreetNumber =
-                place.addressComponents?.asList()?.get(0)?.shortName
-
-        } else {
-            lattitude = place.latLng?.latitude
-
-            longitude = place.latLng?.longitude
-
-            state = place.addressComponents?.asList()?.get(3)?.shortName
-
-            suburb = place.addressComponents?.asList()?.get(1)?.shortName
-
-            country = place.addressComponents?.asList()?.get(4)?.name
-
-            postCode = place.addressComponents?.asList()?.get(5)?.shortName
-
-            street = place.address
-        }
-
-    }
 }
 
 

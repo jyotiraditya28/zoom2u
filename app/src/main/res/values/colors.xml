@@ -17,4 +17,8 @@
     <color name="text_color1">#374350</color>
     <color name="calender_txt_color">#7c86a2</color>
     <color name="color_cyan">#2B93FF</color>
+    <color name="light_green">#5EAC40</color>
+    <color name="green_color">#76D750</color>
+    <color name="gun_metal">#45515b</color>
+    <color name="gray">#d8d8d8</color>
 </resources>

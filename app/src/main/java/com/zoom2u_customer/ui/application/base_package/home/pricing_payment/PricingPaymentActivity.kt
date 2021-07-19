@@ -24,6 +24,7 @@ import com.zoom2u_customer.ui.application.base_package.home.pricing_payment.mode
 import com.zoom2u_customer.ui.application.base_package.home.pricing_payment.model.QuoteOptionClass
 import com.zoom2u_customer.utility.AppUtility
 import com.zoom2u_customer.utility.DateTimeUtil
+import com.zoom2u_customer.utility.DialogActivity
 import org.json.JSONObject
 import java.text.DecimalFormat
 import java.text.NumberFormat
@@ -32,7 +33,7 @@ import java.util.*
 
 class PricingPaymentActivity : AppCompatActivity(), View.OnClickListener {
     var mainObjForMakeABooking: JSONObject? = null
-
+    private var priceSelected:Boolean?=false
     lateinit var binding: ActivityPricingPaymentBinding
     private var intraStateReq: IntraStateReq? = null
     private var interStateReq: InterStateReq? = null
@@ -114,6 +115,8 @@ class PricingPaymentActivity : AppCompatActivity(), View.OnClickListener {
 
     }
     private fun onPriceSelect(quoteOptionClass: QuoteOptionClass) {
+       priceSelected=true
+
         try {
            /* if (mainObjForMakeABooking!!.getJSONObject("_deliveryRequestModel")
                     .getBoolean("IsInterstate")
@@ -160,7 +163,7 @@ class PricingPaymentActivity : AppCompatActivity(), View.OnClickListener {
                 quoteOptionClass.DeliverySpeed
             )
             mainObjForMakeABooking!!.getJSONObject("_deliveryRequestModel").put(
-                "bookingFee",
+                "BookingFee",
                 quoteOptionClass.BookingFee
             )
             mainObjForMakeABooking!!.getJSONObject("_deliveryRequestModel")
@@ -174,7 +177,7 @@ class PricingPaymentActivity : AppCompatActivity(), View.OnClickListener {
                 .put("ETA", quoteOptionClass.ETA)
 
 
-            callBookingConfirmationPage()
+
 
 
            /* if (quoteID != 0) mainObjForMakeABooking!!.getJSONObject("_deliveryRequestModel")
@@ -187,16 +190,6 @@ class PricingPaymentActivity : AppCompatActivity(), View.OnClickListener {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-    }
-
-    private fun callBookingConfirmationPage() {
-        val bookingConfirmationIntent = Intent(this, BookingConfirmationActivity::class.java)
-        bookingConfirmationIntent.putExtra(
-            "MainJsonForMakeABooking",
-            mainObjForMakeABooking.toString()
-        )
-        bookingConfirmationIntent.putParcelableArrayListExtra("IconList", itemDataList)
-        startActivity(bookingConfirmationIntent)
     }
 
     private fun startTimer() {
@@ -227,11 +220,14 @@ class PricingPaymentActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(view: View?) {
         when (view!!.id) {
             R.id.next_btn -> {
-                val intent = Intent(this, BookingConfirmationActivity::class.java)
-                intent.putExtra("SaveDeliveryRequestReq",saveDeliveryRequestReq)
-                intent.putParcelableArrayListExtra("IconList", itemDataList)
-                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
-                startActivity(intent)
+                if(priceSelected==true){
+                val bookingConfirmationIntent = Intent(this, BookingConfirmationActivity::class.java)
+                bookingConfirmationIntent.putExtra("MainJsonForMakeABooking", mainObjForMakeABooking.toString())
+                bookingConfirmationIntent.putParcelableArrayListExtra("IconList", itemDataList)
+                startActivity(bookingConfirmationIntent)
+             }else{
+                    DialogActivity.alertDialogSingleButton(this, "Oops!", "Please select a price.")
+                }
             }
             R.id.start_timer->{
                 callApiForInterOrIntraState()

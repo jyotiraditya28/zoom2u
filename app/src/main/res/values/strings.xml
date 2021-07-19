@@ -11,6 +11,7 @@
     <string name="courier">COURIER</string>
     <string name="next">Next</string>
 
+
     <!--login text-->
     <string name="login_txt_header">Zoom2u connects you with local drivers in your area for fast same day deliveries.</string>
     <string name="email_header">Email</string>
@@ -150,7 +151,7 @@
     <string name="delivery_feature">Show Delivery Features</string>
     <string name="quotes_valid">Your quotes are valid for </string>
     <string name="expired_quote">our quotes have expired. Please click</string>
-
+    <string name="proceed_to_payment">Proceed to payment</string>
 
     <!--Booking Confirmation-->
     <string name="booking_confirmation">Booking Confirmation</string>
@@ -159,6 +160,32 @@
     <string name="booking_confirmation_term_con">I Accept the customer terms and conditions.</string>
     <string name="total">Total</string>
     <string name="min">minutes</string>
+
+
+    <!--order confirmed-->
+    <string name="your_booking_number">Your booking number</string>
+    <string name="order_confirmed">Order Confirmed</string>
+    <string name="what_next">What’s next?</string>
+    <string name="what_next_text">Keep an eye on your smartphone or computer for three email/messages from. They are:</string>
+    <string name="details_eta">Courier’s details and ETA</string>
+    <string name="drop_off_confirmation">Dropoff confirmation and invoice</string>
+    <string name="want_5_credit">Want a $5 credit?</string>
+    <string name="wantACreditDetails">Tweet or share us on Facebook to earn a $5 credit towards your next delivery.</string>
+
+
+    <!--on hold-->
+    <string name="textDetails1">Why is my booking on hold ?</string>
+    <string name="textDetails2">Thank you for your booking. We have it recorded in our system, but have placed it on hold as the credit card details that you entered failed the authorisation process.</string>
+    <string name="textDetails3">This may be because the details you entered are incorrect, or authorisation for this purchase has been rejected by your bank.</string>
+    <string name="textDetails4">Your package will not be picked up while the booking is on hold.</string>
+    <string name="textDetails5">Please enter or add an alternative payment method below in order to make your booking active. We accept MasterCard, Visa and Amex.</string>
+    <string name="txtChangePayment">Change payment method</string>
+    <string name="text_details7">If you have any queries, please email us at</string>
+    <string name="text_details8"><u>deliveries@zoom2u.com.au</u></string>
+    <string name="activate_my_booking">Activate My Booking</string>
+
+
+
 
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -184,4 +211,12 @@
 
 
     <string name="google_api_key" translatable="false">AIzaSyDXy3Z6OzAQ3siNfARS3Y54-sbhNQSBL0U</string>
+    <string name="_3">3</string>
+    <string name="_2">2</string>
+    <string name="_1">1</string>
+    <string name="cancel_booking">Cancel Booking</string>
+    <string name="close">Close</string>
+    <string name="make_a_new_booking">Make a new booking</string>
+
+
 </resources>

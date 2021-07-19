@@ -43,7 +43,6 @@ class GetBrainTreeClientTokenOrBookDeliveryRequest(var context: Context,var requ
 
     private fun onTokenSuccess(BrainToken:String) {
         AppUtility.progressBarDissMiss()
-
         if (BrainToken != "" || BrainToken != "0") {
             val paymentRequest: PaymentRequest = PaymentRequest().clientToken(BrainToken)
             (context as Activity).startActivityForResult(

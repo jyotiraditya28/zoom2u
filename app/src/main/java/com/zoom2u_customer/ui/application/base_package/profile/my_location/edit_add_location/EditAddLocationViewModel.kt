@@ -11,8 +11,8 @@ class EditAddLocationViewModel : ViewModel() {
     private var editSuccess: MutableLiveData<String>? = MutableLiveData("")
     private var addSuccess: MutableLiveData<String>? = MutableLiveData("")
     private var deleteSuccess: MutableLiveData<String>? = MutableLiveData("")
-    private var googleAddressSuccess : MutableLiveData<HashMap<String, Any>>? = MutableLiveData()
-    var isForEdit:MutableLiveData<Boolean>? = MutableLiveData()
+    private var googleAddUsingAdd : MutableLiveData<HashMap<String, Any>>? = MutableLiveData()
+    private var googleAddUsingLatLang: MutableLiveData<HashMap<String, Any>>? = MutableLiveData()
     var repository: EditAddLocationRepository? = null
     var repositoryGoogleAdd : GoogleAddressRepository?=null
     fun editLocation(myLocationResponse: MyLocationResAndEditLocationReq?) =
@@ -24,8 +24,11 @@ class EditAddLocationViewModel : ViewModel() {
     fun deleteLocation(locationId: Int?) =
         repository?.deleteLocation(locationId, onSuccess = ::deleteLocationSuccess)
 
-   fun dataFromGoogle(address: String?, isEdit: Boolean) =
-          repositoryGoogleAdd?.getAddressFromGeocoder(address,isEdit,onSuccess = ::googleAddressSuccess)
+    fun addFromGoogleAdd(address: String?, isEdit: Boolean) =
+        repositoryGoogleAdd?.getAddressFromGeocoder(address,isEdit,onSuccess = ::googleAddUsingAddress)
+
+    fun addFromGoogleLatLang( lat:String?,lang:String?,isPickup: Boolean) =
+        repositoryGoogleAdd?.getAddressFromLatLang(lat,lang,isPickup,onSuccess = ::googleAddUsingLatLang)
 
 
 
@@ -39,12 +42,13 @@ class EditAddLocationViewModel : ViewModel() {
         deleteSuccess?.value = msg
     }
 
-    private fun googleAddressSuccess(address: HashMap<String, Any>, isEdit: Boolean?){
-        googleAddressSuccess?.value = address
-        isForEdit?.value = isEdit
-
+    private fun googleAddUsingAddress(address: HashMap<String, Any>){
+        googleAddUsingAdd?.value = address
     }
 
+    private fun googleAddUsingLatLang(address: HashMap<String, Any>){
+        googleAddUsingLatLang?.value = address
+    }
 
     fun getEditLocationSuccess(): MutableLiveData<String>? {
         return editSuccess
@@ -59,14 +63,13 @@ class EditAddLocationViewModel : ViewModel() {
     }
 
 
-    fun getDataFromGoogleSuccess() : MutableLiveData<HashMap<String, Any>>?{
-        return googleAddressSuccess
+
+    fun googleSuccessUsingAdd() : MutableLiveData<HashMap<String, Any>>?{
+        return googleAddUsingAdd
     }
 
-    fun getIsForEdit() :  MutableLiveData<Boolean>?{
-        return isForEdit
+    fun googleSuccessUsingLatLang() : MutableLiveData<HashMap<String, Any>>?{
+        return googleAddUsingLatLang
     }
-
-
 
 }

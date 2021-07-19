@@ -10,24 +10,32 @@ class DeliveryDetailsViewModel : ViewModel(){
     var bookDeliveryAlertMsgStr = ""
     var success: MutableLiveData<List<MyLocationResAndEditLocationReq>>? = MutableLiveData(null)
     private var googleAddUsingAdd : MutableLiveData<HashMap<String, Any>>? = MutableLiveData()
+    private var googleAddUsingLatLang: MutableLiveData<HashMap<String, Any>>? = MutableLiveData()
     var repositoryMyLoc: MyLocationRepository? = null
     var repository: DeliveryDetailsRepository? = null
-    var repositoryGoogelAddress: GoogleAddressRepository? = null
+    var repositoryGoogleAddress: GoogleAddressRepository? = null
     var isFroPickup:MutableLiveData<Boolean>? = MutableLiveData()
 
 
     fun getMyLocationList() = repositoryMyLoc?.getMyLocation(onSuccess = ::onSuccess)
 
-    fun dataFromGoogle(address: String?, isEdit: Boolean) =
-        repositoryGoogelAddress?.getAddressFromGeocoder(address,isEdit,onSuccess = ::googleAddUsingAddress)
+    fun addFromGoogleAdd(address: String?, isPickUp: Boolean) =
+        repositoryGoogleAddress?.getAddressFromGeocoder(address,isPickUp,onSuccess = ::googleAddUsingAddress)
+
+    fun addFromGoogleLatLang( lat:String?,lang:String?,isPickup: Boolean) =
+        repositoryGoogleAddress?.getAddressFromLatLang(lat,lang,isPickup,onSuccess = ::googleAddUsingLatLang)
+
 
     fun onSuccess(myLocationList:List<MyLocationResAndEditLocationReq>){
         success?.value=myLocationList
     }
 
-    private fun googleAddUsingAddress(address: HashMap<String, Any>, isEdit: Boolean?){
+    private fun googleAddUsingAddress(address: HashMap<String, Any>){
         googleAddUsingAdd?.value = address
-        getIsForPickup()?.value = isEdit
+    }
+
+    private fun googleAddUsingLatLang(address: HashMap<String, Any>){
+        googleAddUsingAdd?.value = address
     }
 
     fun getMySuccess(): MutableLiveData<List<MyLocationResAndEditLocationReq>>?{
@@ -38,9 +46,10 @@ class DeliveryDetailsViewModel : ViewModel(){
         return googleAddUsingAdd
     }
 
-    fun getIsForPickup() :  MutableLiveData<Boolean>?{
-        return isFroPickup
+    fun googleSuccessUsingLatLang() : MutableLiveData<HashMap<String, Any>>?{
+        return googleAddUsingLatLang
     }
+
 
 
 

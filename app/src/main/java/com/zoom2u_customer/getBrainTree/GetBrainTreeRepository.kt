@@ -74,16 +74,17 @@ class GetBrainTreeRepository(private var serviceApi: ServiceApi, var context: Co
 
         /********** WebService to Get Braintree Client token  */
         fun getBrainTreeClientToken(onSuccess: (token:String) -> Unit) {
-
+            //AppUtility.progressBarShow(context)
             var clientTokenId: String? = "0"
             try {
-                var url: URL? =
+                val url =
                     URL( "https://api-test.zoom2u.com/api/Braintree/BrainTreeToken")
-                clientTokenId = httpGetRequest(url!!)
+                clientTokenId = httpGetRequest(url)
                 onSuccess(clientTokenId.toString())
 
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
+                AppUtility.progressBarDissMiss()
                 DialogActivity.alertDialogSingleButton(
                     context,
                     "No Network !",
