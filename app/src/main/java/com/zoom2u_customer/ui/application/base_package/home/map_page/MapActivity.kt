@@ -138,7 +138,6 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, View.OnClickListene
 
     private fun onCancelClick() {
         val intent = Intent()
-        intent.putParcelableArrayListExtra("IconList", dataList)
         setResult(11, intent)
         finish()
     }

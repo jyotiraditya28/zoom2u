@@ -41,6 +41,7 @@ class PricingPaymentActivity : AppCompatActivity(), View.OnClickListener {
     private var repository: PricingPaymentRepository? = null
     var adapter : PricePaymentAdapter? =null
     private lateinit var itemDataList: ArrayList<Icon>
+    private var selectedQuoteOptionClass:QuoteOptionClass?=null
      private var saveDeliveryRequestReq: SaveDeliveryRequestReq?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,6 +65,10 @@ class PricingPaymentActivity : AppCompatActivity(), View.OnClickListener {
                 AppUtility.progressBarDissMiss()
                 startTimer()
                 val intraStateRes:IntraStateRes = Gson().fromJson(it, IntraStateRes::class.java)
+
+                mainObjForMakeABooking!!.getJSONObject("_deliveryRequestModel")
+                    .put("Vehicle", intraStateRes.Vehicle)
+
                 val quoteOptionList =intraStateRes.QuoteOptions
                 if (quoteOptionList != null) {
                     adapter?.updateRecords(quoteOptionList)
@@ -78,6 +83,10 @@ class PricingPaymentActivity : AppCompatActivity(), View.OnClickListener {
                 startTimer()
                 binding.priceView.visibility=View.VISIBLE
                 val interStateRes: InterStateRes = Gson().fromJson(it, InterStateRes::class.java)
+
+                mainObjForMakeABooking!!.getJSONObject("_deliveryRequestModel")
+                    .put("Vehicle", interStateRes.Vehicle)
+
                 val quoteOptionList =interStateRes.QuoteOptions
                 if (quoteOptionList != null) {
                     adapter?.updateRecords(quoteOptionList)
@@ -115,80 +124,12 @@ class PricingPaymentActivity : AppCompatActivity(), View.OnClickListener {
 
     }
     private fun onPriceSelect(quoteOptionClass: QuoteOptionClass) {
-       priceSelected=true
 
-        try {
-           /* if (mainObjForMakeABooking!!.getJSONObject("_deliveryRequestModel")
-                    .getBoolean("IsInterstate")
-            ) {
-                mainObjForMakeABooking!!.getJSONObject("_interstateModel").put(
-                    "pickupDistance",
-                    jsonArrayQuoteOptions.getJSONObject(+index).getString("PickupDistance")
-                )
-                mainObjForMakeABooking!!.getJSONObject("_interstateModel").put(
-                    "dropDistance",
-                    jsonArrayQuoteOptions.getJSONObject(+index).getString("DropDistance")
-                )
-                mainObjForMakeABooking!!.getJSONObject("_interstateModel").put(
-                    "pickupState",
-                    mainObjForMakeABooking!!.getJSONObject("_deliveryRequestModel")
-                        .getJSONObject("PickupLocation").getString("state")
-                )
-                mainObjForMakeABooking!!.getJSONObject("_interstateModel").put(
-                    "dropState",
-                    mainObjForMakeABooking!!.getJSONObject("_deliveryRequestModel")
-                        .getJSONObject("DropLocation").getString("state")
-                )
-                mainObjForMakeABooking!!.getJSONObject("_interstateModel").put(
-                    "routePickupPrice",
-                    jsonArrayQuoteOptions.getJSONObject(+index).getInt("PickupPrice")
-                )
-                mainObjForMakeABooking!!.getJSONObject("_interstateModel").put(
-                    "routeAirPrice",
-                    jsonArrayQuoteOptions.getJSONObject(+index).getInt("InterstatePrice")
-                )
-                mainObjForMakeABooking!!.getJSONObject("_interstateModel").put(
-                    "routeDropPrice",
-                    jsonArrayQuoteOptions.getJSONObject(+index).getInt("DropPrice")
-                )
-                mainObjForMakeABooking!!.getJSONObject("_deliveryRequestModel").put(
-                    "Distance",
-                    jsonArrayQuoteOptions.getJSONObject(+index).getString("Distance")
-                )
-            } else*/
-                mainObjForMakeABooking!!.getJSONObject("_deliveryRequestModel")
-                .put("Distance", quoteOptionClass.Distance)
-            mainObjForMakeABooking!!.getJSONObject("_deliveryRequestModel").put(
-                "DeliverySpeed",
-                quoteOptionClass.DeliverySpeed
-            )
-            mainObjForMakeABooking!!.getJSONObject("_deliveryRequestModel").put(
-                "BookingFee",
-                quoteOptionClass.BookingFee
-            )
-            mainObjForMakeABooking!!.getJSONObject("_deliveryRequestModel")
-                .put("Price",quoteOptionClass.Price)
-            mainObjForMakeABooking!!.getJSONObject("_deliveryRequestModel").put(
-                "DropDateTime",
-                DateTimeUtil.getServerFormatFromServerFormat(quoteOptionClass.DropDateTime)
-                )
-            mainObjForMakeABooking!!.getJSONObject("_deliveryRequestModel").put("Source", 9)
-            mainObjForMakeABooking!!.getJSONObject("_deliveryRequestModel")
-                .put("ETA", quoteOptionClass.ETA)
-
-
-
-
-
-           /* if (quoteID != 0) mainObjForMakeABooking!!.getJSONObject("_deliveryRequestModel")
-                .put("quoteID", quoteID)
-            if (intent.getIntExtra(
-                    "quoteFromMakeABooking",
-                    0
-                ) != 1
-            ) callBookingConfirmationPage() else callMakeABookingView()*/
-        } catch (e: Exception) {
-            e.printStackTrace()
+        if(quoteOptionClass.isPriceSelect==false) {
+            selectedQuoteOptionClass = quoteOptionClass
+            priceSelected=true
+        }else{
+            priceSelected=false
         }
     }
 
@@ -207,6 +148,7 @@ class PricingPaymentActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
 
+            @SuppressLint("SetTextI18n")
             override fun onFinish() {
                 binding.timer.setTextColor(Color.BLACK)
                 binding.timer.text = "3:00"
@@ -221,6 +163,7 @@ class PricingPaymentActivity : AppCompatActivity(), View.OnClickListener {
         when (view!!.id) {
             R.id.next_btn -> {
                 if(priceSelected==true){
+                selectedQuoteOptionData(selectedQuoteOptionClass)
                 val bookingConfirmationIntent = Intent(this, BookingConfirmationActivity::class.java)
                 bookingConfirmationIntent.putExtra("MainJsonForMakeABooking", mainObjForMakeABooking.toString())
                 bookingConfirmationIntent.putParcelableArrayListExtra("IconList", itemDataList)
@@ -234,6 +177,100 @@ class PricingPaymentActivity : AppCompatActivity(), View.OnClickListener {
                 binding.expiredQuote.visibility=View.GONE
                 binding.expiredQuote1.visibility=View.GONE
             }
+        }
+    }
+
+    private fun selectedQuoteOptionData(quoteOptionClass : QuoteOptionClass?) {
+        try {
+            if (mainObjForMakeABooking!!.getJSONObject("_deliveryRequestModel")
+                    .getBoolean("IsInterstate")
+            ) {
+
+
+                /**for InterstateModel*/
+                mainObjForMakeABooking!!.getJSONObject("_interstateModel").put(
+                    "pickupDistance",
+                    quoteOptionClass?.PickupDistance
+                )
+                mainObjForMakeABooking!!.getJSONObject("_interstateModel").put(
+                    "dropDistance",
+                    quoteOptionClass?.DropDistance
+                )
+
+                mainObjForMakeABooking!!.getJSONObject("_interstateModel").put(
+                    "routeDropPrice",
+                    quoteOptionClass?.DropPrice
+                )
+
+                mainObjForMakeABooking!!.getJSONObject("_interstateModel").put(
+                    "routePickupPrice",
+                    quoteOptionClass?.PickupPrice
+                )
+                mainObjForMakeABooking!!.getJSONObject("_interstateModel").put(
+                    "routeAirPrice",
+                    quoteOptionClass?.InterstatePrice
+                )
+
+                /*for interstateodel*/
+
+
+
+
+                mainObjForMakeABooking!!.getJSONObject("_deliveryRequestModel").put(
+                    "DeliverySpeed",
+                    quoteOptionClass?.DeliverySpeed
+                )
+
+
+                mainObjForMakeABooking!!.getJSONObject("_deliveryRequestModel").put(
+                    "BookingFee",
+                    quoteOptionClass?.BookingFee
+                )
+
+                mainObjForMakeABooking!!.getJSONObject("_deliveryRequestModel")
+                    .put("Price",quoteOptionClass?.Price)
+
+
+                mainObjForMakeABooking!!.getJSONObject("_deliveryRequestModel").put(
+                    "Distance",
+                    quoteOptionClass?.Distance
+                )
+
+                mainObjForMakeABooking!!.getJSONObject("_deliveryRequestModel").put(
+                    "DropDateTime",
+                    DateTimeUtil.getServerFormatFromServerFormat(quoteOptionClass?.DropDateTime)
+                )
+
+                mainObjForMakeABooking!!.getJSONObject("_deliveryRequestModel")
+                    .put("ETA", quoteOptionClass?.ETA)
+
+            } else
+                mainObjForMakeABooking!!.getJSONObject("_deliveryRequestModel")
+                    .put("Distance", quoteOptionClass?.Distance)
+
+            mainObjForMakeABooking!!.getJSONObject("_deliveryRequestModel").put(
+                "DeliverySpeed",
+                quoteOptionClass?.DeliverySpeed
+            )
+            mainObjForMakeABooking!!.getJSONObject("_deliveryRequestModel").put(
+                "BookingFee",
+                quoteOptionClass?.BookingFee
+            )
+            mainObjForMakeABooking!!.getJSONObject("_deliveryRequestModel")
+                .put("Price",quoteOptionClass?.Price)
+
+            mainObjForMakeABooking!!.getJSONObject("_deliveryRequestModel").put(
+                "DropDateTime",
+                DateTimeUtil.getServerFormatFromServerFormat(quoteOptionClass?.DropDateTime)
+            )
+
+
+            mainObjForMakeABooking!!.getJSONObject("_deliveryRequestModel")
+                .put("ETA", quoteOptionClass?.ETA)
+
+
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 }

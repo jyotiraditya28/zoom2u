@@ -14,12 +14,8 @@ import org.json.JSONObject
 class GetBrainTreeClientTokenOrBookDeliveryRequest(var context: Context,var requestCode:Int) {
 
     private var repository: GetBrainTreeRepository? = null
-
-
     var requestCod:Int=0
     var subLayout: RelativeLayout? = null
-
-
 
     init {
         this.requestCod=requestCode
@@ -33,7 +29,7 @@ class GetBrainTreeClientTokenOrBookDeliveryRequest(var context: Context,var requ
         //repository?.getBrainTreeToken(onSuccess = ::onTokenSuccess)
         val thread = Thread {
             try {
-                repository?.getBrainTreeClientToken(onSuccess = ::onTokenSuccess)
+                repository?.getBrainTreeClientToken(context,onSuccess = ::onTokenSuccess)
             } catch (e: Exception) {
                 e.printStackTrace()
             }

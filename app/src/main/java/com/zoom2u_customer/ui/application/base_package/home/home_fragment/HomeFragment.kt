@@ -78,14 +78,22 @@ class HomeFragment : Fragment(), View.OnClickListener{
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode === 11) {
-            val iconList: ArrayList<Icon> =  data?.getParcelableArrayListExtra<Icon>("IconList") as ArrayList<Icon>
-
-
-            itemList.clear()
-
+           setDefaultData()
         }
     }
 
+    private fun setDefaultData() {
+        for (item in IconDataProvider.iconList) {
+            item.quantity=0
+            adapter.updateItem(item)
+        }
+        itemList.clear()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setDefaultData()
+    }
 
 
 }

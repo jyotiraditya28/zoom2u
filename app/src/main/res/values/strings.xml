@@ -30,7 +30,8 @@
     <string name="pass_header_login">Password"</string>
     <string name="confirm_pass_header_login">Confirm Password"</string>
     <string name="find_us">Where did you find us?</string>
-    <string name="term_con">I Accept the customer</string>
+    <string name="term_con">I Accept the customer </string>
+    <string name="term_con1">I Accept the customer terms and conditions.</string>
     <string name="sign_up">Sign up</string>
     <string name="already_acc">Already have an account?</string>
     <string name="sign_in">Sign in</string>
@@ -120,7 +121,7 @@
     <string name="date">Date</string>
     <string name="time">Time</string>
     <string name="required_before">Required before</string>
-    <string name="weight">Weight</string>
+    <string name="weight">Total Shipment Weight</string>
     <string name="weight_txt">Select total weight(kg)*</string>
     <string name="weight_desc">Total weight cannot exceed 100kg, and each item cannot exceed 30kg. This is for the health and safety of our drivers. If you require extra large items moved, please use the Bid Requests feature!</string>
     <string name="items_we_not_send">Items we cannot send interstate</string>
@@ -185,7 +186,17 @@
     <string name="activate_my_booking">Activate My Booking</string>
 
 
-
+    <!-- Interstate alert view text -->
+    <string name="interstateAlertHeader">Thanks for using Zoom2u for your interstate delivery</string>
+    <string name="interstateAlertHeaderroadinterstate">Thanks for using Zoom2u for your interstate road delivery</string>
+    <string name="interstateMsgTxt">Please note your delivery will go on a Qantas flight. Once it arrives at the destination airport our couriers can collects the parcel 20 minutes after arrival. \n\nIf the item is at the airport prior to 10am Qantas will deliver it to destination airport on the same day. If it’s after 10am there is still a good chance it will be delivered on the same day however it is not guaranteed. \n\nIf your item is extremely important and needs to be delivered same day Qantas does offer a next flight service, this will cost an additional $95 on your delivery. This means that once your parcel arrives at the airport 1 hour form this time it can go on the next available flight to your destination. If you like this option please place the booking and call our office on 1300 966 628 or email deliveries@zoom2u.com \n\nAir freight can be delayed, airports can close and there is a lot that is outside of our control. We therefore unfortunately cannot guarantee this service, that being said 99% of our customers are very happy with this service.</string>
+    <string name="interstateMsgTxtroadInterstate">Please note if this an urgent delivery it recommended that you use our air service as this service only operate during weekdays.This delivery service uses the Greyhound bus network to deliver parcels interstate. Our Zoom2u courier will pickup your parcel on arrival and deliver directly to you.</string>
+    <string name="interstateAlertBelowHeader">To help with delivery please make sure</string>
+    <string name="interstateAlertPoint1">Your parcel is marked for Zoom2u with the destination airport.</string>
+    <string name="interstateAlertPoint2">If it’s a small item place it in a larger box so it can’t be lost.</string>
+    <string name="interstateAlertPoint3">Make your parcel is packaged extremely well so it can’t be damaged.</string>
+    <string name="interstateAlertPoint4">Make sure the destination address is available after 5pm.</string>
+    <!-- Interstate alert view text -->
 
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -217,6 +228,9 @@
     <string name="cancel_booking">Cancel Booking</string>
     <string name="close">Close</string>
     <string name="make_a_new_booking">Make a new booking</string>
+    <string name="_4">4</string>
+    <string name="cancel">Cancel</string>
+    <string name="accept">Accept</string>
 
 
 </resources>

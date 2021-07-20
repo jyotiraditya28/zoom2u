@@ -11,6 +11,7 @@ object IconDataProvider {
 
         val item = Icon(image,text,desc,0,weight,length,width,height,Category,Value,ItemWeightKg)
         iconList.add(item)
+
     }
 
     init {

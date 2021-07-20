@@ -73,8 +73,7 @@ class GetBrainTreeRepository(private var serviceApi: ServiceApi, var context: Co
 
 
         /********** WebService to Get Braintree Client token  */
-        fun getBrainTreeClientToken(onSuccess: (token:String) -> Unit) {
-            //AppUtility.progressBarShow(context)
+        fun getBrainTreeClientToken(context: Context?,onSuccess: (token:String) -> Unit) {
             var clientTokenId: String? = "0"
             try {
                 val url =
@@ -142,5 +141,6 @@ class GetBrainTreeRepository(private var serviceApi: ServiceApi, var context: Co
             httpGetResponseStr = ""
         }
         return httpGetResponseStr
+
     }
 

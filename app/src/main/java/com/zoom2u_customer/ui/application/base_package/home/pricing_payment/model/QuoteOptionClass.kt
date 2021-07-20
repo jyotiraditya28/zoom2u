@@ -22,8 +22,9 @@ data class QuoteOptionClass (
     var PrinterRequired: Boolean? = null,
     var isAvailable: Boolean? = null,
     var DropDateTime: String? = null,
-    var EarliestPickupDateTime: String? = null
-        ): Parcelable
+    var EarliestPickupDateTime: String? = null,
+    var isPriceSelect:Boolean?=false
+): Parcelable
 
 
 

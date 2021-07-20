@@ -36,7 +36,7 @@ class PricePaymentAdapter(
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: BindingViewHolder, position: Int) {
-
+        var isPriceSelected: Boolean = false
         val quoteOptionClass: QuoteOptionClass = dataList[position]
         holder.itemBinding.quoteOptionClass = quoteOptionClass
         holder.itemBinding.price.text = "$" + (dataList[position].BookingFee as Int +
@@ -51,12 +51,22 @@ class PricePaymentAdapter(
 
 
         if (rowIndex == position) {
-            holder.itemBinding.selectBtn.setBackgroundResource(R.drawable.selected_background)
-            holder.itemBinding.selectBtn.text = "Selected"
-        } else{
-            holder.itemBinding.selectBtn.setBackgroundResource(R.drawable.chip_background)
+            if (dataList[position].isPriceSelect == false) {
+                holder.itemBinding.selectBtn.setBackgroundResource(R.drawable.selected_background)
+                holder.itemBinding.selectBtn.text = "Selected"
+                dataList[position].isPriceSelect = true
+            }else{
+                holder.itemBinding.selectBtn.setBackgroundResource(R.drawable.chip_background)
                 holder.itemBinding.selectBtn.text = "Select"
+                dataList[position].isPriceSelect = false
             }
+        }else {
+            holder.itemBinding.selectBtn.setBackgroundResource(R.drawable.chip_background)
+            holder.itemBinding.selectBtn.text = "Select"
+        }
+
+
+
     }
 
 

@@ -251,7 +251,8 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
         binding.address.setText(myLocationResponse?.Location?.Address)
         binding.pickupCheckBox.isChecked = myLocationResponse?.DefaultPickup == true
         binding.dropOffCheckBox.isChecked = myLocationResponse?.DefaultDropoff == true
-
+        binding.company.setText(myLocationResponse?.Location?.CompanyName)
+        binding.unit.setText(myLocationResponse?.Location?.UnitNumber)
     }
 
     private fun onOkClick() {
@@ -325,7 +326,7 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
 
                     val location2 = AddLocationReq.Location2(
                         binding.address.text.toString().trim(),
-                        "",
+                        binding.company.text.toString().trim(),
                         binding.name.text.toString().trim(),
                         country,
                         binding.email.text.toString().trim(),
@@ -336,7 +337,7 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
                         postCode,
                         state,
                         street,
-                        suburb, ""
+                        suburb, binding.unit.text.toString().trim()
                     )
 
 

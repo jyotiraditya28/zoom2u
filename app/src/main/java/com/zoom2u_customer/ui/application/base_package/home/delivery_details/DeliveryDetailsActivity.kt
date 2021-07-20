@@ -84,9 +84,10 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
 
     private var leaveAt: Int? = null
     private var isInterstate: Boolean? = null
-    private var otherInstructions: String? = null
+
 
     private lateinit var itemDataList: ArrayList<Icon>
+    @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AppUtility.hideKeyboard(this)
@@ -135,8 +136,8 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
         binding.pickAddress.setOnClickListener(this)
         binding.dropAddress.setOnClickListener(this)
         binding.itemWeNotSend.setOnClickListener(this)
-        binding.dropChkTerms1.setOnClickListener(this)
-        binding.dropChkTerms.setOnClickListener(this)
+        binding.noContactDrop.setOnClickListener(this)
+        binding.authorityToLeave.setOnClickListener(this)
 
         if (!Places.isInitialized()) {
             val apiKey = getString(R.string.google_api_key)
@@ -192,46 +193,55 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
                 val getAddress: HashMap<String, Any>? = isGoogleAdd
                 if (isGoogleAdd["isTrue"] == "true") {
 
+                    pickGpx =
+                        getAddress?.get("latitude").toString()
 
-                    /* myLocationResponse?.Location?.GPSX =
-                         getAddress?.get("latitude") as Double
+                    pickGpy =
+                        getAddress?.get("longitude").toString()
 
-                     myLocationResponse?.Location?.GPSY =
-                         getAddress["longitude"] as Double
-*/
                     pickState = getAddress?.get("state")?.toString()
                     showHideWeight(pickState, dropState)
-                    /*   myLocationResponse?.Location?.Suburb =
-                           getAddress["suburb"].toString()
 
+                    pickSuburb =
+                        getAddress?.get("suburb")?.toString()
 
-                       myLocationResponse?.Location?.Postcode =
-                           getAddress["postcode"].toString()
+                    pickPostCode =
+                        getAddress?.get("postcode")?.toString()
 
-                       myLocationResponse?.Location?.Street =
-                           getAddress["suburb"].toString()
+                    pickStreet =
+                        getAddress?.get("suburb")?.toString()
 
+                    pickStreetNumber =
+                        getAddress?.get("suburb")?.toString()
 
-                       myLocationResponse?.Location?.StreetNumber =
-                           getAddress["streetNumber"].toString()
-*/
+                    pickCountry =
+                        getAddress?.get("country")?.toString()
 
                 } else {
 
-                    /*  lattitude = getAddress?.get("latitude") as Double
+                    dropGpx =
+                        getAddress?.get("latitude").toString()
 
-                      longitude = getAddress["longitude"] as Double
-*/
+                    dropGpy =
+                        getAddress?.get("longitude").toString()
+
                     dropState = getAddress?.get("state")?.toString()
                     showHideWeight(pickState, dropState)
-                    /*   suburb =  getAddress["suburb"].toString()
 
-                       country =  getAddress["country"].toString()
+                    dropSuburb =
+                        getAddress?.get("suburb")?.toString()
 
-                       postCode =   getAddress["postcode"].toString()
+                    dropPostCode =
+                        getAddress?.get("postcode")?.toString()
 
-                       street =  getAddress["suburb"].toString()*/
+                    dropStreet =
+                        getAddress?.get("suburb")?.toString()
 
+                    dropStreetNumber =
+                        getAddress?.get("suburb")?.toString()
+
+                    dropCountry =
+                        getAddress?.get("country")?.toString()
 
                 }
             }
@@ -242,50 +252,73 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
                 val getAddress: HashMap<String, Any>? = isGoogleAdd
                 if (isGoogleAdd["isTrue"] == "true") {
 
+                    pickGpx =
+                        getAddress?.get("latitude").toString()
 
-                    /* myLocationResponse?.Location?.GPSX =
-                         getAddress?.get("latitude") as Double
+                    pickGpy =
+                        getAddress?.get("longitude").toString()
 
-                     myLocationResponse?.Location?.GPSY =
-                         getAddress["longitude"] as Double
-*/
                     pickState = getAddress?.get("state")?.toString()
                     showHideWeight(pickState, dropState)
-                    /*   myLocationResponse?.Location?.Suburb =
-                           getAddress["suburb"].toString()
 
+                    pickSuburb =
+                        getAddress?.get("suburb")?.toString()
 
-                       myLocationResponse?.Location?.Postcode =
-                           getAddress["postcode"].toString()
+                    pickPostCode =
+                        getAddress?.get("postcode")?.toString()
 
-                       myLocationResponse?.Location?.Street =
-                           getAddress["suburb"].toString()
+                    pickStreet =
+                        getAddress?.get("suburb")?.toString()
 
+                    pickStreetNumber =
+                        getAddress?.get("suburb")?.toString()
 
-                       myLocationResponse?.Location?.StreetNumber =
-                           getAddress["streetNumber"].toString()
-*/
+                    pickCountry =
+                        getAddress?.get("country")?.toString()
 
                 } else {
+                    dropGpx =
+                        getAddress?.get("latitude").toString()
 
-                    /*  lattitude = getAddress?.get("latitude") as Double
+                    dropGpy =
+                        getAddress?.get("longitude").toString()
 
-                      longitude = getAddress["longitude"] as Double
-*/
                     dropState = getAddress?.get("state")?.toString()
                     showHideWeight(pickState, dropState)
-                    /*   suburb =  getAddress["suburb"].toString()
 
-                       country =  getAddress["country"].toString()
+                    dropSuburb =
+                        getAddress?.get("suburb")?.toString()
 
-                       postCode =   getAddress["postcode"].toString()
+                    dropPostCode =
+                        getAddress?.get("postcode")?.toString()
 
-                       street =  getAddress["suburb"].toString()*/
+                    dropStreet =
+                        getAddress?.get("suburb")?.toString()
 
+                    dropStreetNumber =
+                        getAddress?.get("suburb")?.toString()
 
+                    dropCountry =
+                        getAddress?.get("country")?.toString()
                 }
             }
         }
+
+         binding.pickHouseCom.setOnCheckedChangeListener { _, checkedId ->
+             pickPremisesType = if (R.id.pick_house == checkedId)
+                binding.pickHouse.text.toString()
+            else binding.pickCom.text.toString()
+
+         }
+
+        binding.dropHouseCom.setOnCheckedChangeListener { _, checkedId ->
+            pickPremisesType = if (R.id.drop_house == checkedId)
+                binding.dropHouse.text.toString()
+            else binding.dropCom.text.toString()
+
+        }
+
+
     }
 
 
@@ -303,6 +336,7 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setDataToContact(it: List<MyLocationResAndEditLocationReq>) {
         val contactList: MutableList<MyLocationResAndEditLocationReq> = mutableListOf()
         for (myLocation in it) {
@@ -312,6 +346,7 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
                     binding.pickName.setText(myLocation.Location?.ContactName.toString())
                     binding.pickEmail.setText(myLocation.Location?.Email.toString())
                     binding.pickPhone.setText(myLocation.Location?.Phone.toString())
+                    binding.totalWeight.text = countTotalWeight()+"Kg"
                     if (TextUtils.isEmpty(myLocation.Location?.UnitNumber.toString()))
                         binding.pickUnit.setText(myLocation.Location?.UnitNumber.toString())
                     if (TextUtils.isEmpty(myLocation.Location?.CompanyName.toString()))
@@ -321,6 +356,9 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
                     pickGpx = myLocation.Location?.GPSX.toString()
                     pickGpy = myLocation.Location?.GPSY.toString()
                     pickSuburb = myLocation.Location?.Suburb.toString()
+                    pickPostCode=myLocation.Location?.Postcode.toString()
+                    pickStreet=myLocation.Location?.Street.toString()
+                    pickStreetNumber=myLocation.Location?.StreetNumber.toString()
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
@@ -337,7 +375,12 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
                         binding.dropCompany.setText(myLocation.Location?.CompanyName.toString())
                     binding.dropAddress.setText(myLocation.Location?.Address.toString())
                     dropState = myLocation.Location?.State.toString()
+                    dropGpx = myLocation.Location?.GPSX.toString()
+                    dropGpy = myLocation.Location?.GPSY.toString()
                     dropSuburb = myLocation.Location?.Suburb.toString()
+                    dropPostCode=myLocation.Location?.Postcode.toString()
+                    dropStreet=myLocation.Location?.Street.toString()
+                    dropStreetNumber=myLocation.Location?.StreetNumber.toString()
 
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -451,7 +494,7 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
             R.id.pick_time -> {
                 timePicker?.timePickerDialog(
                     this,
-                    binding.pickDate.text.toString(),
+                    binding.pickTime.text.toString(),
                     onItemClick = ::onTimeClick
                 )
             }
@@ -462,12 +505,12 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
             R.id.authority_to -> {
                 binding.spinner.performClick()
             }
-            R.id.drop_chk_terms -> {
-                binding.dropChkTerms1.isChecked = true
+            R.id.no_contact_drop -> {
+                binding.authorityToLeave.isChecked = true
                 binding.authorityTo.visibility = View.VISIBLE
             }
-            R.id.drop_chk_terms1 -> {
-                if (binding.dropChkTerms1.isChecked)
+            R.id.authority_to_leave -> {
+                if (binding.authorityToLeave.isChecked)
                     binding.authorityTo.visibility = View.VISIBLE
                 else
                     binding.authorityTo.visibility = View.GONE
@@ -513,14 +556,14 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
     }
 
     private fun getIntraState(): IntraStateReq? {
-        val dropLocation = IntraStateReq.DropLocationClass("", "")
-        val pickLocation = IntraStateReq.PickupLocationClass("", "")
+        val dropLocation = IntraStateReq.DropLocationClass(dropGpx, dropGpy)
+        val pickLocation = IntraStateReq.PickupLocationClass(pickGpx, pickGpy)
         intraStateReq = IntraStateReq(
             getCurrentDateAndTimeInEta(),
             0,
             binding.dropAddress.text.toString(),
             dropLocation,
-            "",
+            dropPostCode,
             dropState,
             dropSuburb,
             false,
@@ -528,7 +571,7 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
             binding.pickAddress.text.toString(),
             getPickDateAndTimeInEta(),
             pickLocation,
-            "",
+            pickPostCode,
             pickState,
             pickSuburb,
             getShipmentsList()
@@ -538,26 +581,26 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
     }
 
     private fun getInterState(): InterStateReq? {
-        val dropLocation = InterStateReq.DropLocationClass("", "")
-        val pickLocation = InterStateReq.PickupLocationClass("", "")
+        val dropLocation = InterStateReq.DropLocationClass(dropGpx,dropGpy)
+        val pickLocation = InterStateReq.PickupLocationClass(pickGpx, pickGpy)
         interStateReq = InterStateReq(
             getCurrentDateAndTimeInEta(),
             binding.dropAddress.text.toString(),
             dropLocation,
-            "",
+            dropPostCode,
             dropState,
-            "",
-            "",
+            dropStreet,
+            dropStreetNumber,
             dropSuburb,
             false,
             false,
             binding.pickAddress.text.toString(),
             getPickDateAndTimeInEta(),
             pickLocation,
-            "",
+            pickPostCode,
             pickState,
-            "",
-            "",
+            pickStreet,
+            pickStreetNumber,
             pickSuburb,
             getShipmentsList(),
             binding.totalWeight.text.toString().trim()
@@ -566,85 +609,6 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
         return interStateReq
     }
 
-    private fun deliveryDetailsModel(): SaveDeliveryRequestReq {
-
-
-        val authorityToLeaveForm = SaveDeliveryRequestReq.AuthorityToLeaveForm(
-            leaveAt.toString(), otherInstructions, "",
-            "", true
-        )
-        val itemList: MutableList<SaveDeliveryRequestReq.DeliveryRequestModel.Item> = ArrayList()
-
-        val item = SaveDeliveryRequestReq.DeliveryRequestModel.Item(
-            "", "", "", "", "",
-            "", "", ""
-        )
-        itemList.add(item)
-
-
-        val pickLocation: SaveDeliveryRequestReq.DeliveryRequestModel.PickupLocationClass =
-            SaveDeliveryRequestReq.DeliveryRequestModel.PickupLocationClass(
-                binding.pickName.text.toString(),
-                binding.pickPhone.text.toString(),
-                binding.pickEmail.text.toString(),
-                binding.pickAddress.text.toString(),
-                binding.pickInstruction.text.toString(),
-                "-33.8709706", "-33.8709706", binding.pickUnit.text.toString(),
-                "", "", "",
-                pickState, "", "House", true,
-                binding.pickCompany.text.toString(), ""
-            )
-
-
-        val dropLocation: SaveDeliveryRequestReq.DeliveryRequestModel.DropLocationClass =
-            SaveDeliveryRequestReq.DeliveryRequestModel.DropLocationClass(
-                binding.dropName.text.toString(),
-                binding.dropPhone.text.toString(),
-                binding.dropEmail.text.toString(),
-                binding.dropAddress.text.toString(),
-                binding.dropInstruction.text.toString(),
-                dropGpx, dropGpy, binding.dropUnit.text.toString(),
-                "", "", "",
-                dropState, "", "House", true,
-                binding.dropCompany.text.toString(), ""
-            )
-
-
-        val deliveryRequestReqModel = SaveDeliveryRequestReq.DeliveryRequestModel(
-            itemList, "", "", "",
-            "FullLoad", "", "",
-            "y", "y",
-            "None", "None",
-            "", "",
-            "Active", "9", 10,
-            "", pickLocation, dropLocation, "Bike",
-            "2021-07-16T04:44:13.932Z", "2021-07-16T04:44:13.932Z",
-            "2021-07-16T04:44:13.932Z",
-            "2021-07-16T04:44:13.932Z",
-            "2021-07-16T04:44:13.932Z",
-            "2021-07-16T04:44:13.932Z",
-            "", 0, "", "",
-            isInterstate, 0, false,
-            false, binding.pickSendSms.isChecked,
-            "", "",
-            binding.dropChkTerms.isChecked,
-            binding.dropChkTerms1.isChecked,
-            leaveAt.toString(), "",
-            false, "",
-            "", "0.5",
-            binding.isNoContactPickup.isChecked, false,
-            false, false,
-            false, false, true,
-            "", "", "laptopOrMobileNo", false,
-            "", "Standard", 1,
-            "400ccf7b-e0ac-0aab-134d-3ffc7fac5142"
-        )
-        //val interstateModel= SaveDeliveryRequestReq.InterstateModel(null,"")
-        return SaveDeliveryRequestReq(
-            authorityToLeaveForm,
-            deliveryRequestReqModel, null, getShipmentsList()
-        )
-    }
 
     private fun onTimeClick(hr: String?, min: String?, am_pm: String?) {
         binding.pickTime.text = "$hr:$min $am_pm"
@@ -653,6 +617,15 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
     fun onDateClick(s: String?) {
         if (!TextUtils.isEmpty(s))
             binding.pickDate.text = s.toString()
+    }
+
+
+    fun countTotalWeight():String{
+          var totalWeight=0.0
+        for (item in itemDataList) {
+            totalWeight += item.weight
+        }
+        return totalWeight.toString()
     }
 
 
@@ -665,10 +638,10 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
                 binding.pickEmail.text.toString(),
                 binding.pickAddress.text.toString(),
                 binding.pickInstruction.text.toString(),
-                "-33.8709706", "-33.8709706", binding.pickUnit.text.toString(),
-                "", "", "",
-                pickState, "", "House", true,
-                binding.pickCompany.text.toString(), ""
+                pickGpx, pickGpy, binding.pickUnit.text.toString(),
+                pickStreetNumber, pickStreet, pickSuburb,
+                pickState, pickPostCode, pickPremisesType, true,
+                binding.pickCompany.text.toString(), pickCountry
             )
 
 
@@ -679,47 +652,53 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
                 binding.dropEmail.text.toString(),
                 binding.dropAddress.text.toString(),
                 binding.dropInstruction.text.toString(),
-                "-33.8646627", "151.2043709", binding.dropUnit.text.toString(),
-                "", "", "",
-                dropState, "", "House", true,
-                binding.dropCompany.text.toString(), ""
+                dropGpx, dropGpy, binding.dropUnit.text.toString(),
+                dropStreetNumber, dropStreet, dropSuburb,
+                dropState, dropPostCode, dropPremisesType, true,
+                binding.dropCompany.text.toString(), dropCountry
             )
 
         val jObjOfQuotesItem = JSONObject()
-        val jObjOfQuotesItemForDeliveryRequest = JSONObject()
-        val jObjOfQuotesItemForInterstate = JSONObject()
+        val deliveryRequest = JSONObject()
+        val forInterstate = JSONObject()
+        val authorityToLeaveForm = JSONObject()
         try {
+            deliveryRequest.put("IsInterstate", isInterstate)
+            deliveryRequest.put("PickUpDateTime", getPickDateAndTimeInEta())
+            deliveryRequest.put("Notes", "")
+            deliveryRequest.put("ParentId", 0)
+            deliveryRequest.put("Source", 9)
+            deliveryRequest.put("DropLocation", JSONObject(Gson().toJson(dropLocation).toString()))
+            deliveryRequest.put("PickupLocation", JSONObject(Gson().toJson(pickLocation).toString()))
+            deliveryRequest.put("Weight", countTotalWeight())
+            deliveryRequest.put("sendSmsToPickupPerson",binding.pickSendSms.isChecked)
+            deliveryRequest.put("IsNoContactPickup",binding.isNoContactPickup.isChecked)
+            deliveryRequest.put("IsNoContactDrop",binding.noContactDrop.isChecked)
+            deliveryRequest.put("RequestedDropDateTimeWindowEnd",getCurrentDateAndTimeInEta())
+            deliveryRequest.put("RequestedDropDateTimeWindowStart",getCurrentDateAndTimeInEta())
+            deliveryRequest.put("RequestedPickupDateTimeWindowEnd",getCurrentDateAndTimeInEta())
+            deliveryRequest.put("RequestedPickupDateTimeWindowStart",getCurrentDateAndTimeInEta())
 
 
-            jObjOfQuotesItemForDeliveryRequest.put(
-                "IsInterstate",
-                false
-            )
-            jObjOfQuotesItemForDeliveryRequest.put("PickUpDateTime", getPickDateAndTimeInEta())
-            jObjOfQuotesItemForDeliveryRequest.put(
-                "Notes",
-                ""
-            )
-            jObjOfQuotesItemForDeliveryRequest.put("ParentId", 0)
-            jObjOfQuotesItemForDeliveryRequest.put("Source", 9)
-            jObjOfQuotesItemForDeliveryRequest.put(
-                "DropLocation",
-                JSONObject(Gson().toJson(dropLocation).toString())
-            )
-            jObjOfQuotesItemForDeliveryRequest.put(
-                "PickupLocation",
-                JSONObject(Gson().toJson(pickLocation).toString())
-            )
-            /*if (pickOrDropView_Handler.isInterState) jObjOfQuotesItemForDeliveryRequest.put(
-                "Weight",
-                pickOrDropView_Handler.selectWeightYourdelivery.getText().toString().toInt()
-            )*/
-            jObjOfQuotesItem.put("_deliveryRequestModel", jObjOfQuotesItemForDeliveryRequest)
-            jObjOfQuotesItem.put("_interstateModel", jObjOfQuotesItemForInterstate)
-            jObjOfQuotesItem.put(
-                "_shipmentModel",
-                JSONArray(Gson().toJson(getShipmentsList()).toString())
-            )
+
+
+            if(binding.authorityTo.text.toString() == "Other"){
+                authorityToLeaveForm.put("NoContact", binding.noContactDrop.isChecked)
+                authorityToLeaveForm.put("LeaveAt", leaveAt.toString())
+                authorityToLeaveForm.put("Instructions", binding.other.text.toString())
+                jObjOfQuotesItem.put("_authorityToLeaveForm", authorityToLeaveForm)
+
+              }
+
+
+
+
+            jObjOfQuotesItem.put("_deliveryRequestModel", deliveryRequest)
+            jObjOfQuotesItem.put("_interstateModel", forInterstate)
+            jObjOfQuotesItem.put("_shipmentModel", JSONArray(Gson().toJson(getShipmentsList()).toString()))
+
+
+
 
         } catch (e: JSONException) {
             e.printStackTrace()
@@ -785,10 +764,9 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
         leaveAt = position
         if (selectedText == "Other") {
             binding.other.visibility = View.VISIBLE
-            otherInstructions = binding.other.text.toString()
         } else {
             binding.other.visibility = View.GONE
-            otherInstructions = ""
+
         }
     }
 
@@ -887,7 +865,31 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
 
 
 
+        /**for no contact pickup*/
+        if(binding.isNoContactPickup.isChecked) {
+            if (binding.pickInstruction.text.toString() == "") {
+                AppUtility.validateEditTextField(binding.pickInstruction, "Notes are required")
+                bookDeliveryAlertCount++
+                addTextToAlertDialog(
+                    "Notes are required for the pickup location when requesting a no contact delivery.",
+                    bookDeliveryAlertCount
+                )
+            }
+        }
 
+        /**for drop authority to leave*/
+        if(binding.authorityToLeave.isChecked) {
+            if (binding.authorityTo.text.toString() == "Other") {
+                if (binding.other.text.toString() == "") {
+                    AppUtility.validateEditTextField(binding.other, "Please enter a safe place")
+                    bookDeliveryAlertCount++
+                    addTextToAlertDialog(
+                        "Please enter a safe place on where to leave your parcel.",
+                        bookDeliveryAlertCount
+                    )
+                }
+            }
+        }
         return bookDeliveryAlertCount
     }
 

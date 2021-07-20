@@ -1,5 +1,6 @@
 package com.zoom2u_customer.ui.application.base_package.home.booking_confirmation.order_confirm_hold
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.text.Spanned
@@ -9,6 +10,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import com.zoom2u_customer.R
 import com.zoom2u_customer.databinding.ActivityOrderConfirmBinding
+import com.zoom2u_customer.ui.application.base_package.base_page.BasePageActivity
 import com.zoom2u_customer.ui.application.base_package.home.booking_confirmation.BookingResponse
 import com.zoom2u_customer.utility.CustomTypefaceSpan
 
@@ -28,7 +30,7 @@ class OrderConfirmActivity : AppCompatActivity() , View.OnClickListener{
         }
 
 
-
+     binding.makeAnotherBtn.setOnClickListener(this)
 
     }
 
@@ -46,14 +48,16 @@ class OrderConfirmActivity : AppCompatActivity() , View.OnClickListener{
 
         binding.ImportantText.text=ss
 
-
-        binding.yourBookingNumberTxt.text=bookingResponse?.BookingId
+        binding.yourBookingNumberTxt.text=bookingResponse?.BookingRef
     }
 
     override fun onClick(view: View?) {
         when (view!!.id) {
-            R.id.booking_confirmation -> {
-
+            R.id.make_another_btn -> {
+                val intent = Intent(this, BasePageActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                startActivity(intent)
+                finish()
             }
         }
     }

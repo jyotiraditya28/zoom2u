@@ -12,6 +12,7 @@ import com.aigestudio.wheelpicker.WheelPicker
 import com.zoom2u_customer.R
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 class TimePicker() : WheelPicker.OnItemSelectedListener {
     private lateinit var mContext: Context
@@ -30,9 +31,13 @@ class TimePicker() : WheelPicker.OnItemSelectedListener {
 
     fun timePickerDialog(
         context: Context,
-        selectedTimeWindowItem: String,
+        time: String,
         onItemClick: (hr: String?,min: String?,am_pm: String?) -> Unit
     ) {
+        selectedHr=time.split(":")[0]
+        selectedMin=time.split(":")[1].split(" ")[0]
+        selectedAmPm=time.split(":")[1].split(" ")[1]
+
 
 
         for (i  in 0..59) {
@@ -74,12 +79,14 @@ class TimePicker() : WheelPicker.OnItemSelectedListener {
         wheelAmPm.setOnItemSelectedListener(this)
 
         wheelHr.data = hrArray.toMutableList()
-        wheelHr.selectedItemPosition = hrArray.indexOf(selectedTimeWindowItem)
-        wheelHr.selectedItemTextColor = mContext.resources.getColor(R.color.color_cyan)
+        wheelHr.selectedItemPosition = hrArray.indexOf(selectedHr)
+        //wheelHr.selectedItemTextColor = mContext.resources.getColor(R.color.color_cyan)
 
         wheelMin.data = minArray
-        wheelAmPm.data = amPmArray.toMutableList()
+        wheelHr.selectedItemPosition = hrArray.indexOf(selectedMin)
 
+        wheelAmPm.data = amPmArray.toMutableList()
+        wheelHr.selectedItemPosition = hrArray.indexOf(selectedAmPm)
 
 
 

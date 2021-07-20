@@ -109,7 +109,7 @@ class DocDimensionActivity : AppCompatActivity(), View.OnClickListener {
             val intent = Intent()
             intent.putExtra("Icon", icon)
             setResult(1, intent)
-            Toast.makeText(this,"Profile details updated successfully.", Toast.LENGTH_LONG).show()
+            Toast.makeText(this,"Item details updated successfully.", Toast.LENGTH_LONG).show()
             finish()
         }
 

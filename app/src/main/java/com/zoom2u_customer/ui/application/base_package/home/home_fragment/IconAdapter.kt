@@ -9,14 +9,21 @@ import com.zoom2u_customer.R
 import com.zoom2u_customer.databinding.IconItemBinding
 
 
-class IconAdapter(private val context: Context, private val dataList: MutableList<Icon>) :
+class IconAdapter(private val context: Context, private var dataList: MutableList<Icon>) :
     RecyclerView.Adapter<IconAdapter.BindingViewHolder>() {
-
-
 
     override fun getItemCount(): Int {
         return dataList.size
     }
+
+    fun updateItem(icon: Icon?) {
+        dataList.forEachIndexed { index, pod ->
+            if (pod.text == icon?.text) {
+                notifyItemChanged(index)
+            }
+        }
+    }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BindingViewHolder {
         val rootView: IconItemBinding =
@@ -35,9 +42,15 @@ class IconAdapter(private val context: Context, private val dataList: MutableLis
 
 
         holder.itemBinding.layoutDocLl.setOnClickListener {
+           if(dataList[position].quantity==0){
+               dataList[position].quantity+=1
+               notifyItemChanged(position)
+           }else if(dataList[position].quantity==1){
+               dataList[position].quantity-=1
+               notifyItemChanged(position)
+           }
 
         }
-
 
 
         if(icon.text == "Large items"){
