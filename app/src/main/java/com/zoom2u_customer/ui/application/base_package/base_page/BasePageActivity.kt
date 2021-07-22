@@ -41,7 +41,7 @@ class BasePageActivity : AppCompatActivity(),  BottomNavigationView.OnNavigation
         supportActionBar?.setTitle(defaultScreen.titleStringId)
 
         binding.navigation.setOnNavigationItemSelectedListener(this)
-
+        binding.navigation.itemIconTintList = null;
        binding.viewPager.adapter = mainPagerAdapter
        binding.viewPager.addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
             override fun onPageSelected(position: Int) {
@@ -52,8 +52,6 @@ class BasePageActivity : AppCompatActivity(),  BottomNavigationView.OnNavigation
         })
     }
 
-
-
     private fun scrollToScreen(mainScreen: MainScreen) {
         val screenPosition = mainPagerAdapter.getItems().indexOf(mainScreen)
         if (screenPosition != binding.viewPager.currentItem) {
@@ -61,14 +59,11 @@ class BasePageActivity : AppCompatActivity(),  BottomNavigationView.OnNavigation
         }
     }
 
-
     private fun selectBottomNavigationViewMenuItem(@IdRes menuItemId: Int) {
         binding.navigation.setOnNavigationItemSelectedListener(null)
         binding.navigation.selectedItemId = menuItemId
         binding.navigation.setOnNavigationItemSelectedListener(this)
     }
-
-
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         getMainScreenForMenuItem(item.itemId)?.let {
             scrollToScreen(it)
@@ -76,20 +71,14 @@ class BasePageActivity : AppCompatActivity(),  BottomNavigationView.OnNavigation
             return true
         }
         return false
-
     }
-
-
     override fun onBackPressed() {
         DialogActivity.logoutDialog(this, "Are you sure!", "Are you want Logout?",
             "Ok","Cancel",
             onCancelClick=::onCancelClick,
             onOkClick = ::onOkClick)
-
     }
-    private fun onCancelClick(){
-
-    }
+    private fun onCancelClick(){}
 
     private fun onOkClick() {
         val loginResponce: LoginResponce? = AppPreference.getSharedPrefInstance().getLoginResponse()

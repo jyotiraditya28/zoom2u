@@ -72,13 +72,16 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, View.OnClickListene
     private fun onItemClick(icon: Icon) {
         val intent = Intent(this, DocDimensionActivity::class.java)
         intent.putExtra("Icon", icon)
-        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+        intent.flags=Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+
         startActivityForResult(intent, 1)
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
-        map.uiSettings.isZoomControlsEnabled = true
+        map.uiSettings.isZoomControlsEnabled = false;
         map.setOnMarkerClickListener(this)
         setUpMap()
 
@@ -115,7 +118,9 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, View.OnClickListene
             R.id.delivery_details_btn -> {
                 val intent = Intent(this, DeliveryDetailsActivity::class.java)
                 intent.putParcelableArrayListExtra("IconList", dataList)
-                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                intent.flags=Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
             }
             R.id.back_btn -> {

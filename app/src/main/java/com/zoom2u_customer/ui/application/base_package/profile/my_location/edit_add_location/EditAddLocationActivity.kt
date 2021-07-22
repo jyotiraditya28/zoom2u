@@ -320,6 +320,10 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
                         binding.phone.text.toString().trim()
                     myLocationResponse?.Location?.Notes =
                         binding.notes.text.toString().trim()
+                    myLocationResponse?.Location?.UnitNumber =
+                        binding.unit.text.toString().trim()
+                    myLocationResponse?.Location?.CompanyName =
+                        binding.company.text.toString().trim()
                     viewModel.editLocation(myLocationResponse)
                 } else {
 

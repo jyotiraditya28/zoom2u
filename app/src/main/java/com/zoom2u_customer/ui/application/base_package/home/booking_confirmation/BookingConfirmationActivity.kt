@@ -30,7 +30,6 @@ import com.zoom2u_customer.ui.application.base_package.home.booking_confirmation
 import com.zoom2u_customer.ui.application.base_package.home.booking_confirmation.order_confirm_hold.OrderConfirmActivity
 import com.zoom2u_customer.ui.application.base_package.home.home_fragment.Icon
 import com.zoom2u_customer.utility.AppUtility
-import com.zoom2u_customer.utility.DialogActivity
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
@@ -46,8 +45,6 @@ class BookingConfirmationActivity : AppCompatActivity(), View.OnClickListener {
     private var repository: BookingConfirmationRepository? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
         binding = DataBindingUtil.setContentView(this, R.layout.activity_booking_confirmation)
 
         viewModel = ViewModelProvider(this).get(BookingConfirmationViewModel::class.java)
@@ -55,17 +52,15 @@ class BookingConfirmationActivity : AppCompatActivity(), View.OnClickListener {
         repository = BookingConfirmationRepository(serviceApi, this)
         viewModel.repository = repository
 
-
         /**get data from map Item*/
         if (intent.hasExtra("IconList")) {
             itemDataList = intent.getParcelableArrayListExtra<Icon>("IconList") as ArrayList<Icon>
             bookingDeliveryResponce = JSONObject(intent.getStringExtra("MainJsonForMakeABooking"))
             setDataView(bookingDeliveryResponce)
         }
-
         setAdapterView()
-
         binding.bookingConfirmation.setOnClickListener(this)
+        binding.backBtn.setOnClickListener(this)
         binding.bookingConfirmation.isEnabled = true
         viewModel.getDeliverySuccess()?.observe(this) {
             if (it != null) {
@@ -81,11 +76,17 @@ class BookingConfirmationActivity : AppCompatActivity(), View.OnClickListener {
                             loginPage.putExtra(
                                 "BookingResponse", bookingResponse
                             )
+                            intent.flags=Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
+                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
                             startActivity(loginPage)
                             finish()
                         } else {
-                            var intentOnHold = Intent(this, OnHoldActivity::class.java)
+                            val intentOnHold = Intent(this, OnHoldActivity::class.java)
                             intentOnHold.putExtra("BookingResponse", bookingResponse)
+                            intent.flags=Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
+                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
                             startActivity(intentOnHold)
                             finish()
                         }
@@ -93,6 +94,7 @@ class BookingConfirmationActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
         }
+
     }
 
     @SuppressLint("SetTextI18n")
@@ -137,6 +139,9 @@ class BookingConfirmationActivity : AppCompatActivity(), View.OnClickListener {
                 }else{
                     Toast.makeText(this,"Please Accept the customer Terms and Conditions.", Toast.LENGTH_LONG).show()
                 }
+            }
+            R.id.back_btn->{
+                finish()
             }
         }
     }

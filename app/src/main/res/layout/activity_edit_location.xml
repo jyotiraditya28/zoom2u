@@ -59,7 +59,7 @@
             android:background="@drawable/shadow_top"
             android:elevation="10dp"
             android:scrollbars="vertical"
-            app:layout_constraintBottom_toTopOf="@+id/save_change_btn"
+            app:layout_constraintBottom_toTopOf="@+id/next_ll"
             app:layout_constraintTop_toBottomOf="@+id/header">
 
 
@@ -122,6 +122,7 @@
                     android:singleLine="true"
                     android:gravity="center_vertical"
                     android:hint="@string/contact_number"
+                    android:inputType="number"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/line1" />
 

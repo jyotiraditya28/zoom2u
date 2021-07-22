@@ -3,6 +3,7 @@ package com.zoom2u_customer.ui.application.base_package.home.delivery_details
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.location.Geocoder
+import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -39,6 +40,7 @@ import com.zoom2u_customer.utility.utility_custom_class.MySpinnerAdapter
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import java.io.File
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -138,6 +140,7 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
         binding.itemWeNotSend.setOnClickListener(this)
         binding.noContactDrop.setOnClickListener(this)
         binding.authorityToLeave.setOnClickListener(this)
+        binding.backBtn.setOnClickListener(this)
 
         if (!Places.isInitialized()) {
             val apiKey = getString(R.string.google_api_key)
@@ -421,7 +424,9 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
                             createJsonForSaveRequest().toString()
                         )
                         intent.putParcelableArrayListExtra("IconList", itemDataList)
-                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                        intent.flags=Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
                         startActivity(intent)
                     }
                     /**for Inter State**/
@@ -435,7 +440,9 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
                             createJsonForSaveRequest().toString()
                         )
                         intent.putParcelableArrayListExtra("IconList", itemDataList)
-                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                        intent.flags=Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
                         startActivity(intent)
                     }
 
@@ -499,11 +506,14 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
                 )
             }
             R.id.item_we_not_send -> {
-                /*  val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse())
-                  startActivity(browserIntent)*/
+
+               /* val pdfUri= Uri.fromFile( File("raw/item_not_send.pdf"))
+                val browserIntent=Intent(Intent.ACTION_VIEW, pdfUri)
+                startActivity(browserIntent)*/
             }
             R.id.authority_to -> {
                 binding.spinner.performClick()
+
             }
             R.id.no_contact_drop -> {
                 binding.authorityToLeave.isChecked = true
@@ -514,6 +524,9 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
                     binding.authorityTo.visibility = View.VISIBLE
                 else
                     binding.authorityTo.visibility = View.GONE
+            }
+            R.id.back_btn->{
+                finish()
             }
 
         }
@@ -795,27 +808,27 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
             || !pickPhone.matches(("^[\\s0-9\\()\\-\\+]+$").toRegex())
         ) {
             if (pickName == "") {
-                AppUtility.validateEditTextField(binding.pickName, "Please enter contact name")
+                AppUtility.validateEditTextField(binding.pickName, "Please enter contact name.")
                 bookDeliveryAlertCount++
-                addTextToAlertDialog("Contact at pickup name", bookDeliveryAlertCount)
+                addTextToAlertDialog("Contact at pickup name.", bookDeliveryAlertCount)
             }
             if (pickPhone == "") {
-                AppUtility.validateEditTextField(binding.pickPhone, "Please enter mobile number")
+                AppUtility.validateEditTextField(binding.pickPhone, "Please enter mobile number.")
                 bookDeliveryAlertCount++
-                addTextToAlertDialog("Contact at pickup's number", bookDeliveryAlertCount)
+                addTextToAlertDialog("Contact at pickup's number.", bookDeliveryAlertCount)
             } else if (!pickPhone.matches(("^[\\s0-9\\()\\-\\+]+$").toRegex())) {
 
                 AppUtility.validateEditTextField(
                     binding.pickPhone,
-                    "Please enter valid mobile number"
+                    "Please enter valid mobile number."
                 )
                 bookDeliveryAlertCount++
-                addTextToAlertDialog("Contact at pickup's number", bookDeliveryAlertCount)
+                addTextToAlertDialog("Contact at pickup's number.", bookDeliveryAlertCount)
             }
             if (pickAddress == "") {
-                AppUtility.validateEditTextField(binding.pickAddress, "Please enter address")
+                AppUtility.validateEditTextField(binding.pickAddress, "Please enter address.")
                 bookDeliveryAlertCount++
-                addTextToAlertDialog("Contact at pickup's address", bookDeliveryAlertCount)
+                addTextToAlertDialog("Contact at pickup's address.", bookDeliveryAlertCount)
             }
             /* if (!pickEmail.matches(("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$").toRegex()))
               {
@@ -833,25 +846,25 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
             || !dropPhone.matches(("^[\\s0-9\\()\\-\\+]+$").toRegex())
         ) {
             if (dropName == "") {
-                AppUtility.validateEditTextField(binding.dropName, "Please enter contact name")
+                AppUtility.validateEditTextField(binding.dropName, "Please enter contact name.")
                 bookDeliveryAlertCount++
-                addTextToAlertDialog("Contact at dropoff name", bookDeliveryAlertCount)
+                addTextToAlertDialog("Contact at dropoff name.", bookDeliveryAlertCount)
             }
             if (dropPhone == "") {
-                AppUtility.validateEditTextField(binding.dropPhone, "Please enter mobile number")
+                AppUtility.validateEditTextField(binding.dropPhone, "Please enter mobile number.")
                 bookDeliveryAlertCount++
-                addTextToAlertDialog("Contact at dropoff's number", bookDeliveryAlertCount)
+                addTextToAlertDialog("Contact at dropoff's number.", bookDeliveryAlertCount)
             } else if (!dropPhone.matches(("^[\\s0-9\\()\\-\\+]+$").toRegex())) {
 
                 AppUtility.validateEditTextField(
                     binding.pickPhone,
-                    "Please enter valid mobile number"
+                    "Please enter valid mobile number."
                 )
                 bookDeliveryAlertCount++
-                addTextToAlertDialog("Contact at dropoff's number", bookDeliveryAlertCount)
+                addTextToAlertDialog("Contact at dropoff's number.", bookDeliveryAlertCount)
             }
             if (dropAddress == "") {
-                AppUtility.validateEditTextField(binding.dropAddress, "Please enter address")
+                AppUtility.validateEditTextField(binding.dropAddress, "Please enter address.")
                 bookDeliveryAlertCount++
                 addTextToAlertDialog("Contact at dropoff's address", bookDeliveryAlertCount)
             }
@@ -868,7 +881,7 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
         /**for no contact pickup*/
         if(binding.isNoContactPickup.isChecked) {
             if (binding.pickInstruction.text.toString() == "") {
-                AppUtility.validateEditTextField(binding.pickInstruction, "Notes are required")
+                AppUtility.validateEditTextField(binding.pickInstruction, "Notes are required for the pickup location.")
                 bookDeliveryAlertCount++
                 addTextToAlertDialog(
                     "Notes are required for the pickup location when requesting a no contact delivery.",
@@ -881,7 +894,7 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
         if(binding.authorityToLeave.isChecked) {
             if (binding.authorityTo.text.toString() == "Other") {
                 if (binding.other.text.toString() == "") {
-                    AppUtility.validateEditTextField(binding.other, "Please enter a safe place")
+                    AppUtility.validateEditTextField(binding.other, "Please enter a safe place on where to leave your parcel.")
                     bookDeliveryAlertCount++
                     addTextToAlertDialog(
                         "Please enter a safe place on where to leave your parcel.",
@@ -900,6 +913,7 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
             "$bookDeliveryAlertMsgStr\n$count) $addAlertMsgStr"
 
     }
+
 
 }
 

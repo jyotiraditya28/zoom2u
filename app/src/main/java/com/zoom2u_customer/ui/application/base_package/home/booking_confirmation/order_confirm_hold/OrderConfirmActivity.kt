@@ -19,8 +19,6 @@ class OrderConfirmActivity : AppCompatActivity() , View.OnClickListener{
     private var bookingResponse :BookingResponse?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_order_confirm)
-
         binding = DataBindingUtil.setContentView(this, R.layout.activity_order_confirm)
 
 
@@ -31,6 +29,7 @@ class OrderConfirmActivity : AppCompatActivity() , View.OnClickListener{
 
 
      binding.makeAnotherBtn.setOnClickListener(this)
+     binding.close.setOnClickListener(this)
 
     }
 
@@ -54,6 +53,12 @@ class OrderConfirmActivity : AppCompatActivity() , View.OnClickListener{
     override fun onClick(view: View?) {
         when (view!!.id) {
             R.id.make_another_btn -> {
+                val intent = Intent(this, BasePageActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                startActivity(intent)
+                finish()
+            }
+            R.id.close->{
                 val intent = Intent(this, BasePageActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
                 startActivity(intent)

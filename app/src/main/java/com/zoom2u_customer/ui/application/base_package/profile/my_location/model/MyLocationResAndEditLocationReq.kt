@@ -24,12 +24,12 @@ data class MyLocationResAndEditLocationReq(
         var Notes: String?=null,
         var Suburb: String?=null,
         val GpsCoordinates: gpsCoordinates?=null,
-        val UnitNumber: String?=null,
+        var UnitNumber: String?=null,
         var StreetNumber: String?=null,
         var Street: String?=null,
         var State: String?=null,
         var Postcode: String?=null,
-        val CompanyName: String?=null
+        var CompanyName: String?=null
     ): Parcelable  {
         @Parcelize
         data class gpsCoordinates(

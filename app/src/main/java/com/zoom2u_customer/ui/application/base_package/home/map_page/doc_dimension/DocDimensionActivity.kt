@@ -75,16 +75,70 @@ class DocDimensionActivity : AppCompatActivity(), View.OnClickListener {
         })
 
 
-        binding.confirmBtn.setOnClickListener(this)
 
+        binding.length.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+             if(s.toString().toInt()>200)
+                 binding.errorText.visibility=View.VISIBLE
+             else
+                 binding.errorText.visibility=View.GONE
+            }
+        })
+
+
+        binding.height.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if(s.toString().toInt()>200)
+                    binding.errorText.visibility=View.VISIBLE
+                else
+                    binding.errorText.visibility=View.GONE
+
+            }
+        })
+
+        binding.width.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if(s.toString().toInt()>200)
+                    binding.errorText.visibility=View.VISIBLE
+                else
+
+                    binding.errorText.visibility=View.GONE
+            }
+        })
+
+
+
+
+        binding.confirmBtn.setOnClickListener(this)
+        binding.backBtn.setOnClickListener(this)
     }
 
 
     fun getTotalWeight(quantity: Int?, weight: Double?) {
         if (quantity != null && weight != null) {
-            binding.totalWeight.text = (quantity * weight).toString()+" "+"Kg"
-            binding.totalWeight1.text = "Total Weight = "+(quantity * weight).toString()+"Kg"
+            val totalWight=quantity * weight
+            binding.totalWeight.text = (totalWight).toString()+" "+"Kg"
+            binding.totalWeight1.text = "Total Weight = "+(totalWight).toString()+"Kg"
 
+            if(totalWight>100)
+                binding.errorText.visibility=View.VISIBLE
+            else
+                binding.errorText.visibility=View.GONE
 
         }
     }
@@ -94,6 +148,9 @@ class DocDimensionActivity : AppCompatActivity(), View.OnClickListener {
             R.id.confirm_btn -> {
                 updateIconData()
 
+            }
+            R.id.back_btn->{
+                finish()
             }
         }
     }

@@ -76,6 +76,7 @@
 
 
     <style name="spinner_text" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/arimo_bold</item>
         <item name="android:background">@drawable/text_background1</item>
         <item name="android:textSize">13sp</item>
         <item name="android:singleLine">true</item>
@@ -129,6 +130,11 @@
     <style name="DialogAnimation">
         <item name="android:windowEnterAnimation">@anim/slideup</item>
         <item name="android:windowExitAnimation">@anim/slidebottom</item>
+    </style>
+
+    <style name="bottom_text">
+        <item name="android:textColor">@drawable/bottom_text</item>
+        <item name="android:fontFamily">@font/arimo_bold</item>
     </style>
 </resources>
 

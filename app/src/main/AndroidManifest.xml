@@ -17,7 +17,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Zoom2u">
-        <activity android:name=".ui.application.base_package.home.booking_confirmation.order_confirm_hold.OnHoldActivity"></activity>
+        <activity android:name=".utility.ShowPdfActivity"></activity>
+        <activity android:name=".ui.application.base_package.home.booking_confirmation.order_confirm_hold.OnHoldActivity" />
         <activity android:name=".ui.application.base_package.home.booking_confirmation.order_confirm_hold.OrderConfirmActivity" />
         <activity android:name=".utility.FullSizeImageActivity" />
         <activity android:name=".ui.application.base_package.home.booking_confirmation.BookingConfirmationActivity" />

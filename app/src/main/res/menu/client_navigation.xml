@@ -1,24 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/navigation_home"
-        android:icon="@drawable/ic_home_mono_icon"
-        android:title="@string/title_home" />
+        android:icon="@drawable/navigation_home"
+        android:title="@string/title_home"
+        />
 
     <item
         android:id="@+id/navigation_booking"
-        android:icon="@drawable/ic_bookings_mono_icon"
-        android:title="@string/booking" />
+        android:icon="@drawable/navigation_booking"
+        android:title="@string/booking"
+      />
 
     <item
         android:id="@+id/navigation_history"
-        android:icon="@drawable/ic_history_mono_icon"
-        android:title="@string/history" />
+        android:icon="@drawable/navigation_history"
+        android:title="@string/history"
+       />
 
     <item
         android:id="@+id/navigation_profile"
-        android:icon="@drawable/ic_profile_mono_icon"
-        android:title="@string/profile" />
+        android:icon="@drawable/navigation_profile"
+        android:title="@string/profile"
+      />
 
 </menu>

@@ -11,7 +11,7 @@ import com.zoom2u_customer.databinding.ItemMapDocBinding
 
 class ItemMapDocCountAdapter(
     val context: Context,
-    private val dataList: List<Icon>,
+    private val dataList: MutableList<Icon>,
     private val onItemClick: (Icon) -> Unit
 ) : RecyclerView.Adapter<ItemMapDocCountAdapter.BindingViewHolder>() {
 
@@ -27,15 +27,19 @@ class ItemMapDocCountAdapter(
 
 
     override fun onBindViewHolder(holder: BindingViewHolder, position: Int) {
+        if (position == itemCount - 1)
+            holder.itemBinding.blankView.visibility = View.VISIBLE
+        else
+            holder.itemBinding.blankView.visibility = View.GONE
 
         val icon: Icon = dataList[position]
         holder.itemBinding.icon = icon
         if (icon.quantity > 0)
             holder.itemBinding.doc.visibility = View.VISIBLE
-        else
+        else {
             holder.itemBinding.doc.visibility = View.GONE
-
-
+            dataList.removeAt(position)
+        }
         holder.itemBinding.root.setOnClickListener {
             onItemClick(icon)
         }

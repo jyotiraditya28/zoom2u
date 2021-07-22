@@ -108,7 +108,7 @@
                 android:layout_height="20dp"
                 android:layout_marginStart="2dp"
                 android:layout_marginBottom="5dp"
-                android:src="@drawable/ic_baseline_camera_alt_24"
+                android:src="@drawable/ic_cam_icon"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 

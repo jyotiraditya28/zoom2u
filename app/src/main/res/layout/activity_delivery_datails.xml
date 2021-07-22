@@ -12,7 +12,7 @@
 
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/back_icon"
+            android:id="@+id/back_btn"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_margin="15dp"
@@ -147,6 +147,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:background="@null"
+                    android:inputType="number"
                     android:gravity="center_vertical"
                     android:hint="@string/contact_number"
                     app:layout_constraintStart_toStartOf="parent"
@@ -486,6 +487,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
                         android:background="@null"
+                        android:inputType="number"
                         android:singleLine="true"
                         android:gravity="center_vertical"
                         android:hint="@string/contact_number"
@@ -737,7 +739,7 @@
                         android:paddingStart="10dp"
                         android:hint="@string/string_not_send"
                         android:drawableEnd="@drawable/ic_down"
-                        android:drawablePadding="10dp"
+                        android:drawablePadding="20dp"
                         android:editable="false"
                         android:focusable="true"
                         android:inputType="none"

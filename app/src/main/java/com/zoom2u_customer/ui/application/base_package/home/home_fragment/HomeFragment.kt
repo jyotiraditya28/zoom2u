@@ -1,6 +1,7 @@
 package com.zoom2u_customer.ui.application.base_package.home.home_fragment
 
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -14,6 +15,7 @@ import com.zoom2u_customer.R
 import com.zoom2u_customer.ui.application.chat.ChatActivity
 import com.zoom2u_customer.ui.application.base_package.home.map_page.MapActivity
 import com.zoom2u_customer.databinding.FragmentHomeBinding
+import com.zoom2u_customer.utility.AppPreference
 import com.zoom2u_customer.utility.DialogActivity
 
 
@@ -21,20 +23,19 @@ class HomeFragment : Fragment(), View.OnClickListener{
 
     private var itemList:MutableList<Icon> = ArrayList()
     lateinit var adapter : IconAdapter
+    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View {
-
-
         val binding = FragmentHomeBinding.inflate(inflater, container, false)
+
 
         if (container != null) {
             setAdapterView(binding, container.context)
         }
-
         binding.getQuoteBtn.setOnClickListener(this)
         binding.chatBtn.setOnClickListener(this)
-
+        binding.nameHeader.text= "Hi "+AppPreference.getSharedPrefInstance().getLoginResponse()?.firstName.toString()
         return binding.root
     }
 
@@ -54,7 +55,9 @@ class HomeFragment : Fragment(), View.OnClickListener{
                 setItemData()
                 if (itemList.size > 0) {
                     val intent = Intent(activity, MapActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                    intent.flags=Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
                     intent.putParcelableArrayListExtra("icon_data", ArrayList(itemList.toList()))
                     startActivityForResult(intent,11)
                 }else{
