@@ -38,6 +38,7 @@
                 android:id="@+id/interStateMsgTxt"
                 android:textColor="@color/black"
                 android:textSize="14sp"
+                android:text="@string/interstateMsgTxt"
                 android:lineSpacingExtra="3dp"
                 android:padding="15dp"
                 android:gravity="center|left"

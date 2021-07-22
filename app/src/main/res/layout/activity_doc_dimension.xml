@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.zoom2u_customer.ui.application.base_package.home.map_page.doc_dimension.DocDimensionActivity">
+        tools:context="com.zoom2u_customer.ui.application.bottom_navigation.home.map_page.doc_dimension.DocDimensionActivity">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/back_btn"
@@ -126,18 +126,20 @@
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/multiply"
                         style="@style/style_15_bold"
+                        android:layout_marginTop="7dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:text="@string/x"
                         android:textColor="@color/black"
-                        android:textSize="25sp" />
+                        android:textSize="20sp" />
 
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:layout_marginStart="5dp"
                         android:orientation="vertical">
 
                         <com.google.android.material.textview.MaterialTextView
@@ -196,10 +198,11 @@
                         style="@style/style_15_bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
                         android:layout_gravity="center"
                         android:text="="
                         android:textColor="@color/black"
-                        android:textSize="25sp"
+                        android:textSize="20sp"
                         app:layout_constraintBottom_toBottomOf="parent" />
 
                     <LinearLayout
@@ -437,7 +440,6 @@
                     style="@style/style_11_bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
                     android:layout_marginTop="20dp"
                     android:textColor="@color/black"
                     android:textSize="18sp"
@@ -460,15 +462,6 @@
                     android:text="Items weighing over 30kg each or 100kg in total will need to be placed through our Bid Request services. The same goes for items with measurements exceeding 200cm and multiple number of items exceeding the limit per booking. This is to maintain the safety and good health of our drivers."
                     android:textColor="@color/black"
                     />
-
-
-
-
-
-
-
-
-
             </LinearLayout>
 
 

@@ -6,7 +6,7 @@
     <data>
         <variable
             name="myLocation"
-            type="com.zoom2u_customer.ui.application.base_package.profile.my_location.model.MyLocationResAndEditLocationReq" />
+            type="com.zoom2u_customer.ui.application.bottom_navigation.profile.my_location.model.MyLocationResAndEditLocationReq" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

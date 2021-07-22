@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.application.base_package.home.booking_confirmation.BookingConfirmationActivity">
+        tools:context=".ui.application.bottom_navigation.home.booking_confirmation.BookingConfirmationActivity">
 
 
         <com.google.android.material.imageview.ShapeableImageView

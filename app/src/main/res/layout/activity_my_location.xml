@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        tools:context=".ui.application.base_package.profile.my_location.MyLocationActivity">
+        tools:context=".ui.application.bottom_navigation.profile.my_location.MyLocationActivity">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/back_icon"

@@ -10,7 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.zoom2u_customer.R
 import com.zoom2u_customer.apiclient.ServiceApi
-import com.zoom2u_customer.ui.application.base_package.base_page.BasePageActivity
+import com.zoom2u_customer.ui.application.bottom_navigation.base_page.BasePageActivity
 import com.zoom2u_customer.ui.log_in.LogInActivity
 import com.zoom2u_customer.ui.log_in.LoginRequest
 import com.zoom2u_customer.databinding.ActivitySignUpBinding

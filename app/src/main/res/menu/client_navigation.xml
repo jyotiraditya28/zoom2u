@@ -11,7 +11,7 @@
     <item
         android:id="@+id/navigation_booking"
         android:icon="@drawable/navigation_booking"
-        android:title="@string/booking"
+        android:title="@string/bids"
       />
 
     <item

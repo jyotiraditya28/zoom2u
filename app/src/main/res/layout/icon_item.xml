@@ -6,7 +6,7 @@
 
         <variable
             name="icon"
-            type="com.zoom2u_customer.ui.application.base_package.home.home_fragment.Icon" />
+            type="com.zoom2u_customer.ui.application.bottom_navigation.home.home_fragment.Icon" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -73,6 +73,7 @@
                     android:elevation="5dp"
                     android:gravity="center"
                     android:text="+"
+                    android:visibility="gone"
                     android:textColor="@color/white"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

@@ -7,7 +7,7 @@
 
         <variable
             name="quoteOptionClass"
-            type="com.zoom2u_customer.ui.application.base_package.home.pricing_payment.model.QuoteOptionClass" />
+            type="com.zoom2u_customer.ui.application.bottom_navigation.home.pricing_payment.model.QuoteOptionClass" />
     </data>
 
     <androidx.cardview.widget.CardView

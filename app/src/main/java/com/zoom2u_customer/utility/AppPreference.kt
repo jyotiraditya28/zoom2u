@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 
 import com.google.gson.Gson
-import com.zoom2u_customer.ui.application.base_package.profile.ProfileResponse
+import com.zoom2u_customer.ui.application.bottom_navigation.profile.ProfileResponse
 import com.zoom2u_customer.ui.log_in.LoginResponce
 
 object AppPreference : SharedPref {

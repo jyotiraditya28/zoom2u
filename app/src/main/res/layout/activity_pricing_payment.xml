@@ -10,8 +10,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/card_view_color"
-        tools:context=".ui.application.base_package.pricing_payment.PricingPaymentFragment">
+        android:background="@color/white"
+        tools:context=".ui.application.bottom_navigation.pricing_payment.PricingPaymentFragment">
 
 
         <com.google.android.material.imageview.ShapeableImageView
@@ -282,7 +282,7 @@
             android:layout_height="70dp"
             android:layout_alignParentBottom="true"
             android:background="@color/white"
-            android:elevation="5dp"
+            android:elevation="40dp"
             android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent">
 

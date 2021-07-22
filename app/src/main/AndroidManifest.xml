@@ -17,18 +17,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Zoom2u">
-        <activity android:name=".utility.ShowPdfActivity"></activity>
-        <activity android:name=".ui.application.base_package.home.booking_confirmation.order_confirm_hold.OnHoldActivity" />
-        <activity android:name=".ui.application.base_package.home.booking_confirmation.order_confirm_hold.OrderConfirmActivity" />
+        <activity android:name=".ui.application.bottom_navigation.home.booking_confirmation.interstate_booking.InterStateSecondActivity"></activity>
+        <activity android:name=".ui.application.bottom_navigation.home.booking_confirmation.interstate_booking.InterStateFirstScreen" />
+        <activity android:name=".utility.ShowPdfActivity" />
+        <activity android:name=".ui.application.bottom_navigation.home.booking_confirmation.order_confirm_hold.OnHoldActivity" />
+        <activity android:name=".ui.application.bottom_navigation.home.booking_confirmation.order_confirm_hold.OrderConfirmActivity" />
         <activity android:name=".utility.FullSizeImageActivity" />
-        <activity android:name=".ui.application.base_package.home.booking_confirmation.BookingConfirmationActivity" />
-        <activity android:name=".ui.application.base_package.home.map_page.doc_dimension.DocDimensionActivity" />
-        <activity android:name=".ui.application.base_package.profile.my_location.search_location.Location" />
+        <activity android:name=".ui.application.bottom_navigation.home.booking_confirmation.BookingConfirmationActivity" />
+        <activity android:name=".ui.application.bottom_navigation.home.map_page.doc_dimension.DocDimensionActivity" />
+        <activity android:name=".ui.application.bottom_navigation.profile.my_location.search_location.Location" />
         <activity
             android:name=".ui.splash_screen.LogInSignupMainActivity"
             android:theme="@style/AppTheme.Splash" />
-        <activity android:name=".ui.application.base_package.BottomNavigationActivity" />
-        <activity android:name=".ui.application.base_package.profile.edit_profile.EditProfileActivity" />
+        <activity android:name=".ui.application.bottom_navigation.BottomNavigationActivity" />
+        <activity android:name=".ui.application.bottom_navigation.profile.edit_profile.EditProfileActivity" />
         <activity android:name=".ui.splash_screen.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,27 +38,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.application.base_package.profile.chnage_password.ChangePassActivity" />
+        <activity android:name=".ui.application.bottom_navigation.profile.chnage_password.ChangePassActivity" />
         <activity android:name=".ui.log_in.forgot_password.ForgotPasswordActivity" />
-        <activity android:name=".ui.application.base_package.profile.my_location.edit_add_location.EditAddLocationActivity" />
-        <activity android:name=".ui.application.base_package.profile.my_location.MyLocationActivity" />
-        <activity android:name=".ui.application.base_package.profile.change_price.PriceChangeActivity" />
+        <activity android:name=".ui.application.bottom_navigation.profile.my_location.edit_add_location.EditAddLocationActivity" />
+        <activity android:name=".ui.application.bottom_navigation.profile.my_location.MyLocationActivity" />
+        <activity android:name=".ui.application.bottom_navigation.profile.change_price.PriceChangeActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_api_key" />
 
-        <activity android:name=".ui.application.bid_request.active_bid_request.active_bid_page.ActiveBidActivity" />
-        <activity android:name=".ui.application.bid_request.BidRequestActivity" />
+        <activity android:name=".ui.application.bottom_navigation.bid_request.active_bid_request.active_bid_page.ActiveBidActivity" />
         <activity android:name=".ui.application.qutote_request.QuoteRequestActivity" /> <!-- <activity android:name=".application.ui.chat.MessageActivity" /> -->
         <activity android:name=".ui.application.chat.ChatActivity" />
-        <activity android:name=".ui.application.base_package.history.history_details.HistoryDetailsActivity" />
+        <activity android:name=".ui.application.bottom_navigation.history.history_details.HistoryDetailsActivity" />
         <activity android:name=".ui.log_in.LogInActivity" />
         <activity android:name=".ui.sign_up.SignUpActivity" />
-        <activity android:name=".ui.application.base_package.home.pricing_payment.PricingPaymentActivity" />
-        <activity android:name=".ui.application.base_package.home.map_page.MapActivity" />
-        <activity android:name=".ui.application.base_package.home.delivery_details.DeliveryDetailsActivity" />
-        <activity android:name=".ui.application.base_package.base_page.BasePageActivity" />
+        <activity android:name=".ui.application.bottom_navigation.home.pricing_payment.PricingPaymentActivity" />
+        <activity android:name=".ui.application.bottom_navigation.home.map_page.MapActivity" />
+        <activity android:name=".ui.application.bottom_navigation.home.delivery_details.DeliveryDetailsActivity" />
+        <activity android:name=".ui.application.bottom_navigation.base_page.BasePageActivity" />
     </application>
 
 </manifest>

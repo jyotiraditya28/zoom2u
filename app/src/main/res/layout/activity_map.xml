@@ -41,14 +41,14 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
 
-            <com.google.android.material.imageview.ShapeableImageView
+         <!--   <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/chat_btn"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_margin="15dp"
                 android:src="@drawable/ic_chat_white"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent" />-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -90,7 +90,7 @@
                     android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Choose an item that best represents the size of your parcel."
+                    android:text="Adjust your parcel size if they are not matching default size."
                     android:textColor="@color/black"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -216,14 +216,14 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/delivery_details_btn"
+            android:id="@+id/next_btn"
             style="@style/style_15_bold"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_margin="20dp"
             android:textAllCaps="false"
             android:background="@drawable/chip_background"
-            android:text="@string/add_delivery_details"
+            android:text="@string/next"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="parent" />

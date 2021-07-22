@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.zoom2u_customer.R
 import com.zoom2u_customer.apiclient.ApiClient
 import com.zoom2u_customer.apiclient.ServiceApi
-import com.zoom2u_customer.ui.application.base_package.base_page.BasePageActivity
+import com.zoom2u_customer.ui.application.bottom_navigation.base_page.BasePageActivity
 import com.zoom2u_customer.ui.log_in.forgot_password.ForgotPasswordActivity
 import com.zoom2u_customer.ui.sign_up.SignUpActivity
 import com.zoom2u_customer.databinding.ActivityLogInBinding
@@ -77,7 +77,7 @@ class LogInActivity : AppCompatActivity(), View.OnClickListener {
     }
 
 
-    fun setLoginData() {
+    private fun setLoginData() {
 
         email = binding.email.text.toString()
         pass = binding.pass.text.toString()
