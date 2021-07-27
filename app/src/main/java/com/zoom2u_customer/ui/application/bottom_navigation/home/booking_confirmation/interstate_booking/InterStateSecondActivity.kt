@@ -8,6 +8,7 @@ import android.text.TextWatcher
 import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import com.braintreepayments.api.BraintreePaymentActivity
 import com.braintreepayments.api.models.PaymentMethodNonce
 import com.google.gson.Gson
@@ -15,15 +16,18 @@ import com.zoom2u_customer.R
 import com.zoom2u_customer.apiclient.ApiClient
 import com.zoom2u_customer.apiclient.ServiceApi
 import com.zoom2u_customer.databinding.ActivityInterStateSecondBinding
+import com.zoom2u_customer.databinding.ActivityPricingPaymentBinding
 import com.zoom2u_customer.getBrainTree.GetBrainTreeClientTokenOrBookDeliveryRequest
 import com.zoom2u_customer.ui.application.bottom_navigation.home.booking_confirmation.BookingConfirmationRepository
 import com.zoom2u_customer.ui.application.bottom_navigation.home.booking_confirmation.BookingConfirmationViewModel
 import com.zoom2u_customer.ui.application.bottom_navigation.home.booking_confirmation.BookingResponse
 import com.zoom2u_customer.ui.application.bottom_navigation.home.booking_confirmation.order_confirm_hold.OnHoldActivity
 import com.zoom2u_customer.ui.application.bottom_navigation.home.booking_confirmation.order_confirm_hold.OrderConfirmActivity
+import com.zoom2u_customer.ui.application.bottom_navigation.home.pricing_payment.PricePaymentAdapter
 import com.zoom2u_customer.utility.AppUtility
 import org.json.JSONException
 import org.json.JSONObject
+import java.util.*
 
 class InterStateSecondActivity : AppCompatActivity(), View.OnClickListener {
     lateinit var binding: ActivityInterStateSecondBinding
@@ -31,7 +35,7 @@ class InterStateSecondActivity : AppCompatActivity(), View.OnClickListener {
     private var repository: BookingConfirmationRepository? = null
     lateinit var viewModel: BookingConfirmationViewModel
     private var getBrainTreeClientToken: GetBrainTreeClientTokenOrBookDeliveryRequest? = null
-    private var bookingDeliveryResponce: JSONObject? = null
+    private var bookingDeliveryResponse: JSONObject? = null
     private var isFName:Boolean?=null
     private var isLName:Boolean?=null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,14 +44,14 @@ class InterStateSecondActivity : AppCompatActivity(), View.OnClickListener {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_inter_state_second)
 
         if (intent.hasExtra("MainJsonForMakeABooking")) {
-            bookingDeliveryResponce = JSONObject(intent.getStringExtra("MainJsonForMakeABooking"))
+            bookingDeliveryResponse = JSONObject(intent.getStringExtra("MainJsonForMakeABooking"))
         }
         viewModel = ViewModelProvider(this).get(BookingConfirmationViewModel::class.java)
         val serviceApi: ServiceApi = ApiClient.getServices()
         repository = BookingConfirmationRepository(serviceApi, this)
         viewModel.repository = repository
 
-
+        setAdapterView(binding)
         viewModel.getDeliverySuccess()?.observe(this) {
             if (it != null) {
                 AppUtility.progressBarDissMiss()
@@ -130,17 +134,28 @@ class InterStateSecondActivity : AppCompatActivity(), View.OnClickListener {
             }
         })
     }
+    fun setAdapterView(binding: ActivityInterStateSecondBinding) {
+        val layoutManager = GridLayoutManager(this, 3)
+        binding.dangerView.layoutManager = layoutManager
+        val adapter = DangerIconAdapter(this, DangerIconDataProvider.iconList)
+        binding.dangerView.adapter = adapter
 
+    }
 
     private fun callServiceForBookingRequest() {
         try {
-            if (bookingDeliveryResponce!!.getJSONObject("_deliveryRequestModel")
+            if (bookingDeliveryResponse!!.getJSONObject("_deliveryRequestModel")
                     .has("ETA")
-            ) bookingDeliveryResponce!!.getJSONObject("_deliveryRequestModel").remove("ETA")
+            ) bookingDeliveryResponse!!.getJSONObject("_deliveryRequestModel").remove("ETA")
             getBrainTreeClientToken = GetBrainTreeClientTokenOrBookDeliveryRequest(
                 this,
                 Request_Code
             )
+            bookingDeliveryResponse!!.getJSONObject("_deliveryRequestModel")
+                .put("DeclarationSignature", binding.fName.text.toString().trim()+" "+
+                        binding.lName.text.toString().trim())
+
+
             /*if (MainActivity.customerAccountType.equals("0") || MainActivity.customerAccountType.equals(
                     "Standard"
                 )
@@ -169,9 +184,9 @@ class InterStateSecondActivity : AppCompatActivity(), View.OnClickListener {
                     data?.getParcelableExtra(BraintreePaymentActivity.EXTRA_PAYMENT_METHOD_NONCE)
                 val nonce = paymentMethodNonce?.nonce
                 try {
-                    bookingDeliveryResponce!!.getJSONObject("_deliveryRequestModel")
+                    bookingDeliveryResponse!!.getJSONObject("_deliveryRequestModel")
                         .put("paymentNonce", nonce)
-                    viewModel.getDeliveryRequest(bookingDeliveryResponce)
+                    viewModel.getDeliveryRequest(bookingDeliveryResponse)
                     getBrainTreeClientToken = null
                 } catch (e: JSONException) {
                     e.printStackTrace()
@@ -210,6 +225,9 @@ class InterStateSecondActivity : AppCompatActivity(), View.OnClickListener {
             R.id.chk_terms5 -> {
                 enableAcceptBtn(isFName,isLName,binding.chkTerms.isChecked,binding.chkTerms1.isChecked,binding.chkTerms2.isChecked
                     ,binding.chkTerms3.isChecked,binding.chkTerms4.isChecked,binding.chkTerms5.isChecked)
+            }
+            R.id.cancelBtn->{
+                finish()
             }
 
         }

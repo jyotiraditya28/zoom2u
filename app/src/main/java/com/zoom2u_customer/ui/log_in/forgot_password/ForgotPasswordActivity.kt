@@ -44,7 +44,8 @@ class ForgotPasswordActivity : AppCompatActivity(), View.OnClickListener {
                 )
             }
         }
-    } private fun onItemClick() {
+    }
+    private fun onItemClick() {
         finish()
     }
 

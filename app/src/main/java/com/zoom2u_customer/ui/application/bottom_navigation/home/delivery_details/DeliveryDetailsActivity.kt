@@ -74,7 +74,8 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
     private var pickSuburb: String? = null
     private var pickPostCode: String? = null
     private var pickCountry: String? = null
-    private var pickPremisesType: String? = null
+    private var pickAddress: String? = null
+    private var pickPremisesType: String? = "House"
 
     private var dropState: String? = null
     private var dropStreetNumber: String? = null
@@ -84,7 +85,8 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
     private var dropSuburb: String? = null
     private var dropPostCode: String? = null
     private var dropCountry: String? = null
-    private var dropPremisesType: String? = null
+    private var dropAddress: String? = null
+    private var dropPremisesType: String? = "House"
 
     private var leaveAt: Int? = null
     private var isInterstate: Boolean? = null
@@ -216,13 +218,15 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
                         getAddress?.get("postcode")?.toString()
 
                     pickStreet =
-                        getAddress?.get("suburb")?.toString()
+                        getAddress?.get("address")?.toString()
 
                     pickStreetNumber =
-                        getAddress?.get("suburb")?.toString()
+                        getAddress?.get("streetNumber")?.toString()
 
                     pickCountry =
                         getAddress?.get("country")?.toString()
+
+
 
                 } else {
 
@@ -242,10 +246,10 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
                         getAddress?.get("postcode")?.toString()
 
                     dropStreet =
-                        getAddress?.get("suburb")?.toString()
+                        getAddress?.get("address")?.toString()
 
                     dropStreetNumber =
-                        getAddress?.get("suburb")?.toString()
+                        getAddress?.get("streetNumber")?.toString()
 
                     dropCountry =
                         getAddress?.get("country")?.toString()
@@ -275,10 +279,10 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
                         getAddress?.get("postcode")?.toString()
 
                     pickStreet =
-                        getAddress?.get("suburb")?.toString()
+                        getAddress?.get("address")?.toString()
 
                     pickStreetNumber =
-                        getAddress?.get("suburb")?.toString()
+                        getAddress?.get("streetNumber")?.toString()
 
                     pickCountry =
                         getAddress?.get("country")?.toString()
@@ -300,10 +304,10 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
                         getAddress?.get("postcode")?.toString()
 
                     dropStreet =
-                        getAddress?.get("suburb")?.toString()
+                        getAddress?.get("address")?.toString()
 
                     dropStreetNumber =
-                        getAddress?.get("suburb")?.toString()
+                        getAddress?.get("streetNumber")?.toString()
 
                     dropCountry =
                         getAddress?.get("country")?.toString()
@@ -326,18 +330,7 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
         }
 
 
-        if(countTotalWeight().toFloat()>100){
-            val wordToSpan: Spannable =
-                SpannableString("Please login with your account details on https://deliveries.zoom2u.com/ to create Heavy and Large freight bookings. ")
 
-            wordToSpan.setSpan(
-                ForegroundColorSpan(Color.BLUE),
-                42,
-                71,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-            binding.weightWaring.text = wordToSpan
-        }
 
 
     }
@@ -348,11 +341,13 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
             if (pickState != dropState) {
                 binding.packageType.visibility = View.VISIBLE
                 binding.yesNo.visibility = View.VISIBLE
-                binding.weightCl.visibility = View.VISIBLE
+                binding.itemWeNotSend.visibility=View.VISIBLE
+                // binding.weightCl.visibility = View.VISIBLE
             } else {
                 binding.packageType.visibility = View.GONE
                 binding.yesNo.visibility = View.GONE
-                binding.weightCl.visibility = View.GONE
+                binding.itemWeNotSend.visibility=View.GONE
+            // binding.weightCl.visibility = View.GONE
             }
         }
     }
@@ -372,7 +367,7 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
                         binding.pickUnit.setText(myLocation.Location?.UnitNumber.toString())
                     if (TextUtils.isEmpty(myLocation.Location?.CompanyName.toString()))
                         binding.pickCompany.setText(myLocation.Location?.CompanyName.toString())
-                    binding.pickAddress.setText(myLocation.Location?.Address.toString())
+                    binding.pickAddress.setText(myLocation.Location?.Street.toString())
                     pickState = myLocation.Location?.State.toString()
                     pickGpx = myLocation.Location?.GPSX.toString()
                     pickGpy = myLocation.Location?.GPSY.toString()
@@ -394,7 +389,7 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
                         binding.dropUnit.setText(myLocation.Location?.UnitNumber.toString())
                     if (TextUtils.isEmpty(myLocation.Location?.CompanyName.toString()))
                         binding.dropCompany.setText(myLocation.Location?.CompanyName.toString())
-                    binding.dropAddress.setText(myLocation.Location?.Address.toString())
+                    binding.dropAddress.setText(myLocation.Location?.Street.toString())
                     dropState = myLocation.Location?.State.toString()
                     dropGpx = myLocation.Location?.GPSX.toString()
                     dropGpy = myLocation.Location?.GPSY.toString()
@@ -648,7 +643,7 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
             pickStreetNumber,
             pickSuburb,
             getShipmentsList(),
-            binding.weight.text.toString().trim()
+            countTotalWeight()
         )
 
         return interStateReq
@@ -668,7 +663,7 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
     fun countTotalWeight():String{
           var totalWeight=0.0
         for (item in itemDataList) {
-            totalWeight += item.weight
+            totalWeight += item.weight*item.quantity
         }
         return totalWeight.toString()
     }

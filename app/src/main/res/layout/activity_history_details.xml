@@ -112,15 +112,42 @@
 
 
                     <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/ref_id"
+                        style="@style/style_13_bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/black"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/line" />
+
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/price"
+                        style="@style/style_15_bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:textSize="18sp"
+                        android:layout_marginEnd="10dp"
+                        android:textColor="@color/black"
+                        app:layout_constraintBottom_toTopOf="@+id/courier"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/line"
+                        />
+
+                    <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/courier"
                         style="@style/style_9_bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="5dp"
                         android:text="@string/courier"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/line" />
+                        app:layout_constraintTop_toBottomOf="@+id/ref_id" />
+
 
 
                     <com.google.android.material.textview.MaterialTextView
@@ -130,7 +157,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="10dp"
-                        android:maxWidth="150dp"
                         android:singleLine="true"
                         android:textColor="@color/black"
                         android:textSize="18sp"
@@ -141,9 +167,10 @@
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/status"
                         style="@style/style_13_bold"
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:layout_marginTop="15dp"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:minHeight="30dp"
+                        android:layout_marginTop="40dp"
                         android:layout_marginEnd="10dp"
                         android:gravity="center"
                         android:paddingStart="10dp"
@@ -349,16 +376,61 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/track_booking"
+                    style="@style/style_15_bold"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/track_your_booking"
+                    android:textColor="@color/black"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/card" />
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/card4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:minHeight="70dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/white_background"
+                android:elevation="5dp"
+                app:layout_constraintTop_toBottomOf="@+id/track_booking">
+
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/open_browser"
+                    style="@style/style_11_bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:textColor="@color/black"
+                    android:text="clicking on this option should open the tracking link in default browser."
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/package_txt"
                     style="@style/style_15_bold"
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="20dp"
-                    android:text="Package Image &amp; Signbature"
+                    android:text="@string/package_signature"
                     android:textColor="@color/black"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/card" />
+                    app:layout_constraintTop_toBottomOf="@+id/card4" />
 
 
                 <androidx.constraintlayout.widget.ConstraintLayout

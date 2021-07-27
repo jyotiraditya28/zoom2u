@@ -22,6 +22,7 @@ class BidRequestFragment : Fragment() {
         binding.pager.adapter=viewpageradapter
         binding.tabLayout.setupWithViewPager(binding.pager)
 
+
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 binding.pager.currentItem = tab.position

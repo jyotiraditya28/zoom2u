@@ -73,21 +73,7 @@ class BasePageActivity : AppCompatActivity(),  BottomNavigationView.OnNavigation
         return false
     }
     override fun onBackPressed() {
-        DialogActivity.logoutDialog(this, "Are you sure!", "Are you want Logout?",
-            "Ok","Cancel",
-            onCancelClick=::onCancelClick,
-            onOkClick = ::onOkClick)
-    }
-    private fun onCancelClick(){}
-
-    private fun onOkClick() {
-        val loginResponce: LoginResponce? = AppPreference.getSharedPrefInstance().getLoginResponse()
-        loginResponce?.access_token = ""
-        AppPreference.getSharedPrefInstance().setLoginResponse(Gson().toJson(loginResponce))
-
-        val intent = Intent(this, LogInSignupMainActivity::class.java)
-        startActivity(intent)
-        this.finish()
+        finish()
     }
 
 }

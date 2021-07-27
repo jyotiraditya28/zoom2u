@@ -445,23 +445,30 @@
                     android:textSize="18sp"
                     android:layout_gravity="center"
                     />
+
+
+
+                <TextView
+                    android:id="@+id/note_text"
+                    android:layout_width="match_parent"
+                    android:minHeight="82dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="13dp"
+                    android:layout_margin="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="13sp"
+                     />
+
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/error_text"
-                    android:background="@drawable/error_background"
                     style="@style/style_11_bold"
-                    android:padding="10dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:gravity="center"
-                    android:minLines="4"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="10dp"
-                    android:text="Items weighing over 30kg each or 100kg in total will need to be placed through our Bid Request services. The same goes for items with measurements exceeding 200cm and multiple number of items exceeding the limit per booking. This is to maintain the safety and good health of our drivers."
-                    android:textColor="@color/black"
-                    />
+                    android:layout_margin="10dp"
+                    android:textColor="@color/red"
+                   />
+
+
             </LinearLayout>
 
 

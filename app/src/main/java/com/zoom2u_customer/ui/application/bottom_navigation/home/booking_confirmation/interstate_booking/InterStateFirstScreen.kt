@@ -39,16 +39,10 @@ class InterStateFirstScreen : AppCompatActivity() , View.OnClickListener{
             R.id.acceptBtn -> {
                 if (enableAcceptBtn(binding.chkTerms.isChecked,binding.chkTerms1.isChecked,binding.chkTerms2.isChecked)) {
                     val intent = Intent(this, InterStateSecondActivity::class.java)
-                    intent.putExtra(
-                        "MainJsonForMakeABooking",
-                        bookingDeliveryResponse.toString()
-                    )
+                    intent.putExtra("MainJsonForMakeABooking", bookingDeliveryResponse.toString())
                     intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
                     startActivity(intent)
                 }
-            }
-            R.id.cancelBtn -> {
-
             }
             R.id.chk_terms -> {
                 enableAcceptBtn(binding.chkTerms.isChecked,binding.chkTerms1.isChecked,binding.chkTerms2.isChecked)
@@ -59,6 +53,9 @@ class InterStateFirstScreen : AppCompatActivity() , View.OnClickListener{
             }
             R.id.chk_terms2 -> {
                 enableAcceptBtn(binding.chkTerms.isChecked,binding.chkTerms1.isChecked,binding.chkTerms2.isChecked)
+            }
+            R.id.cancelBtn -> {
+                finish()
             }
 
             }

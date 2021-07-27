@@ -46,7 +46,7 @@
                     android:text="@string/interstateMsgTxt"
                     android:lineSpacingExtra="3dp"
                     android:padding="15dp"
-                    android:gravity="center|left"
+                    android:gravity="center"
                     android:visibility="visible" />
 
                 <RelativeLayout
@@ -74,7 +74,7 @@
                         android:layout_gravity="center_vertical"
                         android:buttonTint="@color/base_color"
                         android:gravity="center_vertical"
-                        android:text="My package does not contain batteries of any kind."
+                        android:text="@string/first_inter_state1"
                         android:textColor="@color/gun_metal"
                         android:textSize="13sp"
                         android:layout_below="@+id/interStateBelowHeaderTxt" />
@@ -87,7 +87,7 @@
                         android:buttonTint="@color/base_color"
                         android:gravity="top"
                         android:textSize="13sp"
-                        android:text="My package is not fragile, delicate, or can be easily damaged."
+                        android:text="@string/first_inter_state2"
                         android:textColor="@color/gun_metal"
                         android:layout_below="@+id/chk_terms" />
 
@@ -97,7 +97,7 @@
                         android:layout_height="wrap_content"
                         android:buttonTint="@color/base_color"
                         android:textSize="13sp"
-                        android:text="My parcel has been packaged well to avoid any light bumps caused during general handling. If the item is small it has been placed in a larger box to minimise any chance of it being lost in transit."
+                        android:text="@string/first_inter_state3"
                         android:textColor="@color/gun_metal"
                         android:gravity="top"
                         android:layout_below="@+id/chk_terms1" />

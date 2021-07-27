@@ -17,7 +17,7 @@
             android:id="@+id/interStateHeaderTxt"
             android:textColor="@color/gun_metal"
             android:textSize="17sp"
-            android:text="Many seemingly harmless goods can be dangerous on board an aircraft."
+            android:text="@string/second_inter_state1"
             android:padding="10dp"
             android:lineSpacingExtra="3dp"
             android:background="@drawable/background_box"
@@ -48,15 +48,23 @@
                     android:text="@string/desc_txt"
                     android:lineSpacingExtra="3dp"
                     android:padding="15dp"
-                    android:gravity="center|left"
+                    android:gravity="center"
                     android:visibility="visible" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/danger_view"
+                    android:isScrollContainer="false"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/interStateMsgTxt"/>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
                     android:id="@+id/interstateOptionLayout"
-                    android:layout_below="@+id/interStateMsgTxt"
+                    android:layout_below="@+id/danger_view"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="15dp">
 
@@ -76,7 +84,7 @@
                         android:layout_gravity="center_vertical"
                         android:buttonTint="@color/base_color"
                         android:gravity="top"
-                        android:text="I hereby declare that my shipment does not contain any of the above products, any item that would not be permitted in checked luggage on a passenger flight or any other dangerous good as outlined by IATA regulations."
+                        android:text="@string/second_inter_state2"
                         android:textColor="@color/gun_metal"
                         android:textSize="13sp"
                         android:layout_below="@+id/interStateBelowHeaderTxt" />
@@ -90,7 +98,7 @@
                         android:gravity="top"
                         android:textSize="13sp"
                         android:layout_marginTop="5dp"
-                        android:text="Where possible, any old labelling has been removed to avoid any confusion or missorting during processing and shipping - This includes address, shipping and special handling labels."
+                        android:text="@string/second_inter_state3"
                         android:textColor="@color/gun_metal"
                         android:layout_below="@+id/chk_terms" />
 
@@ -101,7 +109,7 @@
                         android:buttonTint="@color/base_color"
                         android:textSize="13sp"
                         android:layout_marginTop="5dp"
-                        android:text="I understand that, in the unlikely event my package is lost or damaged, Zoom2u can cover up to $300 in damages - This coverage will be void if my package is fragile or insufficiently packaged."
+                        android:text="@string/second_inter_state4"
                         android:textColor="@color/gun_metal"
                         android:gravity="top"
                         android:layout_below="@+id/chk_terms1" />
@@ -114,7 +122,7 @@
                         android:buttonTint="@color/base_color"
                         android:textSize="13sp"
                         android:layout_marginTop="5dp"
-                        android:text="I understand that, in the unlikely event my package is lost or damaged, Zoom2u can cover up to $300 in damages - This coverage will be void if my package is fragile or insufficiently packaged."
+                        android:text="@string/second_inter_state5"
                         android:textColor="@color/gun_metal"
                         android:gravity="top"
                         android:layout_below="@+id/chk_terms2" />
@@ -126,7 +134,7 @@
                         android:buttonTint="@color/base_color"
                         android:textSize="13sp"
                         android:layout_marginTop="5dp"
-                        android:text="I acknowledge this consignment may travel by air and make this statement for the purpose of section 23A of the Civil Aviation Act."
+                        android:text="@string/second_inter_state6"
                         android:textColor="@color/gun_metal"
                         android:gravity="top"
                         android:layout_below="@+id/chk_terms3" />
@@ -138,7 +146,7 @@
                         android:buttonTint="@color/base_color"
                         android:textSize="13sp"
                         android:layout_marginTop="5dp"
-                        android:text="I understand that I am personally responsible for the above statements and that misdeclaring goods or knowingly or recklessly making false or misleading statement is a statutory offence punishable by imprisonment and/or a fine and may render me liable in damages - Including the return of my items at my expense."
+                        android:text="@string/second_inter_state7"
                         android:textColor="@color/gun_metal"
                         android:gravity="top"
                         android:layout_below="@+id/chk_terms4" />
@@ -152,7 +160,7 @@
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="10dp"
                         android:gravity="center"
-                        android:text="Signed by:"
+                        android:text="@string/second_inter_state8"
                         android:textColor="@color/black"
                         android:layout_below="@+id/chk_terms5" />
 
@@ -164,7 +172,7 @@
                         android:layout_height="50dp"
                         android:layout_marginTop="10dp"
                         android:paddingStart="10dp"
-                        android:hint="First name (required)..."
+                        android:hint="@string/second_inter_state9"
                         android:drawablePadding="10dp"
                         android:layout_below="@+id/signed_by" />
 
@@ -176,7 +184,7 @@
                         android:layout_height="50dp"
                         android:layout_marginTop="10dp"
                         android:paddingStart="10dp"
-                        android:hint="Last name (required)..."
+                        android:hint="@string/second_inter_state10"
                         android:drawablePadding="10dp"
                         android:layout_below="@+id/f_name" />
 

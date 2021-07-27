@@ -12,12 +12,12 @@
     <application
         android:name=".utility.Zoom2u"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/appicon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Zoom2u">
-        <activity android:name=".ui.application.bottom_navigation.home.booking_confirmation.interstate_booking.InterStateSecondActivity"></activity>
+        <activity android:name=".ui.application.bottom_navigation.home.delivery_details.quotes_req.UploadQuotesActivity"></activity>
+        <activity android:name=".ui.application.bottom_navigation.home.booking_confirmation.interstate_booking.InterStateSecondActivity" />
         <activity android:name=".ui.application.bottom_navigation.home.booking_confirmation.interstate_booking.InterStateFirstScreen" />
         <activity android:name=".utility.ShowPdfActivity" />
         <activity android:name=".ui.application.bottom_navigation.home.booking_confirmation.order_confirm_hold.OnHoldActivity" />

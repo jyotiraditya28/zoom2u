@@ -346,14 +346,14 @@
             app:layout_constraintBottom_toBottomOf="parent">
 
             <Button
-                android:id="@+id/make_another_btn"
+                android:id="@+id/view_delivery_details"
                 style="@style/style_15_bold"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
                 android:background="@drawable/chip_background"
-                android:text="@string/make_a_new_booking"
+                android:text="@string/view_delivery_details"
                 android:textAllCaps="false"
                 android:textColor="@color/white" />
 

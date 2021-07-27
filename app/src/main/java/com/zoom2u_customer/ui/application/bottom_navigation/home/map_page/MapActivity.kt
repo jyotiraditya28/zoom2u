@@ -124,7 +124,8 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, View.OnClickListene
         when (view!!.id) {
             R.id.next_btn -> {
                 if (getTotalWeight() > 100) {
-                    DialogActivity.alertDialogSingleButton(this, "Total weight = "+getTotalWeight()+"Kg", "Items weighing over 30kg each or 100kg in total will need to be placed through our Bid Request services. The same goes for items with measurements exceeding 200cm and multiple number of items exceeding the limit per booking. This is to maintain the safety and good health of our drivers.")
+                    DialogActivity.alertDialogOkCallback(this, "Total weight : "+getTotalWeight()+"Kg", "Items weighing over 30kg each or 100kg in total will need to be placed through our Bid Request services. The same goes for items with measurements exceeding 200cm and multiple number of items exceeding the limit per booking. This is to maintain the safety and good health of our drivers.",
+                        onItemClick = ::onItemClick)
                 } else {
                     val intent = Intent(this, DeliveryDetailsActivity::class.java)
                     intent.putParcelableArrayListExtra("IconList", dataList)
@@ -151,7 +152,14 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, View.OnClickListene
 
         }
     }
-
+    private fun onItemClick() {
+        val intent = Intent(this, DeliveryDetailsActivity::class.java)
+        intent.putParcelableArrayListExtra("IconList", dataList)
+        intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+    }
     private fun onCancelClick() {
         val intent = Intent()
         setResult(11, intent)

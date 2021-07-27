@@ -3,16 +3,13 @@ package com.zoom2u_customer.utility
 
 import android.app.Activity
 import android.content.Context
+import android.content.Context.LAYOUT_INFLATER_SERVICE
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
+import android.view.*
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat.getSystemService
 import com.zoom2u_customer.R
 
 
@@ -79,7 +76,7 @@ class DialogActivity {
 
             alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             lp.copyFrom(alertDialog.window!!.attributes)
-            lp.width = 600
+            lp.width = 650
             alertDialog.window?.attributes = lp
 
             val titleAlert: TextView = dialogView.findViewById(R.id.dialogLogoutTitleText)
@@ -118,7 +115,12 @@ class DialogActivity {
 
             val alertDialog = builder.create()
             alertDialog.show()
+            val lp = WindowManager.LayoutParams()
 
+            alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            lp.copyFrom(alertDialog.window!!.attributes)
+            lp.width = 650
+            alertDialog.window?.attributes = lp
 
             val titleAlert: TextView = dialogView.findViewById(R.id.titleDialog)
             titleAlert.text = alertTitle
@@ -139,6 +141,7 @@ class DialogActivity {
             }
 
         }
+
 
 
 

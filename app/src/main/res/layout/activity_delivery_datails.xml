@@ -1147,7 +1147,6 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/parcel_bfore_cl"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     >
 
 
@@ -1180,10 +1179,11 @@
                         android:background="@drawable/white_background"
                         android:layout_marginEnd="1dp"
                         android:layout_marginStart="1dp"
+                        android:layout_marginBottom="30dp"
                         android:elevation="3dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/parcel_weight1"
-                        >
+                        app:layout_constraintBottom_toTopOf="@+id/item_we_not_send">
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/weight_txt"
@@ -1191,7 +1191,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
-                            android:src="@drawable/in_progress_icon"
                             android:text="@string/weigh1"
                             android:textColor="@color/black"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -1226,26 +1225,13 @@
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:layout_marginEnd="10dp"
-                            android:src="@drawable/ic_calendar_icon"
+                            android:src="@drawable/in_progress_icon"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/weight_waring"
-                        style="@style/style_11_bold"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:text="Please login with your account details on https://deliveries.zoom2u.com/ to create Heavy and Large freight bookings. "
-                        app:layout_constraintStart_toStartOf="parent"
-                        android:textColor="@color/red"
-                        app:layout_constraintTop_toBottomOf="@+id/weight_cl1" />
-
-
 
 
 
@@ -1255,6 +1241,7 @@
                         style="@style/style_15_bold"
                         android:layout_width="wrap_content"
                         android:layout_height="50dp"
+                        android:visibility="gone"
                         android:layout_marginTop="15dp"
                         android:background="@drawable/gray_background"
                         android:gravity="center"
@@ -1267,8 +1254,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/weight_waring"/>
-
+                        app:layout_constraintTop_toBottomOf="@+id/weight_cl1"/>
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

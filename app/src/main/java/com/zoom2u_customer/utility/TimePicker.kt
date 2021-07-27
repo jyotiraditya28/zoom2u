@@ -26,7 +26,7 @@ class TimePicker() : WheelPicker.OnItemSelectedListener {
     private var selectedAmPm: String? = null
     private val hrArray =
         arrayOf("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12")
-    private var minArray: MutableList<String> = ArrayList()
+    private val minArray= arrayOf("00","15","30","45")
     private val amPmArray = arrayOf("AM", "PM")
 
     fun timePickerDialog(
@@ -37,16 +37,6 @@ class TimePicker() : WheelPicker.OnItemSelectedListener {
         selectedHr=time.split(":")[0]
         selectedMin=time.split(":")[1].split(" ")[0]
         selectedAmPm=time.split(":")[1].split(" ")[1]
-
-
-
-        for (i  in 0..59) {
-            if(i<10){
-                minArray.add("0$i")
-            }else
-            minArray.add(i.toString())
-        }
-
 
         mContext = context
         isSelectTimeWindow = 0
@@ -82,7 +72,7 @@ class TimePicker() : WheelPicker.OnItemSelectedListener {
         wheelHr.selectedItemPosition = hrArray.indexOf(selectedHr)
         //wheelHr.selectedItemTextColor = mContext.resources.getColor(R.color.color_cyan)
 
-        wheelMin.data = minArray
+        wheelMin.data = minArray.toMutableList()
         wheelHr.selectedItemPosition = hrArray.indexOf(selectedMin)
 
         wheelAmPm.data = amPmArray.toMutableList()

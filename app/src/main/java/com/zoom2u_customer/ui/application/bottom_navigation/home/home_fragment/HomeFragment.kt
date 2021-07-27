@@ -40,6 +40,7 @@ class HomeFragment : Fragment(), View.OnClickListener{
 
     fun setAdapterView(binding: FragmentHomeBinding, context: Context) {
         val layoutManager = GridLayoutManager(activity, 2)
+       
         binding.iconView.layoutManager = layoutManager
         (binding.iconView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         adapter = IconAdapter(context, IconDataProvider.iconList)

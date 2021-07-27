@@ -5,8 +5,14 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.LinearLayout
+import android.widget.PopupWindow
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -28,6 +34,7 @@ import org.json.JSONObject
 import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.util.*
+import androidx.appcompat.app.AppCompatActivity.LAYOUT_INFLATER_SERVICE as LAYOUT_INFLATER_SERVICE1
 
 
 class PricingPaymentActivity : AppCompatActivity(), View.OnClickListener {
@@ -65,6 +72,12 @@ class PricingPaymentActivity : AppCompatActivity(), View.OnClickListener {
 
                 mainObjForMakeABooking!!.getJSONObject("_deliveryRequestModel")
                     .put("Vehicle", intraStateRes.Vehicle)
+
+                mainObjForMakeABooking!!.getJSONObject("_deliveryRequestModel").put(
+                    "Distance",
+                    intraStateRes.Distance
+                )
+
 
                 val quoteOptionList = intraStateRes.QuoteOptions
                 if (quoteOptionList != null) {
@@ -121,6 +134,7 @@ class PricingPaymentActivity : AppCompatActivity(), View.OnClickListener {
         binding.priceView.adapter = adapter
 
     }
+
 
     private fun onPriceSelect(quoteOptionClass: QuoteOptionClass) {
 
@@ -256,8 +270,7 @@ class PricingPaymentActivity : AppCompatActivity(), View.OnClickListener {
                     .put("ETA", quoteOptionClass?.ETA)
 
             } else
-                mainObjForMakeABooking!!.getJSONObject("_deliveryRequestModel")
-                    .put("Distance", quoteOptionClass?.Distance)
+
 
             mainObjForMakeABooking!!.getJSONObject("_deliveryRequestModel").put(
                 "DeliverySpeed",
@@ -284,4 +297,7 @@ class PricingPaymentActivity : AppCompatActivity(), View.OnClickListener {
             e.printStackTrace()
         }
     }
+
+
+
 }

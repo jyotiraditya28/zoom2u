@@ -48,6 +48,7 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
     private var country: String? = null
     private var state: String? = null
     private var street: String? = null
+    private var streetNumber: String? = null
     private var suburb: String? = null
     private var postCode: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -160,7 +161,7 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
                             getAddress["postcode"].toString()
 
                         myLocationResponse?.Location?.Street =
-                            getAddress["suburb"].toString()
+                            getAddress["address"].toString()
 
 
                         myLocationResponse?.Location?.StreetNumber =
@@ -181,7 +182,9 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
 
                         postCode = getAddress["postcode"].toString()
 
-                        street = getAddress["suburb"].toString()
+                        street = getAddress["address"].toString()
+
+                        streetNumber= getAddress["streetNumber"].toString()
 
 
                     }
@@ -193,7 +196,6 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
                     AppUtility.progressBarDissMiss()
                     val getAddress: HashMap<String, Any>? = it
                     if (it["isTrue"] == "true") {
-
 
                         myLocationResponse?.Location?.GPSX =
                             getAddress?.get("latitude") as Double
@@ -212,11 +214,12 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
                             getAddress["postcode"].toString()
 
                         myLocationResponse?.Location?.Street =
-                            getAddress["suburb"].toString()
+                            getAddress["address"].toString()
 
 
                         myLocationResponse?.Location?.StreetNumber =
                             getAddress["streetNumber"].toString()
+
 
                     } else {
 
@@ -232,7 +235,9 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
 
                         postCode = getAddress["postcode"].toString()
 
-                        street = getAddress["suburb"].toString()
+                        street = getAddress["address"].toString()
+
+                        streetNumber= getAddress["streetNumber"].toString()
 
 
                     }
@@ -248,7 +253,7 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
         binding.name.setText(myLocationResponse?.Location?.ContactName)
         binding.email.setText(myLocationResponse?.Location?.Email)
         binding.phone.setText(myLocationResponse?.Location?.Phone)
-        binding.address.setText(myLocationResponse?.Location?.Address)
+        binding.address.setText(myLocationResponse?.Location?.Street)
         binding.pickupCheckBox.isChecked = myLocationResponse?.DefaultPickup == true
         binding.dropOffCheckBox.isChecked = myLocationResponse?.DefaultDropoff == true
         binding.company.setText(myLocationResponse?.Location?.CompanyName)
@@ -310,8 +315,10 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
                 if (isEdit) {
                     myLocationResponse?.DefaultPickup = binding.pickupCheckBox.isChecked
                     myLocationResponse?.DefaultDropoff = binding.dropOffCheckBox.isChecked
+
                     myLocationResponse?.Location?.Address =
                         binding.address.text.toString().trim()
+
                     myLocationResponse?.Location?.ContactName =
                         binding.name.text.toString().trim()
                     myLocationResponse?.Location?.Email =
@@ -324,9 +331,14 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
                         binding.unit.text.toString().trim()
                     myLocationResponse?.Location?.CompanyName =
                         binding.company.text.toString().trim()
+                    if (checkValidation(
+                            binding.name.text.toString().trim(),
+                            binding.phone.text.toString().trim(),
+                            binding.address.text.toString().trim()
+                        )
+                    )
                     viewModel.editLocation(myLocationResponse)
                 } else {
-
 
                     val location2 = AddLocationReq.Location2(
                         binding.address.text.toString().trim(),
@@ -341,14 +353,15 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
                         postCode,
                         state,
                         street,
+                        streetNumber,
                         suburb, binding.unit.text.toString().trim()
                     )
 
 
 
                     addLocationReq = AddLocationReq(
-                        binding.pickupCheckBox.isChecked,
-                        binding.dropOffCheckBox.isChecked, location2
+                        binding.dropOffCheckBox.isChecked,
+                        binding.pickupCheckBox.isChecked, location2
                     )
 
                     if (checkValidation(
