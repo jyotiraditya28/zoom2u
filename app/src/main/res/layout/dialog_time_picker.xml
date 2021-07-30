@@ -71,61 +71,19 @@
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <LinearLayout
+    <com.aigestudio.wheelpicker.WheelPicker
+        android:id="@+id/wheel_TimeSelect"
         android:layout_width="0dp"
-        android:gravity="center"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toStartOf="@id/layout_guideEnd_TimeSelect"
         app:layout_constraintStart_toEndOf="@id/layout_guideStart_TimeSelect"
-        app:layout_constraintTop_toBottomOf="@id/layout_header_TimeSelect">
+        app:layout_constraintTop_toBottomOf="@id/layout_header_TimeSelect"
+        app:wheel_atmospheric="true"
+        app:wheel_curved="true"
+        app:wheel_cyclic="true"
+        app:wheel_item_text_color="@color/calender_txt_color"
+        app:wheel_item_text_size="18sp"
+        app:wheel_selected_item_text_color="@color/color_cyan" />
 
-        <LinearLayout
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="3">
 
-
-            <com.aigestudio.wheelpicker.WheelPicker
-                android:id="@+id/hr_picker"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                app:wheel_atmospheric="true"
-                app:wheel_curved="true"
-                app:wheel_cyclic="true"
-                android:layout_marginEnd="10dp"
-                app:wheel_item_text_color="@color/calender_txt_color"
-                app:wheel_item_text_size="18sp"
-                app:wheel_selected_item_text_color="@color/color_cyan" />
-
-            <com.aigestudio.wheelpicker.WheelPicker
-                android:id="@+id/min_picker"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                app:wheel_atmospheric="true"
-                app:wheel_curved="true"
-                app:wheel_cyclic="true"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
-                app:wheel_item_text_color="@color/calender_txt_color"
-                app:wheel_item_text_size="18sp"
-                app:wheel_selected_item_text_color="@color/color_cyan" />
-
-            <com.aigestudio.wheelpicker.WheelPicker
-                android:id="@+id/am_pm_picker"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                app:wheel_atmospheric="true"
-                android:layout_marginStart="10dp"
-                app:wheel_curved="true"
-                app:wheel_cyclic="true"
-                app:wheel_item_text_color="@color/calender_txt_color"
-                app:wheel_item_text_size="18sp"
-                app:wheel_selected_item_text_color="@color/color_cyan" />
-        </LinearLayout>
-
-    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

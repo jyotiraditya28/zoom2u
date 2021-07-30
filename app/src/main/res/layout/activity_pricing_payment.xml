@@ -141,55 +141,23 @@
                     app:layout_constraintTop_toBottomOf="@+id/price_view" />
 
 
-                <LinearLayout
-                    android:id="@+id/expired_quote"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:orientation="horizontal"
-                    android:visibility="gone"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/line">
-
-
-                    <com.google.android.material.textview.MaterialTextView
-                        style="@style/style_13_bold"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/expired_quote"
-                        android:textColor="@color/red" />
-
-                    <LinearLayout
-                        android:id="@+id/start_timer"
-                        android:layout_width="40dp"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <com.google.android.material.textview.MaterialTextView
-                            style="@style/style_13_bold"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="  hear"
-                            android:textColor="@color/base_color" />
-
-                        <View
-                            android:layout_width="wrap_content"
-                            android:layout_height="1dp"
-                            android:background="@color/base_color" />
-                    </LinearLayout>
-
-                </LinearLayout>
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/expired_quote1"
-                    style="@style/style_13_bold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:visibility="gone"
-                    android:text=" to generate new quotes."
-                    app:layout_constraintTop_toBottomOf="@id/expired_quote"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:textColor="@color/red" />
+                        android:id="@+id/quotes_expiered"
+                        style="@style/style_13_bold"
+                        android:textColor="@color/black"
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/line"/>
+
+
+
+
+
+
 
                 <!--
 

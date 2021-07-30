@@ -82,7 +82,6 @@ class DatePicker(): WheelPicker.OnItemSelectedListener {
 
     private fun timeSelection(selectedTimeWindowItem: String) {
 
-
         wheel_TimeSelect.selectedItemPosition = arrayOFDate.indexOf(selectedTimeWindowItem)
         wheel_TimeSelect.selectedItemTextColor = mContext.resources.getColor(R.color.color_cyan)
     }

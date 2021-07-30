@@ -2,13 +2,9 @@ package com.zoom2u_customer.ui.application.bottom_navigation.home.delivery_detai
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Color
 import android.location.Geocoder
 import android.os.Bundle
-import android.text.Spannable
-import android.text.SpannableString
 import android.text.TextUtils
-import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
@@ -33,6 +29,7 @@ import com.zoom2u_customer.ui.application.bottom_navigation.home.delivery_detail
 import com.zoom2u_customer.ui.application.bottom_navigation.home.delivery_details.model.IntraStateReq
 import com.zoom2u_customer.ui.application.bottom_navigation.home.delivery_details.model.SaveDeliveryRequestReq
 import com.zoom2u_customer.ui.application.bottom_navigation.home.delivery_details.model.ShipmentsClass
+import com.zoom2u_customer.ui.application.bottom_navigation.home.delivery_details.quotes_req.UploadQuotesActivity
 import com.zoom2u_customer.ui.application.bottom_navigation.home.home_fragment.Icon
 import com.zoom2u_customer.ui.application.bottom_navigation.home.pricing_payment.PricingPaymentActivity
 import com.zoom2u_customer.ui.application.bottom_navigation.profile.my_location.MyLocationRepository
@@ -61,7 +58,6 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
     private var timePicker: TimePicker? = null
     lateinit var viewModel: DeliveryDetailsViewModel
     private var categories: MutableList<String> = mutableListOf()
-    private var repository: DeliveryDetailsRepository? = null
     private var repositoryGoogleAddress: GoogleAddressRepository? = null
     private var repositoryMyLoc: MyLocationRepository? = null
     private var getLocationClass: GetLocationClass? = null
@@ -74,7 +70,6 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
     private var pickSuburb: String? = null
     private var pickPostCode: String? = null
     private var pickCountry: String? = null
-    private var pickAddress: String? = null
     private var pickPremisesType: String? = "House"
 
     private var dropState: String? = null
@@ -85,14 +80,12 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
     private var dropSuburb: String? = null
     private var dropPostCode: String? = null
     private var dropCountry: String? = null
-    private var dropAddress: String? = null
     private var dropPremisesType: String? = "House"
-
     private var leaveAt: Int? = null
     private var isInterstate: Boolean? = null
-
-
+    private var isLaptopOrMobile: String? = "laptopOrMobileNo"
     private lateinit var itemDataList: ArrayList<Icon>
+    var isQuotesRequest:Boolean?=null
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,7 +95,7 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
         /**get data from map Item*/
         val intent: Intent = intent
         itemDataList = intent.getParcelableArrayListExtra<Icon>("IconList") as ArrayList<Icon>
-
+        isQuotesRequest=intent.getBooleanExtra("isQuotesRequest",false)
 
         viewModel = ViewModelProvider(this).get(DeliveryDetailsViewModel::class.java)
         val serviceApi: ServiceApi = ApiClient.getServices()
@@ -113,16 +106,50 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
         viewModel.repositoryGoogleAddress = repositoryGoogleAddress
         viewModel.getMyLocationList()
 
+      /**for request quotes*/
+       if(isQuotesRequest as Boolean){
+        binding.pickSendSms.visibility=View.GONE
+        binding.nextBtn.text="Request Quotes"
+        binding.parcelBeforeCl.visibility=View.VISIBLE
+       }else{
+           binding.pickSendSms.visibility=View.VISIBLE
+           binding.nextBtn.text="Next"
+           binding.parcelBeforeCl.visibility=View.GONE
+       }
 
+      /**drop and pick date*/
         val dateFormat: DateFormat = SimpleDateFormat("EEE dd MMM yyyy")
         val date = Date()
         binding.pickDate.text = dateFormat.format(date)
 
-        val dateFormat1: DateFormat = SimpleDateFormat("hh:mm aaa")
-        binding.pickTime.text = dateFormat1.format(date)
+        /** pick time*/
+        val timeFormat: DateFormat = SimpleDateFormat("hh:mm aaa")
+        binding.pickTime.text = timeFormat.format(date)
+
+        /**drop time*/
+        val c = Calendar.getInstance()
+        c.add(Calendar.HOUR, 3)
+        val d = c.time
+        val dropTime = timeFormat.format(d)
+        binding.dropTime.text = dropTime
+
         datePicker = DatePicker()
         timePicker = TimePicker()
 
+        val timeFrom="09:00 PM"
+        val current:String=timeFormat.format(date)
+
+        val time9PM: Date = timeFormat.parse(timeFrom)
+        val currentTime: Date = timeFormat.parse(current)
+
+        if(time9PM.before(currentTime)){
+            val c = Calendar.getInstance()
+            c.add(Calendar.DATE, 1)
+            val d = c.time
+            val dropTime = dateFormat.format(d)
+            binding.dropDate.text = dropTime
+        }else
+            binding.dropDate.text = dateFormat.format(date)
 
         categories.add("Front door")
         categories.add("Back door")
@@ -136,7 +163,6 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
         binding.nextBtn.setOnClickListener(this)
         binding.pickTime.setOnClickListener(this)
         binding.pickDate.setOnClickListener(this)
-        binding.pickTime.setOnClickListener(this)
         binding.pickFindMe.setOnClickListener(this)
         binding.dropFindMe.setOnClickListener(this)
         binding.pickAddress.setOnClickListener(this)
@@ -147,7 +173,10 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
         binding.backBtn.setOnClickListener(this)
         binding.pickDateCl.setOnClickListener(this)
         binding.pickTimeCl.setOnClickListener(this)
-
+        binding.dropDateCl.setOnClickListener(this)
+        binding.dropTimeCl.setOnClickListener(this)
+        binding.dropTime.setOnClickListener(this)
+        binding.dropDate.setOnClickListener(this)
         if (!Places.isInitialized()) {
             val apiKey = getString(R.string.google_api_key)
             Places.initialize(applicationContext, apiKey)
@@ -225,7 +254,6 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
 
                     pickCountry =
                         getAddress?.get("country")?.toString()
-
 
 
                 } else {
@@ -315,24 +343,29 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
             }
         }
 
-         binding.pickHouseCom.setOnCheckedChangeListener { _, checkedId ->
-             pickPremisesType = if (R.id.pick_house == checkedId)
-                binding.pickHouse.text.toString()
-            else binding.pickCom.text.toString()
+        binding.pickHouseCom.setOnCheckedChangeListener { _, checkedId ->
+            pickPremisesType = if (R.id.pick_house == checkedId)
+                "House"
+            else "Commercial"
 
-         }
+        }
 
         binding.dropHouseCom.setOnCheckedChangeListener { _, checkedId ->
-            pickPremisesType = if (R.id.drop_house == checkedId)
-                binding.dropHouse.text.toString()
-            else binding.dropCom.text.toString()
+            dropPremisesType = if (R.id.drop_house == checkedId)
+                "House"
+            else "Commercial"
 
         }
 
 
+        binding.yesNo.setOnCheckedChangeListener { _, checkedId ->
+            isLaptopOrMobile = if (R.id.yes == checkedId)
+                "laptopOrMobileYes"
+            else "laptopOrMobileNo"
 
+        }
 
-
+        binding.weight.text = countTotalWeight() + "Kg"
     }
 
 
@@ -341,13 +374,13 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
             if (pickState != dropState) {
                 binding.packageType.visibility = View.VISIBLE
                 binding.yesNo.visibility = View.VISIBLE
-                binding.itemWeNotSend.visibility=View.VISIBLE
+                binding.itemWeNotSend.visibility = View.VISIBLE
                 // binding.weightCl.visibility = View.VISIBLE
             } else {
                 binding.packageType.visibility = View.GONE
                 binding.yesNo.visibility = View.GONE
-                binding.itemWeNotSend.visibility=View.GONE
-            // binding.weightCl.visibility = View.GONE
+                binding.itemWeNotSend.visibility = View.GONE
+                // binding.weightCl.visibility = View.GONE
             }
         }
     }
@@ -362,7 +395,7 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
                     binding.pickName.setText(myLocation.Location?.ContactName.toString())
                     binding.pickEmail.setText(myLocation.Location?.Email.toString())
                     binding.pickPhone.setText(myLocation.Location?.Phone.toString())
-                    binding.weight.text = countTotalWeight()+"Kg"
+
                     if (TextUtils.isEmpty(myLocation.Location?.UnitNumber.toString()))
                         binding.pickUnit.setText(myLocation.Location?.UnitNumber.toString())
                     if (TextUtils.isEmpty(myLocation.Location?.CompanyName.toString()))
@@ -372,9 +405,9 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
                     pickGpx = myLocation.Location?.GPSX.toString()
                     pickGpy = myLocation.Location?.GPSY.toString()
                     pickSuburb = myLocation.Location?.Suburb.toString()
-                    pickPostCode=myLocation.Location?.Postcode.toString()
-                    pickStreet=myLocation.Location?.Street.toString()
-                    pickStreetNumber=myLocation.Location?.StreetNumber.toString()
+                    pickPostCode = myLocation.Location?.Postcode.toString()
+                    pickStreet = myLocation.Location?.Street.toString()
+                    pickStreetNumber = myLocation.Location?.StreetNumber.toString()
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
@@ -394,9 +427,9 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
                     dropGpx = myLocation.Location?.GPSX.toString()
                     dropGpy = myLocation.Location?.GPSY.toString()
                     dropSuburb = myLocation.Location?.Suburb.toString()
-                    dropPostCode=myLocation.Location?.Postcode.toString()
-                    dropStreet=myLocation.Location?.Street.toString()
-                    dropStreetNumber=myLocation.Location?.StreetNumber.toString()
+                    dropPostCode = myLocation.Location?.Postcode.toString()
+                    dropStreet = myLocation.Location?.Street.toString()
+                    dropStreetNumber = myLocation.Location?.StreetNumber.toString()
 
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -425,40 +458,47 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
                     binding.dropPhone.text.toString().trim(),
                     binding.dropAddress.text.toString().trim()
                 )
-                if (isBookingConfirm <= 0) {
-                    /**for Intra State**/
-                    if (pickState == dropState) {
-                        isInterstate = false
-                        intraStateReq = getIntraState()
-                        val intent = Intent(this, PricingPaymentActivity::class.java)
-                        intent.putExtra("IntraStateData", intraStateReq)
-                        intent.putExtra(
-                            "SaveDeliveryRequestReq",
-                            createJsonForSaveRequest().toString()
-                        )
-                        intent.putParcelableArrayListExtra("IconList", itemDataList)
-                        intent.flags=Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
-                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
-                        startActivity(intent)
-                    }
-                    /**for Inter State**/
-                    else {
-                        isInterstate = true
-                        interStateReq = getInterState()
-                        val intent = Intent(this, PricingPaymentActivity::class.java)
-                        intent.putExtra("InterStateData", interStateReq)
-                        intent.putExtra(
-                            "SaveDeliveryRequestReq",
-                            createJsonForSaveRequest().toString()
-                        )
-                        intent.putParcelableArrayListExtra("IconList", itemDataList)
-                        intent.flags=Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
-                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
-                        startActivity(intent)
-                    }
 
+                if (isBookingConfirm <= 0) {
+                    if(isQuotesRequest as Boolean) {
+                        val intent = Intent(this, UploadQuotesActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
+                        startActivity(intent)
+                    }
+                    else {
+                        /**for Intra State**/
+                        if (pickState == dropState) {
+                            isInterstate = false
+                            intraStateReq = getIntraState()
+                            val intent = Intent(this, PricingPaymentActivity::class.java)
+                            intent.putExtra("IntraStateData", intraStateReq)
+                            intent.putExtra(
+                                "SaveDeliveryRequestReq",
+                                createJsonForSaveRequest().toString()
+                            )
+                            intent.putParcelableArrayListExtra("IconList", itemDataList)
+                            intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
+                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            startActivity(intent)
+                        }
+                        /**for Inter State**/
+                        else {
+                            isInterstate = true
+                            interStateReq = getInterState()
+                            val intent = Intent(this, PricingPaymentActivity::class.java)
+                            intent.putExtra("InterStateData", interStateReq)
+                            intent.putExtra(
+                                "SaveDeliveryRequestReq",
+                                createJsonForSaveRequest().toString()
+                            )
+                            intent.putParcelableArrayListExtra("IconList", itemDataList)
+                            intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
+                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            startActivity(intent)
+                        }
+                    }
                 } else
                     DialogActivity.alertDialogSingleButton(
                         this,
@@ -508,35 +548,62 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
                 datePicker?.datePickerDialog(
                     this,
                     binding.pickDate.text.toString(),
-                    onItemClick = ::onDateClick
+                    onItemClick = ::onPickDateClick
                 )
             }
             R.id.pick_date_cl -> {
                 datePicker?.datePickerDialog(
                     this,
                     binding.pickDate.text.toString(),
-                    onItemClick = ::onDateClick
+                    onItemClick = ::onPickDateClick
                 )
             }
-            R.id.pick_time->{
+            R.id.pick_time -> {
                 timePicker?.timePickerDialog(
-                    this,
+                    this,false,
                     binding.pickTime.text.toString(),
-                    onItemClick = ::onTimeClick
+                    onItemClick = ::onPickTimeClick
                 )
             }
             R.id.pick_time_cl -> {
                 timePicker?.timePickerDialog(
-                    this,
+                    this,false,
                     binding.pickTime.text.toString(),
-                    onItemClick = ::onTimeClick
+                    onItemClick = ::onPickTimeClick
+                )
+            }
+            R.id.drop_date -> {
+                datePicker?.datePickerDialog(
+                    this,
+                    binding.dropDate.text.toString(),
+                    onItemClick = ::onDropDateClick
+                )
+            }
+            R.id.drop_date_cl -> {
+                datePicker?.datePickerDialog(
+                    this,
+                    binding.dropDate.text.toString(),
+                    onItemClick = ::onDropDateClick
+                )
+            }
+            R.id.drop_time -> {
+                timePicker?.timePickerDialog(
+                    this,true,
+                    binding.dropTime.text.toString(),
+                    onItemClick = ::onDropTimeClick
+                )
+            }
+            R.id.drop_time_cl -> {
+                timePicker?.timePickerDialog(
+                    this,true,
+                    binding.dropTime.text.toString(),
+                    onItemClick = ::onDropTimeClick
                 )
             }
             R.id.item_we_not_send -> {
-
-               /* val pdfUri= Uri.fromFile( File("raw/item_not_send.pdf"))
-                val browserIntent=Intent(Intent.ACTION_VIEW, pdfUri)
-                startActivity(browserIntent)*/
+            /* val pdfUri= Uri.fromFile( File("raw/item_not_send.pdf"))
+                 val browserIntent=Intent(Intent.ACTION_VIEW, pdfUri)
+                 startActivity(browserIntent)*/
             }
             R.id.authority_to -> {
                 binding.spinner.performClick()
@@ -552,7 +619,7 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
                 else
                     binding.authorityTo.visibility = View.GONE
             }
-            R.id.back_btn->{
+            R.id.back_btn -> {
                 finish()
             }
 
@@ -621,7 +688,7 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
     }
 
     private fun getInterState(): InterStateReq? {
-        val dropLocation = InterStateReq.DropLocationClass(dropGpx,dropGpy)
+        val dropLocation = InterStateReq.DropLocationClass(dropGpx, dropGpy)
         val pickLocation = InterStateReq.PickupLocationClass(pickGpx, pickGpy)
         interStateReq = InterStateReq(
             getCurrentDateAndTimeInEta(),
@@ -649,24 +716,132 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
         return interStateReq
     }
 
-
-    private fun onTimeClick(hr: String?, min: String?, am_pm: String?) {
-        binding.pickTime.text = "$hr:$min $am_pm"
+    private fun onPickTimeClick(time: String?) {
+        if (!TextUtils.isEmpty(time)) {
+            if (checkPickFutureTime(time)) {
+                binding.pickTime.text = time
+            }
+        }
     }
-
-    fun onDateClick(s: String?) {
+    private fun onPickDateClick(s: String?) {
         if (!TextUtils.isEmpty(s))
             binding.pickDate.text = s.toString()
     }
 
+    private fun onDropTimeClick(time: String?) {
+        if (!TextUtils.isEmpty(time)) {
+            if (checkDropFutureTime(time)) {
+                if (check3HourTime(time)) {
+                    binding.dropTime.text = time
+                }
+            }
+        }
+    }
+    private fun onDropDateClick(s: String?) {
+        if (!TextUtils.isEmpty(s))
+            binding.dropDate.text = s.toString()
+    }
 
-    fun countTotalWeight():String{
-          var totalWeight=0.0
+    fun add3HourInPickTime(time: String?){
+        val serverDateTimeValue = binding.pickDate.text.toString() + " " +
+                time
+        val millisToAdd:Long = 7_200_000
+        val converter = SimpleDateFormat("hh:mm a")
+        val convertedDate: Date?
+        try {
+            convertedDate = converter.parse(serverDateTimeValue)
+
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+    }
+
+    private fun checkPickFutureTime(selectedTime:String?): Boolean {
+        val serverDateTimeValue = binding.pickDate.text.toString() + " " +
+                selectedTime
+        val converter = SimpleDateFormat("EEE dd MMM yyyy hh:mm a")
+        val convertedDate: Date?
+        try {
+            convertedDate = converter.parse(serverDateTimeValue)
+            if (System.currentTimeMillis() > convertedDate.time) {
+                DialogActivity.alertDialogSingleButton(
+                    this,
+                    "Oops!",
+                    "Please enter a pickup date/time in the future."
+                )
+                return false
+            }
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        return true
+    }
+
+    private fun checkDropFutureTime(selectedTime:String?): Boolean {
+        val serverDateTimeValue = binding.dropDate.text.toString() + " " +
+                selectedTime
+        val converter = SimpleDateFormat("EEE dd MMM yyyy hh:mm a")
+        val convertedDate: Date?
+        try {
+            convertedDate = converter.parse(serverDateTimeValue)
+            if (System.currentTimeMillis() > convertedDate.time) {
+                DialogActivity.alertDialogSingleButton(
+                        this,
+                        "Oops!",
+                        "Please enter a drop off date/time in the future."
+                    )
+                return false
+            }
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        return true
+    }
+
+    private fun check3HourTime(selectedTime:String?): Boolean {
+        val serverDateTimeValue = binding.dropDate.text.toString() + " " +
+                selectedTime
+        val converter = SimpleDateFormat("EEE dd MMM yyyy hh:mm a")
+        val convertedDate: Date?
+        try {
+            convertedDate = converter.parse(serverDateTimeValue)
+
+            val c = Calendar.getInstance()
+            c.add(Calendar.HOUR, 3)
+            val d = c.time
+            val currentTime= converter.format(d)
+            val currentTimePlus3Hour: Date = converter.parse(currentTime)
+            if (currentTimePlus3Hour.time > convertedDate.time) {
+                DialogActivity.alertDialogSingleButton(
+                    this,
+                    "Oops!",
+                    "Please enter a dropoff date/time 3 hours more than the pickup date/time."
+                )
+                return false
+            }
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        return true
+    }
+
+
+    fun countTotalWeight(): String {
+        var totalWeight = 0.0
         for (item in itemDataList) {
-            totalWeight += item.weight*item.quantity
+            totalWeight += item.weight * item.quantity
         }
         return totalWeight.toString()
     }
+
 
 
     fun createJsonForSaveRequest(): JSONObject {
@@ -709,35 +884,37 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
             deliveryRequest.put("ParentId", 0)
             deliveryRequest.put("Source", 9)
             deliveryRequest.put("DropLocation", JSONObject(Gson().toJson(dropLocation).toString()))
-            deliveryRequest.put("PickupLocation", JSONObject(Gson().toJson(pickLocation).toString()))
+            deliveryRequest.put(
+                "PickupLocation",
+                JSONObject(Gson().toJson(pickLocation).toString())
+            )
             deliveryRequest.put("Weight", countTotalWeight())
-            deliveryRequest.put("sendSmsToPickupPerson",binding.pickSendSms.isChecked)
-            deliveryRequest.put("IsNoContactPickup",binding.isNoContactPickup.isChecked)
-            deliveryRequest.put("IsNoContactDrop",binding.noContactDrop.isChecked)
-            deliveryRequest.put("RequestedDropDateTimeWindowEnd",getCurrentDateAndTimeInEta())
-            deliveryRequest.put("RequestedDropDateTimeWindowStart",getCurrentDateAndTimeInEta())
-            deliveryRequest.put("RequestedPickupDateTimeWindowEnd",getCurrentDateAndTimeInEta())
-            deliveryRequest.put("RequestedPickupDateTimeWindowStart",getCurrentDateAndTimeInEta())
+            deliveryRequest.put("sendSmsToPickupPerson", binding.pickSendSms.isChecked)
+            deliveryRequest.put("IsNoContactPickup", binding.isNoContactPickup.isChecked)
+            deliveryRequest.put("IsNoContactDrop", binding.noContactDrop.isChecked)
+            deliveryRequest.put("RequestedDropDateTimeWindowEnd", getCurrentDateAndTimeInEta())
+            deliveryRequest.put("RequestedDropDateTimeWindowStart", getCurrentDateAndTimeInEta())
+            deliveryRequest.put("RequestedPickupDateTimeWindowEnd", getCurrentDateAndTimeInEta())
+            deliveryRequest.put("RequestedPickupDateTimeWindowStart", getCurrentDateAndTimeInEta())
+            deliveryRequest.put("isLaptopOrMobile", isLaptopOrMobile)
 
 
 
 
-            if(binding.authorityTo.text.toString() == "Other"){
+            if (binding.authorityTo.text.toString() == "Other") {
                 authorityToLeaveForm.put("NoContact", binding.noContactDrop.isChecked)
                 authorityToLeaveForm.put("LeaveAt", leaveAt.toString())
                 authorityToLeaveForm.put("Instructions", binding.other.text.toString())
                 jObjOfQuotesItem.put("_authorityToLeaveForm", authorityToLeaveForm)
 
-              }
-
-
-
+            }
 
             jObjOfQuotesItem.put("_deliveryRequestModel", deliveryRequest)
             jObjOfQuotesItem.put("_interstateModel", forInterstate)
-            jObjOfQuotesItem.put("_shipmentModel", JSONArray(Gson().toJson(getShipmentsList()).toString()))
-
-
+            jObjOfQuotesItem.put(
+                "_shipmentModel",
+                JSONArray(Gson().toJson(getShipmentsList()).toString())
+            )
 
 
         } catch (e: JSONException) {
@@ -904,11 +1081,13 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
         }
 
 
-
         /**for no contact pickup*/
-        if(binding.isNoContactPickup.isChecked) {
+        if (binding.isNoContactPickup.isChecked) {
             if (binding.pickInstruction.text.toString() == "") {
-                AppUtility.validateEditTextField(binding.pickInstruction, "Notes are required for the pickup location.")
+                AppUtility.validateEditTextField(
+                    binding.pickInstruction,
+                    "Notes are required for the pickup location."
+                )
                 bookDeliveryAlertCount++
                 addTextToAlertDialog(
                     "Notes are required for the pickup location when requesting a no contact delivery.",
@@ -918,10 +1097,13 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
         }
 
         /**for drop authority to leave*/
-        if(binding.authorityToLeave.isChecked) {
+        if (binding.authorityToLeave.isChecked) {
             if (binding.authorityTo.text.toString() == "Other") {
                 if (binding.other.text.toString() == "") {
-                    AppUtility.validateEditTextField(binding.other, "Please enter a safe place on where to leave your parcel.")
+                    AppUtility.validateEditTextField(
+                        binding.other,
+                        "Please enter a safe place on where to leave your parcel."
+                    )
                     bookDeliveryAlertCount++
                     addTextToAlertDialog(
                         "Please enter a safe place on where to leave your parcel.",

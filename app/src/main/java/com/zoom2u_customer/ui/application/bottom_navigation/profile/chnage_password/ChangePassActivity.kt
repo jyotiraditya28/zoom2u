@@ -29,6 +29,7 @@ open class ChangePassActivity : AppCompatActivity(), View.OnClickListener {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_chnage_pass)
 
         binding.changePassBtn.setOnClickListener(this)
+        binding.backIcon.setOnClickListener(this)
 
         viewModel = ViewModelProvider(this).get(ChangePassViewModel::class.java)
         val serviceApi: ServiceApi = com.zoom2u_customer.apiclient.ApiClient.getServices()
@@ -67,6 +68,9 @@ open class ChangePassActivity : AppCompatActivity(), View.OnClickListener {
                     )
                 }
 
+            }
+            R.id.back_icon->{
+                finish()
             }
 
         }

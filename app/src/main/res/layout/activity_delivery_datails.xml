@@ -815,6 +815,7 @@
                             android:layout_height="30dp"
                             android:id="@+id/no"
                             android:layout_marginTop="5dp"
+                            android:checked="true"
                             android:text="@string/no"
                             android:buttonTint="@color/base_color"
                             android:textColor="@color/black"/>
@@ -874,7 +875,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
-                            android:src="@drawable/in_progress_icon"
                             android:text="@string/date"
                             android:textColor="@color/black"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -982,7 +982,7 @@
 
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/parcel_bfore_cl"
+                    android:id="@+id/parcel_before_cl"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
@@ -996,8 +996,7 @@
                         style="@style/style_15_bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:text="@string/parcel_after"
+                        android:text="@string/deliver_before"
                         android:textColor="@color/black"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -1008,13 +1007,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:text="@string/parcel_after_txt"
+                        android:text="@string/parcel_drop_text"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/parcel_before" />
 
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/date_cl1"
+                        android:id="@+id/drop_date_cl"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
                         android:layout_marginTop="20dp"
@@ -1026,12 +1025,11 @@
                         app:layout_constraintTop_toBottomOf="@+id/parcel_before1">
 
                         <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/date_txt1"
+                            android:id="@+id/drop_date_txt"
                             style="@style/style_13_bold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
-                            android:src="@drawable/in_progress_icon"
                             android:text="@string/date"
                             android:textColor="@color/black"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -1045,7 +1043,7 @@
                             android:layout_margin="10dp"
                             android:background="@color/line_color"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/date_txt1"
+                            app:layout_constraintStart_toEndOf="@+id/drop_date_txt"
                             app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -1076,7 +1074,7 @@
 
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/time_cl1"
+                        android:id="@+id/drop_time_cl"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
                         android:layout_marginTop="10dp"
@@ -1087,10 +1085,10 @@
                         android:elevation="5dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/date_cl1">
+                        app:layout_constraintTop_toBottomOf="@+id/drop_date_cl">
 
                         <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/time_txt1"
+                            android:id="@+id/drop_time_txt"
                             style="@style/style_13_bold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -1107,7 +1105,7 @@
                             android:layout_margin="10dp"
                             android:background="@color/line_color"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/time_txt1"
+                            app:layout_constraintStart_toEndOf="@+id/drop_time_txt"
                             app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -1146,7 +1144,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/parcel_bfore_cl"
+                    app:layout_constraintTop_toBottomOf="@id/parcel_before_cl"
                     >
 
 
@@ -1287,7 +1285,6 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
                 android:background="@drawable/chip_background"
-                android:text="@string/next"
                 android:textAllCaps="false"
                 android:textColor="@color/white" />
 

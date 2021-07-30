@@ -81,13 +81,13 @@ class HistoryDetailsActivity : AppCompatActivity(), View.OnClickListener {
 
 
         val pickTimeReq =
-            AppUtility.getDateTimeFromDeviceToServerForDate(it.RequestedPickupDateTimeWindowStart)
+            AppUtility.getDateTimeFromDeviceToServerForDate(it.PickupDateTime)
         val pickUpReqSplit: Array<String>? = pickTimeReq?.split(" ")?.toTypedArray()
         binding.pickTimeReq.text =
             pickUpReqSplit?.get(1) + " " + pickUpReqSplit?.get(2) + " | " + pickUpReqSplit?.get(0)
 
         val dropTimeReq =
-            AppUtility.getDateTimeFromDeviceToServerForDate(it.RequestedDropDateTimeWindowStart)
+            AppUtility.getDateTimeFromDeviceToServerForDate(it.DropDateTime)
         val dropReqSplit: Array<String>? = dropTimeReq?.split(" ")?.toTypedArray()
         binding.dropTimeReq.text =
             dropReqSplit?.get(1) + " " + dropReqSplit?.get(2) + " | " + dropReqSplit?.get(0)
@@ -142,6 +142,7 @@ class HistoryDetailsActivity : AppCompatActivity(), View.OnClickListener {
         binding.pickSignature.setOnClickListener(this)
         binding.dropSignature.setOnClickListener(this)
         binding.dropImage.setOnClickListener(this)
+        binding.backIcon.setOnClickListener(this)
     }
 
     private fun setStatus(status: String?) {
@@ -203,6 +204,9 @@ class HistoryDetailsActivity : AppCompatActivity(), View.OnClickListener {
                 else
                     Toast.makeText(this, "No dropoff image found.", Toast.LENGTH_LONG).show()
 
+            }
+            R.id.back_icon ->{
+                finish()
             }
         }
     }

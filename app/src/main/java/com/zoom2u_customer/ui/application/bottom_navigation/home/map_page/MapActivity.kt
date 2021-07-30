@@ -34,7 +34,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, View.OnClickListene
     private lateinit var adapter: ItemMapDocCountAdapter
     private lateinit var dataList: ArrayList<Icon>
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-
+    var isQuotesRequest:Boolean?=false
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
     }
@@ -47,7 +47,6 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, View.OnClickListene
         dataList = intent.getParcelableArrayListExtra<Icon>("icon_data") as ArrayList<Icon>
 
         setAdapterView()
-
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
@@ -129,6 +128,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, View.OnClickListene
                 } else {
                     val intent = Intent(this, DeliveryDetailsActivity::class.java)
                     intent.putParcelableArrayListExtra("IconList", dataList)
+                    intent.putExtra("isQuotesRequest",isQuotesRequest)
                     intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -153,8 +153,10 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, View.OnClickListene
         }
     }
     private fun onItemClick() {
+        isQuotesRequest = true
         val intent = Intent(this, DeliveryDetailsActivity::class.java)
         intent.putParcelableArrayListExtra("IconList", dataList)
+        intent.putExtra("isQuotesRequest",isQuotesRequest)
         intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -176,7 +178,9 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, View.OnClickListene
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode === 1) {
             val icon: Icon? = data?.getParcelableExtra<Icon>("Icon")
+            isQuotesRequest= data?.getBooleanExtra("isQuotesRequest",false)
             adapter.updateItem(icon)
+
         }
     }
 

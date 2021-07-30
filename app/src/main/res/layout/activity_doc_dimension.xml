@@ -300,7 +300,7 @@
 
                                 />
 
-                            <com.google.android.material.textfield.TextInputEditText
+                            <com.google.android.material.textview.MaterialTextView
                                 android:id="@+id/cm"
                                 style="@style/style_13_bold"
                                 android:layout_width="30dp"
@@ -479,7 +479,7 @@
             android:layout_height="70dp"
             android:layout_alignParentBottom="true"
             android:background="@color/white"
-            android:elevation="5dp"
+            android:elevation="70dp"
             android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             tools:layout_editor_absoluteX="-36dp">

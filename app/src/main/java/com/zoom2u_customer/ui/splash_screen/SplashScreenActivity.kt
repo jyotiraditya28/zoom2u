@@ -3,6 +3,7 @@ package com.zoom2u_customer.ui.splash_screen
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.text.TextUtils
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
@@ -21,7 +22,7 @@ class SplashScreenActivity : AppCompatActivity() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
 
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             if (AppPreference.getSharedPrefInstance().getLoginResponse()!=null) {
                 if (TextUtils.isEmpty(AppPreference.getSharedPrefInstance().getLoginResponse()?.access_token)) {
                     val intent = Intent(this@SplashScreenActivity, LogInSignupMainActivity::class.java)
@@ -42,7 +43,7 @@ class SplashScreenActivity : AppCompatActivity() {
 
 
     }
- fun LoginSuccessFully() {
+ private fun LoginSuccessFully() {
      startActivity(Intent(this@SplashScreenActivity , BasePageActivity:: class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
      finish()
     }

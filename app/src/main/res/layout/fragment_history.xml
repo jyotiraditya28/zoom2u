@@ -30,7 +30,7 @@
           />
 
 
-            <com.google.android.material.imageview.ShapeableImageView
+           <!-- <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/chat_btn"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
@@ -39,6 +39,11 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 />
+-->
+
+
+            <!--linear layout for displaying
+                our recycler view-->
 
 
           <com.google.android.material.textview.MaterialTextView
@@ -54,17 +59,22 @@
               app:layout_constraintStart_toStartOf="parent"
               app:layout_constraintEnd_toEndOf="parent"/>
 
-
+                <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/swipe_refresh"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@+id/header_txt">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/delivery_history_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:listitem="@layout/item_delivery_history"
-                android:layout_marginTop="15dp"
                 android:scrollbars="vertical"
-                app:layout_constraintTop_toBottomOf="@+id/header_txt"
                 />
+
+                </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

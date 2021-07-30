@@ -17,13 +17,13 @@ import retrofit2.Response
 
 class HistoryRepository(private var serviceApi: ServiceApi, var context: Context?) {
 
-    fun getHistoryList(disposable: CompositeDisposable = CompositeDisposable(),
+    fun getHistoryList(page:Int,disposable: CompositeDisposable = CompositeDisposable(),
                        onSuccess: (history:List<HistoryResponse>) -> Unit) {
         if (AppUtility.isInternetConnected()) {
          // AppUtility.progressBarShow(context)
             disposable.add(
                 serviceApi.getWithJsonObject(
-                    "breeze/customer/DeliveriesForCustomer?currentPage=1&searchText=",
+                    "breeze/customer/DeliveriesForCustomer?currentPage=$page&searchText=",
                     AppUtility.getApiHeaders()
                 ).subscribeOn(
                     Schedulers.io()
@@ -33,7 +33,7 @@ class HistoryRepository(private var serviceApi: ServiceApi, var context: Context
                         override fun onSuccess(responce: Response<JsonObject>) {
                             if (responce.body() != null) {
                                 val convert =
-                                    Gson().toJson(responce.body()?.get("data")?.getAsJsonArray())
+                                    Gson().toJson(responce.body()?.get("data")?.asJsonArray)
                                 val listType = object : TypeToken<List<HistoryResponse?>?>() {}.type
                                 val list: List<HistoryResponse> =
                                     Gson().fromJson(convert, listType)

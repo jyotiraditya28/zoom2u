@@ -117,7 +117,7 @@
     <string name="drop_check2">Authority to Leave (ATL)</string>
     <string name="drop_check2_desc">(please provide a phone number above and provide notes regarding the location of the package)</string>
     <string name="commercial">Commercial</string>
-    <string name="parcel_after">Parcel available after</string>
+    <string name="parcel_after">Shipment available after</string>
     <string name="parcel_after_txt">(your parcel will be picked up and deliver within the requested window.it may not be at this exact time)</string>
     <string name="date">Date</string>
     <string name="time">Time</string>
@@ -152,7 +152,7 @@
     <string name="pricing_payment">Pricing and Payment</string>
     <string name="delivery_feature">Show Delivery Features</string>
     <string name="quotes_valid">Your quotes are valid for </string>
-    <string name="expired_quote">our quotes have expired. Please click</string>
+    <string name="expired_quote">Your quotes have expired. Please click here to generate new quotes.</string>
     <string name="proceed_to_payment">Proceed to payment</string>
 
     <!--Booking Confirmation-->
@@ -212,7 +212,7 @@
     <string name="password_error">Please enter a password.</string>
     <string name="error_invalid_password">Please enter a minimum password of 6 characters.</string>
     <string name="reset_pass">Reset your Password</string>
-    <string name="reset_pass_txt">Enter your Email and we\'ll send you a link to rest your password.</string>
+    <string name="reset_pass_txt">Enter your Email and we\'ll send you a link to reset your password.</string>
     <string name="enter_email">Enter your Email</string>
     <string name="reset_pass1">Reset Password</string>
 
@@ -255,6 +255,18 @@
     <string name="package_signature"><![CDATA[Package Image & Signature]]></string>
     <string name="track_your_booking">Track your booking</string>
     <string name="quote_request">Quote Request</string>
+    <string name="describe_shipment">Describe Shipment</string>
+    <string name="describe_in_as_much_detail_as_possible_the_item_s_you_need_delivered">Describe in as much detail as possible the item(s) you need delivered</string>
+    <string name="image_of_freight_png_jpg_or_pdf">Image of Freight (.png, .jpg or .pdf)</string>
+    <string name="click_hear_upload_photos">Click hear to upload photos</string>
+    <string name="submit_quote_req">Submit quote request</string>
+    <string name="the_appropriate_label_has_been_attached_label_for_laptops_and_mobile_phones_can_be_downloaded_here">The appropriate label has been attached (Label for laptops and mobile phones can be downloaded here).</string>
+    <string name="packaging">Packaging</string>
+    <string name="packing_term1">Item will be in original packaging.</string>
+    <string name="item_will_be_packaged_not_in_original_packaging">Item will be packaged (Not in original packaging)</string>
+    <string name="packing_term2">Item will not be packaged. (Please note: This option will void any damage cover for this delivery. Items sent without packaging are at the customers own risk.)</string>
+    <string name="deliver_before">Deliver before</string>
+    <string name="parcel_drop_text">(your parcel will be droped off and deliver within the requested window.it may not be at this exact time)</string>
 
 
 </resources>

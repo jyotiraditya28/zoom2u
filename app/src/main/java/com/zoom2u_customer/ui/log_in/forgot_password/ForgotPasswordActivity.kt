@@ -59,6 +59,9 @@ class ForgotPasswordActivity : AppCompatActivity(), View.OnClickListener {
                     viewModel.reSetPass(binding.email.text.toString())
                 }
             }
+            R.id.back_icon ->{
+                finish()
+            }
         }
     }
 

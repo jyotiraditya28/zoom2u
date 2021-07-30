@@ -2,6 +2,7 @@ package com.zoom2u_customer.ui.application.bottom_navigation.history
 
 import android.content.Context
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,13 +10,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.zoom2u_customer.databinding.ItemDeliveryHistoryBinding
 import java.util.*
 
-class HistoryItemAdapter(val context: Context, private var dataList: List<HistoryResponse>, private val onItemClick:(HistoryResponse) -> Unit) :
+class HistoryItemAdapter(val context: Context, private val onItemClick:(HistoryResponse) -> Unit,private val onApiCall:() ->Unit) :
     RecyclerView.Adapter<HistoryItemAdapter.BindingViewHolder>() {
-    private var ongoingList:MutableList<HistoryResponse> = ArrayList()
+    private var dataList:MutableList<HistoryResponse> = ArrayList()
     private var pastList:MutableList<HistoryResponse> = ArrayList()
+    var lastApiCallPosition:Int=-1
+
 
     fun updateRecords(dataList: List<HistoryResponse>) {
-        this.dataList = dataList
+        this.dataList.addAll(dataList)
         notifyDataSetChanged()
     }
     override fun getItemCount(): Int {
@@ -45,6 +48,15 @@ class HistoryItemAdapter(val context: Context, private var dataList: List<Histor
         setStatus(dataList[position].Status,holder)
 
 
+
+
+
+        if(position==dataList.size-1) {
+            if(lastApiCallPosition!=position){
+                lastApiCallPosition=position
+                onApiCall()
+            }
+        }
 
       /*  val createdDateTime = AppUtility.getDateTime(dataList[position].DropDateTime)
         if (System.currentTimeMillis() < createdDateTime.time) {

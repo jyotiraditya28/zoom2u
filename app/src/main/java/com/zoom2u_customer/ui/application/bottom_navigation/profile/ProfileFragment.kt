@@ -1,6 +1,7 @@
 package com.zoom2u_customer.ui.application.bottom_navigation.profile
 
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
@@ -31,7 +32,7 @@ class ProfileFragment : Fragment(), View.OnClickListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         binding = FragmentProfileBinding.inflate(inflater, container, false)
         //binding.changePrice.setOnClickListener(this)
@@ -56,6 +57,7 @@ class ProfileFragment : Fragment(), View.OnClickListener {
         return binding.root
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setDataToView(profileResponse: ProfileResponse?) {
         this.profileResponse = profileResponse
         binding.email.text = profileResponse?.Email

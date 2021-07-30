@@ -32,12 +32,6 @@ class DialogActivity {
             alertDialog.show()
             alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-            val lp = WindowManager.LayoutParams()
-
-            lp.copyFrom(alertDialog.window!!.attributes)
-            lp.width = 600
-            alertDialog.window?.attributes = lp
-
             val titleAlert: TextView = dialogView.findViewById(R.id.titleDialog)
             titleAlert.text = alertTitle
 
@@ -72,12 +66,7 @@ class DialogActivity {
 
             val alertDialog = builder.create()
             alertDialog.show()
-            val lp = WindowManager.LayoutParams()
-
             alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            lp.copyFrom(alertDialog.window!!.attributes)
-            lp.width = 650
-            alertDialog.window?.attributes = lp
 
             val titleAlert: TextView = dialogView.findViewById(R.id.dialogLogoutTitleText)
             titleAlert.text = alertTitle
@@ -99,7 +88,10 @@ class DialogActivity {
                 onOkClick()
                 alertDialog.dismiss()
             }
-
+            val crossBtn: ImageView = dialogView.findViewById(R.id.dialogDoneBtn)
+            crossBtn.setOnClickListener {
+                alertDialog.dismiss()
+            }
         }
 
         fun alertDialogOkCallback(context: Context?, alertTitle: String, alertMsg: String,onItemClick: () -> Unit) {
@@ -115,12 +107,7 @@ class DialogActivity {
 
             val alertDialog = builder.create()
             alertDialog.show()
-            val lp = WindowManager.LayoutParams()
-
             alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            lp.copyFrom(alertDialog.window!!.attributes)
-            lp.width = 650
-            alertDialog.window?.attributes = lp
 
             val titleAlert: TextView = dialogView.findViewById(R.id.titleDialog)
             titleAlert.text = alertTitle

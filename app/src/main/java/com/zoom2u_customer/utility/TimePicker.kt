@@ -10,34 +10,122 @@ import android.view.Window
 import android.widget.Button
 import com.aigestudio.wheelpicker.WheelPicker
 import com.zoom2u_customer.R
-import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.collections.ArrayList
 
-class TimePicker() : WheelPicker.OnItemSelectedListener {
+class TimePicker : WheelPicker.OnItemSelectedListener {
     private lateinit var mContext: Context
     private var isSelectTimeWindow = 0
     private var dialogTimePicker: Dialog? = null
     private lateinit var wheelHr: WheelPicker
-    private lateinit var wheelMin: WheelPicker
-    private lateinit var wheelAmPm: WheelPicker
     private var selectedHr: String? = null
-    private var selectedMin: String? = null
-    private var selectedAmPm: String? = null
-    private val hrArray =
-        arrayOf("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12")
-    private val minArray= arrayOf("00","15","30","45")
-    private val amPmArray = arrayOf("AM", "PM")
-
+    private val pickTimeArray =
+        arrayOf(
+            "8:00 AM",
+            "8:15 AM",
+            "8:30 AM",
+            "8:45 AM",
+            "9:00 AM",
+            "9:15 AM",
+            "9:30 AM",
+            "9:45 AM",
+            "10:00 AM",
+            "10:15 AM",
+            "10:30 AM",
+            "10:45 AM",
+            "11:00 AM",
+            "11:15 AM",
+            "11:30 AM",
+            "11:45 AM",
+            "12:00 PM",
+            "12:15 PM",
+            "12:30 PM",
+            "12:45 PM",
+            "1:00 PM",
+            "1:15 PM",
+            "1:30 PM",
+            "1:45 PM",
+            "2:00 PM",
+            "2:15 PM",
+            "2:30 PM",
+            "2:45 PM",
+            "3:00 PM",
+            "3:15 PM",
+            "3:30 PM",
+            "3:45 PM",
+            "4:00 PM",
+            "4:15 PM",
+            "4:30 PM",
+            "4:45 PM",
+            "5:00 PM",
+            "5:15 PM",
+            "5:30 PM",
+            "5:45 PM",
+            "6:00 PM"
+        )
+    private val dropTimeArray =
+        arrayOf(
+            "8:00 AM",
+            "8:15 AM",
+            "8:30 AM",
+            "8:45 AM",
+            "9:00 AM",
+            "9:15 AM",
+            "9:30 AM",
+            "9:45 AM",
+            "10:00 AM",
+            "10:15 AM",
+            "10:30 AM",
+            "10:45 AM",
+            "11:00 AM",
+            "11:15 AM",
+            "11:30 AM",
+            "11:45 AM",
+            "12:00 PM",
+            "12:15 PM",
+            "12:30 PM",
+            "12:45 PM",
+            "1:00 PM",
+            "1:15 PM",
+            "1:30 PM",
+            "1:45 PM",
+            "2:00 PM",
+            "2:15 PM",
+            "2:30 PM",
+            "2:45 PM",
+            "3:00 PM",
+            "3:15 PM",
+            "3:30 PM",
+            "3:45 PM",
+            "4:00 PM",
+            "4:15 PM",
+            "4:30 PM",
+            "4:45 PM",
+            "5:00 PM",
+            "5:15 PM",
+            "5:30 PM",
+            "5:45 PM",
+            "6:00 PM",
+            "7:00 PM",
+            "7:15 PM",
+            "7:30 PM",
+            "7:45 PM",
+            "8:00 PM",
+            "8:15 PM",
+            "8:30 PM",
+            "8:45 PM",
+            "9:00 PM",
+            "9:15 PM",
+            "9:30 PM",
+            "9:45 PM",
+            "10:00 PM"
+        )
+    private var isForDropTime: Boolean = false
     fun timePickerDialog(
         context: Context,
-        time: String,
-        onItemClick: (hr: String?,min: String?,am_pm: String?) -> Unit
+        isForDrop: Boolean,
+        selectedTimeWindowItem: String,
+        onItemClick: (hr: String?) -> Unit
     ) {
-        selectedHr=time.split(":")[0]
-        selectedMin=time.split(":")[1].split(" ")[0]
-        selectedAmPm=time.split(":")[1].split(" ")[1]
-
+        this.isForDropTime = isForDrop
         mContext = context
         isSelectTimeWindow = 0
 
@@ -60,29 +148,22 @@ class TimePicker() : WheelPicker.OnItemSelectedListener {
 
         val done = dialogTimePicker!!.findViewById(R.id.btn_Done_TimeSelect) as Button
         val cancel = dialogTimePicker!!.findViewById(R.id.btn_Cancel_TimeSelect) as Button
-        wheelHr = dialogTimePicker!!.findViewById(R.id.hr_picker) as WheelPicker
-        wheelMin = dialogTimePicker!!.findViewById(R.id.min_picker) as WheelPicker
-        wheelAmPm = dialogTimePicker!!.findViewById(R.id.am_pm_picker) as WheelPicker
+        wheelHr = dialogTimePicker!!.findViewById(R.id.wheel_TimeSelect) as WheelPicker
+
 
         wheelHr.setOnItemSelectedListener(this)
-        wheelMin.setOnItemSelectedListener(this)
-        wheelAmPm.setOnItemSelectedListener(this)
+        if (isForDrop)
+            wheelHr.data = dropTimeArray.toMutableList()
+        else
+            wheelHr.data = pickTimeArray.toMutableList()
+        timeSelection(selectedTimeWindowItem)
 
-        wheelHr.data = hrArray.toMutableList()
-        wheelHr.selectedItemPosition = hrArray.indexOf(selectedHr)
-        //wheelHr.selectedItemTextColor = mContext.resources.getColor(R.color.color_cyan)
-
-        wheelMin.data = minArray.toMutableList()
-        wheelHr.selectedItemPosition = hrArray.indexOf(selectedMin)
-
-        wheelAmPm.data = amPmArray.toMutableList()
-        wheelHr.selectedItemPosition = hrArray.indexOf(selectedAmPm)
 
 
 
 
         done.setOnClickListener {
-            onItemClick(selectedHr,selectedMin,selectedAmPm)
+            onItemClick(selectedHr)
             dialogTimePicker!!.dismiss()
         }
 
@@ -93,21 +174,24 @@ class TimePicker() : WheelPicker.OnItemSelectedListener {
         dialogTimePicker!!.show()
     }
 
+    private fun timeSelection(selectedTimeWindowItem: String) {
+        if (isForDropTime)
+            wheelHr.selectedItemPosition = dropTimeArray.indexOf(selectedTimeWindowItem)
+        else
+            wheelHr.selectedItemPosition = pickTimeArray.indexOf(selectedTimeWindowItem)
+        wheelHr.selectedItemTextColor = mContext.resources.getColor(R.color.color_cyan)
+    }
 
     override fun onItemSelected(picker: WheelPicker?, data: Any?, position: Int) {
         when (picker) {
             wheelHr -> {
                 wheelHr.selectedItemTextColor = mContext.resources.getColor(R.color.color_cyan)
-                selectedHr = hrArray[position]
+                selectedHr = if (isForDropTime)
+                    dropTimeArray[position]
+                else
+                    pickTimeArray[position]
             }
-            wheelMin -> {
-                wheelMin.selectedItemTextColor = mContext.resources.getColor(R.color.color_cyan)
-                selectedMin = minArray[position]
-            }
-            wheelAmPm -> {
-                wheelAmPm.selectedItemTextColor = mContext.resources.getColor(R.color.color_cyan)
-                selectedAmPm = amPmArray[position]
-            }
+
         }
 
 

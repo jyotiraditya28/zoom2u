@@ -12,6 +12,7 @@
 
 
         <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/back_icon"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_margin="10dp"
@@ -33,14 +34,14 @@
             app:layout_constraintTop_toTopOf="parent" />
 
 
-        <com.google.android.material.imageview.ShapeableImageView
+       <!-- <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/chat_btn"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_margin="10dp"
             android:src="@drawable/ic_chat_grey"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent" />-->
 
 
         <fragment

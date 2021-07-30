@@ -38,9 +38,10 @@ class BookingConfirmationRepository(private var serviceApi: ServiceApi, var cont
                                 onSuccess(Gson().toJson(responce.body()))
                             else if (responce.errorBody() != null) {
                                 AppUtility.progressBarDissMiss()
+                                //TODO
                                 Toast.makeText(
                                     context,
-                                    "something went wrong please try again.",
+                                    "Error Code:${responce.code()} something went wrong please try again.",
                                     Toast.LENGTH_LONG
                                 ).show()
                             }
@@ -51,7 +52,7 @@ class BookingConfirmationRepository(private var serviceApi: ServiceApi, var cont
                             AppUtility.progressBarDissMiss()
                             Toast.makeText(
                                 context,
-                                "something went wrong please try again.",
+                                "Error Code:${e.message} something went wrong please try again.",
                                 Toast.LENGTH_LONG
                             ).show()
                         }

@@ -3,6 +3,8 @@ package com.zoom2u_customer.ui.application.bottom_navigation.home.booking_confir
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -18,10 +20,12 @@ import com.zoom2u_customer.apiclient.ServiceApi
 import com.zoom2u_customer.databinding.ActivityBookingConfirmationBinding
 import com.zoom2u_customer.getBrainTree.GetBrainTreeClientTokenOrBookDeliveryRequest
 import com.zoom2u_customer.ui.application.bottom_navigation.home.booking_confirmation.interstate_booking.InterStateFirstScreen
+
 import com.zoom2u_customer.ui.application.bottom_navigation.home.booking_confirmation.order_confirm_hold.OnHoldActivity
 import com.zoom2u_customer.ui.application.bottom_navigation.home.booking_confirmation.order_confirm_hold.OrderConfirmActivity
 import com.zoom2u_customer.ui.application.bottom_navigation.home.home_fragment.Icon
 import com.zoom2u_customer.utility.AppUtility
+
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
@@ -137,6 +141,7 @@ class BookingConfirmationActivity : AppCompatActivity(), View.OnClickListener {
 
 
     private fun callServiceForBookingRequest() {
+       AppUtility.progressBarShow(this)
         try {
             if (bookingDeliveryResponce!!.getJSONObject("_deliveryRequestModel")
                     .has("ETA")

@@ -16,7 +16,7 @@
         <ImageView
             android:id="@+id/icon"
             android:layout_width="150dp"
-            android:layout_height="80dp"
+            android:layout_height="70dp"
             android:layout_marginTop="50dp"
             android:src="@drawable/zoom2u_black_blue"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -30,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
+            android:textColor="@color/gun_metal"
             android:paddingStart="30dp"
             android:paddingEnd="30dp"
             android:maxLines="2"

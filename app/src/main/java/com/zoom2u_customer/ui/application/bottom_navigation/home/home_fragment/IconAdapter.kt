@@ -33,6 +33,7 @@ class IconAdapter(private val context: Context, private var dataList: MutableLis
 
 
     override fun onBindViewHolder(holder: BindingViewHolder, position: Int) {
+
         val icon: Icon = dataList[position]
         holder.itemBinding.icon = icon
         if(icon.quantity==0)

@@ -141,6 +141,8 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
                 if (it.isNotEmpty()) {
                     AppUtility.progressBarDissMiss()
                     val getAddress: HashMap<String, Any>? = it
+
+                   /**for edit case*/
                     if (it["isTrue"] == "true") {
 
 
@@ -169,7 +171,7 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
 
 
                     } else {
-
+/**for add ca*/
                         lattitude = getAddress?.get("latitude") as Double
 
                         longitude = getAddress["longitude"] as Double

@@ -138,7 +138,6 @@ class EditProfileActivity : AppCompatActivity(), View.OnClickListener {
                 val contentURI = data.data
                 try {
                     val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, contentURI)
-                    saveImage(bitmap)
                     binding.dp.setImageBitmap(bitmap)
 
                 } catch (e: IOException) {

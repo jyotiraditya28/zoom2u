@@ -1,21 +1,15 @@
 package com.zoom2u_customer.ui.application.bottom_navigation.base_page
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.annotation.IdRes
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.viewpager.widget.ViewPager
-
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.gson.Gson
 import com.zoom2u_customer.R
-import com.zoom2u_customer.ui.splash_screen.LogInSignupMainActivity
-import com.zoom2u_customer.ui.log_in.LoginResponce
 import com.zoom2u_customer.databinding.ActivityBasepageBinding
-import com.zoom2u_customer.utility.AppPreference
-import com.zoom2u_customer.utility.DialogActivity
 
 class BasePageActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItemSelectedListener {
     lateinit var binding: ActivityBasepageBinding
@@ -42,8 +36,8 @@ class BasePageActivity : AppCompatActivity(),  BottomNavigationView.OnNavigation
 
         binding.navigation.setOnNavigationItemSelectedListener(this)
         binding.navigation.itemIconTintList = null;
-       binding.viewPager.adapter = mainPagerAdapter
-       binding.viewPager.addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
+        binding.viewPager.adapter = mainPagerAdapter
+        binding.viewPager.addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
             override fun onPageSelected(position: Int) {
                 val selectedScreen = mainPagerAdapter.getItems()[position]
                 selectBottomNavigationViewMenuItem(selectedScreen.menuItemId)
@@ -73,7 +67,12 @@ class BasePageActivity : AppCompatActivity(),  BottomNavigationView.OnNavigation
         return false
     }
     override fun onBackPressed() {
-        finish()
+        minimizeApp()
     }
-
+    fun minimizeApp() {
+        val startMain = Intent(Intent.ACTION_MAIN)
+        startMain.addCategory(Intent.CATEGORY_HOME)
+        startMain.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(startMain)
+    }
 }

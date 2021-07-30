@@ -3,14 +3,22 @@ package com.zoom2u_customer.ui.application.bottom_navigation.home.pricing_paymen
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.TextPaint
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.TextView
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -106,8 +114,29 @@ class PricingPaymentActivity : AppCompatActivity(), View.OnClickListener {
 
 
         binding.nextBtn.setOnClickListener(this)
-        binding.startTimer.setOnClickListener(this)
         binding.backBtn.setOnClickListener(this)
+
+
+        val text =  getString(R.string.expired_quote)
+        val spannableString = SpannableString(text)
+        val clickableSpan: ClickableSpan = object : ClickableSpan() {
+            @RequiresApi(Build.VERSION_CODES.Q)
+            override fun updateDrawState(ds: TextPaint) {
+                super.updateDrawState(ds)
+                ds.color=resources.getColor(R.color.base_color)
+                ds.underlineColor=resources.getColor(R.color.base_color)
+                ds.isUnderlineText = true
+            }
+
+            override fun onClick(p0: View) {
+                callApiForInterOrIntraState()
+                priceSelected = true
+                binding.quotesExpiered.visibility = View.GONE
+            }
+        }
+        spannableString.setSpan(clickableSpan, 39, 43, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        binding.quotesExpiered.setText(spannableString, TextView.BufferType.SPANNABLE)
+        binding.quotesExpiered.movementMethod = LinkMovementMethod.getInstance()
     }
 
     private fun callApiForInterOrIntraState() {
@@ -154,8 +183,7 @@ class PricingPaymentActivity : AppCompatActivity(), View.OnClickListener {
                 val min = millisUntilFinished / 60000 % 60
                 val sec = millisUntilFinished / 1000 % 60
                 binding.timer.text = f.format(min) + ":" + f.format(sec)
-                binding.expiredQuote.visibility = View.GONE
-                binding.expiredQuote1.visibility = View.GONE
+                binding.quotesExpiered.visibility = View.GONE
                 if (millisUntilFinished < 60000) {
                     binding.timer.setTextColor(Color.RED)
                 }
@@ -166,8 +194,7 @@ class PricingPaymentActivity : AppCompatActivity(), View.OnClickListener {
                 binding.timer.setTextColor(Color.BLACK)
                 binding.timer.text = "3:00"
                 priceSelected = false
-                binding.expiredQuote.visibility = View.VISIBLE
-                binding.expiredQuote1.visibility = View.VISIBLE
+                binding.quotesExpiered.visibility = View.VISIBLE
                 adapter?.updateRecords(Collections.emptyList())
             }
         }.start()
@@ -192,12 +219,6 @@ class PricingPaymentActivity : AppCompatActivity(), View.OnClickListener {
                 } else {
                     DialogActivity.alertDialogSingleButton(this, "Oops!", "Please select a price.")
                 }
-            }
-            R.id.start_timer -> {
-                callApiForInterOrIntraState()
-                priceSelected = true
-                binding.expiredQuote.visibility = View.GONE
-                binding.expiredQuote1.visibility = View.GONE
             }
             R.id.back_btn -> {
                 finish()

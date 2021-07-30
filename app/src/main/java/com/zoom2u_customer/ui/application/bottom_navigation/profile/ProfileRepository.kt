@@ -1,6 +1,7 @@
 package com.zoom2u_customer.ui.application.bottom_navigation.profile
 
 import android.content.Context
+import android.widget.Toast
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.reflect.TypeToken
@@ -38,14 +39,24 @@ class ProfileRepository(private var serviceApi: ServiceApi, var context: Context
                                 //AppPreference.getSharedPrefInstance().setLoginResponse(Gson().toJson(list[0]))
 
                             }
+                            else if (responce.errorBody() != null) {
+                                AppUtility.progressBarDissMiss()
+                                //TODO
+                                Toast.makeText(
+                                    context,
+                                    "Error Code:${responce.code()} something went wrong please try again.",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
                         }
 
                         override fun onError(e: Throwable) {
-                            DialogActivity.alertDialogSingleButton(
+                            AppUtility.progressBarDissMiss()
+                            Toast.makeText(
                                 context,
-                                "No Network !",
-                                "No network connection, Please try again later."
-                            )
+                                "something went wrong please try again.",
+                                Toast.LENGTH_LONG
+                            ).show()
                         }
                     })
             )

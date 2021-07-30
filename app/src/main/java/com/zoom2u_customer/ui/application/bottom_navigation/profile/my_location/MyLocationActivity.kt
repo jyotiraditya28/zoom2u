@@ -25,7 +25,7 @@ class MyLocationActivity : AppCompatActivity() , View.OnClickListener {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_my_location)
 
-        setAdpterView()
+        setAdapterView()
 
         viewModel = ViewModelProvider(this).get(MyLocationViewModel::class.java)
 
@@ -35,7 +35,7 @@ class MyLocationActivity : AppCompatActivity() , View.OnClickListener {
         viewModel.getMyLocation()
 
         binding.addNewCard.setOnClickListener(this)
-
+        binding.backIcon.setOnClickListener(this)
 
         viewModel.getMySuccess()?.observe(this) {
 
@@ -53,7 +53,7 @@ class MyLocationActivity : AppCompatActivity() , View.OnClickListener {
 
     }
 
-    private fun setAdpterView() {
+    private fun setAdapterView() {
         val layoutManager = GridLayoutManager(this, 1)
         binding.myLocationView.layoutManager = layoutManager
         adapter = MyLocationAdapter(this, Collections.emptyList(), onItemClick = ::onItemClick)
@@ -77,6 +77,9 @@ class MyLocationActivity : AppCompatActivity() , View.OnClickListener {
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
                 startActivityForResult(intent,4)
 
+            }
+            R.id.back_icon -> {
+               finish()
             }
         }
     }

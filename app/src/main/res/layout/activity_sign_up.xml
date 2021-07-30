@@ -32,8 +32,8 @@
             android:text="@string/create_acc"
             android:textAlignment="center"
             android:textColor="#42B4E5"
-            android:fontFamily="@font/montserrat_black"
-            android:textSize="20dp"
+            android:fontFamily="@font/montserrat_bold"
+            android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/zoom2u_header" />
@@ -158,6 +158,7 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/phone"
+                        android:inputType="number"
                         style="@style/login_signup_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />

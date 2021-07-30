@@ -3,26 +3,28 @@ package com.zoom2u_customer.ui.application.bottom_navigation.history
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.zoom2u_customer.apiclient.ApiClient.Companion.getServices
 import com.zoom2u_customer.apiclient.ServiceApi
-import com.zoom2u_customer.ui.application.bottom_navigation.history.history_details.HistoryDetailsActivity
 import com.zoom2u_customer.databinding.FragmentHistoryBinding
+import com.zoom2u_customer.ui.application.bottom_navigation.history.history_details.HistoryDetailsActivity
 import com.zoom2u_customer.utility.AppUtility
-
 import java.util.*
 
-class HistoryFragment : Fragment() {
 
+class HistoryFragment : Fragment() {
+    private var page: Int? = null
     lateinit var viewModel: HistoryViewModel
     private var repository: HistoryRepository? = null
     lateinit var binding: FragmentHistoryBinding
     private var adapter: HistoryItemAdapter? = null
+    private var currentPage:Int=1
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,14 +41,15 @@ class HistoryFragment : Fragment() {
         val serviceApi: ServiceApi = getServices()
         repository = HistoryRepository(serviceApi, container?.context)
         viewModel.repository = repository
-        viewModel.getHistory()
+        viewModel.getHistory(currentPage)
 
 
         viewModel.getHistoryList()?.observe(viewLifecycleOwner) {
             if (it != null) {
                 AppUtility.progressBarDissMiss()
+                binding.swipeRefresh.isRefreshing = false
                 if (it.isNotEmpty()) {
-
+                     AppUtility.progressBarDissMiss()
                     adapter?.updateRecords(it)
                     binding.noHistoryText.visibility = View.GONE
                 } else
@@ -55,6 +58,16 @@ class HistoryFragment : Fragment() {
             }
 
         }
+
+
+
+
+        binding.swipeRefresh.setOnRefreshListener(OnRefreshListener {
+            viewModel.getHistory(1)
+        })
+
+
+
         return binding.root
 
     }
@@ -62,9 +75,19 @@ class HistoryFragment : Fragment() {
     fun setAdapterView(binding: FragmentHistoryBinding, context: Context) {
         val layoutManager = GridLayoutManager(activity, 1)
         binding.deliveryHistoryRecycler.layoutManager = layoutManager
-        adapter = HistoryItemAdapter(context, Collections.emptyList(), onItemClick = ::onItemClick)
+        adapter = HistoryItemAdapter(
+            context,
+            onItemClick = ::onItemClick,
+            onApiCall = ::onApiCall
+        )
         binding.deliveryHistoryRecycler.adapter = adapter
 
+    }
+
+    private fun onApiCall() {
+        currentPage++
+        AppUtility.progressBarShow(activity)
+        viewModel.getHistory(currentPage)
     }
 
     private fun onItemClick(historyResponse: HistoryResponse) {
@@ -74,3 +97,4 @@ class HistoryFragment : Fragment() {
         startActivity(intent)
     }
 }
+
