@@ -1,6 +1,8 @@
 package com.zoom2u_customer.ui.DataBindingAdapter
 
 import android.graphics.BitmapFactory
+import android.os.SystemClock
+import android.view.View
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import java.io.IOException
@@ -23,3 +25,8 @@ fun setImageFromAssets(view: ImageView, fileName: String) {
 fun setImageFromAssets(view: ImageView, image: Int) {
     view.setImageResource(image)
 }
+
+
+
+
+

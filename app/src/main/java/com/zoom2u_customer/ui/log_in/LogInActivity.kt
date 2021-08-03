@@ -6,6 +6,7 @@ import android.text.TextUtils
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.zoom2u_customer.R
 import com.zoom2u_customer.apiclient.ApiClient
@@ -29,15 +30,14 @@ class LogInActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
         binding = DataBindingUtil.setContentView(this, R.layout.activity_log_in)
-
+        AppUtility.hideKeyBoardClickOutside(binding.parentCl,this)
+        AppUtility.hideKeyboardActivityLunched(this)
         binding.loginBtn.setOnClickListener(this)
         binding.register.setOnClickListener(this)
         binding.forgetPass.setOnClickListener(this)
 
-        viewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
         val serviceApi: ServiceApi = ApiClient.getServices()
         repository = LoginRepository(serviceApi,this)
         viewModel.repository = repository

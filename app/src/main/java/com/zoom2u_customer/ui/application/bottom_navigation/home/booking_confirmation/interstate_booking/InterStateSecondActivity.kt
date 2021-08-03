@@ -68,16 +68,12 @@ class InterStateSecondActivity : AppCompatActivity(), View.OnClickListener {
                             loginPage.putExtra(
                                 "BookingResponse", bookingResponse
                             )
-                            intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
-                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
                             startActivity(loginPage)
                             finish()
                         } else {
                             val intentOnHold = Intent(this, OnHoldActivity::class.java)
                             intentOnHold.putExtra("BookingResponse", bookingResponse)
-                            intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
-                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
                             startActivity(intentOnHold)
                             finish()

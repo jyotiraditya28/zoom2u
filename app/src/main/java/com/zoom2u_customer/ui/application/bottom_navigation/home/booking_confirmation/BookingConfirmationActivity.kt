@@ -31,7 +31,7 @@ import org.json.JSONObject
 import java.util.*
 
 class BookingConfirmationActivity : AppCompatActivity(), View.OnClickListener {
-    private var bookingDeliveryResponce: JSONObject? = null
+    private var bookingDeliveryResponse: JSONObject? = null
     private var Request_Code = 1001
     private var getBrainTreeClientToken: GetBrainTreeClientTokenOrBookDeliveryRequest? = null
     lateinit var binding: ActivityBookingConfirmationBinding
@@ -51,8 +51,8 @@ class BookingConfirmationActivity : AppCompatActivity(), View.OnClickListener {
         /**get data from map Item*/
         if (intent.hasExtra("IconList")) {
             itemDataList = intent.getParcelableArrayListExtra<Icon>("IconList") as ArrayList<Icon>
-            bookingDeliveryResponce = JSONObject(intent.getStringExtra("MainJsonForMakeABooking"))
-            setDataView(bookingDeliveryResponce)
+            bookingDeliveryResponse = JSONObject(intent.getStringExtra("MainJsonForMakeABooking"))
+            setDataView(bookingDeliveryResponse)
         }
         setAdapterView()
         binding.bookingConfirmation.setOnClickListener(this)
@@ -127,10 +127,17 @@ class BookingConfirmationActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(view: View?) {
         when (view!!.id) {
             R.id.booking_confirmation -> {
+                binding.bookingConfirmation.isClickable=false
+                Handler(Looper.getMainLooper()).postDelayed({
+                    binding.bookingConfirmation.isClickable=true
+
+                }, 3000)
+
                 if (binding.chkTerms.isChecked) {
                     bookingConfirmation()
                 }else{
                     Toast.makeText(this,"Please Accept the customer Terms and Conditions.", Toast.LENGTH_LONG).show()
+                    binding.bookingConfirmation.isClickable=true
                 }
             }
             R.id.back_btn->{
@@ -143,9 +150,9 @@ class BookingConfirmationActivity : AppCompatActivity(), View.OnClickListener {
     private fun callServiceForBookingRequest() {
        AppUtility.progressBarShow(this)
         try {
-            if (bookingDeliveryResponce!!.getJSONObject("_deliveryRequestModel")
+            if (bookingDeliveryResponse!!.getJSONObject("_deliveryRequestModel")
                     .has("ETA")
-            ) bookingDeliveryResponce!!.getJSONObject("_deliveryRequestModel").remove("ETA")
+            ) bookingDeliveryResponse!!.getJSONObject("_deliveryRequestModel").remove("ETA")
             getBrainTreeClientToken = GetBrainTreeClientTokenOrBookDeliveryRequest(
                 this,
                 Request_Code
@@ -179,9 +186,9 @@ class BookingConfirmationActivity : AppCompatActivity(), View.OnClickListener {
                     data?.getParcelableExtra(BraintreePaymentActivity.EXTRA_PAYMENT_METHOD_NONCE)
                 val nonce = paymentMethodNonce?.nonce
                 try {
-                    bookingDeliveryResponce!!.getJSONObject("_deliveryRequestModel")
+                    bookingDeliveryResponse!!.getJSONObject("_deliveryRequestModel")
                         .put("paymentNonce", nonce)
-                    viewModel.getDeliveryRequest(bookingDeliveryResponce)
+                    viewModel.getDeliveryRequest(bookingDeliveryResponse)
                     getBrainTreeClientToken = null
                 } catch (e: JSONException) {
                     e.printStackTrace()
@@ -194,28 +201,28 @@ class BookingConfirmationActivity : AppCompatActivity(), View.OnClickListener {
     private fun bookingConfirmation() {
 
         try {
-            if (bookingDeliveryResponce!!.getJSONObject("_deliveryRequestModel")
+            if (bookingDeliveryResponse!!.getJSONObject("_deliveryRequestModel")
                     .getBoolean("IsInterstate")
             ) {
-                if (bookingDeliveryResponce!!.getJSONObject("_deliveryRequestModel")
-                        .getString("DeliverySpeed") == "Interstate" || bookingDeliveryResponce!!.getJSONObject(
+                if (bookingDeliveryResponse!!.getJSONObject("_deliveryRequestModel")
+                        .getString("DeliverySpeed") == "Interstate" || bookingDeliveryResponse!!.getJSONObject(
                         "_deliveryRequestModel"
                     ).getString("DeliverySpeed") == "Road interstate"
                 ) {
 
-                    if (bookingDeliveryResponce!!.getJSONObject("_deliveryRequestModel")
+                    if (bookingDeliveryResponse!!.getJSONObject("_deliveryRequestModel")
                             .getString("DeliverySpeed") == "Interstate"
                     ) {
                         val intent = Intent(this, InterStateFirstScreen::class.java)
                         intent.putExtra(
                             "MainJsonForMakeABooking",
-                            bookingDeliveryResponce.toString()
+                            bookingDeliveryResponse.toString()
                         )
-                        intent.flags=Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                         startActivity(intent)
 
 
-                    } else if (bookingDeliveryResponce!!.getJSONObject("_deliveryRequestModel")
+                    } else if (bookingDeliveryResponse!!.getJSONObject("_deliveryRequestModel")
                             .getString("DeliverySpeed") == "Road interstate"
                     ) {
                         //interStateHeaderTxt.setText(R.string.interstateAlertHeaderroadinterstate)

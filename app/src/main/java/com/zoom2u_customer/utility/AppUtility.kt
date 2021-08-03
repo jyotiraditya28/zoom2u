@@ -1,5 +1,6 @@
 package com.zoom2u_customer.utility
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
@@ -11,17 +12,15 @@ import android.graphics.Color
 import android.net.ConnectivityManager
 import android.os.Build
 import android.os.StrictMode
-import android.util.TypedValue
+import android.util.DisplayMetrics
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import android.widget.ListPopupWindow
-import android.widget.Spinner
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.google.android.material.textfield.TextInputEditText
-
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.zoom2u_customer.R
@@ -35,6 +34,21 @@ import java.util.*
 
 class AppUtility {
     companion object {
+
+
+
+
+
+       fun getDeviceWight():Int?{
+            val displayMetrics: DisplayMetrics? = Zoom2u.getInstance()?.resources?.getDisplayMetrics()
+            return displayMetrics?.widthPixels
+       }
+        fun getDeviceHeight():Int?{
+            val displayMetrics: DisplayMetrics? = Zoom2u.getInstance()?.resources?.getDisplayMetrics()
+            return displayMetrics?.heightPixels
+        }
+
+
 
         var progressDialog: ProgressDialog? = null
 
@@ -77,7 +91,7 @@ class AppUtility {
             val headers: MutableMap<String, String> = HashMap()
             val loginResponce: LoginResponce? =
                 AppPreference.getSharedPrefInstance().getLoginResponse()
-            headers.put("authorization", "Bearer" + " " + loginResponce?.access_token)
+            headers["authorization"] = "Bearer" + " " + loginResponce?.access_token
             return headers
         }
 
@@ -155,15 +169,24 @@ class AppUtility {
             return parser.parse(params).asJsonObject
         }
 
-        fun hideKeyboard(activity:Activity) {
+        fun hideKeyboardActivityLunched(activity:Activity) {
            activity.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         }
-        fun hideKeyboard(context: Context) {
-            val inputManager =
-                context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            val v = (context as Activity).currentFocus ?: return
-            inputManager.hideSoftInputFromWindow(v.windowToken, 0)
+
+
+        fun hideKeyBoardClickOutside(view:View, context: Context){
+            view.setOnTouchListener { _, _ ->
+                val imm: InputMethodManager =
+                    context.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow((context as Activity).currentFocus?.windowToken, 0)
+                true
+            }
         }
+
+
+
+
+
 
         fun validateEditTextField(validateTxtField: EditText, msgStr: String?) {
             validateTxtField.hint = msgStr
@@ -237,11 +260,5 @@ class AppUtility {
             context?.startActivity(intent)
         }
 
-        fun hideKeyboardOnClick(context: Context) {
-            val inputManager =
-                context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            val v = (context as Activity).currentFocus ?: return
-            inputManager.hideSoftInputFromWindow(v.windowToken, 0)
-        }
     }
 }

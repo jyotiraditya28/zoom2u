@@ -3,9 +3,7 @@ package com.zoom2u_customer.ui.application.bottom_navigation.home.pricing_paymen
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
-import android.os.Build
-import android.os.Bundle
-import android.os.CountDownTimer
+import android.os.*
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.TextPaint
@@ -56,11 +54,12 @@ class PricingPaymentActivity : AppCompatActivity(), View.OnClickListener {
     var adapter: PricePaymentAdapter? = null
     private lateinit var itemDataList: ArrayList<Icon>
     private var selectedQuoteOptionClass: QuoteOptionClass? = null
-
+    private var isGenerateQuotesBtn:Boolean?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_pricing_payment)
-
+        AppUtility.hideKeyboardActivityLunched(this)
+        AppUtility.hideKeyBoardClickOutside(binding.parentCl,this)
 
         viewModel = ViewModelProvider(this).get(PricingPaymentViewModel::class.java)
         val serviceApi: ServiceApi = com.zoom2u_customer.apiclient.ApiClient.getServices()
@@ -129,9 +128,7 @@ class PricingPaymentActivity : AppCompatActivity(), View.OnClickListener {
             }
 
             override fun onClick(p0: View) {
-                callApiForInterOrIntraState()
-                priceSelected = true
-                binding.quotesExpiered.visibility = View.GONE
+              regenerateQuotes()
             }
         }
         spannableString.setSpan(clickableSpan, 39, 43, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -186,14 +183,18 @@ class PricingPaymentActivity : AppCompatActivity(), View.OnClickListener {
                 binding.quotesExpiered.visibility = View.GONE
                 if (millisUntilFinished < 60000) {
                     binding.timer.setTextColor(Color.RED)
+                    binding.secMin.text="seconds."
                 }
             }
 
             @SuppressLint("SetTextI18n")
             override fun onFinish() {
+                binding.secMin.text="minutes."
                 binding.timer.setTextColor(Color.BLACK)
                 binding.timer.text = "3:00"
+                isGenerateQuotesBtn=true
                 priceSelected = false
+                binding.nextBtn.text="Regenerate Quotes"
                 binding.quotesExpiered.visibility = View.VISIBLE
                 adapter?.updateRecords(Collections.emptyList())
             }
@@ -203,27 +204,52 @@ class PricingPaymentActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(view: View?) {
         when (view!!.id) {
             R.id.next_btn -> {
-                if (priceSelected == true) {
-                    selectedQuoteOptionData(selectedQuoteOptionClass)
-                    val bookingConfirmationIntent =
-                        Intent(this, BookingConfirmationActivity::class.java)
-                    bookingConfirmationIntent.putExtra(
-                        "MainJsonForMakeABooking",
-                        mainObjForMakeABooking.toString()
-                    )
-                    bookingConfirmationIntent.putParcelableArrayListExtra("IconList", itemDataList)
-                    intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    startActivity(bookingConfirmationIntent)
-                } else {
-                    DialogActivity.alertDialogSingleButton(this, "Oops!", "Please select a price.")
+                binding.nextBtn.isClickable=false
+                Handler(Looper.getMainLooper()).postDelayed({
+                    binding.nextBtn.isClickable=true
+
+                }, 1000)
+
+                if(isGenerateQuotesBtn==true){
+                    regenerateQuotes()
+                }
+                else {
+                    if (priceSelected == true) {
+                        selectedQuoteOptionData(selectedQuoteOptionClass)
+                        val bookingConfirmationIntent =
+                            Intent(this, BookingConfirmationActivity::class.java)
+                        bookingConfirmationIntent.putExtra(
+                            "MainJsonForMakeABooking",
+                            mainObjForMakeABooking.toString()
+                        )
+                        bookingConfirmationIntent.putParcelableArrayListExtra(
+                            "IconList",
+                            itemDataList
+                        )
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(bookingConfirmationIntent)
+                    } else {
+                        binding.nextBtn.isClickable = true
+                        DialogActivity.alertDialogSingleButton(
+                            this,
+                            "Oops!",
+                            "Please select a price."
+                        )
+                    }
                 }
             }
             R.id.back_btn -> {
                 finish()
             }
         }
+    }
+
+    private fun regenerateQuotes() {
+       isGenerateQuotesBtn=false
+        callApiForInterOrIntraState()
+        priceSelected = true
+        binding.quotesExpiered.visibility = View.GONE
+        binding.nextBtn.text="Next"
     }
 
     private fun selectedQuoteOptionData(quoteOptionClass: QuoteOptionClass?) {

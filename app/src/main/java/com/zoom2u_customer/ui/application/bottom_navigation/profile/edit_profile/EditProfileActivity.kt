@@ -37,8 +37,9 @@ class EditProfileActivity : AppCompatActivity(), View.OnClickListener {
     private var repository: EditProfileRepository? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = DataBindingUtil.setContentView(this, R.layout.activity_edit_profile)
+        //AppUtility.hideKeyBoardClickOutside(binding.parentCl,this)
+        AppUtility.hideKeyboardActivityLunched(this)
 
         if (intent.hasExtra("profileData")) {
             profileResponse = intent.getParcelableExtra("profileData")
@@ -89,7 +90,6 @@ class EditProfileActivity : AppCompatActivity(), View.OnClickListener {
                 finish()
             }
             R.id.save_btn -> {
-                AppUtility.hideKeyboardOnClick(this)
                 profileResponse?.FirstName=binding.fname.text.toString().trim()
                 profileResponse?.LastName=binding.lname.text.toString().trim()
                 profileResponse?.Company = binding.company.text.toString().trim()
@@ -189,19 +189,19 @@ class EditProfileActivity : AppCompatActivity(), View.OnClickListener {
             DialogActivity.alertDialogSingleButton(this, "Alert!", "Please enter your first name")
             AppUtility.validateTextField(binding.fname)
             return false
-        } else if (!first_name.matches(("[a-zA-Z ]+").toRegex())) {
+        } /*else if (!first_name.matches(("[a-zA-Z ]+").toRegex())) {
             DialogActivity.alertDialogSingleButton(this, "Alert!", "Please enter alphabets in first name")
             AppUtility.validateTextField(binding.fname)
             return false
-        } else if (last_name == "") {
+        }*/ else if (last_name == "") {
             DialogActivity.alertDialogSingleButton(this, "Alert!", "Please enter your last name")
             AppUtility.validateTextField(binding.lname)
             return false
-        } else if (!last_name.matches(("[a-zA-Z ]+").toRegex())) {
+        } /*else if (!last_name.matches(("[a-zA-Z ]+").toRegex())) {
             DialogActivity.alertDialogSingleButton(this, "Alert!", "Please enter alphabets in last name")
             AppUtility.validateTextField(binding.lname)
             return false
-        }   else if (phone == "") {
+        }*/   else if (phone == "") {
             DialogActivity.alertDialogSingleButton(this, "Alert!", "Please enter your phone number")
             AppUtility.validateTextField(binding.phone)
             return false

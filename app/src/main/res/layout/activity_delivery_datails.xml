@@ -6,6 +6,7 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/parent_cl"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white">
@@ -235,11 +236,11 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:maxLines="2"
-                    android:layout_marginTop="20dp"
+                    android:minHeight="40dp"
                     android:background="@null"
                     android:editable="false"
                     android:clickable="true"
-                    android:gravity="center_vertical"
+                    android:gravity="bottom"
                     android:hint="@string/address"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/pick_find_me"
@@ -579,8 +580,8 @@
                         android:id="@+id/drop_address"
                         style="@style/style_13_bold"
                         android:layout_width="0dp"
+                        android:minHeight="40dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
                         android:background="@null"
                         android:maxLines="2"
                         android:editable="false"
@@ -778,23 +779,24 @@
 
 
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/package_type"
                         style="@style/style_13_bold"
                         android:singleLine="true"
                         android:layout_margin="10dp"
+                        android:visibility="gone"
                         android:background="@android:color/transparent"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/package_type"
                         android:gravity="center_vertical"
-                        android:hint="@string/company_name"
                         app:layout_constraintTop_toBottomOf="@+id/other"/>
 
                     <RadioGroup
                         android:id="@+id/yes_no"
                         android:layout_marginTop="5dp"
                         android:layout_width="match_parent"
+                        android:visibility="gone"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         app:layout_constraintTop_toBottomOf="@+id/package_type"
@@ -1277,8 +1279,9 @@
             android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent">
 
-            <Button
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/next_btn"
+                android:gravity="center"
                 style="@style/style_15_bold"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"

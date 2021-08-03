@@ -76,7 +76,7 @@ class InterStateFirstScreen : AppCompatActivity() , View.OnClickListener{
                 if (enableAcceptBtn(binding.chkTerms.isChecked,binding.chkTerms1.isChecked,binding.chkTerms2.isChecked)) {
                     val intent = Intent(this, InterStateSecondActivity::class.java)
                     intent.putExtra("MainJsonForMakeABooking", bookingDeliveryResponse.toString())
-                    intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                     startActivity(intent)
                 }
             }

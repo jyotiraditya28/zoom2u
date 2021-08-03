@@ -243,7 +243,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:buttonTint="@color/base_color"
-                    android:text="@string/packing_term2"
                     android:textColor="@color/black"
                     android:textSize="13sp"
                     android:gravity="top"

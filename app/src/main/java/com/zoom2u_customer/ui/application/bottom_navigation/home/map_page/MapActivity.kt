@@ -5,6 +5,8 @@ import android.content.pm.PackageManager
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -69,10 +71,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, View.OnClickListene
     private fun onItemClick(icon: Icon) {
         val intent = Intent(this, DocDimensionActivity::class.java)
         intent.putExtra("Icon", icon)
-        intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
-
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
         startActivityForResult(intent, 1)
     }
 
@@ -122,6 +121,12 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, View.OnClickListene
     override fun onClick(view: View?) {
         when (view!!.id) {
             R.id.next_btn -> {
+                binding.nextBtn.isClickable=false
+                Handler(Looper.getMainLooper()).postDelayed({
+                    binding.nextBtn.isClickable=true
+
+                }, 1000)
+
                 if (getTotalWeight() > 100) {
                     DialogActivity.alertDialogOkCallback(this, "Total weight : "+getTotalWeight()+"Kg", "Items weighing over 30kg each or 100kg in total will need to be placed through our Bid Request services. The same goes for items with measurements exceeding 200cm and multiple number of items exceeding the limit per booking. This is to maintain the safety and good health of our drivers.",
                         onItemClick = ::onItemClick)
@@ -129,8 +134,6 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, View.OnClickListene
                     val intent = Intent(this, DeliveryDetailsActivity::class.java)
                     intent.putParcelableArrayListExtra("IconList", dataList)
                     intent.putExtra("isQuotesRequest",isQuotesRequest)
-                    intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
                     startActivity(intent)
                 }
@@ -161,6 +164,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, View.OnClickListene
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
+        binding.nextBtn.isClickable=true
     }
     private fun onCancelClick() {
         val intent = Intent()

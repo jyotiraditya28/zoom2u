@@ -267,6 +267,7 @@
     <string name="packing_term2">Item will not be packaged. (Please note: This option will void any damage cover for this delivery. Items sent without packaging are at the customers own risk.)</string>
     <string name="deliver_before">Deliver before</string>
     <string name="parcel_drop_text">(your parcel will be droped off and deliver within the requested window.it may not be at this exact time)</string>
+    <string name="minutes">minutes.</string>
 
 
 </resources>
