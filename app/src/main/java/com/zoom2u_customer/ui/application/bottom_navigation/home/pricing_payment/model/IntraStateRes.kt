@@ -21,4 +21,3 @@ class IntraStateRes(
     var DropLongitude: String? = null
 
 ) : Parcelable
-

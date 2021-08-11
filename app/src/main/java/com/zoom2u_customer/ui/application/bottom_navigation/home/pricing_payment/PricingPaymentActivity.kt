@@ -1,3 +1,4 @@
+
 package com.zoom2u_customer.ui.application.bottom_navigation.home.pricing_payment
 
 import android.annotation.SuppressLint
@@ -139,15 +140,19 @@ class PricingPaymentActivity : AppCompatActivity(), View.OnClickListener {
     private fun callApiForInterOrIntraState() {
         if (intent.hasExtra("IntraStateData")) {
             intraStateReq = intent.getParcelableExtra("IntraStateData")
+            intraStateReq?.CurrentDateTime =AppUtility.getCurrentDateAndTimeInEta()
             itemDataList = intent.getParcelableArrayListExtra<Icon>("IconList") as ArrayList<Icon>
-            //saveDeliveryRequestReq=intent.getParcelableExtra("SaveDeliveryRequestReq")
             mainObjForMakeABooking = JSONObject(intent.getStringExtra("SaveDeliveryRequestReq"))
+            if(!mainObjForMakeABooking!!.getJSONObject("_deliveryRequestModel").getBoolean("isPickTimeSelectedFromTimeWindow"))
+                intraStateReq?.PickupDateTime = AppUtility.getCurrentDateAndTimeInEta()
             viewModel.getIntraStatePrice(intraStateReq)
         } else if (intent.hasExtra("InterStateData")) {
             interStateReq = intent.getParcelableExtra("InterStateData")
+            interStateReq?.CurrentDateTime = AppUtility.getCurrentDateAndTimeInEta()
             itemDataList = intent.getParcelableArrayListExtra<Icon>("IconList") as ArrayList<Icon>
-            // saveDeliveryRequestReq=intent.getParcelableExtra("SaveDeliveryRequestReq")
             mainObjForMakeABooking = JSONObject(intent.getStringExtra("SaveDeliveryRequestReq"))
+            if(!mainObjForMakeABooking!!.getJSONObject("_deliveryRequestModel").getBoolean("isPickTimeSelectedFromTimeWindow"))
+                interStateReq?.PickupDateTime = AppUtility.getCurrentDateAndTimeInEta()
             viewModel.getInterStatePrice(interStateReq)
         }
     }
@@ -239,13 +244,15 @@ class PricingPaymentActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
             R.id.back_btn -> {
+                val intent = Intent()
+                setResult(3, intent)
                 finish()
             }
         }
     }
 
     private fun regenerateQuotes() {
-       isGenerateQuotesBtn=false
+        isGenerateQuotesBtn=false
         callApiForInterOrIntraState()
         priceSelected = true
         binding.quotesExpiered.visibility = View.GONE
@@ -345,6 +352,9 @@ class PricingPaymentActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-
-
+    override fun onBackPressed() {
+        val intent = Intent()
+        setResult(3, intent)
+        finish()
+    }
 }

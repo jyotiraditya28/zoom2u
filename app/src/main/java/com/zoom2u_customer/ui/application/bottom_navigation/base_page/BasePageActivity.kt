@@ -14,6 +14,7 @@ import com.zoom2u_customer.databinding.ActivityBasepageBinding
 import com.zoom2u_customer.ui.log_in.LoginResponce
 import com.zoom2u_customer.ui.splash_screen.LogInSignupMainActivity
 import com.zoom2u_customer.utility.AppPreference
+import com.zoom2u_customer.utility.AppUtility
 import com.zoom2u_customer.utility.DialogActivity
 
 class BasePageActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItemSelectedListener {
@@ -86,12 +87,6 @@ class BasePageActivity : AppCompatActivity(),  BottomNavigationView.OnNavigation
     }
 
     private fun onOkClick() {
-        val loginResponce: LoginResponce? = AppPreference.getSharedPrefInstance().getLoginResponse()
-        loginResponce?.access_token = ""
-        AppPreference.getSharedPrefInstance().setLoginResponse(Gson().toJson(loginResponce))
-
-        val intent = Intent(this, LogInSignupMainActivity::class.java)
-        startActivity(intent)
-        finish()
+        AppUtility.onLogoutCall(this)
     }
 }

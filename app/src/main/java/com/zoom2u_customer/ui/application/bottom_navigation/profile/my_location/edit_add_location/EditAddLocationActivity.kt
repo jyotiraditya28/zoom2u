@@ -171,7 +171,7 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
 
 
                     } else {
-/**for add ca*/
+
                         lattitude = getAddress?.get("latitude") as Double
 
                         longitude = getAddress["longitude"] as Double

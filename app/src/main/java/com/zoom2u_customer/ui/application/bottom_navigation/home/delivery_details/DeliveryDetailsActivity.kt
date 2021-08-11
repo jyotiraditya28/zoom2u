@@ -3,7 +3,6 @@ package com.zoom2u_customer.ui.application.bottom_navigation.home.delivery_detai
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.location.Geocoder
-import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -42,7 +41,6 @@ import com.zoom2u_customer.utility.utility_custom_class.MySpinnerAdapter
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
-import java.io.File
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -89,6 +87,7 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
     private var isLaptopOrMobile: String? = "laptopOrMobileNo"
     private lateinit var itemDataList: ArrayList<Icon>
     private var isQuotesRequest: Boolean? = null
+    private var isPickTimeSelectedFromTimeWindow: Boolean = false
 
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -126,7 +125,7 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
         val date = Date()
 
         val timeFormat: DateFormat = SimpleDateFormat("hh:mm aaa")
-        val currentTime: String = timeFormat.format(date)
+        val currentTime = timeFormat.format(date)
 
         val currTimeInDateFormat: Date = timeFormat.parse(currentTime)
 
@@ -208,14 +207,24 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
                 val selectedContact =
                     parent.adapter.getItem(position) as MyLocationResAndEditLocationReq?
                 binding.pickName.setText(selectedContact?.Location?.ContactName)
-                binding.pickCompany.setText(selectedContact?.Location?.CompanyName)
+                if (!selectedContact?.Location?.CompanyName.toString().isNullOrEmpty())
+                    binding.pickCompany.setText(selectedContact?.Location?.CompanyName)
                 binding.pickEmail.setText(selectedContact?.Location?.Email)
                 binding.pickPhone.setText(selectedContact?.Location?.Phone)
-                binding.pickUnit.setText(selectedContact?.Location?.UnitNumber)
+                if (!selectedContact?.Location?.UnitNumber.toString().isNullOrEmpty())
+                    binding.pickUnit.setText(selectedContact?.Location?.UnitNumber)
                 binding.pickInstruction.setText(selectedContact?.Location?.Notes)
                 binding.pickAddress.setText(selectedContact?.Location?.Street)
                 pickState = selectedContact?.Location?.State
                 showHideWeight(pickState, dropState)
+                pickGpx = selectedContact?.Location?.GPSX.toString()
+                pickGpy = selectedContact?.Location?.GPSY.toString()
+                pickSuburb = selectedContact?.Location?.Suburb
+                pickPostCode = selectedContact?.Location?.Postcode
+                pickStreet = selectedContact?.Location?.Street
+                pickStreetNumber = selectedContact?.Location?.StreetNumber
+
+
             }
 
         binding.dropName.onItemClickListener =
@@ -223,14 +232,22 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
                 val selectedContact =
                     parent.adapter.getItem(position) as MyLocationResAndEditLocationReq?
                 binding.dropName.setText(selectedContact?.Location?.ContactName)
-                binding.dropCompany.setText(selectedContact?.Location?.CompanyName)
+                if (!selectedContact?.Location?.CompanyName.toString().isNullOrEmpty())
+                    binding.dropCompany.setText(selectedContact?.Location?.CompanyName)
                 binding.dropEmail.setText(selectedContact?.Location?.Email)
                 binding.dropPhone.setText(selectedContact?.Location?.Phone)
-                binding.dropUnit.setText(selectedContact?.Location?.UnitNumber)
+                if (!selectedContact?.Location?.UnitNumber.toString().isNullOrEmpty())
+                    binding.dropUnit.setText(selectedContact?.Location?.UnitNumber)
                 binding.dropInstruction.setText(selectedContact?.Location?.Notes)
                 binding.dropAddress.setText(selectedContact?.Location?.Street)
                 dropState = selectedContact?.Location?.State
                 showHideWeight(pickState, dropState)
+                dropGpx = selectedContact?.Location?.GPSX.toString()
+                dropGpy = selectedContact?.Location?.GPSY.toString()
+                dropSuburb = selectedContact?.Location?.Suburb
+                dropPostCode = selectedContact?.Location?.Postcode
+                dropStreet = selectedContact?.Location?.Street
+                dropStreetNumber = selectedContact?.Location?.StreetNumber
             }
 
 
@@ -419,8 +436,10 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
                     binding.pickName.setText(myLocation.Location?.ContactName.toString())
                     binding.pickEmail.setText(myLocation.Location?.Email.toString())
                     binding.pickPhone.setText(myLocation.Location?.Phone.toString())
-                    binding.pickUnit.setText(myLocation.Location?.UnitNumber.toString())
-                    binding.pickCompany.setText(myLocation.Location?.CompanyName.toString())
+                    if (!myLocation.Location?.UnitNumber.toString().isNullOrEmpty())
+                        binding.pickUnit.setText(myLocation.Location?.UnitNumber.toString())
+                    if (!myLocation.Location?.CompanyName.toString().isNullOrEmpty())
+                        binding.pickCompany.setText(myLocation.Location?.CompanyName.toString())
                     binding.pickAddress.setText(myLocation.Location?.Street.toString())
                     pickState = myLocation.Location?.State.toString()
                     pickGpx = myLocation.Location?.GPSX.toString()
@@ -439,8 +458,10 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
                     binding.dropName.setText(myLocation.Location?.ContactName.toString())
                     binding.dropEmail.setText(myLocation.Location?.Email.toString())
                     binding.dropPhone.setText(myLocation.Location?.Phone.toString())
-                    binding.dropUnit.setText(myLocation.Location?.UnitNumber.toString())
-                    binding.dropCompany.setText(myLocation.Location?.CompanyName.toString())
+                    if (!myLocation.Location?.UnitNumber.toString().isNullOrEmpty())
+                        binding.dropUnit.setText(myLocation.Location?.UnitNumber.toString())
+                    if (!myLocation.Location?.UnitNumber.toString().isNullOrEmpty())
+                        binding.dropCompany.setText(myLocation.Location?.CompanyName.toString())
                     binding.dropAddress.setText(myLocation.Location?.Street.toString())
                     dropState = myLocation.Location?.State.toString()
                     dropGpx = myLocation.Location?.GPSX.toString()
@@ -489,65 +510,71 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
 
                 }, 3000)*/
                 /**check if pick or drop state is TAS*/
-                if (pickState == "TAS" || dropState == "TAS") {
+                 if (pickState == "TAS" || dropState == "TAS") {
+                     DialogActivity.alertDialogSingleButton(
+                         this,
+                         "Oops!",
+                         "We're sorry,we currently don't service this route.Please contact us if you required more information! You can reach us on  1300 966 628."
+                     )
+                 } else {
+                val isBookingConfirm = validateYourDeliveryField(
+                    binding.pickName.text.toString().trim(),
+                    binding.pickPhone.text.toString().trim(),
+                    binding.pickAddress.text.toString().trim(),
+                    binding.pickEmail.text.toString().trim(),
+                    binding.dropName.text.toString().trim(),
+                    binding.dropPhone.text.toString().trim(),
+                    binding.dropAddress.text.toString().trim()
+                )
+
+                if (isBookingConfirm <= 0) {
+                    if (isQuotesRequest as Boolean) {
+                        val intent = Intent(this, UploadQuotesActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                        startActivity(intent)
+                    } else {
+
+                        val intent = Intent(this, PricingPaymentActivity::class.java)
+                        /**for Intra State**/
+                        if (pickState == dropState) {
+                            isInterstate = false
+                            intraStateReq = getIntraState()
+                           // val intent = Intent(this, PricingPaymentActivity::class.java)
+                            intent.putExtra("IntraStateData", intraStateReq)
+                          /*  intent.putExtra(
+                                "SaveDeliveryRequestReq",
+                                createJsonForSaveRequest().toString()
+                            )
+                            intent.putParcelableArrayListExtra("IconList", itemDataList)
+                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            startActivityForResult(intent,3)*/
+                        }
+                        /**for Inter State**/
+                        else {
+                            isInterstate = true
+                            interStateReq = getInterState()
+                            //val intent = Intent(this, PricingPaymentActivity::class.java)
+                            intent.putExtra("InterStateData", interStateReq)
+                           /* intent.putExtra(
+                                "SaveDeliveryRequestReq",
+                                createJsonForSaveRequest().toString()
+                            )
+                            intent.putParcelableArrayListExtra("IconList", itemDataList)
+                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            startActivityForResult(intent,3)*/
+                        }
+                        intent.putExtra("SaveDeliveryRequestReq", createJsonForSaveRequest().toString())
+                        intent.putParcelableArrayListExtra("IconList", itemDataList)
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivityForResult(intent,3)
+                    }
+                } else
+                //  binding.nextBtn.isClickable=true
                     DialogActivity.alertDialogSingleButton(
                         this,
-                        "Oops!",
-                        "We're sorry,we currently don't service this route.Please contact us if you required more information! You can reach us on  1300 966 628."
+                        "Awaiting!",
+                        bookDeliveryAlertMsgStr
                     )
-                } else {
-                    val isBookingConfirm = validateYourDeliveryField(
-                        binding.pickName.text.toString().trim(),
-                        binding.pickPhone.text.toString().trim(),
-                        binding.pickAddress.text.toString().trim(),
-                        binding.pickEmail.text.toString().trim(),
-                        binding.dropName.text.toString().trim(),
-                        binding.dropPhone.text.toString().trim(),
-                        binding.dropAddress.text.toString().trim()
-                    )
-
-                    if (isBookingConfirm <= 0) {
-                        if (isQuotesRequest as Boolean) {
-                            val intent = Intent(this, UploadQuotesActivity::class.java)
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                            startActivity(intent)
-                        } else {
-                            /**for Intra State**/
-                            if (pickState == dropState) {
-                                isInterstate = false
-                                intraStateReq = getIntraState()
-                                val intent = Intent(this, PricingPaymentActivity::class.java)
-                                intent.putExtra("IntraStateData", intraStateReq)
-                                intent.putExtra(
-                                    "SaveDeliveryRequestReq",
-                                    createJsonForSaveRequest().toString()
-                                )
-                                intent.putParcelableArrayListExtra("IconList", itemDataList)
-                                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                startActivity(intent)
-                            }
-                            /**for Inter State**/
-                            else {
-                                isInterstate = true
-                                interStateReq = getInterState()
-                                val intent = Intent(this, PricingPaymentActivity::class.java)
-                                intent.putExtra("InterStateData", interStateReq)
-                                intent.putExtra(
-                                    "SaveDeliveryRequestReq",
-                                    createJsonForSaveRequest().toString()
-                                )
-                                intent.putParcelableArrayListExtra("IconList", itemDataList)
-                                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                startActivity(intent)
-                            }
-                        }
-                    } else
-                    //  binding.nextBtn.isClickable=true
-                        DialogActivity.alertDialogSingleButton(
-                            this,
-                            "Awaiting!",
-                            bookDeliveryAlertMsgStr
-                        )
                 }
             }
             R.id.pick_find_me -> {
@@ -619,18 +646,19 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
                 )
             }
             R.id.item_we_not_send -> {
-                val pdfUri = Uri.fromFile(File(filesDir.parent + "/raw/item_not_send.pdf"))
-                val browserIntent = Intent(Intent.ACTION_VIEW, pdfUri)
-                startActivity(browserIntent)
+                /*   val pdfUri = Uri.fromFile(File(filesDir.parent + "/raw/item_not_send.pdf"))
+                   val browserIntent = Intent(Intent.ACTION_VIEW, pdfUri)
+                   startActivity(browserIntent)*/
             }
             R.id.authority_to -> {
                 binding.spinner.performClick()
 
             }
             R.id.no_contact_drop -> {
-                binding.authorityToLeave.isChecked = true
-                binding.authorityTo.visibility = View.VISIBLE
-
+                if (binding.noContactDrop.isChecked) {
+                    binding.authorityToLeave.isChecked = true
+                    binding.authorityTo.visibility = View.VISIBLE
+                }
             }
             R.id.authority_to_leave -> {
                 if (binding.authorityToLeave.isChecked)
@@ -695,31 +723,21 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
     }
 
     private fun getPickDateAndTimeInEta(): String {
-        return DateTimeUtil.getDateTimeFromDeviceForDeliveryETA(
-            binding.pickDate.text.toString() + " " +
-                    binding.pickTime.text.toString()
-        ).toString()
-
-    }
-
-    @SuppressLint("SimpleDateFormat")
-    fun getCurrentDateAndTimeInEta(): String {
-        val date = Date()
-        val dateFormat: DateFormat = SimpleDateFormat("EEE dd MMM yyyy")
-        val timeFormat: DateFormat = SimpleDateFormat("hh:mm aaa")
-
-        return DateTimeUtil.getDateTimeFromDeviceForDeliveryETA(
-            dateFormat.format(date) + " " +
-                    timeFormat.format(date)
-        ).toString()
-
+        return if (isPickTimeSelectedFromTimeWindow) {
+            DateTimeUtil.getDateTimeFromDeviceForDeliveryETA(
+                binding.pickDate.text.toString() + " " +
+                        binding.pickTime.text.toString()
+            ).toString()
+        } else {
+            AppUtility.getCurrentDateAndTimeInEta()
+        }
     }
 
     private fun getIntraState(): IntraStateReq? {
         val dropLocation = IntraStateReq.DropLocationClass(dropGpx, dropGpy)
         val pickLocation = IntraStateReq.PickupLocationClass(pickGpx, pickGpy)
         intraStateReq = IntraStateReq(
-            getCurrentDateAndTimeInEta(),
+            AppUtility.getCurrentDateAndTimeInEta(),
             0,
             binding.dropAddress.text.toString(),
             dropLocation,
@@ -744,7 +762,7 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
         val dropLocation = InterStateReq.DropLocationClass(dropGpx, dropGpy)
         val pickLocation = InterStateReq.PickupLocationClass(pickGpx, pickGpy)
         interStateReq = InterStateReq(
-            getCurrentDateAndTimeInEta(),
+            AppUtility.getCurrentDateAndTimeInEta(),
             binding.dropAddress.text.toString(),
             dropLocation,
             dropPostCode,
@@ -773,6 +791,7 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
         if (!TextUtils.isEmpty(time)) {
             if (checkPickFutureTime(time)) {
                 binding.pickTime.text = time
+                isPickTimeSelectedFromTimeWindow = true
             }
         }
     }
@@ -946,13 +965,22 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
             deliveryRequest.put("sendSmsToPickupPerson", binding.pickSendSms.isChecked)
             deliveryRequest.put("IsNoContactPickup", binding.isNoContactPickup.isChecked)
             deliveryRequest.put("IsNoContactDrop", binding.noContactDrop.isChecked)
-            deliveryRequest.put("RequestedDropDateTimeWindowEnd", getCurrentDateAndTimeInEta())
-            deliveryRequest.put("RequestedDropDateTimeWindowStart", getCurrentDateAndTimeInEta())
-            deliveryRequest.put("RequestedPickupDateTimeWindowEnd", getCurrentDateAndTimeInEta())
-            deliveryRequest.put("RequestedPickupDateTimeWindowStart", getCurrentDateAndTimeInEta())
+            deliveryRequest.put("RequestedDropDateTimeWindowEnd", AppUtility.getCurrentDateAndTimeInEta())
+            deliveryRequest.put("RequestedDropDateTimeWindowStart",AppUtility. getCurrentDateAndTimeInEta())
+            deliveryRequest.put("RequestedPickupDateTimeWindowEnd", AppUtility.getCurrentDateAndTimeInEta())
+            deliveryRequest.put("RequestedPickupDateTimeWindowStart", AppUtility.getCurrentDateAndTimeInEta())
             deliveryRequest.put("isLaptopOrMobile", isLaptopOrMobile)
-
             deliveryRequest.put("AuthorityToLeave", binding.authorityToLeave.isChecked)
+            deliveryRequest.put("Instructions", binding.other.text.toString())
+
+
+            /**put boolean for check in next pages that is time selected from time window or not*/
+            deliveryRequest.put("isPickTimeSelectedFromTimeWindow", isPickTimeSelectedFromTimeWindow)
+
+
+
+
+
             if (binding.authorityToLeave.isChecked) {
                 deliveryRequest.put("LeaveAt", leaveAt.toString())
                 authorityToLeaveForm.put("NoContact", binding.noContactDrop.isChecked)
@@ -961,7 +989,6 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
                 jObjOfQuotesItem.put("_authorityToLeaveForm", authorityToLeaveForm)
             } else {
                 deliveryRequest.put("LeaveAt", "")
-
             }
 
 
@@ -1027,6 +1054,13 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
                     Log.i("Place API Failure", "  -------------- User Cancelled -------------")
                 }
             }
+        }
+        /**update current time when user back from price screen*/
+        else if(requestCode == 3){
+            val date = Date()
+            val timeFormat: DateFormat = SimpleDateFormat("hh:mm aaa")
+            val currentTime = timeFormat.format(date)
+            binding.pickTime.text = currentTime
         }
     }
 
@@ -1170,24 +1204,25 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
         }
 
         /** check for future pick time*/
-        val serverDateTimeValue = binding.pickDate.text.toString() + " " +
-                binding.pickTime.text.toString()
-        val converter = SimpleDateFormat("EEE dd MMM yyyy hh:mm a")
-        val convertedDate: Date?
-        try {
-            convertedDate = converter.parse(serverDateTimeValue)
-            if (System.currentTimeMillis() > convertedDate.time) {
-                bookDeliveryAlertCount++
-                addTextToAlertDialog(
-                    "Please enter a drop off date/time in the future.",
-                    bookDeliveryAlertCount
-                )
+        if (isPickTimeSelectedFromTimeWindow) {
+            val serverDateTimeValue = binding.pickDate.text.toString() + " " +
+                    binding.pickTime.text.toString()
+            val converter = SimpleDateFormat("EEE dd MMM yyyy hh:mm a")
+            val convertedDate: Date?
+            try {
+                convertedDate = converter.parse(serverDateTimeValue)
+                if (System.currentTimeMillis() > convertedDate.time) {
+                    bookDeliveryAlertCount++
+                    addTextToAlertDialog(
+                        "Please enter a drop off date/time in the future.",
+                        bookDeliveryAlertCount
+                    )
+                }
+
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
-
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
-
 
 
 
@@ -1204,6 +1239,7 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
             "$bookDeliveryAlertMsgStr\n$count) $addAlertMsgStr"
 
     }
+
 
 
 }

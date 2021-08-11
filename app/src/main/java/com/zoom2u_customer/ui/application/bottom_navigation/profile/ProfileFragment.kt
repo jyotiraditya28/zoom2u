@@ -50,6 +50,8 @@ class ProfileFragment : Fragment(), View.OnClickListener {
         viewModel.getProfileSuccess()?.observe(viewLifecycleOwner) {
             if (it != null)
                 AppUtility.progressBarDissMiss()
+                binding.parentCl.visibility=View.VISIBLE
+                binding.edit.visibility=View.VISIBLE
                 setDataToView(it)
 
         }
@@ -76,9 +78,9 @@ class ProfileFragment : Fragment(), View.OnClickListener {
     }
 
     private fun onOkClick() {
-        val loginResponce: LoginResponce? = AppPreference.getSharedPrefInstance().getLoginResponse()
-        loginResponce?.access_token = ""
-        AppPreference.getSharedPrefInstance().setLoginResponse(Gson().toJson(loginResponce))
+        val loginResponse: LoginResponce? = AppPreference.getSharedPrefInstance().getLoginResponse()
+        loginResponse?.access_token = ""
+        AppPreference.getSharedPrefInstance().setLoginResponse(Gson().toJson(loginResponse))
 
         val intent = Intent(activity, LogInSignupMainActivity::class.java)
         startActivity(intent)

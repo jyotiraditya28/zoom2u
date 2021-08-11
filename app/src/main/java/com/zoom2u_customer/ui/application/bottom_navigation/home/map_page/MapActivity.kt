@@ -160,8 +160,6 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, View.OnClickListene
         val intent = Intent(this, DeliveryDetailsActivity::class.java)
         intent.putParcelableArrayListExtra("IconList", dataList)
         intent.putExtra("isQuotesRequest",isQuotesRequest)
-        intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         binding.nextBtn.isClickable=true

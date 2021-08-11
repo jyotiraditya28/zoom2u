@@ -29,7 +29,7 @@
     <string name="email_header_login">Email*</string>
     <string name="pass_header_login">Password"</string>
     <string name="confirm_pass_header_login">Confirm Password"</string>
-    <string name="find_us">Where did you find us?</string>
+    <string name="find_us">How did you find us?</string>
     <string name="term_con">I Accept the customer </string>
     <string name="term_con1">I Accept the customer terms and conditions.</string>
     <string name="sign_up">Sign up</string>
@@ -268,6 +268,9 @@
     <string name="deliver_before">Deliver before</string>
     <string name="parcel_drop_text">(your parcel will be droped off and deliver within the requested window.it may not be at this exact time)</string>
     <string name="minutes">minutes.</string>
+    <string name="not_available">Not Available</string>
+    <string name="register_text">Don\'t have an account?Register</string>
+    <string name="cancel_booking1">Cancel Booking</string>
 
 
 </resources>

@@ -25,7 +25,7 @@
             android:id="@+id/header_txt"
             style="@style/style_15_bold"
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:layout_height="45dp"
             android:layout_margin="10dp"
             android:text="@string/delivery_details"
             android:textColor="@color/black"
@@ -48,7 +48,7 @@
             android:id="@+id/map"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
-            android:layout_height="270dp"
+            android:layout_height="330dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/header_txt" />
 
@@ -56,7 +56,7 @@
             android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="190dp"
+            android:layout_marginTop="270dp"
             android:layout_weight="1"
             android:scrollbars="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -72,7 +72,8 @@
                     android:id="@+id/card"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp"
                     android:layout_marginTop="4dp"
                     android:background="@drawable/white_background"
                     android:elevation="5dp"
@@ -130,7 +131,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:textSize="18sp"
                         android:layout_marginEnd="10dp"
                         android:textColor="@color/black"
                         app:layout_constraintBottom_toTopOf="@+id/courier"
@@ -144,7 +144,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
-                        android:layout_marginTop="5dp"
+                        android:layout_marginTop="2dp"
                         android:text="@string/courier"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/ref_id" />
@@ -156,9 +156,10 @@
                         style="@style/style_15_bold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:maxWidth="200dp"
                         android:layout_marginStart="10dp"
-                        android:layout_marginTop="10dp"
-                        android:singleLine="true"
+                        android:layout_marginTop="3dp"
+                        android:maxLines="2"
                         android:textColor="@color/black"
                         android:textSize="18sp"
                         app:layout_constraintStart_toStartOf="parent"
@@ -168,9 +169,10 @@
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/status"
                         style="@style/style_13_bold"
-                        android:layout_width="100dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:minHeight="30dp"
+                        android:maxWidth="100dp"
                         android:layout_marginTop="40dp"
                         android:layout_marginEnd="10dp"
                         android:gravity="center"
@@ -194,7 +196,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
-                            android:layout_marginTop="10dp"
                             android:text="@string/pick_up_details"
                             android:textColor="@color/black"
                             app:layout_constraintStart_toEndOf="@+id/relMain"
@@ -260,7 +261,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="0.5dp"
                             android:layout_marginStart="40dp"
-                            android:layout_marginTop="20dp"
+                            android:layout_marginTop="5dp"
                             android:background="@color/line_color"
                             app:layout_constraintStart_toEndOf="@+id/relMain"
                             app:layout_constraintTop_toBottomOf="@+id/pick_email" />
@@ -272,7 +273,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
-                            android:layout_marginTop="18dp"
+                            android:layout_marginTop="5dp"
                             android:text="@string/drop_off_details"
                             android:textColor="@color/black"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -284,11 +285,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
-                            android:layout_marginTop="10dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-
-                            >
+                            app:layout_constraintTop_toTopOf="parent">
 
 
                             <com.google.android.material.imageview.ShapeableImageView
@@ -300,7 +299,7 @@
                             <com.google.android.material.imageview.ShapeableImageView
                                 android:id="@+id/textViewJobStatus"
                                 android:layout_width="1dp"
-                                android:layout_height="130dp"
+                                android:layout_height="93dp"
                                 android:layout_below="@id/imageViewStatus"
                                 android:layout_centerHorizontal="true"
                                 android:src="@drawable/ic_broken_line" />
@@ -376,30 +375,19 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/track_booking"
-                    style="@style/style_15_bold"
-                    android:layout_width="match_parent"
-                    android:layout_height="20dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="20dp"
-                    android:text="@string/track_your_booking"
-                    android:textColor="@color/black"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/card" />
-
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/card4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="15dp"
                 android:layout_marginTop="10dp"
                 android:minHeight="70dp"
-                android:layout_marginEnd="10dp"
+                android:layout_marginEnd="15dp"
                 android:background="@drawable/white_background"
                 android:elevation="5dp"
-                app:layout_constraintTop_toBottomOf="@+id/track_booking">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/card">
 
 
                 <com.google.android.material.textview.MaterialTextView
@@ -409,10 +397,13 @@
                     android:layout_height="wrap_content"
                     android:paddingStart="10dp"
                     android:paddingEnd="10dp"
-                    android:textColor="@color/black"
-                    android:text="clicking on this option should open the tracking link in default browser."
+                    android:textSize="18sp"
+                    android:gravity="center"
+                    android:textColor="@color/base_color"
+                    android:text="@string/track_your_booking"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"/>
 
 
@@ -439,8 +430,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="15dp"
                     android:background="@drawable/white_background"
                     android:elevation="5dp"
                     app:layout_constraintTop_toBottomOf="@+id/package_txt">
@@ -477,8 +468,8 @@
                             android:layout_height="60dp"
                             android:weightSum="2"
                             android:background="@drawable/border4side"
-                            android:layout_marginStart="15dp"
-                            android:layout_marginEnd="13dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginEnd="10dp"
                             android:orientation="horizontal"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/pick_txt">
@@ -489,6 +480,7 @@
                                 android:layout_width="70dp"
                                 android:layout_height="55dp"
                                 android:layout_gravity="center"
+                                android:layout_margin="5dp"
                                 android:layout_weight="0.5"
                                 android:src="@mipmap/ic_box"
                                 android:layout_marginEnd="5dp"
@@ -508,6 +500,7 @@
                                 android:layout_height="55dp"
                                 android:layout_gravity="center"
                                 android:layout_weight="0.5"
+                                android:layout_marginEnd="10dp"
                                 android:layout_marginStart="5dp"
                                 android:src="@drawable/ic_blank_sing"
                              />
@@ -619,8 +612,8 @@
                             android:layout_height="60dp"
                             android:weightSum="2"
                             android:background="@drawable/border4side"
-                            android:layout_marginStart="15dp"
-                            android:layout_marginEnd="15dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginEnd="10dp"
                             android:orientation="horizontal"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/drop_txt1">
@@ -630,6 +623,7 @@
                                 android:id="@+id/drop_image"
                                 android:layout_width="70dp"
                                 android:layout_height="55dp"
+                                android:layout_margin="5dp"
                                 android:layout_weight="0.5"
                                 android:src="@mipmap/ic_box"
                                 android:layout_marginEnd="5dp"/>
@@ -648,6 +642,7 @@
                                 android:id="@+id/drop_signature"
                                 android:layout_width="70dp"
                                 android:layout_height="55dp"
+                                android:layout_margin="5dp"
                                 android:layout_gravity="center"
                                 android:layout_weight="0.5"
                                 android:src="@drawable/ic_blank_sing"
@@ -738,13 +733,12 @@
                     android:id="@+id/card3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="15dp"
                     android:layout_marginTop="10dp"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginEnd="15dp"
                     android:layout_marginBottom="20dp"
                     android:elevation="5dp"
                     android:background="@drawable/white_background"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/notes">
 
                     <com.google.android.material.textview.MaterialTextView
@@ -796,6 +790,52 @@
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cancel_book"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="10dp"
+                    android:minHeight="70dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginEnd="15dp"
+                    android:background="@drawable/white_background"
+                    android:elevation="5dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/card3"
+                    app:layout_constraintBottom_toBottomOf="parent">
+
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/cancel_booking"
+                        style="@style/style_11_bold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:textSize="18sp"
+                        android:gravity="center"
+                        android:textColor="@color/red"
+                        android:text="@string/cancel_booking1"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -1,20 +1,28 @@
 package com.zoom2u_customer.ui.log_in
 
 import android.content.Intent
+import android.graphics.Typeface
+import android.os.Build
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.TextPaint
 import android.text.TextUtils
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.view.View
+import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import com.zoom2u_customer.R
 import com.zoom2u_customer.apiclient.ApiClient
 import com.zoom2u_customer.apiclient.ServiceApi
+import com.zoom2u_customer.databinding.ActivityLogInBinding
 import com.zoom2u_customer.ui.application.bottom_navigation.base_page.BasePageActivity
 import com.zoom2u_customer.ui.log_in.forgot_password.ForgotPasswordActivity
 import com.zoom2u_customer.ui.sign_up.SignUpActivity
-import com.zoom2u_customer.databinding.ActivityLogInBinding
 import com.zoom2u_customer.utility.AppUtility
 import com.zoom2u_customer.utility.DialogActivity
 
@@ -55,7 +63,17 @@ class LogInActivity : AppCompatActivity(), View.OnClickListener {
 
             }
         }
+
+       /* binding.emailHeader.isF
+        binding.scrollView.scrollTo(0,50)
+*/
+
+
     }
+
+
+
+
 
     override fun onClick(view: View?) {
         when (view!!.id) {
@@ -91,7 +109,7 @@ class LogInActivity : AppCompatActivity(), View.OnClickListener {
 
 
 
-    fun SetValidation(email: String, pass: String): Boolean {
+    private fun SetValidation(email: String, pass: String): Boolean {
         if (TextUtils.isEmpty(email) && TextUtils.isEmpty(pass)) {
             AppUtility.validateTextField(binding.email)
             AppUtility.validateTextField(binding.pass)

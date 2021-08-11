@@ -2,10 +2,13 @@ package com.zoom2u_customer.ui.application.bottom_navigation.history.history_det
 
 import android.content.Context
 import android.util.Log
+import android.widget.Toast
 
 import com.google.gson.Gson
 import com.google.gson.JsonArray
+import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
+import com.zoom2u_customer.R
 import com.zoom2u_customer.apiclient.ServiceApi
 import com.zoom2u_customer.utility.AppUtility
 import com.zoom2u_customer.utility.DialogActivity
@@ -42,7 +45,52 @@ class HistoryDetailsRepository(private var serviceApi: ServiceApi, var context: 
                         }
 
                         override fun onError(e: Throwable) {
-                            Log.d("", "")
+                            AppUtility.progressBarDissMiss()
+                            Toast.makeText(
+                                context,
+                                "something went wrong please try again.",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    })
+            )
+        } else {
+            DialogActivity.alertDialogSingleButton(
+                context,
+                "No Network !",
+                "No network connection, Please try again later."
+            )
+        }
+    }
+
+
+    fun cancelBooking(
+        bookingID: String?,
+        disposable: CompositeDisposable = CompositeDisposable(),
+        onSuccess: (msg: String) -> Unit
+    ) {
+        if (AppUtility.isInternetConnected()) {
+            AppUtility.progressBarShow(context)
+            disposable.add(
+                serviceApi.cancelBooking(
+                    "breeze/customer/CancelBooking?bookingId=$bookingID",
+                    AppUtility.getApiHeaders()
+                ).subscribeOn(
+                    Schedulers.io()
+                )
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeWith(object : DisposableSingleObserver<Response<String>>() {
+                        override fun onSuccess(responce: Response<String>) {
+                            onSuccess("true")
+                        }
+
+                        override fun onError(e: Throwable) {
+                            AppUtility.progressBarDissMiss()
+                            Toast.makeText(
+                                context,
+                                "something went wrong please try again.",
+                                Toast.LENGTH_LONG
+                            ).show()
                         }
                     })
             )

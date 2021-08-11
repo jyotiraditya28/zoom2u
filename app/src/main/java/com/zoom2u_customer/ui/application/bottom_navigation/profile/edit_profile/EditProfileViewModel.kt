@@ -3,6 +3,7 @@ package com.zoom2u_customer.ui.application.bottom_navigation.profile.edit_profil
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.zoom2u_customer.ui.application.bottom_navigation.profile.ProfileResponse
+import java.io.File
 
 class EditProfileViewModel : ViewModel(){
     var success: MutableLiveData<String>? = MutableLiveData("")
@@ -11,7 +12,7 @@ class EditProfileViewModel : ViewModel(){
 
     fun setProfile(profileResponse: ProfileResponse?) = repository?.setProfile(profileResponse,onSuccess = ::onSuccess)
 
-    //fun uploadDp(profileImage : Bitmap)= repository?.uploadDb(profileImage,onSuccess = ::onDpSuccess)
+   fun uploadDp(path: String?)= repository?.changeDp(path ,onSuccess = ::onDpSuccess)
 
     fun onSuccess(msg: String){
         success?.value=msg

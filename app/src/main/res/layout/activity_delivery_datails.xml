@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
 
     <data />
 
@@ -1236,6 +1237,69 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+                    <!--<androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/item_we_not_send"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/gray_background"
+                        android:layout_marginEnd="1dp"
+                        android:visibility="gone"
+                        android:layout_marginStart="1dp"
+                        android:layout_marginBottom="30dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/weight_cl1">
+
+
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/item_not_send"
+                            style="@style/style_15_bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:textColor="@color/white"
+                            android:gravity="center"
+                            android:text="@string/items_we_not_send"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginEnd="10dp"
+                            android:src="@drawable/ic_arrow_forward"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+-->
+
+
+
+
+
+
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/item_we_not_send"
                         style="@style/style_15_bold"
@@ -1258,6 +1322,8 @@
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
 
 

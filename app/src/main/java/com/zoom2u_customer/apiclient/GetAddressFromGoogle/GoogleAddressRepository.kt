@@ -414,4 +414,56 @@ class GoogleAddressRepository(
             )
         }
     }
+
+    fun getRoute(
+        url: String?,
+        disposable: CompositeDisposable = CompositeDisposable(),
+        onSuccess: (add: String) -> Unit
+    ) {
+        if (AppUtility.isInternetConnected()) {
+
+            disposable.add(
+                googleServiceApi.getAddressFromGeocoder(url.toString()).subscribeOn(
+                    Schedulers.io()
+                )
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeWith(object : DisposableSingleObserver<Response<JsonObject>>() {
+                        override fun onSuccess(responce: Response<JsonObject>) {
+                            if (responce.body() != null) {
+                                onSuccess(responce.body().toString())
+                            }
+                            else if (responce.errorBody() != null) {
+                                AppUtility.progressBarDissMiss()
+                                Toast.makeText(
+                                    context,
+                                    "something went wrong please try again.",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+
+                        }
+
+                        override fun onError(e: Throwable) {
+                            AppUtility.progressBarDissMiss()
+                            Log.d("", "")
+                            Toast.makeText(
+                                context,
+                                "something went wrong please try again.",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    })
+            )
+        } else {
+            DialogActivity.alertDialogSingleButton(
+                context,
+                "No Network !",
+                "No network connection, Please try again later."
+            )
+        }
+    }
+
+
+
+
 }
