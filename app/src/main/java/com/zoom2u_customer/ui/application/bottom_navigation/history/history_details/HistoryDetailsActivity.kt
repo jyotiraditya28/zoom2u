@@ -1,48 +1,74 @@
 package com.zoom2u_customer.ui.application.bottom_navigation.history.history_details
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.text.Html
+import android.text.SpannableString
 import android.text.TextUtils
+import android.text.style.UnderlineSpan
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.MapFragment
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.PolylineOptions
 import com.zoom2u_customer.R
 import com.zoom2u_customer.apiclient.ApiClient.Companion.getServices
+import com.zoom2u_customer.apiclient.GetAddressFromGoogle.GoogleAddressRepository
+import com.zoom2u_customer.apiclient.GetAddressFromGoogleAPI
+import com.zoom2u_customer.apiclient.GoogleServiceApi
 import com.zoom2u_customer.apiclient.ServiceApi
 import com.zoom2u_customer.databinding.ActivityHistoryDetailsBinding
 import com.zoom2u_customer.ui.application.bottom_navigation.history.HistoryResponse
+import com.zoom2u_customer.ui.application.bottom_navigation.home.home_fragment.Icon
 import com.zoom2u_customer.utility.AppUtility
+import com.zoom2u_customer.utility.DialogActivity
+import com.zoom2u_customer.utility.DirectionJsonParser
+import org.json.JSONException
+import org.json.JSONObject
+import java.util.*
+import java.util.concurrent.Executors
 
-class HistoryDetailsActivity : AppCompatActivity(), View.OnClickListener {
+
+class HistoryDetailsActivity : AppCompatActivity(),  OnMapReadyCallback, View.OnClickListener {
     private var arrayCourierPick: List<String>? = null
     private var arrayCourierDrop: List<String>? = null
-    private lateinit var googleMap: GoogleMap
-    var fragment: MapFragment? = null
+    private lateinit var map: GoogleMap
     var response: HistoryDetailsResponse? = null
-
 
     private var historyItem: HistoryResponse? = null
     lateinit var viewModel: HistoryDetailsViewModel
+    private var repositoryGoogleAddress: GoogleAddressRepository? = null
     private var repository: HistoryDetailsRepository? = null
     lateinit var binding: ActivityHistoryDetailsBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_history_details)
 
         viewModel = ViewModelProvider(this).get(HistoryDetailsViewModel::class.java)
+        val googleServiceApi: GoogleServiceApi = GetAddressFromGoogleAPI.getGoogleServices()
         val serviceApi: ServiceApi = getServices()
+        repositoryGoogleAddress = GoogleAddressRepository(googleServiceApi, this)
         repository = HistoryDetailsRepository(serviceApi, this)
         viewModel.repository = repository
+        viewModel.repositoryGoogleAddress = repositoryGoogleAddress
 
         if (intent.hasExtra("HistoryItem")) {
             historyItem = intent.getParcelableExtra("HistoryItem")
             viewModel.setHistoryDetails(historyItem?.BookingRef)
-        } else if(intent.hasExtra("BookingRef")) {
+        } else if (intent.hasExtra("BookingRef")) {
             viewModel.setHistoryDetails(intent.getStringExtra("BookingRef"))
         }
 
@@ -52,6 +78,28 @@ class HistoryDetailsActivity : AppCompatActivity(), View.OnClickListener {
                 setDataToView(it)
             }
         }
+        val fragment = supportFragmentManager
+            .findFragmentById(R.id.map) as SupportMapFragment
+        fragment.getMapAsync(this)
+
+
+        viewModel.getRouteSuccess()?.observe(this) {
+            if (!it.isNullOrEmpty())
+               parserTask(it)
+        }
+
+        viewModel.getCancelBooking()?.observe(this) {
+            if (!it.isNullOrEmpty()) {
+                if(it=="true"){
+                    val intent = Intent()
+                    historyItem?.IsCancel=true
+                    intent.putExtra("historyItem",historyItem)
+                    setResult(3, intent)
+                    Toast.makeText(this, "Booking cancelation successfully.", Toast.LENGTH_LONG).show()
+                    finish()
+                }
+            }
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -59,7 +107,7 @@ class HistoryDetailsActivity : AppCompatActivity(), View.OnClickListener {
         this.response = it
         arrayCourierPick = it.PickupLocation?.split(",")
         arrayCourierDrop = it.DropLocation?.split(",")
-
+        initializeMap()
         binding.pickAdd.text = it.PickupAddress
         binding.pickName.text = it.PickupContactName
         binding.pickPhone.text = it.PickupPhone
@@ -93,20 +141,6 @@ class HistoryDetailsActivity : AppCompatActivity(), View.OnClickListener {
             dropReqSplit?.get(1) + " " + dropReqSplit?.get(2) + " | " + dropReqSplit?.get(0)
 
 
-        val pickActualReq =
-            AppUtility.getDateTimeFromDeviceToServerForDate(it.RequestedPickupDateTimeWindowEnd)
-        val pickActualSplit: Array<String>? = pickActualReq?.split(" ")?.toTypedArray()
-        binding.pickTimeActual.text =
-            pickUpReqSplit?.get(1) + " " + pickActualSplit?.get(2) + " | " + pickActualSplit?.get(0)
-
-        val dropActualReq =
-            AppUtility.getDateTimeFromDeviceToServerForDate(it.RequestedDropDateTimeWindowEnd)
-        val dropActualSplit: Array<String>? = dropActualReq?.split(" ")?.toTypedArray()
-        binding.dropTimeActual.text =
-            dropActualSplit?.get(1) + " " + dropActualSplit?.get(2) + " | " + dropActualSplit?.get(0)
-
-
-
         binding.name.text = it.CustomerFirstName + ' ' + it.CustomerLastName
         binding.dropAdd.text = it.DropAddress
         binding.dropName.text = it.DropContactName
@@ -115,7 +149,7 @@ class HistoryDetailsActivity : AppCompatActivity(), View.OnClickListener {
         binding.dropAdd.text = it.DropAddress
         binding.refId.text=it.BookingRef
         binding.price.text = "$"+it.Price.toString()
-        setStatus(it.Status)
+
 
         if (!TextUtils.isEmpty(it.PackageNotes))
             binding.packageNote.text = it.PackageNotes
@@ -135,6 +169,18 @@ class HistoryDetailsActivity : AppCompatActivity(), View.OnClickListener {
             binding.dropImage.setImageBitmap(AppUtility.getBitmapFromURL(it.DropPhoto))
         }
 
+        if(it.IsCancel==true){
+            binding.cancelBook.visibility=View.GONE
+            binding.price.text = "No Charge"
+            binding.status.text = "Cancelled"
+            binding.status.setBackgroundColor(Color.parseColor("#ff0000"))
+            binding.status.setTextColor(Color.WHITE)
+        }
+        else {
+            binding.cancelBook.visibility = View.VISIBLE
+            setStatus(it.Status)
+            binding.price.text = "$"+it.Price.toString()
+        }
         /*if(!TextUtils.isEmpty(it.PickP)) {
             binding.dropImage.setImageBitmap(AppUtility.getBitmapFromURL(it.DropPhoto))
         }*/
@@ -143,10 +189,30 @@ class HistoryDetailsActivity : AppCompatActivity(), View.OnClickListener {
         binding.dropSignature.setOnClickListener(this)
         binding.dropImage.setOnClickListener(this)
         binding.backIcon.setOnClickListener(this)
+        binding.cancelBook.setOnClickListener(this)
+
+
+        /**condition for actual pick drop*/
+        if(it.PickupActual.isNullOrEmpty() || it.DropActual.isNullOrEmpty()){
+          binding.pickTimeActual.visibility=View.GONE
+          binding.pickActual.visibility=View.GONE
+          binding.dropTimeActual.visibility=View.GONE
+          binding.dropActual.visibility=View.GONE
+
+        }else {
+            val pickActualReq = AppUtility.getDateTimeFromDeviceToServerForDate(it.PickupActual)
+            val pickActualSplit: Array<String>? = pickActualReq?.split(" ")?.toTypedArray()
+            binding.pickTimeActual.text =pickActualSplit?.get(1) + " " + pickActualSplit?.get(2) + " | " + pickActualSplit?.get(0)
+
+            val dropActualReq = AppUtility.getDateTimeFromDeviceToServerForDate(it.DropActual)
+            val dropActualSplit: Array<String>? = dropActualReq?.split(" ")?.toTypedArray()
+            binding.dropTimeActual.text = dropActualSplit?.get(1) + " " + dropActualSplit?.get(2) + " | " + dropActualSplit?.get(0)
+
+        }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setStatus(status: String?) {
-
         when (status) {
             "Accepted" -> {
                 binding.status.text = "Allocated"
@@ -203,121 +269,126 @@ class HistoryDetailsActivity : AppCompatActivity(), View.OnClickListener {
                     AppUtility.fullSizeImageView(this, response?.DropPhoto.toString())
                 else
                     Toast.makeText(this, "No dropoff image found.", Toast.LENGTH_LONG).show()
-
             }
             R.id.back_icon ->{
                 finish()
             }
+            R.id.cancel_book->{
+                DialogActivity.logoutDialog(
+                    this,
+                    "Confirm!",
+                    "Are you sure you want to cancel your booking?",
+                    "Yes","No",
+                    onCancelClick=::onNoClick,
+                    onOkClick = ::onYesClick
+                )
+            }
         }
     }
+    private fun onNoClick(){
 
+    }
 
-    /*   private fun initilizeMap() {
-           if (googleMap == null) {
-               fragment = fragmentManager.findFragmentById(R.id.map) as WorkaroundMapFragment
-               googleMap = fragment.getMapAsync(this)
+    private fun onYesClick(){
+        viewModel.cancelBooking(historyItem?.BookingId.toString())
+    }
+    override fun onMapReady(googleMap: GoogleMap) {
+         map=googleMap
+        //hide zoom in out button in map
+        map.uiSettings.isZoomControlsEnabled = false
+        //googleMap.setInfoWindowAdapter(new CustomInfoWindowAdapter());
+        map.mapType = GoogleMap.MAP_TYPE_NORMAL
+        //googleMap.setMyLocationEnabled(true);
+       // map.uiSettings.isZoomControlsEnabled = true
+        // Enable / Disable my location button
+        map.uiSettings.isMyLocationButtonEnabled = true
+        // Enable / Disable Compass icon
+        map.uiSettings.isCompassEnabled = true
+        // Enable / Disable Rotate gesture
+        map.uiSettings.isRotateGesturesEnabled = true
+        // Enable / Disable zooming functionality
+        map.uiSettings.isZoomGesturesEnabled = true
+    }
 
-               //googleMap.setInfoWindowAdapter(new CustomInfoWindowAdapter());
-               googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL)
-               //googleMap.setMyLocationEnabled(true);
-               googleMap.getUiSettings().setZoomControlsEnabled(true)
-               // Enable / Disable my location button
-               googleMap.getUiSettings().setMyLocationButtonEnabled(true)
-               // Enable / Disable Compass icon
-               googleMap.getUiSettings().setCompassEnabled(true)
-               // Enable / Disable Rotate gesture
-               googleMap.getUiSettings().setRotateGesturesEnabled(true)
-               // Enable / Disable zooming functionality
-               googleMap.getUiSettings().setZoomGesturesEnabled(true)
-               try {
-                   googleMap.animateCamera(
-                       CameraUpdateFactory.newLatLngZoom(
-                           LatLng(
-                               arrayCourierPick?.get(0)!!.toDouble(),
-                               arrayCourierPick?.get(1)!!.toDouble()
-                           ), 10F
-                       )
-                   )
-               } catch (e: Exception) {
-                   e.printStackTrace()
-                   googleMap.animateCamera(
-                       CameraUpdateFactory.newLatLngZoom(
-                           LatLng(
-                               -33.8619486,
-                               151.00586
-                           ), 12F
-                       )
-                   )
-               }
-               addMarkers()
-               try {
-                   // Getting URL to the Google Directions API
-                   if (response?.Status == "Accepted" || response?.Status == "On Route to Pickup") {
-                       val url: String = getDirectionsUrl(
-                           LatLng(
-                               response!!.Latitude.toDouble(),
-                               jObjOfDeliveryHistoryDetail.getString("Longitude").toDouble()
-                           ),
-                           LatLng(
-                               arrayCourierPick.get(0).toDouble(),
-                               arrayCourierPick.get(1).toDouble()
-                           )
-                       )
-                       com.customer.tabitems.completeview.CompletedDetails.DownloadTask().execute(url)
-                       val url1: String = getDirectionsUrl(
-                           LatLng(
-                               arrayCourierPick.get(0).toDouble(),
-                               arrayCourierPick.get(1).toDouble()
-                           ),
-                           LatLng(
-                               arrayCourierDrop.get(0).toDouble(),
-                               arrayCourierDrop.get(1).toDouble()
-                           )
-                       )
-                       com.customer.tabitems.completeview.CompletedDetails.DownloadTask().execute(url1)
-                   } else if (jObjOfDeliveryHistoryDetail.getString("Status") == "Picked up" || jObjOfDeliveryHistoryDetail.getString(
-                           "Status"
-                       ) == "On Route to Dropoff" || jObjOfDeliveryHistoryDetail.getString("Status") == "Tried to deliver"
-                   ) {
-                       val url2: String = getDirectionsUrl(
-                           LatLng(
-                               jObjOfDeliveryHistoryDetail.getString("Latitude").toDouble(),
-                               jObjOfDeliveryHistoryDetail.getString("Longitude").toDouble()
-                           ),
-                           LatLng(
-                               arrayCourierDrop.get(0).toDouble(),
-                               arrayCourierDrop.get(1).toDouble()
-                           )
-                       )
-                       com.customer.tabitems.completeview.CompletedDetails.DownloadTask().execute(url2)
-                   } else {
-                       val url3: String = getDirectionsUrl(
-                           LatLng(
-                               arrayCourierPick.get(0).toDouble(),
-                               arrayCourierPick.get(1).toDouble()
-                           ),
-                           LatLng(
-                               arrayCourierDrop.get(0).toDouble(),
-                               arrayCourierDrop.get(1).toDouble()
-                           )
-                       )
-                       com.customer.tabitems.completeview.CompletedDetails.DownloadTask().execute(url3)
-                   }
-               } catch (e: JSONException) {
-                   e.printStackTrace()
-               }
-               if (googleMap == null) {
-                   Toast.makeText(
-                       applicationContext,
-                       "Sorry! unable to create maps",
-                       Toast.LENGTH_SHORT
-                   ).show()
-               }
-           }
+   private fun initializeMap() {
+
+       try {
+           map.animateCamera(
+               CameraUpdateFactory.newLatLngZoom(
+                   LatLng(
+                       arrayCourierPick?.get(0)!!.toDouble(),
+                       arrayCourierPick?.get(1)!!.toDouble()
+                   ), 10F
+               )
+           )
+       } catch (e: Exception) {
+           e.printStackTrace()
+           map.animateCamera(
+               CameraUpdateFactory.newLatLngZoom(
+                   LatLng(
+                       -33.8619486,
+                       151.00586
+                   ), 12F
+               )
+           )
        }
-
-
-       private fun getDirectionsUrl(origin: LatLng, dest: LatLng): String? {
+       addMarkers()
+       try {
+           // Getting URL to the Google Directions API
+           if (response?.Status == "Accepted" || response?.Status == "On Route to Pickup") {
+               val url: String? = getDirectionsUrl(
+                   LatLng(
+                       response?.Latitude?.toDouble()!!,
+                       response?.Longitude?.toDouble()!!
+                   ),
+                   LatLng(
+                       arrayCourierPick?.get(0)!!.toDouble(),
+                       arrayCourierPick?.get(1)!!.toDouble()
+                   )
+               )
+               viewModel.getRoute(url)
+               val url1: String? = getDirectionsUrl(
+                   LatLng(
+                       arrayCourierPick?.get(0)!!.toDouble(),
+                       arrayCourierPick?.get(1)!!.toDouble()
+                   ),
+                   LatLng(
+                       arrayCourierDrop?.get(0)!!.toDouble(),
+                       arrayCourierDrop?.get(1)!!.toDouble()
+                   )
+               )
+              viewModel.getRoute(url1)
+           } else if (response?.Status == "Picked up" || response?.Status == "On Route to Dropoff" || response?.Status == "Tried to deliver"
+           ) {
+               val url2: String? = getDirectionsUrl(
+                   LatLng(
+                       response?.Latitude!!.toDouble(),
+                       response?.Longitude!!.toDouble()
+                   ),
+                   LatLng(
+                       arrayCourierDrop?.get(0)!!.toDouble(),
+                       arrayCourierDrop?.get(1)!!.toDouble()
+                   )
+               )
+               viewModel.getRoute(url2)
+           } else {
+               val url3: String? = getDirectionsUrl(
+                   LatLng(
+                       arrayCourierPick?.get(0)!!.toDouble(),
+                       arrayCourierPick?.get(1)!!.toDouble()
+                   ),
+                   LatLng(
+                       arrayCourierDrop?.get(0)!!.toDouble(),
+                       arrayCourierDrop?.get(1)!!.toDouble()
+                   )
+               )
+               viewModel.getRoute(url3)
+           }
+       } catch (e: JSONException) {
+           e.printStackTrace()
+       }
+   }
+    private fun getDirectionsUrl(origin: LatLng, dest: LatLng): String? {
            // Origin of route
            val str_origin =
                "origin=" + origin.latitude.toString() + "," + origin.longitude
@@ -342,223 +413,147 @@ class HistoryDetailsActivity : AppCompatActivity(), View.OnClickListener {
        }
 
 
-       fun addMarkers() {
+       private fun addMarkers() {
            try {
-               if (response?.Status == "Accepted" || response?.Status == "On Route to Pickup"
-               ) {
-                   if (response?.Vehicle == "Van") {
-                       googleMap.addMarker(
-                           MarkerOptions().position(
-                               LatLng(
-                                   response?.Latitude?.toDouble(),
-                                  "Longitude").toDouble()
-                               )
-                           ).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.icontruck))
-                       )
-                       googleMap.addMarker(
-                           MarkerOptions().position(
-                               LatLng(
-                                   arrayCourierPick!![0].toDouble(),
-                                   arrayCourierPick!![1].toDouble()
-                               )
-                           ).title("")
-                               .icon(BitmapDescriptorFactory.fromResource(R.drawable.picklocation_icon))
-                       )
-                       googleMap.addMarker(
-                           MarkerOptions().position(
-                               LatLng(
-                                   arrayCourierDrop!![0].toDouble(),
-                                   arrayCourierDrop!![1].toDouble()
-                               )
-                           ).title("")
-                               .icon(BitmapDescriptorFactory.fromResource(R.drawable.iconfinish))
-                       )
-                   } else if (jObjOfDeliveryHistoryDetail.getString("Vehicle") == "Bike") {
-                       googleMap.addMarker(
-                           MarkerOptions().position(
-                               LatLng(
-                                   jObjOfDeliveryHistoryDetail.getString(
-                                       "Latitude"
-                                   ).toDouble(),
-                                   jObjOfDeliveryHistoryDetail.getString("Longitude").toDouble()
-                               )
-                           ).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.iconbike))
-                       )
-                       googleMap.addMarker(
-                           MarkerOptions().position(
-                               LatLng(
-                                   arrayCourierPick!![0].toDouble(),
-                                   arrayCourierPick!![1].toDouble()
-                               )
-                           ).title("")
-                               .icon(BitmapDescriptorFactory.fromResource(R.drawable.picklocation_icon))
-                       )
-                       googleMap.addMarker(
-                           MarkerOptions().position(
-                               LatLng(
-                                   arrayCourierDrop!![0].toDouble(),
-                                   arrayCourierDrop!![1].toDouble()
-                               )
-                           ).title("")
-                               .icon(BitmapDescriptorFactory.fromResource(R.drawable.iconfinish))
-                       )
-                   } else if (jObjOfDeliveryHistoryDetail.getString("Vehicle") == "Car") {
-                       googleMap.addMarker(
-                           MarkerOptions().position(
-                               LatLng(
-                                   jObjOfDeliveryHistoryDetail.getString(
-                                       "Latitude"
-                                   ).toDouble(),
-                                   jObjOfDeliveryHistoryDetail.getString("Longitude").toDouble()
-                               )
-                           ).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.iconcar))
-                       )
-                       googleMap.addMarker(
-                           MarkerOptions().position(
-                               LatLng(
-                                   arrayCourierPick!![0].toDouble(),
-                                   arrayCourierPick!![1].toDouble()
-                               )
-                           ).title("")
-                               .icon(BitmapDescriptorFactory.fromResource(R.drawable.picklocation_icon))
-                       )
-                       googleMap.addMarker(
-                           MarkerOptions().position(
-                               LatLng(
-                                   arrayCourierDrop!![0].toDouble(),
-                                   arrayCourierDrop!![1].toDouble()
-                               )
-                           ).title("")
-                               .icon(BitmapDescriptorFactory.fromResource(R.drawable.iconfinish))
-                       )
+               if (response?.Status == "Accepted" || response?.Status == "On Route to Pickup" || response?.Status== "On Route to Dropoff") {
+                   if(response?.Latitude!!.toDouble() !=arrayCourierPick!![0].toDouble()){
+                   when (response?.Vehicle) {
+                       "Van" -> {
+                           map.addMarker(MarkerOptions().position(LatLng(response?.Latitude!!.toDouble(), response?.Longitude!!.toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.icontruck)))
+                           map.addMarker(MarkerOptions().position(LatLng(arrayCourierPick!![0].toDouble(),arrayCourierPick!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pickup_icon)))
+                           map.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon)))
+                       }
+                       "Bike" -> {
+                           map.addMarker(MarkerOptions().position(LatLng(response?.Latitude!!.toDouble(), response?.Longitude!!.toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.iconbike)))
+                           map.addMarker(MarkerOptions().position(LatLng(arrayCourierPick!![0].toDouble(), arrayCourierPick!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pickup_icon)))
+                           map.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon)))
+                       }
+                       "Car" -> {
+                           map.addMarker(MarkerOptions().position(LatLng(response?.Latitude!!.toDouble(), response?.Longitude!!.toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.iconcar)))
+                           map.addMarker(MarkerOptions().position(LatLng(arrayCourierPick!![0].toDouble(), arrayCourierPick!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pickup_icon)))
+                           map.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon)))
+                       }
                    }
-               } else if (jObjOfDeliveryHistoryDetail.getString("Status") == "Picked up" || jObjOfDeliveryHistoryDetail.getString(
-                       "Status"
-                   ) == "On Route to Dropoff" || jObjOfDeliveryHistoryDetail.getString("Status") == "Tried to deliver"
-               ) {
-                   if (jObjOfDeliveryHistoryDetail.getString("Vehicle") == "Van") {
-                       googleMap.addMarker(
-                           MarkerOptions().position(
-                               LatLng(
-                                   jObjOfDeliveryHistoryDetail.getString(
-                                       "Latitude"
-                                   ).toDouble(),
-                                   jObjOfDeliveryHistoryDetail.getString("Longitude").toDouble()
-                               )
-                           ).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.icontruck))
-                       )
-                       googleMap.addMarker(
-                           MarkerOptions().position(
-                               LatLng(
-                                   arrayCourierDrop!![0].toDouble(),
-                                   arrayCourierDrop!![1].toDouble()
-                               )
-                           ).title("")
-                               .icon(BitmapDescriptorFactory.fromResource(R.drawable.iconfinish))
-                       )
-                   } else if (jObjOfDeliveryHistoryDetail.getString("Vehicle") == "Bike") {
-                       googleMap.addMarker(
-                           MarkerOptions().position(
-                               LatLng(
-                                   jObjOfDeliveryHistoryDetail.getString(
-                                       "Latitude"
-                                   ).toDouble(),
-                                   jObjOfDeliveryHistoryDetail.getString("Longitude").toDouble()
-                               )
-                           ).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.iconbike))
-                       )
-                       googleMap.addMarker(
-                           MarkerOptions().position(
-                               LatLng(
-                                   arrayCourierDrop!![0].toDouble(),
-                                   arrayCourierDrop!![1].toDouble()
-                               )
-                           ).title("")
-                               .icon(BitmapDescriptorFactory.fromResource(R.drawable.iconfinish))
-                       )
-                   } else if (jObjOfDeliveryHistoryDetail.getString("Vehicle") == "Car") {
-                       googleMap.addMarker(
-                           MarkerOptions().position(
-                               LatLng(
-                                   jObjOfDeliveryHistoryDetail.getString(
-                                       "Latitude"
-                                   ).toDouble(),
-                                   jObjOfDeliveryHistoryDetail.getString("Longitude").toDouble()
-                               )
-                           ).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.iconcar))
-                       )
-                       googleMap.addMarker(
-                           MarkerOptions().position(
-                               LatLng(
-                                   arrayCourierDrop!![0].toDouble(),
-                                   arrayCourierDrop!![1].toDouble()
-                               )
-                           ).title("")
-                               .icon(BitmapDescriptorFactory.fromResource(R.drawable.iconfinish))
-                       )
+                       }else{
+                       when (response?.Vehicle) {
+                           "Van" -> {
+                               map.addMarker(MarkerOptions().position(LatLng(response?.Latitude!!.toDouble(), response?.Latitude!!.toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.icontruck)))
+                               map.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon)))
+                           }
+                           "Bike" -> {
+                               map.addMarker(
+                                   MarkerOptions().position(LatLng(response?.Latitude!!.toDouble(), response?.Longitude!!.toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.iconbike)))
+                               map.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon)))
+                           }
+                           "Car" -> {
+                               map.addMarker(MarkerOptions().position(LatLng(response?.Latitude!!.toDouble(), response?.Longitude!!.toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.iconcar)))
+                               map.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon)))
+                           }
+                       }
+                       }
+               } else if ( response?.Status=="Picked up"  ||response?.Status== "Tried to deliver") {
+                   when (response?.Vehicle) {
+                       "Van" -> {
+                           map.addMarker(MarkerOptions().position(LatLng(response?.Latitude!!.toDouble(), response?.Latitude!!.toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.icontruck)))
+                           map.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon)))
+                       }
+                       "Bike" -> {
+                           map.addMarker(
+                               MarkerOptions().position(
+                                   LatLng(response?.Latitude!!.toDouble(), response?.Longitude!!.toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.iconbike)))
+                           map.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon)))
+                       }
+                       "Car" -> {
+                           map.addMarker(
+                               MarkerOptions().position(
+                                   LatLng(response?.Latitude!!.toDouble(), response?.Longitude!!.toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.iconcar)))
+                           map.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon)))
+                       }
                    }
                } else {
-                   if (jObjOfDeliveryHistoryDetail.getString("Vehicle") == "Van") {
-                       googleMap.addMarker(
-                           MarkerOptions().position(
-                               LatLng(
-                                   arrayCourierPick!![0].toDouble(),
-                                   arrayCourierPick!![1].toDouble()
-                               )
-                           ).title("")
-                               .icon(BitmapDescriptorFactory.fromResource(R.drawable.picklocation_icon))
-                       )
-                       googleMap.addMarker(
-                           MarkerOptions().position(
-                               LatLng(
-                                   arrayCourierDrop!![0].toDouble(),
-                                   arrayCourierDrop!![1].toDouble()
-                               )
-                           ).title("")
-                               .icon(BitmapDescriptorFactory.fromResource(R.drawable.iconfinish))
-                       )
-                   } else if (jObjOfDeliveryHistoryDetail.getString("Vehicle") == "Bike") {
-                       googleMap.addMarker(
-                           MarkerOptions().position(
-                               LatLng(
-                                   arrayCourierPick!![0].toDouble(),
-                                   arrayCourierPick!![1].toDouble()
-                               )
-                           ).title("")
-                               .icon(BitmapDescriptorFactory.fromResource(R.drawable.picklocation_icon))
-                       )
-                       googleMap.addMarker(
-                           MarkerOptions().position(
-                               LatLng(
-                                   arrayCourierDrop!![0].toDouble(),
-                                   arrayCourierDrop!![1].toDouble()
-                               )
-                           ).title("")
-                               .icon(BitmapDescriptorFactory.fromResource(R.drawable.iconfinish))
-                       )
-                   } else if (jObjOfDeliveryHistoryDetail.getString("Vehicle") == "Car") {
-                       googleMap.addMarker(
-                           MarkerOptions().position(
-                               LatLng(
-                                   arrayCourierPick!![0].toDouble(),
-                                   arrayCourierPick!![1].toDouble()
-                               )
-                           ).title("")
-                               .icon(BitmapDescriptorFactory.fromResource(R.drawable.picklocation_icon))
-                       )
-                       googleMap.addMarker(
-                           MarkerOptions().position(
-                               LatLng(
-                                   arrayCourierDrop!![0].toDouble(),
-                                   arrayCourierDrop!![1].toDouble()
-                               )
-                           ).title("")
-                               .icon(BitmapDescriptorFactory.fromResource(R.drawable.iconfinish))
-                       )
+                   when (response?.Vehicle) {
+                       "Van" -> {
+                           map.addMarker(MarkerOptions().position(LatLng(arrayCourierPick!![0].toDouble(),arrayCourierPick!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pickup_icon)))
+                           map.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon)))
+                       }
+                       "Bike" -> {
+                           map.addMarker(MarkerOptions().position(LatLng(arrayCourierPick!![0].toDouble(),arrayCourierPick!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pickup_icon)))
+                           map.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon)))
+                       }
+                       "Car" -> {
+                           map.addMarker(MarkerOptions().position(LatLng(arrayCourierPick!![0].toDouble(), arrayCourierPick!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pickup_icon)))
+                           map.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon))
+                           )
+                       }
                    }
                }
            } catch (e: JSONException) {
                e.printStackTrace()
            }
-       }*/
+
+       }
+
+    private fun parserTask(data:String){
+        val executor = Executors.newSingleThreadExecutor()
+        val handler = Handler(Looper.getMainLooper())
+        executor.execute {
+
+            val jObject: JSONObject
+            var routes: List<List<HashMap<String, String>>>?=null
+            try {
+                jObject = JSONObject(data)
+                val parser = DirectionJsonParser()
+                routes = parser.parse(jObject)
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+            }
+
+
+
+
+            handler.post {
+                var points: ArrayList<LatLng>
+                var lineOptions: PolylineOptions? = null
+                var distance = ""
+                var duration = ""
+                if (routes?.isEmpty() == true) {
+                    Toast.makeText(this.baseContext, "No Points", Toast.LENGTH_SHORT).show()
+                }
+                for (i in routes?.indices!!) {
+                    points = ArrayList()
+                    if (lineOptions != null) lineOptions = null
+                    lineOptions = PolylineOptions()
+
+                    // Fetching i-th route
+                    val path: List<HashMap<String, String>> = routes[i]
+                    // Fetching all the points in i-th route
+                    for (j in path.indices) {
+                        val point = path[j]
+                        if (j == 0) { // Get distance from the list
+                            distance = point["distance"].toString()
+                            continue
+                        } else if (j == 1) { // Get duration from the list
+                            duration = point["duration"].toString()
+                            continue
+                        }
+                        val lat = point["lat"]!!.toDouble()
+                        val lng = point["lng"]!!.toDouble()
+                        val position = LatLng(lat, lng)
+                        points.add(position)
+                    }
+
+                    // Adding all the points in the route to LineOptions
+                    lineOptions.addAll(points)
+                    lineOptions.width(8F)
+                    lineOptions.color(Color.parseColor("#374350"))
+                }
+
+                // Drawing polyline in the Google Map for the i-th route
+                map.addPolyline(lineOptions)
+            }
+        }
+
+    }
+
+
 }

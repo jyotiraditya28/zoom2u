@@ -16,7 +16,7 @@ class TimePicker : WheelPicker.OnItemSelectedListener {
     private var isSelectTimeWindow = 0
     private var dialogTimePicker: Dialog? = null
     private lateinit var wheelHr: WheelPicker
-    private var selectedHr: String? = null
+    private var selectedHr: String = "8:00 AM"
     private val pickTimeArray =
         arrayOf(
             "8:00 AM",

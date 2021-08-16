@@ -14,8 +14,10 @@ import com.zoom2u_customer.apiclient.ApiClient.Companion.getServices
 import com.zoom2u_customer.apiclient.ServiceApi
 import com.zoom2u_customer.databinding.FragmentHistoryBinding
 import com.zoom2u_customer.ui.application.bottom_navigation.history.history_details.HistoryDetailsActivity
+import com.zoom2u_customer.ui.application.bottom_navigation.home.home_fragment.Icon
 import com.zoom2u_customer.utility.AppUtility
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class HistoryFragment : Fragment() {
@@ -24,7 +26,9 @@ class HistoryFragment : Fragment() {
     private var repository: HistoryRepository? = null
     lateinit var binding: FragmentHistoryBinding
     private var adapter: HistoryItemAdapter? = null
-    private var currentPage:Int=1
+    private var currentPage: Int = 1
+    private var mergeHistoryList: MutableList<HistoryResponse> = ArrayList()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -41,19 +45,76 @@ class HistoryFragment : Fragment() {
         val serviceApi: ServiceApi = getServices()
         repository = HistoryRepository(serviceApi, container?.context)
         viewModel.repository = repository
+        currentPage = 1
         viewModel.getHistory(currentPage)
-
+        if(mergeHistoryList.size>0)
+        mergeHistoryList.clear()
 
         viewModel.getHistoryList()?.observe(viewLifecycleOwner) {
             if (it != null) {
                 AppUtility.progressBarDissMiss()
                 binding.swipeRefresh.isRefreshing = false
                 if (it.isNotEmpty()) {
-                     AppUtility.progressBarDissMiss()
-                    adapter?.updateRecords(it)
+                    AppUtility.progressBarDissMiss()
+
+                    val onGoingList: MutableList<HistoryResponse> = ArrayList()
+                    val pastList: MutableList<HistoryResponse> = ArrayList()
+
+                    /**count ongoing*/
+                    for (item in it) {
+                        if (System.currentTimeMillis() < AppUtility.getDateTime(item.DropDateTime).time) {
+                            onGoingList.add(item)
+                        } else {
+                            pastList.add(item)
+                        }
+                    }
+                    if(mergeHistoryList.size>0) {
+                      /**when swipe refresh*/
+                        if (mergeHistoryList[2].BookingRef == it[0].BookingRef) {
+                            mergeHistoryList.clear()
+                            mergeHistoryList.add(HistoryResponse().apply {
+                                count = onGoingList.size
+                                type = 1
+                            })
+                            mergeHistoryList.addAll(onGoingList)
+
+                            mergeHistoryList.add(HistoryResponse().apply {
+                                count=pastList.size
+                                type=2
+                            })
+                            mergeHistoryList.addAll(pastList)
+                        }else{
+                           /**when pagination work*/
+                            /*mergeHistoryList.add(HistoryResponse().apply {
+                                count = onGoingList.size
+                                type = 1
+                            })*/
+                            mergeHistoryList.addAll(onGoingList)
+
+                            /*mergeHistoryList.add(HistoryResponse().apply {
+                                count=pastList.size
+                                type=2
+                            })*/
+                            mergeHistoryList.addAll(pastList)
+                        }
+                    }else{
+                        /**when first time activity lunch*/
+                        mergeHistoryList.clear()
+                        mergeHistoryList.add(HistoryResponse().apply {
+                            count = onGoingList.size
+                            type = 1
+                        })
+                        mergeHistoryList.addAll(onGoingList)
+
+                        mergeHistoryList.add(HistoryResponse().apply {
+                            count=pastList.size
+                            type=2
+                        })
+                        mergeHistoryList.addAll(pastList)
+                    }
+                    adapter?.updateRecords(mergeHistoryList)
                     binding.noHistoryText.visibility = View.GONE
                 } else
-
                     binding.noHistoryText.visibility = View.VISIBLE
             }
 
@@ -93,8 +154,17 @@ class HistoryFragment : Fragment() {
     private fun onItemClick(historyResponse: HistoryResponse) {
         val intent = Intent(activity, HistoryDetailsActivity::class.java)
         intent.putExtra("HistoryItem", historyResponse)
+        intent.putParcelableArrayListExtra("mergeHistoryList", ArrayList(mergeHistoryList.toList()))
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
-        startActivity(intent)
+        startActivityForResult(intent,3)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 3 ) {
+            val updatedHistoryItem: HistoryResponse? = data?.getParcelableExtra<HistoryResponse>("historyItem")
+            adapter?.updateItem(updatedHistoryItem)
+        }
     }
 }
 

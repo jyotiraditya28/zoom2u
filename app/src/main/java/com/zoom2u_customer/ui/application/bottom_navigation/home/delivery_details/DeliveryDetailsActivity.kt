@@ -6,6 +6,7 @@ import android.location.Geocoder
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.widget.AdapterView
 import androidx.appcompat.app.AppCompatActivity
@@ -45,7 +46,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
+class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.OnTouchListener,
     AdapterView.OnItemSelectedListener {
     var bookDeliveryAlertMsgStr = ""
     private var intraStateReq: IntraStateReq? = null
@@ -85,17 +86,19 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
     private var isInterstate: Boolean? = null
     private var isLaptopOrMobile: String? = "laptopOrMobileNo"
     private lateinit var itemDataList: ArrayList<Icon>
-    var isQuotesRequest:Boolean?=null
+    private var isQuotesRequest: Boolean? = null
+    private var isPickTimeSelectedFromTimeWindow: Boolean = false
+
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        AppUtility.hideKeyboard(this)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_delivery_datails)
-
+        AppUtility.hideKeyboardActivityLunched(this)
+        AppUtility.hideKeyBoardClickOutside(binding.parentCl, this)
         /**get data from map Item*/
         val intent: Intent = intent
         itemDataList = intent.getParcelableArrayListExtra<Icon>("IconList") as ArrayList<Icon>
-        isQuotesRequest=intent.getBooleanExtra("isQuotesRequest",false)
+        isQuotesRequest = intent.getBooleanExtra("isQuotesRequest", false)
 
         viewModel = ViewModelProvider(this).get(DeliveryDetailsViewModel::class.java)
         val serviceApi: ServiceApi = ApiClient.getServices()
@@ -106,25 +109,42 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
         viewModel.repositoryGoogleAddress = repositoryGoogleAddress
         viewModel.getMyLocationList()
 
-      /**for request quotes*/
-       if(isQuotesRequest as Boolean){
-        binding.pickSendSms.visibility=View.GONE
-        binding.nextBtn.text="Request Quotes"
-        binding.parcelBeforeCl.visibility=View.VISIBLE
-       }else{
-           binding.pickSendSms.visibility=View.VISIBLE
-           binding.nextBtn.text="Next"
-           binding.parcelBeforeCl.visibility=View.GONE
-       }
+        /**for request quotes*/
+        if (isQuotesRequest as Boolean) {
+            binding.pickSendSms.visibility = View.GONE
+            binding.nextBtn.text = "Request Quotes"
+            binding.parcelBeforeCl.visibility = View.VISIBLE
+        } else {
+            binding.pickSendSms.visibility = View.VISIBLE
+            binding.nextBtn.text = "Next"
+            binding.parcelBeforeCl.visibility = View.GONE
+        }
 
-      /**drop and pick date*/
+        /**date and time format*/
         val dateFormat: DateFormat = SimpleDateFormat("EEE dd MMM yyyy")
         val date = Date()
-        binding.pickDate.text = dateFormat.format(date)
 
-        /** pick time*/
         val timeFormat: DateFormat = SimpleDateFormat("hh:mm aaa")
-        binding.pickTime.text = timeFormat.format(date)
+        val currentTime = timeFormat.format(date)
+
+        val currTimeInDateFormat: Date = timeFormat.parse(currentTime)
+
+        /**check if current time after 9pm */
+        val time6Pm = "06:00 PM"
+        val time6PM: Date = timeFormat.parse(time6Pm)
+
+        if (time6PM.before(currTimeInDateFormat)) {
+            val c = Calendar.getInstance()
+            c.add(Calendar.DATE, 1)
+            val d = c.time
+            val dropTime = dateFormat.format(d)
+            binding.pickDate.text = dropTime
+            binding.pickTime.text = "8:00 AM"
+        } else {
+            binding.pickDate.text = dateFormat.format(date)
+            binding.pickTime.text = currentTime
+        }
+
 
         /**drop time*/
         val c = Calendar.getInstance()
@@ -136,19 +156,18 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
         datePicker = DatePicker()
         timePicker = TimePicker()
 
-        val timeFrom="09:00 PM"
-        val current:String=timeFormat.format(date)
+        /**check if current time after 9pm */
+        val time9Pm = "09:00 PM"
+        val time9PM: Date = timeFormat.parse(time9Pm)
 
-        val time9PM: Date = timeFormat.parse(timeFrom)
-        val currentTime: Date = timeFormat.parse(current)
 
-        if(time9PM.before(currentTime)){
+        if (time9PM.after(currTimeInDateFormat)) {
             val c = Calendar.getInstance()
             c.add(Calendar.DATE, 1)
             val d = c.time
             val dropTime = dateFormat.format(d)
             binding.dropDate.text = dropTime
-        }else
+        } else
             binding.dropDate.text = dateFormat.format(date)
 
         categories.add("Front door")
@@ -188,13 +207,24 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
                 val selectedContact =
                     parent.adapter.getItem(position) as MyLocationResAndEditLocationReq?
                 binding.pickName.setText(selectedContact?.Location?.ContactName)
+                if (!selectedContact?.Location?.CompanyName.toString().isNullOrEmpty())
+                    binding.pickCompany.setText(selectedContact?.Location?.CompanyName)
                 binding.pickEmail.setText(selectedContact?.Location?.Email)
                 binding.pickPhone.setText(selectedContact?.Location?.Phone)
-                binding.pickUnit.setText(selectedContact?.Location?.UnitNumber)
+                if (!selectedContact?.Location?.UnitNumber.toString().isNullOrEmpty())
+                    binding.pickUnit.setText(selectedContact?.Location?.UnitNumber)
                 binding.pickInstruction.setText(selectedContact?.Location?.Notes)
-                binding.pickAddress.setText(selectedContact?.Location?.Address)
+                binding.pickAddress.setText(selectedContact?.Location?.Street)
                 pickState = selectedContact?.Location?.State
                 showHideWeight(pickState, dropState)
+                pickGpx = selectedContact?.Location?.GPSX.toString()
+                pickGpy = selectedContact?.Location?.GPSY.toString()
+                pickSuburb = selectedContact?.Location?.Suburb
+                pickPostCode = selectedContact?.Location?.Postcode
+                pickStreet = selectedContact?.Location?.Street
+                pickStreetNumber = selectedContact?.Location?.StreetNumber
+
+
             }
 
         binding.dropName.onItemClickListener =
@@ -202,13 +232,22 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
                 val selectedContact =
                     parent.adapter.getItem(position) as MyLocationResAndEditLocationReq?
                 binding.dropName.setText(selectedContact?.Location?.ContactName)
+                if (!selectedContact?.Location?.CompanyName.toString().isNullOrEmpty())
+                    binding.dropCompany.setText(selectedContact?.Location?.CompanyName)
                 binding.dropEmail.setText(selectedContact?.Location?.Email)
                 binding.dropPhone.setText(selectedContact?.Location?.Phone)
-                binding.dropUnit.setText(selectedContact?.Location?.UnitNumber)
+                if (!selectedContact?.Location?.UnitNumber.toString().isNullOrEmpty())
+                    binding.dropUnit.setText(selectedContact?.Location?.UnitNumber)
                 binding.dropInstruction.setText(selectedContact?.Location?.Notes)
-                binding.dropAddress.setText(selectedContact?.Location?.Address)
+                binding.dropAddress.setText(selectedContact?.Location?.Street)
                 dropState = selectedContact?.Location?.State
                 showHideWeight(pickState, dropState)
+                dropGpx = selectedContact?.Location?.GPSX.toString()
+                dropGpy = selectedContact?.Location?.GPSY.toString()
+                dropSuburb = selectedContact?.Location?.Suburb
+                dropPostCode = selectedContact?.Location?.Postcode
+                dropStreet = selectedContact?.Location?.Street
+                dropStreetNumber = selectedContact?.Location?.StreetNumber
             }
 
 
@@ -366,6 +405,8 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
         }
 
         binding.weight.text = countTotalWeight() + "Kg"
+
+
     }
 
 
@@ -395,10 +436,9 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
                     binding.pickName.setText(myLocation.Location?.ContactName.toString())
                     binding.pickEmail.setText(myLocation.Location?.Email.toString())
                     binding.pickPhone.setText(myLocation.Location?.Phone.toString())
-
-                    if (TextUtils.isEmpty(myLocation.Location?.UnitNumber.toString()))
+                    if (!myLocation.Location?.UnitNumber.toString().isNullOrEmpty())
                         binding.pickUnit.setText(myLocation.Location?.UnitNumber.toString())
-                    if (TextUtils.isEmpty(myLocation.Location?.CompanyName.toString()))
+                    if (!myLocation.Location?.CompanyName.toString().isNullOrEmpty())
                         binding.pickCompany.setText(myLocation.Location?.CompanyName.toString())
                     binding.pickAddress.setText(myLocation.Location?.Street.toString())
                     pickState = myLocation.Location?.State.toString()
@@ -418,9 +458,9 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
                     binding.dropName.setText(myLocation.Location?.ContactName.toString())
                     binding.dropEmail.setText(myLocation.Location?.Email.toString())
                     binding.dropPhone.setText(myLocation.Location?.Phone.toString())
-                    if (TextUtils.isEmpty(myLocation.Location?.UnitNumber.toString()))
+                    if (!myLocation.Location?.UnitNumber.toString().isNullOrEmpty())
                         binding.dropUnit.setText(myLocation.Location?.UnitNumber.toString())
-                    if (TextUtils.isEmpty(myLocation.Location?.CompanyName.toString()))
+                    if (!myLocation.Location?.UnitNumber.toString().isNullOrEmpty())
                         binding.dropCompany.setText(myLocation.Location?.CompanyName.toString())
                     binding.dropAddress.setText(myLocation.Location?.Street.toString())
                     dropState = myLocation.Location?.State.toString()
@@ -446,9 +486,37 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
         showHideWeight(pickState, dropState)
     }
 
+
+    override fun onTouch(view: View?, p1: MotionEvent?): Boolean {
+        when (view!!.id) {
+            R.id.pick_address -> {
+                pickSearchLocation()
+            }
+            R.id.drop_address -> {
+                dropSearchLocation()
+            }
+
+        }
+        return true
+    }
+
+
     override fun onClick(view: View?) {
         when (view!!.id) {
             R.id.next_btn -> {
+                /*  binding.nextBtn.isClickable=false
+                Handler(Looper.getMainLooper()).postDelayed({
+                    binding.nextBtn.isClickable=true
+
+                }, 3000)*/
+                /**check if pick or drop state is TAS*/
+                 if (pickState == "TAS" || dropState == "TAS") {
+                     DialogActivity.alertDialogSingleButton(
+                         this,
+                         "Oops!",
+                         "We're sorry,we currently don't service this route.Please contact us if you required more information! You can reach us on  1300 966 628."
+                     )
+                 } else {
                 val isBookingConfirm = validateYourDeliveryField(
                     binding.pickName.text.toString().trim(),
                     binding.pickPhone.text.toString().trim(),
@@ -460,51 +528,54 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
                 )
 
                 if (isBookingConfirm <= 0) {
-                    if(isQuotesRequest as Boolean) {
+                    if (isQuotesRequest as Boolean) {
                         val intent = Intent(this, UploadQuotesActivity::class.java)
-                        intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                         startActivity(intent)
-                    }
-                    else {
+                    } else {
+
+                        val intent = Intent(this, PricingPaymentActivity::class.java)
                         /**for Intra State**/
                         if (pickState == dropState) {
                             isInterstate = false
                             intraStateReq = getIntraState()
-                            val intent = Intent(this, PricingPaymentActivity::class.java)
+                           // val intent = Intent(this, PricingPaymentActivity::class.java)
                             intent.putExtra("IntraStateData", intraStateReq)
-                            intent.putExtra(
+                          /*  intent.putExtra(
                                 "SaveDeliveryRequestReq",
                                 createJsonForSaveRequest().toString()
                             )
                             intent.putParcelableArrayListExtra("IconList", itemDataList)
-                            intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
-                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
-                            startActivity(intent)
+                            startActivityForResult(intent,3)*/
                         }
                         /**for Inter State**/
                         else {
                             isInterstate = true
                             interStateReq = getInterState()
-                            val intent = Intent(this, PricingPaymentActivity::class.java)
+                            //val intent = Intent(this, PricingPaymentActivity::class.java)
                             intent.putExtra("InterStateData", interStateReq)
-                            intent.putExtra(
+                           /* intent.putExtra(
                                 "SaveDeliveryRequestReq",
                                 createJsonForSaveRequest().toString()
                             )
                             intent.putParcelableArrayListExtra("IconList", itemDataList)
-                            intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
-                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
-                            startActivity(intent)
+                            startActivityForResult(intent,3)*/
                         }
+                        intent.putExtra("SaveDeliveryRequestReq", createJsonForSaveRequest().toString())
+                        intent.putParcelableArrayListExtra("IconList", itemDataList)
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivityForResult(intent,3)
                     }
                 } else
+                //  binding.nextBtn.isClickable=true
                     DialogActivity.alertDialogSingleButton(
                         this,
                         "Awaiting!",
                         bookDeliveryAlertMsgStr
                     )
+                }
             }
             R.id.pick_find_me -> {
                 getLocationClass?.getCurrentLocation(onAddress = ::getPickAddress)
@@ -513,36 +584,10 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
                 getLocationClass?.getCurrentLocation(onAddress = ::getDropAddress)
             }
             R.id.pick_address -> {
-                try {
-                    val fields =
-                        listOf(
-                            Place.Field.ADDRESS, Place.Field.LAT_LNG,
-                        )
-                    val intent = Autocomplete.IntentBuilder(
-                        AutocompleteActivityMode.FULLSCREEN, fields
-                    )
-                        .setCountry("AU")
-                        .setTypeFilter(TypeFilter.ADDRESS)
-                        .build(this)
-                    startActivityForResult(intent, pickAutocompleteRequest)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
+                pickSearchLocation()
             }
             R.id.drop_address -> {
-                try {
-                    val fields =
-                        listOf(Place.Field.ADDRESS, Place.Field.LAT_LNG)
-                    val intent = Autocomplete.IntentBuilder(
-                        AutocompleteActivityMode.FULLSCREEN, fields
-                    )
-                        .setCountry("AU")
-                        .setTypeFilter(TypeFilter.ADDRESS)
-                        .build(this)
-                    startActivityForResult(intent, dropAutocompleteRequest)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
+                dropSearchLocation()
             }
             R.id.pick_date -> {
                 datePicker?.datePickerDialog(
@@ -560,14 +605,14 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
             }
             R.id.pick_time -> {
                 timePicker?.timePickerDialog(
-                    this,false,
+                    this, false,
                     binding.pickTime.text.toString(),
                     onItemClick = ::onPickTimeClick
                 )
             }
             R.id.pick_time_cl -> {
                 timePicker?.timePickerDialog(
-                    this,false,
+                    this, false,
                     binding.pickTime.text.toString(),
                     onItemClick = ::onPickTimeClick
                 )
@@ -588,30 +633,32 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
             }
             R.id.drop_time -> {
                 timePicker?.timePickerDialog(
-                    this,true,
+                    this, true,
                     binding.dropTime.text.toString(),
                     onItemClick = ::onDropTimeClick
                 )
             }
             R.id.drop_time_cl -> {
                 timePicker?.timePickerDialog(
-                    this,true,
+                    this, true,
                     binding.dropTime.text.toString(),
                     onItemClick = ::onDropTimeClick
                 )
             }
             R.id.item_we_not_send -> {
-            /* val pdfUri= Uri.fromFile( File("raw/item_not_send.pdf"))
-                 val browserIntent=Intent(Intent.ACTION_VIEW, pdfUri)
-                 startActivity(browserIntent)*/
+                /*   val pdfUri = Uri.fromFile(File(filesDir.parent + "/raw/item_not_send.pdf"))
+                   val browserIntent = Intent(Intent.ACTION_VIEW, pdfUri)
+                   startActivity(browserIntent)*/
             }
             R.id.authority_to -> {
                 binding.spinner.performClick()
 
             }
             R.id.no_contact_drop -> {
-                binding.authorityToLeave.isChecked = true
-                binding.authorityTo.visibility = View.VISIBLE
+                if (binding.noContactDrop.isChecked) {
+                    binding.authorityToLeave.isChecked = true
+                    binding.authorityTo.visibility = View.VISIBLE
+                }
             }
             R.id.authority_to_leave -> {
                 if (binding.authorityToLeave.isChecked)
@@ -623,6 +670,40 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
                 finish()
             }
 
+        }
+    }
+
+    private fun dropSearchLocation() {
+        try {
+            val fields =
+                listOf(Place.Field.ADDRESS, Place.Field.LAT_LNG)
+            val intent = Autocomplete.IntentBuilder(
+                AutocompleteActivityMode.FULLSCREEN, fields
+            )
+                .setCountry("AU")
+                .setTypeFilter(TypeFilter.ADDRESS)
+                .build(this)
+            startActivityForResult(intent, dropAutocompleteRequest)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun pickSearchLocation() {
+        try {
+            val fields =
+                listOf(
+                    Place.Field.ADDRESS, Place.Field.LAT_LNG,
+                )
+            val intent = Autocomplete.IntentBuilder(
+                AutocompleteActivityMode.FULLSCREEN, fields
+            )
+                .setCountry("AU")
+                .setTypeFilter(TypeFilter.ADDRESS)
+                .build(this)
+            startActivityForResult(intent, pickAutocompleteRequest)
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
@@ -642,31 +723,21 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
     }
 
     private fun getPickDateAndTimeInEta(): String {
-        return DateTimeUtil.getDateTimeFromDeviceForDeliveryETA(
-            binding.pickDate.text.toString() + " " +
-                    binding.pickTime.text.toString()
-        ).toString()
-
-    }
-
-    @SuppressLint("SimpleDateFormat")
-    fun getCurrentDateAndTimeInEta(): String {
-        val date = Date()
-        val dateFormat: DateFormat = SimpleDateFormat("EEE dd MMM yyyy")
-        val timeFormat: DateFormat = SimpleDateFormat("hh:mm aaa")
-
-        return DateTimeUtil.getDateTimeFromDeviceForDeliveryETA(
-            dateFormat.format(date) + " " +
-                    timeFormat.format(date)
-        ).toString()
-
+        return if (isPickTimeSelectedFromTimeWindow) {
+            DateTimeUtil.getDateTimeFromDeviceForDeliveryETA(
+                binding.pickDate.text.toString() + " " +
+                        binding.pickTime.text.toString()
+            ).toString()
+        } else {
+            AppUtility.getCurrentDateAndTimeInEta()
+        }
     }
 
     private fun getIntraState(): IntraStateReq? {
         val dropLocation = IntraStateReq.DropLocationClass(dropGpx, dropGpy)
         val pickLocation = IntraStateReq.PickupLocationClass(pickGpx, pickGpy)
         intraStateReq = IntraStateReq(
-            getCurrentDateAndTimeInEta(),
+            AppUtility.getCurrentDateAndTimeInEta(),
             0,
             binding.dropAddress.text.toString(),
             dropLocation,
@@ -691,7 +762,7 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
         val dropLocation = InterStateReq.DropLocationClass(dropGpx, dropGpy)
         val pickLocation = InterStateReq.PickupLocationClass(pickGpx, pickGpy)
         interStateReq = InterStateReq(
-            getCurrentDateAndTimeInEta(),
+            AppUtility.getCurrentDateAndTimeInEta(),
             binding.dropAddress.text.toString(),
             dropLocation,
             dropPostCode,
@@ -720,9 +791,11 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
         if (!TextUtils.isEmpty(time)) {
             if (checkPickFutureTime(time)) {
                 binding.pickTime.text = time
+                isPickTimeSelectedFromTimeWindow = true
             }
         }
     }
+
     private fun onPickDateClick(s: String?) {
         if (!TextUtils.isEmpty(s))
             binding.pickDate.text = s.toString()
@@ -737,15 +810,16 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
             }
         }
     }
+
     private fun onDropDateClick(s: String?) {
         if (!TextUtils.isEmpty(s))
             binding.dropDate.text = s.toString()
     }
 
-    fun add3HourInPickTime(time: String?){
+    fun add3HourInPickTime(time: String?) {
         val serverDateTimeValue = binding.pickDate.text.toString() + " " +
                 time
-        val millisToAdd:Long = 7_200_000
+        val millisToAdd: Long = 7_200_000
         val converter = SimpleDateFormat("hh:mm a")
         val convertedDate: Date?
         try {
@@ -758,7 +832,7 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
 
     }
 
-    private fun checkPickFutureTime(selectedTime:String?): Boolean {
+    private fun checkPickFutureTime(selectedTime: String?): Boolean {
         val serverDateTimeValue = binding.pickDate.text.toString() + " " +
                 selectedTime
         val converter = SimpleDateFormat("EEE dd MMM yyyy hh:mm a")
@@ -781,7 +855,7 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
         return true
     }
 
-    private fun checkDropFutureTime(selectedTime:String?): Boolean {
+    private fun checkDropFutureTime(selectedTime: String?): Boolean {
         val serverDateTimeValue = binding.dropDate.text.toString() + " " +
                 selectedTime
         val converter = SimpleDateFormat("EEE dd MMM yyyy hh:mm a")
@@ -790,10 +864,10 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
             convertedDate = converter.parse(serverDateTimeValue)
             if (System.currentTimeMillis() > convertedDate.time) {
                 DialogActivity.alertDialogSingleButton(
-                        this,
-                        "Oops!",
-                        "Please enter a drop off date/time in the future."
-                    )
+                    this,
+                    "Oops!",
+                    "Please enter a drop off date/time in the future."
+                )
                 return false
             }
 
@@ -804,7 +878,7 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
         return true
     }
 
-    private fun check3HourTime(selectedTime:String?): Boolean {
+    private fun check3HourTime(selectedTime: String?): Boolean {
         val serverDateTimeValue = binding.dropDate.text.toString() + " " +
                 selectedTime
         val converter = SimpleDateFormat("EEE dd MMM yyyy hh:mm a")
@@ -815,7 +889,7 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
             val c = Calendar.getInstance()
             c.add(Calendar.HOUR, 3)
             val d = c.time
-            val currentTime= converter.format(d)
+            val currentTime = converter.format(d)
             val currentTimePlus3Hour: Date = converter.parse(currentTime)
             if (currentTimePlus3Hour.time > convertedDate.time) {
                 DialogActivity.alertDialogSingleButton(
@@ -841,7 +915,6 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
         }
         return totalWeight.toString()
     }
-
 
 
     fun createJsonForSaveRequest(): JSONObject {
@@ -892,22 +965,32 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
             deliveryRequest.put("sendSmsToPickupPerson", binding.pickSendSms.isChecked)
             deliveryRequest.put("IsNoContactPickup", binding.isNoContactPickup.isChecked)
             deliveryRequest.put("IsNoContactDrop", binding.noContactDrop.isChecked)
-            deliveryRequest.put("RequestedDropDateTimeWindowEnd", getCurrentDateAndTimeInEta())
-            deliveryRequest.put("RequestedDropDateTimeWindowStart", getCurrentDateAndTimeInEta())
-            deliveryRequest.put("RequestedPickupDateTimeWindowEnd", getCurrentDateAndTimeInEta())
-            deliveryRequest.put("RequestedPickupDateTimeWindowStart", getCurrentDateAndTimeInEta())
+            deliveryRequest.put("RequestedDropDateTimeWindowEnd", AppUtility.getCurrentDateAndTimeInEta())
+            deliveryRequest.put("RequestedDropDateTimeWindowStart",AppUtility. getCurrentDateAndTimeInEta())
+            deliveryRequest.put("RequestedPickupDateTimeWindowEnd", AppUtility.getCurrentDateAndTimeInEta())
+            deliveryRequest.put("RequestedPickupDateTimeWindowStart", AppUtility.getCurrentDateAndTimeInEta())
             deliveryRequest.put("isLaptopOrMobile", isLaptopOrMobile)
+            deliveryRequest.put("AuthorityToLeave", binding.authorityToLeave.isChecked)
+            deliveryRequest.put("Instructions", binding.other.text.toString())
+
+
+            /**put boolean for check in next pages that is time selected from time window or not*/
+            deliveryRequest.put("isPickTimeSelectedFromTimeWindow", isPickTimeSelectedFromTimeWindow)
 
 
 
 
-            if (binding.authorityTo.text.toString() == "Other") {
+
+            if (binding.authorityToLeave.isChecked) {
+                deliveryRequest.put("LeaveAt", leaveAt.toString())
                 authorityToLeaveForm.put("NoContact", binding.noContactDrop.isChecked)
                 authorityToLeaveForm.put("LeaveAt", leaveAt.toString())
                 authorityToLeaveForm.put("Instructions", binding.other.text.toString())
                 jObjOfQuotesItem.put("_authorityToLeaveForm", authorityToLeaveForm)
-
+            } else {
+                deliveryRequest.put("LeaveAt", "")
             }
+
 
             jObjOfQuotesItem.put("_deliveryRequestModel", deliveryRequest)
             jObjOfQuotesItem.put("_interstateModel", forInterstate)
@@ -971,6 +1054,13 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
                     Log.i("Place API Failure", "  -------------- User Cancelled -------------")
                 }
             }
+        }
+        /**update current time when user back from price screen*/
+        else if(requestCode == 3){
+            val date = Date()
+            val timeFormat: DateFormat = SimpleDateFormat("hh:mm aaa")
+            val currentTime = timeFormat.format(date)
+            binding.pickTime.text = currentTime
         }
     }
 
@@ -1112,6 +1202,33 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
                 }
             }
         }
+
+        /** check for future pick time*/
+        if (isPickTimeSelectedFromTimeWindow) {
+            val serverDateTimeValue = binding.pickDate.text.toString() + " " +
+                    binding.pickTime.text.toString()
+            val converter = SimpleDateFormat("EEE dd MMM yyyy hh:mm a")
+            val convertedDate: Date?
+            try {
+                convertedDate = converter.parse(serverDateTimeValue)
+                if (System.currentTimeMillis() > convertedDate.time) {
+                    bookDeliveryAlertCount++
+                    addTextToAlertDialog(
+                        "Please enter a drop off date/time in the future.",
+                        bookDeliveryAlertCount
+                    )
+                }
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+
+
+
+
+
         return bookDeliveryAlertCount
     }
 
@@ -1122,6 +1239,7 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener,
             "$bookDeliveryAlertMsgStr\n$count) $addAlertMsgStr"
 
     }
+
 
 
 }

@@ -8,6 +8,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/parent_cl"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
@@ -116,10 +117,12 @@
                         android:textColor="@color/black" />
 
                     <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/sec_min"
+                        android:layout_marginStart="5dp"
                         style="@style/style_13_regular"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text=" minutes" />
+                        android:text="@string/minutes" />
 
                 </LinearLayout>
 
@@ -128,6 +131,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="10dp"
+                    tools:listitem="@layout/item_price"
                     android:background="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -254,8 +258,9 @@
             android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent">
 
-            <Button
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/next_btn"
+                android:gravity="center"
                 style="@style/style_15_bold"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"

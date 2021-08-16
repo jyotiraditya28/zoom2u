@@ -5,6 +5,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,14 +21,14 @@ import com.zoom2u_customer.utility.DialogActivity
 
 
 class HomeFragment : Fragment(), View.OnClickListener{
-
+    lateinit var binding : FragmentHomeBinding
     private var itemList:MutableList<Icon> = ArrayList()
     lateinit var adapter : IconAdapter
     @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View {
-        val binding = FragmentHomeBinding.inflate(inflater, container, false)
+         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
 
         if (container != null) {
@@ -52,24 +54,33 @@ class HomeFragment : Fragment(), View.OnClickListener{
     override fun onClick(view: View?) {
         when (view?.id) {
             R.id.get_quote_btn -> {
+                binding.getQuoteBtn.isClickable=false
+                Handler(Looper.getMainLooper()).postDelayed({
+                    binding.getQuoteBtn.isClickable=true
+
+                }, 1000)
                 setItemData()
                 if (itemList.size > 0) {
                     val intent = Intent(activity, MapActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                     intent.putParcelableArrayListExtra("icon_data", ArrayList(itemList.toList()))
                     startActivityForResult(intent,11)
                 }else{
-                    DialogActivity.alertDialogSingleButton(activity, "Oops!", "Please select the type of parcel you want to send.")
+                    DialogActivity.alertDialogOkCallback(activity, "Oops!", "Please select the type of parcel you want to send.",onItemClick = ::onItemClick)
+
                 }
-            }
+
+                }
            /* R.id.chat_btn -> {
                 val intent = Intent(activity, ChatActivity::class.java)
                 startActivity(intent)
             }*/
 
         }
+    }
+
+    private fun onItemClick() {
+        binding.getQuoteBtn.isClickable=true
     }
 
     private fun setItemData() {

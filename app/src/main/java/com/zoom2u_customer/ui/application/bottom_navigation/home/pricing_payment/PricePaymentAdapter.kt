@@ -20,7 +20,7 @@ class PricePaymentAdapter(
     val context: Context, private var dataList: List<QuoteOptionClass>,
     private val onItemClick: (QuoteOptionClass) -> Unit,
 
-) : RecyclerView.Adapter<PricePaymentAdapter.BindingViewHolder>() {
+    ) : RecyclerView.Adapter<PricePaymentAdapter.BindingViewHolder>() {
 
     private var rowIndex: Int? = null
 
@@ -53,16 +53,18 @@ class PricePaymentAdapter(
             rowIndex = position
             onItemClick(dataList[position])
             notifyDataSetChanged()
-
         }
 
-        if(dataList[position].DeliverySpeed=="Interstate")
-            holder.itemBinding.priceTag.text="Premium air"
-        else
-            holder.itemBinding.priceTag.text=dataList[position].DeliverySpeed
+     /**set delivery speed text according portal text*/
+        when (dataList[position].DeliverySpeed) {
+            "Interstate" -> holder.itemBinding.priceTag.text = "Premium air"
+            "VIP" -> holder.itemBinding.priceTag.text = "ASAP"
+            else -> holder.itemBinding.priceTag.text = dataList[position].DeliverySpeed
+        }
 
-        holder.itemBinding.info.setOnClickListener{
-            if(quoteOptionClass.DeliverySpeed=="Same day"){
+    /**set i button text*/
+        holder.itemBinding.info.setOnClickListener {
+            if (quoteOptionClass.DeliverySpeed == "Same day") {
                 showPopup(
                     holder.itemBinding.info,
                     "Same day",
@@ -71,7 +73,7 @@ class PricePaymentAdapter(
                             "Please ensure that both locations will be open during these hours as we are not able to guarantee an earlier collection or delivery time on this service."
                 )
             }
-            if(quoteOptionClass.DeliverySpeed=="3 hour"){
+            if (quoteOptionClass.DeliverySpeed == "3 hour") {
                 showPopup(
                     holder.itemBinding.info,
                     "3 hour",
@@ -80,14 +82,14 @@ class PricePaymentAdapter(
                             "Please be aware that there is no guaranteed collection time on this service."
                 )
             }
-            if(quoteOptionClass.DeliverySpeed=="VIP"){
+            if (quoteOptionClass.DeliverySpeed == "VIP") {
                 showPopup(
                     holder.itemBinding.info,
                     "ASAP",
                     "Delivery will be collected as close to the requested time as possible and delivered directly to the drop location."
                 )
             }
-            if(quoteOptionClass.DeliverySpeed=="Interstate"){
+            if (quoteOptionClass.DeliverySpeed == "Interstate") {
                 showPopup(
                     holder.itemBinding.info,
                     "Premium air",
@@ -100,21 +102,38 @@ class PricePaymentAdapter(
                 )
             }
         }
+
+
         if (rowIndex == position) {
             if (dataList[position].isPriceSelect == false) {
                 holder.itemBinding.selectBtn.setBackgroundResource(R.drawable.selected_background)
                 holder.itemBinding.selectBtn.text = "Selected"
                 dataList[position].isPriceSelect = true
-            }else{
+            } else {
                 holder.itemBinding.selectBtn.setBackgroundResource(R.drawable.chip_background)
                 holder.itemBinding.selectBtn.text = "Select"
                 dataList[position].isPriceSelect = false
             }
-        }else {
+        } else {
             holder.itemBinding.selectBtn.setBackgroundResource(R.drawable.chip_background)
             holder.itemBinding.selectBtn.text = "Select"
         }
 
+
+        /** if price greater then 1500*/
+        if (dataList[position].BookingFee as Int +
+            dataList[position].Price as Int > 1500
+        ) {
+            holder.itemBinding.priceNotAvailable.visibility = View.VISIBLE
+            holder.itemBinding.price.visibility = View.GONE
+            holder.itemBinding.selectBtn.visibility = View.GONE
+            holder.itemBinding.priceTime.visibility =View.GONE
+        } else {
+            holder.itemBinding.priceNotAvailable.visibility = View.GONE
+            holder.itemBinding.price.visibility = View.VISIBLE
+            holder.itemBinding.selectBtn.visibility = View.VISIBLE
+            holder.itemBinding.priceTime.visibility = View.VISIBLE
+        }
 
 
     }
@@ -126,7 +145,8 @@ class PricePaymentAdapter(
     @SuppressLint("ClickableViewAccessibility")
     fun showPopup(view: View, alertTitle: String, alertMsg: String) {
 
-        val inflater = context.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater?
+        val inflater =
+            context.getSystemService(AppCompatActivity.LAYOUT_INFLATER_SERVICE) as LayoutInflater?
         val popupView = inflater?.inflate(R.layout.price_info_dialog, null)
 
         val titleAlert: TextView? = popupView?.findViewById(R.id.price_type)
@@ -142,7 +162,7 @@ class PricePaymentAdapter(
         val popupWindow = PopupWindow(popupView, 500, height, focusable)
 
 
-        popupWindow.showAsDropDown(view, -100, 0,Gravity.LEFT);
+        popupWindow.showAsDropDown(view, -100, 0, Gravity.LEFT)
 
         popupView?.setOnTouchListener { _, _ ->
             popupWindow.dismiss()

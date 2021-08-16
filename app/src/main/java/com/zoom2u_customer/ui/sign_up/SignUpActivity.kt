@@ -1,19 +1,23 @@
 package com.zoom2u_customer.ui.sign_up
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ListPopupWindow
+import android.widget.Spinner
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.zoom2u_customer.R
 import com.zoom2u_customer.apiclient.ServiceApi
+import com.zoom2u_customer.databinding.ActivitySignUpBinding
 import com.zoom2u_customer.ui.application.bottom_navigation.base_page.BasePageActivity
 import com.zoom2u_customer.ui.log_in.LogInActivity
 import com.zoom2u_customer.ui.log_in.LoginRequest
-import com.zoom2u_customer.databinding.ActivitySignUpBinding
 import com.zoom2u_customer.utility.AppUtility
 import com.zoom2u_customer.utility.DialogActivity
 import com.zoom2u_customer.utility.utility_custom_class.MySpinnerAdapter
@@ -29,12 +33,10 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
-        AppUtility.hideKeyboard(this)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_sign_up)
+        AppUtility.hideKeyboardActivityLunched(this)
+        AppUtility.hideKeyBoardClickOutside(binding.parentCl,this)
 
-        binding.signupBtn.setOnClickListener(this)
-        binding.signup.setOnClickListener(this)
-        binding.findUs.setOnClickListener(this)
         try {
             val popup: Field = Spinner::class.java.getDeclaredField("mPopup")
             popup.isAccessible = true
@@ -95,11 +97,16 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener,
 
         }
 
-
-
-
-
-
+        /*binding.parentCl.setOnTouchListener { v, m ->
+            val imm: InputMethodManager =
+                getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
+            true
+        }*/
+        binding.signupBtn.setOnClickListener(this)
+        binding.signup.setOnClickListener(this)
+        binding.findUs.setOnClickListener(this)
+        binding.terms.setOnClickListener(this)
     }
 
 
@@ -116,10 +123,19 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener,
                 finish()
             }
             R.id.find_us -> {
-                AppUtility.hideKeyboardOnClick(this)
                 binding.spinner.performClick()
             }
-
+            R.id.terms -> {
+                try {
+                    val browserIntent: Intent = Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://www.zoom2u.com.au/customer-terms/")
+                    )
+                    startActivity(browserIntent)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
         }
     }
 
@@ -134,19 +150,19 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener,
             DialogActivity.alertDialogSingleButton(this, "Alert!", "Please enter your first name")
             AppUtility.validateTextField(binding.firstName)
             return false
-        } else if (!first_name.matches(("[a-zA-Z ]+").toRegex())) {
+        } /*else if (!first_name.matches(("[a-zA-Z ]+").toRegex())) {
             DialogActivity.alertDialogSingleButton(this, "Alert!", "Please enter alphabets in first name")
             AppUtility.validateTextField(binding.firstName)
             return false
-        } else if (last_name == "") {
+        }*/ else if (last_name == "") {
             DialogActivity.alertDialogSingleButton(this, "Alert!", "Please enter your last name")
             AppUtility.validateTextField(binding.lastName)
             return false
-        } else if (!last_name.matches(("[a-zA-Z ]+").toRegex())) {
+        } /*else if (!last_name.matches(("[a-zA-Z ]+").toRegex())) {
             DialogActivity.alertDialogSingleButton(this, "Alert!", "Please enter alphabets in last name")
             AppUtility.validateTextField(binding.lastName)
             return false
-        }  else if (email == "") {
+        }*/  else if (email == "") {
             DialogActivity.alertDialogSingleButton(this, "Alert!", "Please enter your email")
             AppUtility.validateTextField(binding.email)
             return false

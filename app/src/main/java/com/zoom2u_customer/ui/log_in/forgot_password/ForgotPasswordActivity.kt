@@ -18,13 +18,14 @@ import com.zoom2u_customer.utility.DialogActivity
 
 class ForgotPasswordActivity : AppCompatActivity(), View.OnClickListener {
     lateinit var binding: ActivityForgotPasswordBinding
-
     lateinit var viewModel: ForgotPassViewModel
     private var repository: ForgotPassRepository? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = DataBindingUtil.setContentView(this, R.layout.activity_forgot_password)
+        AppUtility.hideKeyBoardClickOutside(binding.parentCl,this)
+        AppUtility.hideKeyboardActivityLunched(this)
+
         binding.backIcon.setOnClickListener(this)
         binding.resetPassBtn.setOnClickListener(this)
 

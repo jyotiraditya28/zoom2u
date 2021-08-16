@@ -7,12 +7,15 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.text.HtmlCompat
 import androidx.databinding.DataBindingUtil
 import com.zoom2u_customer.R
 import com.zoom2u_customer.databinding.ActivityDocDimensionBinding
 import com.zoom2u_customer.ui.application.bottom_navigation.home.home_fragment.Icon
+import com.zoom2u_customer.utility.AppUtility
 import com.zoom2u_customer.utility.CustomTypefaceSpan
 import com.zoom2u_customer.utility.DialogActivity
+import java.text.DecimalFormat
 
 class DocDimensionActivity : AppCompatActivity(), View.OnClickListener {
     lateinit var binding: ActivityDocDimensionBinding
@@ -25,9 +28,9 @@ class DocDimensionActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = DataBindingUtil.setContentView(this, R.layout.activity_doc_dimension)
-
+        AppUtility.hideKeyboardActivityLunched(this)
+        AppUtility.hideKeyBoardClickOutside(binding.parentCl,this)
         if (intent.hasExtra("Icon")) {
             icon = intent.getParcelableExtra("Icon")
         }
@@ -52,6 +55,7 @@ class DocDimensionActivity : AppCompatActivity(), View.OnClickListener {
         val text = "<font color=#ff0000>Please login with your account details on</font> " +
                 "<font color=#00A7E2>https://deliveries.zoom2u.com/  </font>" +
                 "<font color=#ff0000>to create Heavy and Large freight bookings.</font>"
+        binding.errorText.text = HtmlCompat.fromHtml(text, HtmlCompat.FROM_HTML_MODE_LEGACY)
 
         val importantTxtStr =
             "Important: Items weighing over 30kg each or 100kg in total will need to be placed through our Bid Request services. The same goes for items with measurements exceeding 200cm and multiple number of items exceeding the limit per booking. This is to maintain the safety and good health of our drivers."
@@ -69,8 +73,6 @@ class DocDimensionActivity : AppCompatActivity(), View.OnClickListener {
         binding.noteText.text = ss
 
 
-
-        binding.errorText.text = Html.fromHtml(text)
 
         binding.quantity.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -216,9 +218,10 @@ class DocDimensionActivity : AppCompatActivity(), View.OnClickListener {
 
     fun getTotalWeight(quantity: Int?, weight: Double?): Double? {
         if (quantity != null && weight != null) {
+            val df = DecimalFormat("#.###")
             totalWight = quantity * weight
-            binding.totalWeight.text = (totalWight).toString() + " " + "Kg"
-            binding.totalWeight1.text = "Total Weight = " + (totalWight).toString() + "Kg"
+            binding.totalWeight.text = df.format(totalWight).toString() + " " + "Kg"
+            binding.totalWeight1.text = "Total Weight = " + df.format(totalWight).toString() + "Kg"
 
             if (totalWight!! > 100) {
                 isQuotesRequest = true

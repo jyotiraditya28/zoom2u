@@ -51,16 +51,16 @@ class OrderConfirmActivity : AppCompatActivity() , View.OnClickListener{
     override fun onClick(view: View?) {
         when (view!!.id) {
             R.id.view_delivery_details -> {
-                val intent = Intent(this, HistoryDetailsActivity::class.java)
-                intent.putExtra("BookingRef", bookingResponse?.BookingRef)
-                intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
-                startActivity(intent)
-            }
-            R.id.close->{
                 DialogActivity.logoutDialog(this, "Are you sure!", "Are you want make a new Booking?",
                     "Ok","Cancel",
                     onCancelClick=::onCancelClick,
                     onOkClick = ::onOkClick)
+            }
+            R.id.close->{
+                val intent = Intent(this, HistoryDetailsActivity::class.java)
+                intent.putExtra("BookingRef", bookingResponse?.BookingRef)
+                intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
+                startActivity(intent)
             }
         }
     }

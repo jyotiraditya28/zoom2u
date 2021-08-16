@@ -56,13 +56,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <RelativeLayout
-                    android:id="@+id/relTopBAnner"
-                    android:layout_width="match_parent"
-                    android:layout_height="188dp"
-                    android:background="@drawable/shadow_gray">
 
-                    <LinearLayout
+                <LinearLayout
                         android:id="@+id/LinearBooking"
                         android:layout_width="match_parent"
                         android:layout_height="64dp"
@@ -117,14 +112,12 @@
                         android:background="@color/gray" />
 
 
-                </RelativeLayout>
-
                 <TextView
                     android:id="@+id/whatNextTxt"
                     android:layout_width="wrap_content"
                     style="@style/style_15_bold"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/relTopBAnner"
+                    android:layout_below="@id/topDefaultView1"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="25dp"
                     android:text="@string/what_next"
@@ -353,7 +346,7 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
                 android:background="@drawable/chip_background"
-                android:text="@string/view_delivery_details"
+                android:text="@string/make_a_booking"
                 android:textAllCaps="false"
                 android:textColor="@color/white" />
 

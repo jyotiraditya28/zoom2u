@@ -8,8 +8,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.gson.Gson
 import com.zoom2u_customer.R
 import com.zoom2u_customer.databinding.ActivityBasepageBinding
+import com.zoom2u_customer.ui.log_in.LoginResponce
+import com.zoom2u_customer.ui.splash_screen.LogInSignupMainActivity
+import com.zoom2u_customer.utility.AppPreference
+import com.zoom2u_customer.utility.AppUtility
+import com.zoom2u_customer.utility.DialogActivity
 
 class BasePageActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItemSelectedListener {
     lateinit var binding: ActivityBasepageBinding
@@ -67,12 +73,20 @@ class BasePageActivity : AppCompatActivity(),  BottomNavigationView.OnNavigation
         return false
     }
     override fun onBackPressed() {
-        minimizeApp()
+        DialogActivity.logoutDialog(
+            this,
+            "Are you sure!",
+            "Are you want Logout?",
+            "Ok","Cancel",
+            onCancelClick=::onCancelClick,
+            onOkClick = ::onOkClick
+        )
     }
-    fun minimizeApp() {
-        val startMain = Intent(Intent.ACTION_MAIN)
-        startMain.addCategory(Intent.CATEGORY_HOME)
-        startMain.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        startActivity(startMain)
+    private fun onCancelClick(){
+
+    }
+
+    private fun onOkClick() {
+        AppUtility.onLogoutCall(this)
     }
 }

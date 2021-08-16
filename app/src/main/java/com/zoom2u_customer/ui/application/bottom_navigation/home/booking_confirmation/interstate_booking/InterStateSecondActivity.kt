@@ -27,6 +27,7 @@ import com.zoom2u_customer.ui.application.bottom_navigation.home.booking_confirm
 import com.zoom2u_customer.ui.application.bottom_navigation.home.booking_confirmation.order_confirm_hold.OrderConfirmActivity
 import com.zoom2u_customer.ui.application.bottom_navigation.home.pricing_payment.PricePaymentAdapter
 import com.zoom2u_customer.utility.AppUtility
+import com.zoom2u_customer.utility.DialogActivity
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
@@ -68,16 +69,12 @@ class InterStateSecondActivity : AppCompatActivity(), View.OnClickListener {
                             loginPage.putExtra(
                                 "BookingResponse", bookingResponse
                             )
-                            intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
-                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
                             startActivity(loginPage)
                             finish()
                         } else {
                             val intentOnHold = Intent(this, OnHoldActivity::class.java)
                             intentOnHold.putExtra("BookingResponse", bookingResponse)
-                            intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
-                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
                             startActivity(intentOnHold)
                             finish()
@@ -179,15 +176,17 @@ class InterStateSecondActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun callServiceForBookingRequest() {
         try {
-            if (bookingDeliveryResponse!!.getJSONObject("_deliveryRequestModel")
-                    .has("ETA")
-            ) bookingDeliveryResponse!!.getJSONObject("_deliveryRequestModel").remove("ETA")
-            getBrainTreeClientToken = GetBrainTreeClientTokenOrBookDeliveryRequest(
-                this,
-                Request_Code
-            )
-            bookingDeliveryResponse!!.getJSONObject("_deliveryRequestModel")
-                .put(
+
+            /**check if in delivery details page time not selected from time window*/
+            if(bookingDeliveryResponse!!.getJSONObject("_deliveryRequestModel").has("isPickTimeSelectedFromTimeWindow"))
+                bookingDeliveryResponse!!.getJSONObject("_deliveryRequestModel").remove("isPickTimeSelectedFromTimeWindow")
+
+
+
+            if (bookingDeliveryResponse!!.getJSONObject("_deliveryRequestModel").has("ETA"))
+                bookingDeliveryResponse!!.getJSONObject("_deliveryRequestModel").remove("ETA")
+            getBrainTreeClientToken = GetBrainTreeClientTokenOrBookDeliveryRequest(this, Request_Code)
+            bookingDeliveryResponse!!.getJSONObject("_deliveryRequestModel").put(
                     "DeclarationSignature", binding.fName.text.toString().trim() + " " +
                             binding.lName.text.toString().trim()
                 )
@@ -248,6 +247,8 @@ class InterStateSecondActivity : AppCompatActivity(), View.OnClickListener {
                 ) {
                     AppUtility.progressBarShow(this)
                     callServiceForBookingRequest()
+                }else{
+                    DialogActivity.alertDialogSingleButton(this, "Oops!", "Please fill out all mandatory fields marked in red.")
                 }
             }
             R.id.chk_terms -> {

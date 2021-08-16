@@ -41,13 +41,27 @@ class ProfileRepository(private var serviceApi: ServiceApi, var context: Context
                             }
                             else if (responce.errorBody() != null) {
                                 AppUtility.progressBarDissMiss()
-                                //TODO
-                                Toast.makeText(
-                                    context,
-                                    "Error Code:${responce.code()} something went wrong please try again.",
-                                    Toast.LENGTH_LONG
-                                ).show()
+                                if(responce.code()==401){
+                                    DialogActivity.logoutDialog(
+                                        context,
+                                        "Confirm!",
+                                        "Your token has expired you have to login again.",
+                                        "Ok","Cancel",
+                                        onCancelClick=::onCancelClick,
+                                        onOkClick = ::onOkClick
+                                    )
+                                }
+                                else{
+                                     Toast.makeText(context, "Error Code:${responce.code()} something went wrong please try again.", Toast.LENGTH_LONG).show() }
+
                             }
+                        }
+                        private fun onOkClick(){
+                            AppUtility.onLogoutCall(context)
+                        }
+
+                        private fun onCancelClick(){
+
                         }
 
                         override fun onError(e: Throwable) {

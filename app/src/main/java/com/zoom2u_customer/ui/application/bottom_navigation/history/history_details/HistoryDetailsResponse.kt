@@ -48,7 +48,7 @@ data class HistoryDetailsResponse(
     var DropLocation: String? = null,
     var DeliveryDropContactName: String? = null,
     var DropLocationCompanyName: String? = null,
-    var Price: Int? = null,
+    var Price: Double? = null,
     var CourierPrice: Int? = null,
     var Status: String? = null,
     var CarrierId: Int? = null,
