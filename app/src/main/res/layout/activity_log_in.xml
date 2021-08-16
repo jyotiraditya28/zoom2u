@@ -6,12 +6,26 @@
 
     <data />
 
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/parent_cl"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp">
+        >
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="vertical"
+       app:layout_constraintTop_toTopOf="parent"
+       >
 
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/icon"
@@ -27,6 +41,7 @@
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/header_txt"
             style="@style/style_13_regular"
+            android:importantForAutofill="no"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
@@ -58,6 +73,8 @@
             android:id="@+id/email_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
             android:layout_marginTop="20dp"
             android:hint="@string/email_header"
             app:errorIconDrawable="@null"
@@ -71,7 +88,6 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/email"
                 style="@style/login_signup_text"
-                android:importantForAutofill="no"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -82,23 +98,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
             android:hint="@string/pass_header"
-            app:errorIconDrawable="@null"
             app:boxStrokeWidth="0dp"
             app:boxStrokeWidthFocused="0dp"
             app:hintTextColor="@color/black"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/email_header"
-            app:endIconMode="password_toggle">
+            app:passwordToggleEnabled="true">
 
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/pass"
+                android:ems="15"
+                android:inputType="textPassword"
                 style="@style/login_signup_text"
                 android:importantForAutofill="no"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword" />
+                />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -106,6 +125,8 @@
             android:id="@+id/login_btn"
             style="@style/style_15_bold"
             android:layout_width="match_parent"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
             android:layout_height="50dp"
             android:layout_marginTop="12dp"
             android:background="@drawable/chip_background"
@@ -129,6 +150,17 @@
             app:layout_constraintTop_toBottomOf="@+id/login_btn" />
 
 
+
+        <View
+            android:id="@+id/blank_view"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            app:layout_constraintTop_toBottomOf="@+id/forget_pass"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -146,37 +178,44 @@
                 android:orientation="horizontal">
 
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/signup_txt"
-                style="@style/style_13_regular"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Don't have an account?"
-                android:textColor="@color/black"
-                 />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/signup_txt"
+                    style="@style/style_13_regular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Don't have an account?"
+                    android:textColor="@color/black"
+                    />
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/register"
-                style="@style/style_15_bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/register"
-                android:textColor="@color/black"
-                 />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/register"
+                    style="@style/style_15_bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/register"
+                    android:textColor="@color/black"
+                    />
 
-        </LinearLayout>
+            </LinearLayout>
 
             <View
-                android:id="@+id/line_view"
-                android:layout_width="wrap_content"
-                android:layout_marginStart="60dp"
-                android:layout_marginEnd="60dp"
+                android:id="@+id/black_view"
+                android:layout_width="210dp"
                 android:layout_height="1dp"
                 android:background="@color/black"
                 />
         </LinearLayout>
 
+
+
+
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
 </layout>

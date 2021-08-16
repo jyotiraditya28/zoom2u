@@ -54,7 +54,7 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_edit_location)
-        AppUtility.hideKeyboard(this)
+        AppUtility.hideKeyboardActivityLunched(this)
 
         getLocationClass = GetLocationClass(this)
 
@@ -171,7 +171,7 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
 
 
                     } else {
-/**for add ca*/
+
                         lattitude = getAddress?.get("latitude") as Double
 
                         longitude = getAddress["longitude"] as Double

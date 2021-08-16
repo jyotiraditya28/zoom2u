@@ -73,6 +73,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:buttonTint="@color/base_color"
+                        android:checked="false"
                         android:gravity="center_vertical"
                         android:text="@string/first_inter_state1"
                         android:textColor="@color/gun_metal"
@@ -84,6 +85,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
                         android:buttonTint="@color/base_color"
+                        android:checked="false"
                         android:gravity="top"
                         android:textSize="13sp"
                         android:text="@string/first_inter_state2"
@@ -96,6 +98,7 @@
                         android:layout_height="wrap_content"
                         android:buttonTint="@color/base_color"
                         android:textSize="13sp"
+                        android:checked="false"
                         android:text="@string/first_inter_state3"
                         android:textColor="@color/gun_metal"
                         android:gravity="top"
@@ -103,6 +106,8 @@
 
 
                      <LinearLayout
+                         android:id="@+id/laptop_term"
+                         android:visibility="gone"
                          android:layout_width="wrap_content"
                          android:layout_height="wrap_content"
                          android:orientation="horizontal"
@@ -112,6 +117,7 @@
                          <com.google.android.material.checkbox.MaterialCheckBox
                              android:id="@+id/is_laptop_mobile"
                              android:layout_width="30dp"
+                             android:checked="false"
                              android:layout_height="30dp"
                              android:buttonTint="@color/base_color"
                              android:textSize="13sp"

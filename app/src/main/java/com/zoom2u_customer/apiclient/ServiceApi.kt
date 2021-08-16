@@ -5,10 +5,13 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.JsonPrimitive
 import io.reactivex.Single
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import org.json.JSONObject
 
 import retrofit2.Response
 import retrofit2.http.*
+import java.io.File
 
 
 interface ServiceApi {
@@ -46,5 +49,14 @@ interface ServiceApi {
 
     @POST
     fun bookingApiCall(@Url url:String, @HeaderMap  map:Map<String, String>, @Body request: JSONObject?):Single<Response<JsonObject>>
+
+
+    @Multipart
+    @POST
+    fun changeDp(@Url url:String, @HeaderMap  map:Map<String, String>, @Part image: MultipartBody.Part,@Part("Photo") photo: RequestBody):Single<Response<JsonObject>>
+
+    @POST
+    fun cancelBooking(@Url url:String, @HeaderMap  map:Map<String, String>):Single<Response<String>>
+
 
 }

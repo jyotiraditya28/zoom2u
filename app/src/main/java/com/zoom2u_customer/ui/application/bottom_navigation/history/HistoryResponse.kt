@@ -42,4 +42,7 @@ class HistoryResponse(
     var CarrierId: Int? = null,
     var CarrierType: String? = null,
     var RequestedDropDateTimeWindowStart: String? = null,
-    var RequestedDropDateTimeWindowEnd: String? = null): Parcelable
+    var RequestedDropDateTimeWindowEnd: String? = null,
+    var type:Int=0,
+    var count:Int=0): Parcelable
+
