@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="icon"
+            type="com.zoom2u_customer.ui.application.bottom_navigation.home.home_fragment.Icon" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/doc"
+        android:layout_margin="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+     >
+
+        <View
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/line_color"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/document_icon"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_margin="10dp"
+            app:imagefor="@{icon.image}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/line" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/document_txt"
+            style="@style/style_13_bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/roboto_medium"
+            android:text="@{icon.text}"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/document_icon"
+            app:layout_constraintTop_toBottomOf="@+id/line" />
+
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/document_txt_desc"
+            style="@style/style_11_regular"
+            android:layout_width="0dp"
+            android:maxLines="3"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginEnd="20dp"
+            android:text="@{icon.desc}"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintStart_toEndOf="@+id/document_icon"
+            app:layout_constraintTop_toBottomOf="@+id/document_txt"
+            app:layout_constraintEnd_toStartOf="@+id/ll"/>
+
+
+        <LinearLayout
+            android:id="@+id/ll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+             android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/line"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/count"
+            style="@style/style_15_bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="5dp"
+            android:text="@{Integer.valueOf(icon.quantity).toString()+'x'}"
+            android:textColor="@color/base_color"
+/>
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/forward"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="15dp"
+            android:layout_margin="10dp"
+            android:src="@drawable/ic_arrow_forward"
+           />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/blank_view"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

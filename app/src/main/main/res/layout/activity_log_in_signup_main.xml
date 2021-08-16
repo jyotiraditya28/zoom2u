@@ -1,0 +1,90 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data/>
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:src="@drawable/splash" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="397dp"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/viewsLayoutLoginview"
+            android:background="@android:color/transparent">
+
+            <ImageView
+                android:layout_width="200dp"
+                android:layout_height="53dp"
+                android:src="@drawable/zoom2u_black_blue"
+                android:id="@+id/logoImgLoginView"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Australia’s smartest courier"
+                android:id="@+id/textView1LoginView"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:layout_below="@+id/logoImgLoginView"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="30dp"
+                android:textColor="#ffffffff" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="18dp"
+                android:text="Login or register to start zooming"
+                android:id="@+id/textView2LoginView"
+                android:textSize="14dp"
+                android:layout_below="@+id/textView1LoginView"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="9dp"
+                android:textColor="#ffffffff" />
+
+            <Button
+                android:id="@+id/loginWithEmailBtn"
+                android:layout_width="fill_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="26dp"
+                android:text="Login with email"
+                android:layout_below="@+id/textView2LoginView"
+                android:textSize="16sp"
+                android:textAllCaps="false"
+                android:layout_marginLeft="13dp"
+                android:layout_marginRight="13dp"
+                android:textColor="@drawable/textcolorselector"
+                android:background="@drawable/roundedskybluebg"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/signUpBtn"
+                android:layout_width="fill_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="14dp"
+                android:text="Sign up"
+                android:layout_below="@+id/loginWithEmailBtn"
+                android:textSize="16sp"
+                android:textAllCaps="false"
+                android:layout_marginLeft="13dp"
+                android:layout_marginRight="13dp"
+                android:textColor="@color/white"
+                android:background="@drawable/button_with_borderradius"
+                android:textStyle="bold" />
+
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+</layout>
