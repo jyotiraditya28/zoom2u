@@ -56,7 +56,10 @@ interface ServiceApi {
     fun changeDp(@Url url:String, @HeaderMap  map:Map<String, String>, @Part image: MultipartBody.Part,@Part("Photo") photo: RequestBody):Single<Response<JsonObject>>
 
     @POST
-    fun cancelBooking(@Url url:String, @HeaderMap  map:Map<String, String>):Single<Response<String>>
+    fun cancelBooking(@Url url:String, @HeaderMap  map:Map<String, String>):Single<Response<Void>>
 
+    @Multipart
+    @POST
+    fun quoteImageUpload(@Url url:String, @HeaderMap  map:Map<String, String>, @Part image: MutableList<MultipartBody.Part>):Single<Response<JsonObject>>
 
 }

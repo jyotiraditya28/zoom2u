@@ -16,6 +16,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import com.zoom2u_customer.MainActivity
 import com.zoom2u_customer.R
 import com.zoom2u_customer.apiclient.ApiClient
 import com.zoom2u_customer.apiclient.ServiceApi
@@ -31,7 +32,6 @@ class LogInActivity : AppCompatActivity(), View.OnClickListener {
     lateinit var binding: ActivityLogInBinding
     lateinit var viewModel: LoginViewModel
     private var repository: LoginRepository? = null
-
     private var email: String? = null
     private var pass: String? = null
 
@@ -39,7 +39,7 @@ class LogInActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_log_in)
-        AppUtility.hideKeyBoardClickOutside(binding.parentCl,this)
+        AppUtility.hideKeyBoardClickOutside(binding.cl5,this)
         AppUtility.hideKeyboardActivityLunched(this)
         binding.loginBtn.setOnClickListener(this)
         binding.register.setOnClickListener(this)

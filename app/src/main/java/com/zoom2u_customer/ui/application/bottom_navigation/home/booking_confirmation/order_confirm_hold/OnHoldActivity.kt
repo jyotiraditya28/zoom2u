@@ -7,6 +7,6 @@ import com.zoom2u_customer.R
 class OnHoldActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.a)
+        setContentView(R.layout.activity_on_hold)
     }
 }

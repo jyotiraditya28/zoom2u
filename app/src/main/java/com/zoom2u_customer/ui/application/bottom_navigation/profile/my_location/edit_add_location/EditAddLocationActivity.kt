@@ -54,8 +54,9 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_edit_location)
+        AppUtility.hideKeyBoardClickOutside(binding.parentCl,this)
+        AppUtility.hideKeyBoardClickOutside(binding.scrollView,this)
         AppUtility.hideKeyboardActivityLunched(this)
-
         getLocationClass = GetLocationClass(this)
 
         if (intent.hasExtra("EditAddLocation")) {

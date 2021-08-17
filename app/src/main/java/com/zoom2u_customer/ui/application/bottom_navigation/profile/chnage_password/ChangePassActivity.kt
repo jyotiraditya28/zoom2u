@@ -27,7 +27,9 @@ open class ChangePassActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_chnage_pass)
-
+        AppUtility.hideKeyBoardClickOutside(binding.parentCl,this)
+        AppUtility.hideKeyBoardClickOutside(binding.scrollView,this)
+        AppUtility.hideKeyboardActivityLunched(this)
         binding.changePassBtn.setOnClickListener(this)
         binding.backIcon.setOnClickListener(this)
 

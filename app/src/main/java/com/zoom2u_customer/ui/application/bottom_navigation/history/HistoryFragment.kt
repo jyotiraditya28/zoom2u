@@ -14,14 +14,11 @@ import com.zoom2u_customer.apiclient.ApiClient.Companion.getServices
 import com.zoom2u_customer.apiclient.ServiceApi
 import com.zoom2u_customer.databinding.FragmentHistoryBinding
 import com.zoom2u_customer.ui.application.bottom_navigation.history.history_details.HistoryDetailsActivity
-import com.zoom2u_customer.ui.application.bottom_navigation.home.home_fragment.Icon
 import com.zoom2u_customer.utility.AppUtility
-import java.util.*
 import kotlin.collections.ArrayList
 
 
 class HistoryFragment : Fragment() {
-    private var page: Int? = null
     lateinit var viewModel: HistoryViewModel
     private var repository: HistoryRepository? = null
     lateinit var binding: FragmentHistoryBinding
@@ -33,8 +30,6 @@ class HistoryFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
-
         binding = FragmentHistoryBinding.inflate(inflater, container, false)
 
         if (container != null) {

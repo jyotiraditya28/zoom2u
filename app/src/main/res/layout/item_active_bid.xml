@@ -5,7 +5,7 @@
     <data>
         <variable
             name="activebid"
-            type="com.zoom2u_customer.ui.application.bottom_navigation.bid_request.active_bid_request.ActiveBidItem" />
+            type="com.zoom2u_customer.ui.application.bottom_navigation.bid_request.active_bid_request.ActiveBidListResponse" />
     </data>
 
 
@@ -13,17 +13,18 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/card_view_color"
 
         >
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
+        android:elevation="5dp"
+        app:cardCornerRadius="10dp"
+        android:layout_marginBottom="5dp"
         android:background="@drawable/white_background"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -35,6 +36,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:elevation="50dp">
 
 
@@ -42,7 +45,6 @@
                 android:id="@+id/ll1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
@@ -52,6 +54,7 @@
                 <com.google.android.material.imageview.ShapeableImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
+                    android:layout_marginStart="2dp"
                     android:src="@drawable/ic_documents" />
 
 
@@ -62,7 +65,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_margin="5dp"
-                    android:text="Document"
+                    android:textColor="@color/black"
+                    android:text="@string/document"
                     android:textStyle="bold" />
 
             </LinearLayout>
@@ -71,7 +75,7 @@
                 android:id="@+id/line"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_margin="10dp"
+                android:layout_marginTop="10dp"
                 android:background="@color/line_color"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ll1" />
@@ -81,7 +85,7 @@
                 android:id="@+id/cl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_marginTop="10dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/line">
 
@@ -110,7 +114,7 @@
                         android:layout_height="match_parent"
                         android:background="@color/light_sky"
                         android:gravity="center"
-                        android:text="@{activebid.offers}"
+                        android:text="@{activebid.offers.toString()}"
                         android:textColor="@color/black"
                         android:textSize="25dp" />
 
@@ -130,36 +134,35 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/start_time"
+                    android:id="@+id/pick_time"
                     style="@style/style_11_bold"
+                    android:textColor="#979797"
+                    android:textStyle="bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:text="6:00 AM|28/05/2021"
-                    android:textStyle="bold"
                     app:layout_constraintStart_toEndOf="@+id/relMain"
                     app:layout_constraintTop_toBottomOf="@+id/start_txt" />
 
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/end_txt"
+                    android:id="@+id/drop_txt"
                     style="@style/style_13_bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:text="55 Miller St. Pyrmont,NSW"
                     android:textColor="@color/black"
-                    app:layout_constraintBottom_toTopOf="@+id/end_time"
+                    app:layout_constraintBottom_toTopOf="@+id/drop_time"
                     app:layout_constraintStart_toEndOf="@+id/relMain" />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/end_time"
+                    android:id="@+id/drop_time"
                     style="@style/style_11_bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginBottom="10dp"
-                    android:text="11:00 AM|28/05/2021"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/relMain" />
 
@@ -220,8 +223,8 @@
                 android:layout_height="wrap_content"
                 style="@style/style_15_bold"
                 android:textColor="@color/black"
-                android:layout_margin="10dp"
-                android:text="Notes"
+                android:layout_marginTop="10dp"
+                android:text="@string/notes"
                 app:layout_constraintTop_toBottomOf="@+id/cl"
                 app:layout_constraintStart_toStartOf="parent" />
 
@@ -229,7 +232,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/style_11_bold"
-                android:layout_marginStart="10dp"
                 android:layout_marginBottom="10dp"
                 android:text="The boxes are 406*29.8cm and 5kg 23"
                 app:layout_constraintTop_toBottomOf="@+id/notes"

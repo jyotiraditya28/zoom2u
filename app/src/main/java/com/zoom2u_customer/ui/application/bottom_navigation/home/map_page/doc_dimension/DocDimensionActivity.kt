@@ -31,6 +31,7 @@ class DocDimensionActivity : AppCompatActivity(), View.OnClickListener {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_doc_dimension)
         AppUtility.hideKeyboardActivityLunched(this)
         AppUtility.hideKeyBoardClickOutside(binding.parentCl,this)
+        AppUtility.hideKeyBoardClickOutside(binding.cl1,this)
         if (intent.hasExtra("Icon")) {
             icon = intent.getParcelableExtra("Icon")
         }

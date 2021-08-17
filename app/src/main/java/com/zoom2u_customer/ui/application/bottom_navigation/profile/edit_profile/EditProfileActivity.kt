@@ -32,6 +32,7 @@ class EditProfileActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_edit_profile)
         AppUtility.hideKeyBoardClickOutside(binding.parentCl,this)
+        AppUtility.hideKeyBoardClickOutside(binding.cl3,this)
         AppUtility.hideKeyboardActivityLunched(this)
 
         if (intent.hasExtra("profileData")) {

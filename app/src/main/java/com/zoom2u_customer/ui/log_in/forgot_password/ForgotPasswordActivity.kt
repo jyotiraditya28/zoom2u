@@ -25,7 +25,6 @@ class ForgotPasswordActivity : AppCompatActivity(), View.OnClickListener {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_forgot_password)
         AppUtility.hideKeyBoardClickOutside(binding.parentCl,this)
         AppUtility.hideKeyboardActivityLunched(this)
-
         binding.backIcon.setOnClickListener(this)
         binding.resetPassBtn.setOnClickListener(this)
 

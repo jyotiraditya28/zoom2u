@@ -95,6 +95,7 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
         binding = DataBindingUtil.setContentView(this, R.layout.activity_delivery_datails)
         AppUtility.hideKeyboardActivityLunched(this)
         AppUtility.hideKeyBoardClickOutside(binding.parentCl, this)
+        AppUtility.hideKeyBoardClickOutside(binding.pickupView, this)
         /**get data from map Item*/
         val intent: Intent = intent
         itemDataList = intent.getParcelableArrayListExtra<Icon>("IconList") as ArrayList<Icon>
@@ -529,9 +530,18 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
 
                 if (isBookingConfirm <= 0) {
                     if (isQuotesRequest as Boolean) {
-                        val intent = Intent(this, UploadQuotesActivity::class.java)
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                        startActivity(intent)
+                        if (pickState == dropState) {
+                            val intent = Intent(this, UploadQuotesActivity::class.java)
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                            intent.putExtra("SaveDeliveryRequestReq", createJsonForSaveRequest().toString())
+                            startActivity(intent)
+                        }else{
+                            DialogActivity.alertDialogSingleButton(
+                                this,
+                                "Oops!",
+                                "Unfortunately extra large items are unable to be sent interstate at this stage,in the future we hope to make  this available."+"\n"+"Sorry!"
+                            )
+                        }
                     } else {
 
                         val intent = Intent(this, PricingPaymentActivity::class.java)
@@ -539,29 +549,13 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
                         if (pickState == dropState) {
                             isInterstate = false
                             intraStateReq = getIntraState()
-                           // val intent = Intent(this, PricingPaymentActivity::class.java)
                             intent.putExtra("IntraStateData", intraStateReq)
-                          /*  intent.putExtra(
-                                "SaveDeliveryRequestReq",
-                                createJsonForSaveRequest().toString()
-                            )
-                            intent.putParcelableArrayListExtra("IconList", itemDataList)
-                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
-                            startActivityForResult(intent,3)*/
                         }
                         /**for Inter State**/
                         else {
                             isInterstate = true
                             interStateReq = getInterState()
-                            //val intent = Intent(this, PricingPaymentActivity::class.java)
                             intent.putExtra("InterStateData", interStateReq)
-                           /* intent.putExtra(
-                                "SaveDeliveryRequestReq",
-                                createJsonForSaveRequest().toString()
-                            )
-                            intent.putParcelableArrayListExtra("IconList", itemDataList)
-                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
-                            startActivityForResult(intent,3)*/
                         }
                         intent.putExtra("SaveDeliveryRequestReq", createJsonForSaveRequest().toString())
                         intent.putParcelableArrayListExtra("IconList", itemDataList)
@@ -731,6 +725,14 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
         } else {
             AppUtility.getCurrentDateAndTimeInEta()
         }
+    }
+
+    private fun getDropDateAndTimeInEta(): String {
+        return DateTimeUtil.getDateTimeFromDeviceForDeliveryETA(
+                binding.dropDate.text.toString() + " " +
+                        binding.dropTime.text.toString()
+            ).toString()
+
     }
 
     private fun getIntraState(): IntraStateReq? {
@@ -972,7 +974,7 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
             deliveryRequest.put("isLaptopOrMobile", isLaptopOrMobile)
             deliveryRequest.put("AuthorityToLeave", binding.authorityToLeave.isChecked)
             deliveryRequest.put("Instructions", binding.other.text.toString())
-
+            deliveryRequest.put("isCreatedFromQuotes", false)
 
             /**put boolean for check in next pages that is time selected from time window or not*/
             deliveryRequest.put("isPickTimeSelectedFromTimeWindow", isPickTimeSelectedFromTimeWindow)
@@ -991,14 +993,18 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
                 deliveryRequest.put("LeaveAt", "")
             }
 
-
-            jObjOfQuotesItem.put("_deliveryRequestModel", deliveryRequest)
-            jObjOfQuotesItem.put("_interstateModel", forInterstate)
-            jObjOfQuotesItem.put(
-                "_shipmentModel",
-                JSONArray(Gson().toJson(getShipmentsList()).toString())
-            )
-
+            if (isQuotesRequest as Boolean) {
+                deliveryRequest.put("DropDateTime", getDropDateAndTimeInEta())
+                jObjOfQuotesItem.put("_requestModel", deliveryRequest)
+                jObjOfQuotesItem.put("_shipmentModel", JSONArray(Gson().toJson(getShipmentsList()).toString()))
+            }
+            else {
+                jObjOfQuotesItem.put("_deliveryRequestModel", deliveryRequest)
+                jObjOfQuotesItem.put("_interstateModel", forInterstate)
+                jObjOfQuotesItem.put(
+                    "_shipmentModel", JSONArray(Gson().toJson(getShipmentsList()).toString())
+                )
+            }
 
         } catch (e: JSONException) {
             e.printStackTrace()

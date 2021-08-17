@@ -7,6 +7,7 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/parent_cl"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.application.bottom_navigation.profile.chnage_password.ChangePassActivity">
@@ -40,6 +41,7 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="30dp"

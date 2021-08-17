@@ -39,10 +39,34 @@ class HistoryDetailsRepository(private var serviceApi: ServiceApi, var context: 
                                     object : TypeToken<List<HistoryDetailsResponse>?>() {}.type
                                 val list: List<HistoryDetailsResponse> =
                                     Gson().fromJson(responce.body(), listType)
-                                onSuccess(list.get(0))
+                                onSuccess(list[0])
+
+                            }
+                            else if (responce.errorBody() != null) {
+                                AppUtility.progressBarDissMiss()
+                                if(responce.code()==401){
+                                    DialogActivity.logoutDialog(
+                                        context,
+                                        "Confirm!",
+                                        "Your token has expired you have to login again.",
+                                        "Ok","Cancel",
+                                        onCancelClick=::onCancelClick,
+                                        onOkClick = ::onOkClick
+                                    )
+                                }
+                                else{
+                                    Toast.makeText(context, "Error Code:${responce.code()} something went wrong please try again.", Toast.LENGTH_LONG).show() }
 
                             }
                         }
+                        private fun onOkClick(){
+                            AppUtility.onLogoutCall(context)
+                        }
+
+                        private fun onCancelClick(){
+
+                        }
+
 
                         override fun onError(e: Throwable) {
                             AppUtility.progressBarDissMiss()
@@ -79,8 +103,8 @@ class HistoryDetailsRepository(private var serviceApi: ServiceApi, var context: 
                     Schedulers.io()
                 )
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeWith(object : DisposableSingleObserver<Response<String>>() {
-                        override fun onSuccess(responce: Response<String>) {
+                    .subscribeWith(object : DisposableSingleObserver<Response<Void>>() {
+                        override fun onSuccess(responce: Response<Void>) {
                             onSuccess("true")
                         }
 

@@ -52,7 +52,7 @@ class ProfileRepository(private var serviceApi: ServiceApi, var context: Context
                                     )
                                 }
                                 else{
-                                     Toast.makeText(context, "Error Code:${responce.code()} something went wrong please try again.", Toast.LENGTH_LONG).show() }
+                                     Toast.makeText(context, "Something went wrong please try again.", Toast.LENGTH_LONG).show() }
 
                             }
                         }

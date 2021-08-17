@@ -271,6 +271,18 @@
     <string name="not_available">Not Available</string>
     <string name="register_text">Don\'t have an account?Register</string>
     <string name="cancel_booking1">Cancel Booking</string>
+    <string name="quote_confirm1">All available couriers will be notified of your request, and will reply (usually within minutes) with individual pricing and time frames.</string>
+    <string name="quote_txt4">Your courier will then collect and deliver your items!</string>
+    <string name="quote_txt2">You can see these offers below, and we\'ll email you a summary too!</string>
+    <string name="request_confirmed">Request Confirmed</string>
+    <string name="quote_request_received">Quote request received</string>
+    <string name="what_s_next">What’s next?</string>
+    <string name="quote_txt3">You pick which offer will be most appealing to you.</string>
+    <string name="quotes">Quotes</string>
+    <string name="go_to_offers">Go to offers</string>
+    <string name="offers">Offers</string>
+    <string name="images">Images</string>
+    <string name="bid_request">Bid Request</string>
 
 
 </resources>

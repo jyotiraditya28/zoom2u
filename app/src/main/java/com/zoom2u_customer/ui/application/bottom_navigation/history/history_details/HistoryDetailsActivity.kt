@@ -35,6 +35,7 @@ import com.zoom2u_customer.ui.application.bottom_navigation.home.home_fragment.I
 import com.zoom2u_customer.utility.AppUtility
 import com.zoom2u_customer.utility.DialogActivity
 import com.zoom2u_customer.utility.DirectionJsonParser
+import com.zoom2u_customer.utility.RouteParser
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
@@ -46,7 +47,6 @@ class HistoryDetailsActivity : AppCompatActivity(),  OnMapReadyCallback, View.On
     private var arrayCourierDrop: List<String>? = null
     private lateinit var map: GoogleMap
     var response: HistoryDetailsResponse? = null
-
     private var historyItem: HistoryResponse? = null
     lateinit var viewModel: HistoryDetailsViewModel
     private var repositoryGoogleAddress: GoogleAddressRepository? = null
@@ -85,7 +85,7 @@ class HistoryDetailsActivity : AppCompatActivity(),  OnMapReadyCallback, View.On
 
         viewModel.getRouteSuccess()?.observe(this) {
             if (!it.isNullOrEmpty())
-               parserTask(it)
+               RouteParser.parserTask(this,map,it)
         }
 
         viewModel.getCancelBooking()?.observe(this) {
@@ -493,67 +493,7 @@ class HistoryDetailsActivity : AppCompatActivity(),  OnMapReadyCallback, View.On
 
        }
 
-    private fun parserTask(data:String){
-        val executor = Executors.newSingleThreadExecutor()
-        val handler = Handler(Looper.getMainLooper())
-        executor.execute {
 
-            val jObject: JSONObject
-            var routes: List<List<HashMap<String, String>>>?=null
-            try {
-                jObject = JSONObject(data)
-                val parser = DirectionJsonParser()
-                routes = parser.parse(jObject)
-            } catch (e: java.lang.Exception) {
-                e.printStackTrace()
-            }
-
-
-
-
-            handler.post {
-                var points: ArrayList<LatLng>
-                var lineOptions: PolylineOptions? = null
-                var distance = ""
-                var duration = ""
-                if (routes?.isEmpty() == true) {
-                    Toast.makeText(this.baseContext, "No Points", Toast.LENGTH_SHORT).show()
-                }
-                for (i in routes?.indices!!) {
-                    points = ArrayList()
-                    if (lineOptions != null) lineOptions = null
-                    lineOptions = PolylineOptions()
-
-                    // Fetching i-th route
-                    val path: List<HashMap<String, String>> = routes[i]
-                    // Fetching all the points in i-th route
-                    for (j in path.indices) {
-                        val point = path[j]
-                        if (j == 0) { // Get distance from the list
-                            distance = point["distance"].toString()
-                            continue
-                        } else if (j == 1) { // Get duration from the list
-                            duration = point["duration"].toString()
-                            continue
-                        }
-                        val lat = point["lat"]!!.toDouble()
-                        val lng = point["lng"]!!.toDouble()
-                        val position = LatLng(lat, lng)
-                        points.add(position)
-                    }
-
-                    // Adding all the points in the route to LineOptions
-                    lineOptions.addAll(points)
-                    lineOptions.width(8F)
-                    lineOptions.color(Color.parseColor("#374350"))
-                }
-
-                // Drawing polyline in the Google Map for the i-th route
-                map.addPolyline(lineOptions)
-            }
-        }
-
-    }
 
 
 }

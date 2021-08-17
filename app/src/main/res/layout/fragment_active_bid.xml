@@ -1,27 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <data/>
-
+    <data />
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/card_view_color"
+        android:layout_height="match_parent"
+        android:background="@color/white"
         tools:context=".ui.application.bottom_navigation.bid_request.active_bid_request.ActiveBidFragment">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/active_bid_recycler"
 
+
+
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/no_active_bid_text"
+            style="@style/style_15_bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_delivery_history"
+            android:textColor="@color/black"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+
+
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/swipe_refresh"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:listitem="@layout/item_active_bid"
-            app:layout_constraintTop_toTopOf="parent"
-           />
+            app:layout_constraintTop_toTopOf="parent">
 
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/active_bid_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="vertical"
+                tools:listitem="@layout/item_active_bid" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

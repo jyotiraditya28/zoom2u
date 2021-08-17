@@ -21,8 +21,6 @@ class HistoryItemAdapter(val context: Context, private val onItemClick:(HistoryR
     fun updateRecords(dataList: MutableList<HistoryResponse>) {
         dataList1.clear()
         this.dataList1.addAll(dataList)
-
-
         notifyDataSetChanged()
     }
 

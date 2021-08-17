@@ -37,21 +37,37 @@ class EditProfileRepository (private var serviceApi: ServiceApi, var context: Co
                         override fun onSuccess(responce: Response<JsonObject>) {
                             if (responce.body() != null) {
                                 onSuccess(Gson().toJson(responce.body()))
-                            } else if (responce.errorBody() != null) {
+                            }  else if (responce.errorBody() != null) {
                                 AppUtility.progressBarDissMiss()
-                                Toast.makeText(
-                                    context,
-                                    "something went wrong please try again.",
-                                    Toast.LENGTH_LONG
-                                ).show()
+                                if(responce.code()==401){
+                                    DialogActivity.logoutDialog(
+                                        context,
+                                        "Confirm!",
+                                        "Your token has expired you have to login again.",
+                                        "Ok","Cancel",
+                                        onCancelClick=::onCancelClick,
+                                        onOkClick = ::onOkClick
+                                    )
+                                }
+                                else{
+                                    Toast.makeText(context, "Something went wrong please try again.", Toast.LENGTH_LONG).show() }
+
                             }
                         }
+                        private fun onOkClick(){
+                            AppUtility.onLogoutCall(context)
+                        }
+
+                        private fun onCancelClick(){
+
+                        }
+
 
                         override fun onError(e: Throwable) {
                             AppUtility.progressBarDissMiss()
                             Toast.makeText(
                                 context,
-                                "something went wrong please try again.",
+                                "Something went wrong please try again.",
                                 Toast.LENGTH_LONG
                             ).show()
                         }
@@ -96,16 +112,36 @@ class EditProfileRepository (private var serviceApi: ServiceApi, var context: Co
                                 onSuccess(Gson().toJson(responce.body()))
                             } else if (responce.errorBody() != null) {
                                 AppUtility.progressBarDissMiss()
-                                Toast.makeText(context, "something went wrong please try again.", Toast.LENGTH_LONG).show()
+                                if(responce.code()==401){
+                                    DialogActivity.logoutDialog(
+                                        context,
+                                        "Confirm!",
+                                        "Your token has expired you have to login again.",
+                                        "Ok","Cancel",
+                                        onCancelClick=::onCancelClick,
+                                        onOkClick = ::onOkClick
+                                    )
+                                }
+                                else{
+                                    Toast.makeText(context, "Something went wrong please try again.", Toast.LENGTH_LONG).show() }
+
                             }
                         }
+                        private fun onOkClick(){
+                            AppUtility.onLogoutCall(context)
+                        }
+
+                        private fun onCancelClick(){
+
+                        }
+
 
                         override fun onError(e: Throwable) {
                             AppUtility.progressBarDissMiss()
                             Log.d("", "")
                             Toast.makeText(
                                 context,
-                                "something went wrong please try again.",
+                                "Something went wrong please try again.",
                                 Toast.LENGTH_LONG
                             ).show()
                         }
