@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        tools:context=".ui.application.bottom_navigation.bid_request.active_bid_request.active_bid_page.ActiveBidActivity">
+        tools:context=".ui.application.bottom_navigation.bid_request.complete_bid_request.completed_bid_page.CompletedBidActivity">
 
 
         <com.google.android.material.imageview.ShapeableImageView

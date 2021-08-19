@@ -128,7 +128,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
-                    android:text="55 Miller St. Pyrmont,NSW"
+                    android:text="@{completedbid.pickupSuburb}"
                     android:textColor="@color/black"
                     app:layout_constraintStart_toEndOf="@+id/relMain"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -151,7 +151,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:text="55 Miller St. Pyrmont,NSW"
+                    android:text="@{completedbid.dropSuburb}"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toTopOf="@+id/drop_time"
                     app:layout_constraintStart_toEndOf="@+id/relMain" />
@@ -233,7 +233,7 @@
                 android:layout_height="wrap_content"
                 style="@style/style_11_bold"
                 android:layout_marginBottom="10dp"
-                android:text="The boxes are 406*29.8cm and 5kg 23"
+                android:text="@{completedbid.notes}"
                 app:layout_constraintTop_toBottomOf="@+id/notes"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent" />

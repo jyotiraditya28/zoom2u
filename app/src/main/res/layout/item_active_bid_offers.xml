@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="activebidoffers"
-            type="com.zoom2u_customer.ui.application.bottom_navigation.bid_request.active_bid_request.active_bid_page.active_bid_offers.ActiveBidOffers" />
+            type="com.zoom2u_customer.ui.application.bottom_navigation.bid_request.active_bid_request.active_bid_page.Offer" />
     </data>
-
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,45 +19,52 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginStart="20dp"
-            android:src="@drawable/profile"
             android:layout_marginTop="10dp"
+            android:src="@drawable/profile"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/name"
-            style="@style/style_15_bold"
+            style="@style/style_13_bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginTop="10dp"
             android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:maxWidth="100dp"
+            android:singleLine="true"
+            android:text="Test Tarannum test"
             android:textColor="@color/black"
-            android:text="basu Singh"
             app:layout_constraintStart_toEndOf="@+id/dp"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/price"
+            style="@style/style_15_regular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/style_15_bold"
             android:layout_marginStart="15dp"
+            android:layout_marginTop="5dp"
+            android:text="$20"
             android:textColor="@color/black"
-            android:textSize="20dp"
-            android:text="@{activebidoffers.price}"
-            app:layout_constraintTop_toBottomOf="@+id/name"
-            app:layout_constraintStart_toEndOf="@+id/dp" />
+            android:textSize="20sp"
+            app:layout_constraintStart_toEndOf="@+id/dp"
+            app:layout_constraintTop_toBottomOf="@+id/name" />
 
 
-        <Button
+        <TextView
             android:id="@+id/accept_bid"
             style="@style/style_11_bold"
-            android:layout_width="120dp"
-            android:layout_height="40dp"
-            android:layout_marginEnd="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:gravity="center"
+            android:paddingStart="13dp"
+            android:paddingEnd="13dp"
             android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
             android:background="@drawable/chip_background"
-            android:text="Accept Bid"
+            android:text="Accept Offer"
             android:textAllCaps="false"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
@@ -65,28 +72,236 @@
 
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/chat_btn"
+            android:id="@+id/load_more"
             style="@style/style_11_bold"
-            android:layout_width="120dp"
-            android:layout_height="40dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
             android:layout_marginEnd="10dp"
-            android:layout_marginTop="10dp"
-            android:background="@color/card_view_color"
-            android:text="Chat"
-            android:gravity="center"
-            android:textColor="@color/black"
-            android:layout_marginBottom="20dp"
+            android:paddingStart="5dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="View more details.."
+            android:textColor="@color/base_color"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/accept_bid"
-            app:layout_constraintBottom_toBottomOf="@+id/line" />
+            app:layout_constraintTop_toBottomOf="@+id/accept_bid" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/load_data"
+            android:layout_marginTop="30dp"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/load_more"
+
+            >
+        <LinearLayout
+            android:id="@+id/ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="1"
+               >
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/pickup_eta"
+                    style="@style/style_11_bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pickup_eta"
+                    android:textColor="@color/black" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/pickup_time"
+                    style="@style/style_13_bold"
+                    android:textColor="@color/green_color"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/style_11_bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxWidth="150dp"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/last_completed_a_delivery_on"
+                    android:textColor="@color/black" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/last_completed_time"
+                    style="@style/style_13_bold"
+                    android:textColor="@color/green_color"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                   />
+
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+               >
+
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/drop_eta"
+                    style="@style/style_11_bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/drop_eta"
+                    android:textColor="@color/black"
+
+                    />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/drop_time"
+                    style="@style/style_13_bold"
+                    android:textColor="@color/green_color"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+
+
+                <com.google.android.material.textview.MaterialTextView
+                    style="@style/style_11_bold"
+                    android:layout_width="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_height="wrap_content"
+                    android:maxWidth="150dp"
+                    android:text="@string/registered_with_zoom2u_on"
+                    android:textColor="@color/black"
+
+                    />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/register_time"
+                    style="@style/style_13_bold"
+                    android:layout_width="wrap_content"
+                    android:textColor="@color/green_color"
+                    android:layout_height="wrap_content"
+                     />
+
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+
+             <LinearLayout
+                 android:id="@+id/expire_time"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:orientation="horizontal"
+                 android:layout_marginTop="10dp"
+                 app:layout_constraintTop_toBottomOf="@+id/ll"
+                 app:layout_constraintStart_toStartOf="parent"
+                 app:layout_constraintEnd_toEndOf="parent"
+           >
+                 <com.google.android.material.textview.MaterialTextView
+                     android:id="@+id/bid_has"
+                     style="@style/style_11_bold"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:text="Bid will expire in:"
+                     android:textColor="@color/black"
+                     />
+
+                 <com.google.android.material.textview.MaterialTextView
+                     android:id="@+id/bid_has_time"
+                     style="@style/style_13_bold"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:maxWidth="150dp"
+                     android:text="15 Minutes"
+                     android:textColor="@color/black"
+
+                     />
+             </LinearLayout>
+
+
+
+
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/bid_expire_note"
+                android:visibility="gone"
+                style="@style/style_11_bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Please note: This bid has expired and is no longer available"
+                android:textColor="@color/white"
+                android:padding="5dp"
+                android:background="@color/black"
+                app:layout_constraintTop_toBottomOf="@+id/expire_time"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/load_less"
+                style="@style/style_11_bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:paddingStart="5dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="15dp"
+                android:text="View less details.."
+                android:textColor="@color/base_color"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/bid_expire_note" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <!--      <com.google.android.material.textview.MaterialTextView
+                  android:id="@+id/chat_btn"
+                  style="@style/style_11_bold"
+                  android:layout_width="120dp"
+                  android:layout_height="40dp"
+                  android:layout_marginEnd="10dp"
+                  android:layout_marginTop="10dp"
+                  android:background="@color/card_view_color"
+                  android:text="Chat"
+                  android:gravity="center"
+                  android:textColor="@color/black"
+                  android:layout_marginBottom="20dp"
+                  app:layout_constraintEnd_toEndOf="parent"
+                  app:layout_constraintTop_toBottomOf="@+id/accept_bid"
+                  app:layout_constraintBottom_toBottomOf="@+id/line" />
+      -->
+
+
+
 
 
         <View
             android:id="@+id/line"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="10dp"
             android:background="@color/line_color"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/load_data" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

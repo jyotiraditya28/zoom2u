@@ -14,7 +14,7 @@ import com.zoom2u_customer.utility.AppUtility
 import java.util.ArrayList
 
 
-class CompletedItemAdapter (val context: Context, private val onItemClick:(ActiveBidListResponse) -> Unit, private val onApiCall:() ->Unit) :
+class CompletedItemAdapter (val context: Context, private val onItemClick:(CompletedBidListResponse) -> Unit, private val onApiCall:() ->Unit) :
     RecyclerView.Adapter<CompletedItemAdapter.BindingViewHolder>() {
     private var dataList:MutableList<CompletedBidListResponse> = ArrayList()
     private var lastApiCallPosition:Int=-1
@@ -22,9 +22,20 @@ class CompletedItemAdapter (val context: Context, private val onItemClick:(Activ
         return dataList.size
     }
     fun updateRecords(dataList1: List<CompletedBidListResponse>) {
-        //dataList.clear()
-        this.dataList.addAll(dataList1)
+       if(!dataList.isNullOrEmpty()){
+           if(dataList1[0].Id==dataList[0].Id){
+               dataList.clear()
+               this.dataList.addAll(dataList1)
+           }else{
+               this.dataList.addAll(dataList1)
+           }
+
+
+       }else{
+           this.dataList.addAll(dataList1)
+       }
         notifyDataSetChanged()
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BindingViewHolder {
@@ -42,9 +53,9 @@ class CompletedItemAdapter (val context: Context, private val onItemClick:(Activ
             holder.itemBinding.blankView.visibility = View.GONE
         val completedBidItem: CompletedBidListResponse = dataList[position]
         holder.itemBinding.completedbid= completedBidItem
-       /* holder.itemBinding.root.setOnClickListener {
-            onItemClick(activeBidItem)
-        }*/
+        holder.itemBinding.root.setOnClickListener {
+            onItemClick(completedBidItem)
+        }
         if(position==dataList.size-1) {
             if(lastApiCallPosition!=position){
                 lastApiCallPosition=position

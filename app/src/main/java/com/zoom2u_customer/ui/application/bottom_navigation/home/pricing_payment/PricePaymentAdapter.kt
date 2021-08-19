@@ -18,9 +18,8 @@ import com.zoom2u_customer.ui.application.bottom_navigation.home.pricing_payment
 
 class PricePaymentAdapter(
     val context: Context, private var dataList: List<QuoteOptionClass>,
-    private val onItemClick: (QuoteOptionClass) -> Unit,
-
-    ) : RecyclerView.Adapter<PricePaymentAdapter.BindingViewHolder>() {
+    private val onItemClick: (QuoteOptionClass) -> Unit
+) : RecyclerView.Adapter<PricePaymentAdapter.BindingViewHolder>() {
 
     private var rowIndex: Int? = null
 

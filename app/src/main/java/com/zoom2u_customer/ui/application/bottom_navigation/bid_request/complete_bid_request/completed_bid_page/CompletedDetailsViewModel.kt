@@ -1,4 +1,4 @@
-package com.zoom2u_customer.ui.application.bottom_navigation.bid_request.active_bid_request.active_bid_page
+package com.zoom2u_customer.ui.application.bottom_navigation.bid_request.complete_bid_request.completed_bid_page
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -6,11 +6,11 @@ import com.zoom2u_customer.apiclient.GetAddressFromGoogle.GoogleAddressRepositor
 import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.complete_bid_request.completed_bid_page.CompletedDetailsRepository
 import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.complete_bid_request.completed_bid_page.CompletedDetailsResponse
 
-class BidDetailsViewModel :ViewModel() {
-    var success: MutableLiveData<BidDetailsResponse>?=MutableLiveData()
+class CompletedDetailsViewModel :ViewModel() {
+    var success: MutableLiveData<CompletedDetailsResponse>?=MutableLiveData()
     private var routeSuccess: MutableLiveData<String> = MutableLiveData("")
     private var cancelSuccess: MutableLiveData<String> = MutableLiveData("")
-    var repository: BidDetailsRepository? = null
+    var repository: CompletedDetailsRepository? = null
     var repositoryGoogleAddress: GoogleAddressRepository? = null
 
     fun getBidDetails(quoteId: Int?) =
@@ -24,7 +24,7 @@ class BidDetailsViewModel :ViewModel() {
         repositoryGoogleAddress?.getRoute(url,onSuccess = ::onSuccessRoute)
 
 
-    fun onBidDetailsSuccess(bid: BidDetailsResponse) {
+    fun onBidDetailsSuccess(bid: CompletedDetailsResponse) {
         success?.value = bid
 
     }
@@ -38,7 +38,7 @@ class BidDetailsViewModel :ViewModel() {
         routeSuccess.value=route
     }
 
-    fun getBidDetailsSuccess(): MutableLiveData<BidDetailsResponse>? {
+    fun getBidDetailsSuccess(): MutableLiveData<CompletedDetailsResponse>? {
         return success
     }
 

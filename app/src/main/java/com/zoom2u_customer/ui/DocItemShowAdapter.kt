@@ -17,9 +17,22 @@ class DocItemShowAdapter(val context : Context?,
                          private val dataList: MutableList<ShipmentsClass>,
                          ) : RecyclerView.Adapter<DocItemShowAdapter.BindingViewHolder>() {
 
-
+    private var isMoreEnable:Boolean?=null
     override fun getItemCount(): Int {
-        return dataList.size
+        return if(dataList.size>2){
+            if(isMoreEnable == true)
+                dataList.size
+            else
+                2
+        }
+        else
+            dataList.size
+
+    }
+
+    fun isMoreEnable(isMoreEnable:Boolean){
+        this.isMoreEnable=isMoreEnable
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BindingViewHolder {
@@ -36,24 +49,24 @@ class DocItemShowAdapter(val context : Context?,
         when (dataList[position].Category) {
             "Documents" -> {
              holder.itemBinding.docTxt.text="Documents"
-             holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_documents)
+             holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_documents_low)
             }
             "Bag"
             -> {
                 holder.itemBinding.docTxt.text="Satchel,laptops"
-                holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_satchel_and_laptops)
+                holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_satchelandlaptops_low)
             }
             "Box" -> {
                 holder.itemBinding.docTxt.text="Small box"
-                holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_small_box)
+                holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_smallbox_low)
             }
             "Flowers" -> {
                 holder.itemBinding.docTxt.text="Cakes, flowers,delicates"
-                holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_cakes_flowers_delicates)
+                holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_cakesflowersdelicates_low)
             }
             "Large" -> {
                 holder.itemBinding.docTxt.text="Large box"
-                holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_large_box)
+                holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_largebox_low)
             }
 
         }

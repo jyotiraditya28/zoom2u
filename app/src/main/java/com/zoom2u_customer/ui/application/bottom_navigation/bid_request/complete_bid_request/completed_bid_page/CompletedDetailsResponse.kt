@@ -1,12 +1,13 @@
-package com.zoom2u_customer.ui.application.bottom_navigation.bid_request.active_bid_request.active_bid_page
+package com.zoom2u_customer.ui.application.bottom_navigation.bid_request.complete_bid_request.completed_bid_page
 
 import android.os.Parcelable
+import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.active_bid_request.active_bid_page.Offer
 import com.zoom2u_customer.ui.application.bottom_navigation.home.delivery_details.model.ShipmentsClass
 import kotlinx.parcelize.Parcelize
 
 
 @Parcelize
-data class BidDetailsResponse(
+data class CompletedDetailsResponse(
     var `$id`: String? = null,
     var `$type`: String? = null,
     var Id: Int? = null,

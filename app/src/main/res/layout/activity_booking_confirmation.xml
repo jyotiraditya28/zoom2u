@@ -306,7 +306,7 @@
                     android:id="@+id/chk_terms"
                     style="@style/style_13_bold"
                     android:layout_width="30dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="30dp"
                     android:buttonTint="@color/base_color"
                 />
 

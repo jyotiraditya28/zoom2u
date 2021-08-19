@@ -17,7 +17,7 @@ class BidRequestFragment : Fragment() {
     ): View {
         binding = FragmentBidRequestBinding.inflate(inflater, container, false)
 
-        viewpageradapter= ViewPagerAdapter(activity?.supportFragmentManager)
+        viewpageradapter= ViewPagerAdapter(childFragmentManager)
 
         binding.pager.adapter=viewpageradapter
         binding.tabLayout.setupWithViewPager(binding.pager)

@@ -1,4 +1,4 @@
-package com.zoom2u_customer.ui.application.bottom_navigation.bid_request.active_bid_request.active_bid_page
+package com.zoom2u_customer.ui.application.bottom_navigation.bid_request.complete_bid_request.completed_bid_page
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -19,39 +19,37 @@ import com.zoom2u_customer.apiclient.GoogleServiceApi
 import com.zoom2u_customer.apiclient.ServiceApi
 
 import com.zoom2u_customer.databinding.ActivityActiveBidBinding
-import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.complete_bid_request.completed_bid_page.CompletedDetailsRepository
-import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.complete_bid_request.completed_bid_page.CompletedDetailsViewModel
+import com.zoom2u_customer.databinding.ActivityCompletedBidBinding
 import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.complete_bid_request.completed_bid_page.CompletedViewPagerAdapter
 import com.zoom2u_customer.utility.AppUtility
 import com.zoom2u_customer.utility.RouteParser
 import org.json.JSONException
 
-class ActiveBidActivity : AppCompatActivity(), OnMapReadyCallback {
-    lateinit var binding: ActivityActiveBidBinding
-    private var quoteID: Int? = null
+class CompletedBidActivity : AppCompatActivity(), OnMapReadyCallback {
+    lateinit var binding: ActivityCompletedBidBinding
+    private var quoteId: Int? = null
     private lateinit var map: GoogleMap
-    private lateinit var viewpageradapter: BidViewPagerAdapter
-    lateinit var viewModel: BidDetailsViewModel
+    private lateinit var viewpageradapter: CompletedViewPagerAdapter
+    lateinit var viewModel: CompletedDetailsViewModel
     private var repositoryGoogleAddress: GoogleAddressRepository? = null
-    private var repository: BidDetailsRepository? = null
-
+    private var repository: CompletedDetailsRepository? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_active_bid)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_completed_bid)
 
         if (intent.hasExtra("QuoteId")) {
-            quoteID = intent.getStringExtra("QuoteId")?.toInt()
+            quoteId = intent.getStringExtra("QuoteId")?.toInt()
         }
 
-        viewModel = ViewModelProvider(this).get(BidDetailsViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(CompletedDetailsViewModel::class.java)
         val googleServiceApi: GoogleServiceApi = GetAddressFromGoogleAPI.getGoogleServices()
         val serviceApi: ServiceApi = ApiClient.getServices()
         repositoryGoogleAddress = GoogleAddressRepository(googleServiceApi, this)
-        repository = BidDetailsRepository(serviceApi, this)
+        repository = CompletedDetailsRepository(serviceApi, this)
         viewModel.repository = repository
         viewModel.repositoryGoogleAddress = repositoryGoogleAddress
 
-        viewModel.getBidDetails(quoteID)
+        viewModel.getBidDetails(quoteId)
 
         val fragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
@@ -69,7 +67,7 @@ class ActiveBidActivity : AppCompatActivity(), OnMapReadyCallback {
 
                 initializeMap(arrayCourierPick,arrayCourierDrop)
 
-                viewpageradapter =BidViewPagerAdapter(supportFragmentManager, it)
+                viewpageradapter = CompletedViewPagerAdapter(supportFragmentManager, it)
                 binding.pager.adapter = viewpageradapter
                 binding.tabLayout.setupWithViewPager(binding.pager)
             }

@@ -15,7 +15,7 @@ import com.zoom2u_customer.apiclient.ServiceApi
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.zoom2u_customer.databinding.FragmentCompleteBidBinding
 import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.active_bid_request.ActiveBidListResponse
-import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.active_bid_request.active_bid_page.ActiveBidActivity
+import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.complete_bid_request.completed_bid_page.CompletedBidActivity
 import com.zoom2u_customer.utility.AppUtility
 
 class CompleteBidFragment : Fragment() {
@@ -46,11 +46,24 @@ class CompleteBidFragment : Fragment() {
 
         viewModel.getCompletedBidListSuccess()?.observe(viewLifecycleOwner) {
             if (it != null) {
+                val listWithOutFreight: MutableList<CompletedBidListResponse> = ArrayList()
                 AppUtility.progressBarDissMiss()
                 binding.swipeRefresh.isRefreshing = false
                 if (it.isNotEmpty()) {
-                    AppUtility.progressBarDissMiss()
-                    adapter?.updateRecords(it)
+                    for(item in it){
+                        /**for first release hide freight and xl item  from list*/
+                        if(item.ItemType=="Freight"||item.ItemCategory=="XL")
+                            continue
+                        else
+                            listWithOutFreight.add(item)
+                    }
+                   /**if in first page item not find without Xl and fright*/
+                   if(listWithOutFreight.isNullOrEmpty()){
+                       currentPage++
+                       viewModel.getCompletedBidList(currentPage)
+                   }
+                    else
+                        adapter?.updateRecords(listWithOutFreight)
                     binding.noCompletedBidText.visibility = View.GONE
                 }else{
                     binding.noCompletedBidText.visibility = View.VISIBLE
@@ -77,8 +90,9 @@ class CompleteBidFragment : Fragment() {
         AppUtility.progressBarShow(activity)
         viewModel.getCompletedBidList(currentPage)
     }
-    private fun onItemClick(completedBidItem: ActiveBidListResponse){
-        val intent = Intent(activity, ActiveBidActivity::class.java)
+    private fun onItemClick(completedBidItem: CompletedBidListResponse){
+        val intent = Intent(activity, CompletedBidActivity::class.java)
+        intent.putExtra("QuoteId",completedBidItem.Id.toString())
         startActivity(intent)
     }
 

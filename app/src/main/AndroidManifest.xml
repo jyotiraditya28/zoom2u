@@ -87,8 +87,12 @@
             android:value="@string/google_api_key" />
 
         <activity
+            android:name=".ui.application.bottom_navigation.bid_request.complete_bid_request.completed_bid_page.CompletedBidActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.application.bottom_navigation.bid_request.active_bid_request.active_bid_page.ActiveBidActivity"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".ui.application.qutote_request.QuoteRequestActivity"
             android:screenOrientation="portrait" /> <!-- <activity android:name=".application.ui.chat.MessageActivity" /> -->

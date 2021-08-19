@@ -413,16 +413,24 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
 
     private fun showHideWeight(pickState: String?, dropState: String?) {
         if (pickState != null && dropState != null) {
-            if (pickState != dropState) {
-                binding.packageType.visibility = View.VISIBLE
-                binding.yesNo.visibility = View.VISIBLE
-                binding.itemWeNotSend.visibility = View.VISIBLE
-                // binding.weightCl.visibility = View.VISIBLE
-            } else {
+            if (isQuotesRequest as Boolean ||(pickState == "TAS" || dropState == "TAS")) {
                 binding.packageType.visibility = View.GONE
                 binding.yesNo.visibility = View.GONE
                 binding.itemWeNotSend.visibility = View.GONE
-                // binding.weightCl.visibility = View.GONE
+            }
+
+            else {
+                if (pickState != dropState) {
+                    binding.packageType.visibility = View.VISIBLE
+                    binding.yesNo.visibility = View.VISIBLE
+                    binding.itemWeNotSend.visibility = View.VISIBLE
+                    // binding.weightCl.visibility = View.VISIBLE
+                } else {
+                    binding.packageType.visibility = View.GONE
+                    binding.yesNo.visibility = View.GONE
+                    binding.itemWeNotSend.visibility = View.GONE
+                    // binding.weightCl.visibility = View.GONE
+                }
             }
         }
     }

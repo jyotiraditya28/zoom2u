@@ -283,6 +283,10 @@
     <string name="offers">Offers</string>
     <string name="images">Images</string>
     <string name="bid_request">Bid Request</string>
+    <string name="pickup_eta">Pickup ETA</string>
+    <string name="last_completed_a_delivery_on">Last completed a delivery on</string>
+    <string name="drop_eta">Drop ETA</string>
+    <string name="registered_with_zoom2u_on">Registered with Zoom2u on</string>
 
 
 </resources>

@@ -295,7 +295,6 @@
                 android:layout_marginBottom="5dp"
                 android:background="@drawable/chip_background"
                 android:gravity="center"
-                android:paddingBottom="10dp"
                 android:paddingStart="25dp"
                 android:paddingEnd="25dp"
                 android:text="@string/go_to_offers"

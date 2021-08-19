@@ -3,8 +3,18 @@ package com.zoom2u_customer.ui.application.bottom_navigation.home.delivery_detai
 
 import android.app.Dialog
 import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.TextPaint
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.view.View
+import android.widget.TextView
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.HtmlCompat
 import androidx.databinding.DataBindingUtil
@@ -33,6 +43,7 @@ class UploadQuotesActivity : AppCompatActivity(), View.OnClickListener {
     lateinit var viewModel: UploadQuotesViewModel
     private var repository: UploadQuotesRepository? = null
     private var packagingType:String=""
+    private var quoteId:Int?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_upload_quotes)
@@ -56,16 +67,46 @@ class UploadQuotesActivity : AppCompatActivity(), View.OnClickListener {
         }
 
 
-        viewModel.getQuoteSuccess()?.observe(this) {
+        val text1 =  getString(R.string.term_con1)
+        val spannableString = SpannableString(text1)
+        val clickableSpan: ClickableSpan = object : ClickableSpan() {
+            @RequiresApi(Build.VERSION_CODES.Q)
+            override fun updateDrawState(ds: TextPaint) {
+                super.updateDrawState(ds)
+                ds.color=resources.getColor(R.color.black)
+                ds.underlineColor=resources.getColor(R.color.black)
+                ds.isUnderlineText = true
+            }
+
+            override fun onClick(p0: View) {
+                try {
+                    val browserIntent: Intent = Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://www.zoom2u.com.au/customer-terms/")
+                    )
+                    startActivity(browserIntent)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        }
+        spannableString.setSpan(clickableSpan, 22, text1.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        binding.termsCon.setText(spannableString, TextView.BufferType.SPANNABLE)
+        binding.termsCon.movementMethod = LinkMovementMethod.getInstance()
+
+
+
+            viewModel.getQuoteSuccess()?.observe(this) {
             if (it != null) {
                 if (it.isNotEmpty()) {
-                    requestId = it[it.size-1].toInt()
+                  quoteId=it[it.size-1].toInt()
                     if (it.size > 1) {
                         it.removeAt(it.size-1)
-                        viewModel.uploadQuotesImage(requestId, it)
+                        viewModel.uploadQuotesImage(quoteId, it)
                     }else if(it.size==1){
                         AppUtility.progressBarDissMiss()
                         val intent = Intent(this, QuoteConfirmationActivity::class.java)
+                        intent.putExtra("QuoteId",quoteId.toString())
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                         startActivity(intent)
                     }
@@ -77,6 +118,7 @@ class UploadQuotesActivity : AppCompatActivity(), View.OnClickListener {
             if (it != null) {
                 AppUtility.progressBarDissMiss()
                 val intent = Intent(this, QuoteConfirmationActivity::class.java)
+                intent.putExtra("QuoteId",it)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 startActivity(intent)
             }
@@ -117,10 +159,16 @@ class UploadQuotesActivity : AppCompatActivity(), View.OnClickListener {
             }
             R.id.submit_quotes_req -> {
                 if (checkValidation(binding.notes.text.toString(), packagingType)) {
-                    quoteRequestBody?.getJSONObject("_requestModel")
-                        ?.put("Notes", binding.notes.text.trim().toString())
 
-                    viewModel.getQuoteRequest(quoteRequestBody, arrayOfImageFiles)
+                    DialogActivity.logoutDialog(
+                        this,
+                        "Confirm!",
+                        "Due to the nature of this delivery, it will be created as a quote request and sent out to drivers for bidding on, instead of being a fixed quote. Our drivers will start providing quotes for this delivery, which you can view and accept. Do you wish to continue?",
+                        "Yes","No",
+                        onCancelClick=::onNoClick,
+                        onOkClick = ::onYesClick
+                    )
+
                 }
             }
             R.id.imv1 -> {
@@ -147,7 +195,14 @@ class UploadQuotesActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
+    private fun onNoClick(){
 
+    }
+    private fun onYesClick(){
+        quoteRequestBody?.getJSONObject("_requestModel")
+            ?.put("Notes", binding.notes.text.trim().toString().trim())
+        viewModel.getQuoteRequest(quoteRequestBody, arrayOfImageFiles)
+    }
     private fun checkValidation(desc: String, packaging_Type: String): Boolean {
         if (desc == "") {
             DialogActivity.alertDialogSingleButton(this, "Awaiting!", "Please enter your parcel description.")
@@ -159,6 +214,10 @@ class UploadQuotesActivity : AppCompatActivity(), View.OnClickListener {
         }
        else if (packaging_Type.isNullOrEmpty()) {
             DialogActivity.alertDialogSingleButton(this, "Awaiting!", "Please select a packaging type.")
+            return false
+        }
+        else if(!binding.chkTerms.isChecked){
+            Toast.makeText(this,"Please Accept the customer Terms and Conditions.", Toast.LENGTH_LONG).show()
             return false
         }
      return true

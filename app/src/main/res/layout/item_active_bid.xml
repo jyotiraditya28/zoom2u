@@ -116,7 +116,7 @@
                         android:gravity="center"
                         android:text="@{activebid.offers.toString()}"
                         android:textColor="@color/black"
-                        android:textSize="25dp" />
+                        android:textSize="25sp" />
 
                 </LinearLayout>
 
@@ -128,7 +128,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
-                    android:text="55 Miller St. Pyrmont,NSW"
+                    android:text="@{activebid.pickupSuburb}"
                     android:textColor="@color/black"
                     app:layout_constraintStart_toEndOf="@+id/relMain"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -151,7 +151,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:text="55 Miller St. Pyrmont,NSW"
+                    android:text="@{activebid.dropSuburb}"
                     android:textColor="@color/black"
                     app:layout_constraintBottom_toTopOf="@+id/drop_time"
                     app:layout_constraintStart_toEndOf="@+id/relMain" />
@@ -218,7 +218,7 @@
 
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/notes"
+                android:id="@+id/notes_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/style_15_bold"
@@ -229,12 +229,12 @@
                 app:layout_constraintStart_toStartOf="parent" />
 
             <com.google.android.material.textview.MaterialTextView
+               android:id="@+id/notes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/style_11_bold"
                 android:layout_marginBottom="10dp"
-                android:text="The boxes are 406*29.8cm and 5kg 23"
-                app:layout_constraintTop_toBottomOf="@+id/notes"
+                app:layout_constraintTop_toBottomOf="@+id/notes_txt"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent" />
 

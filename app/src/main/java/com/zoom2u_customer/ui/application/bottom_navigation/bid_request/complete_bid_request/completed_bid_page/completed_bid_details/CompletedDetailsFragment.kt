@@ -1,4 +1,4 @@
-package com.zoom2u_customer.ui.application.bottom_navigation.bid_request.active_bid_request.active_bid_page.active_biddetails
+package com.zoom2u_customer.ui.application.bottom_navigation.bid_request.complete_bid_request.completed_bid_page.completed_bid_details
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -10,18 +10,17 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
-import com.zoom2u_customer.R
 import com.zoom2u_customer.databinding.FragmentBidDetailsBinding
+import com.zoom2u_customer.databinding.FragmentCompletedBidDetailsBinding
 import com.zoom2u_customer.ui.DocItemShowAdapter
 import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.ShowBidImageAdapter
-import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.active_bid_request.active_bid_page.BidDetailsResponse
 import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.complete_bid_request.completed_bid_page.CompletedDetailsResponse
 import com.zoom2u_customer.utility.AppUtility
 
 
-class BidDetailsFragment(var bidDetails: BidDetailsResponse?) : Fragment() , View.OnClickListener{
-    lateinit var binding: FragmentBidDetailsBinding
-    var bidDetail: BidDetailsResponse? = null
+class CompletedDetailsFragment(var bidDetails: CompletedDetailsResponse?) : Fragment() {
+    lateinit var binding: FragmentCompletedBidDetailsBinding
+    var bidDetail: CompletedDetailsResponse? = null
     private var imageAdapter: ShowBidImageAdapter?=null
     private var docAdapter: DocItemShowAdapter?=null
     override fun onCreateView(
@@ -29,18 +28,19 @@ class BidDetailsFragment(var bidDetails: BidDetailsResponse?) : Fragment() , Vie
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentBidDetailsBinding.inflate(inflater, container, false)
+        binding =
+
+            FragmentCompletedBidDetailsBinding.inflate(inflater, container, false)
         this.bidDetail = bidDetails
 
         setDataToView(bidDetail)
         setAdapterView(container?.context)
-        binding.more.setOnClickListener(this)
-        binding.less.setOnClickListener(this)
+
         return binding.root
     }
 
     @SuppressLint("SetTextI18n")
-    private fun setDataToView(bidDetail: BidDetailsResponse?) {
+    private fun setDataToView(bidDetail: CompletedDetailsResponse?) {
         binding.pickAdd.text = bidDetail?.PickupLocation?.Street
         binding.dropAdd.text = bidDetail?.DropLocation?.Street
 
@@ -54,20 +54,13 @@ class BidDetailsFragment(var bidDetails: BidDetailsResponse?) : Fragment() , Vie
 
         binding.offer.text=bidDetail?.Offers?.size.toString()
         binding.notes.text=bidDetail?.Notes
-
-        /**show more less option*/
-        if( bidDetail?.Shipments!!.size>2){
-            binding.more.visibility=View.VISIBLE
-        }
     }
 
 
     fun setAdapterView(context: Context?) {
         if(bidDetail?.PackageImages!!.isNullOrEmpty()) {
            binding.defaultImage.visibility=View.VISIBLE
-           binding.bidImages.visibility=View.GONE
         }else{
-            binding.bidImages.visibility=View.VISIBLE
             binding.defaultImage.visibility=View.GONE
             val layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             binding.bidImages.layoutManager = layoutManager
@@ -80,32 +73,16 @@ class BidDetailsFragment(var bidDetails: BidDetailsResponse?) : Fragment() , Vie
         }
 
 
-        val layoutManager1 = GridLayoutManager(activity, 2)
+       /* val layoutManager1 = GridLayoutManager(activity, 2)
         binding.docRecycler.layoutManager = layoutManager1
         (binding.docRecycler.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
-        docAdapter = DocItemShowAdapter(context, bidDetail?.Shipments!!)
-        binding.docRecycler.adapter =docAdapter
+         docAdapter = DocItemShowAdapter(context, bidDetail?.Shipments!!)
+        binding.docRecycler.adapter =docAdapter*/
 
 
 
     }
     fun onItemClick(imagePath:String){
 
-    }
-
-    override fun onClick(view: View?) {
-        when (view?.id) {
-            R.id.more -> {
-                docAdapter?.isMoreEnable(true)
-                binding.more.visibility=View.GONE
-                binding.less.visibility=View.VISIBLE
-            }
-            R.id.less -> {
-                docAdapter?.isMoreEnable(false)
-                binding.more.visibility=View.VISIBLE
-                binding.less.visibility=View.GONE
-
-            }
-            }
     }
 }

@@ -1,4 +1,4 @@
-package com.zoom2u_customer.ui.application.bottom_navigation.bid_request.active_bid_request.active_bid_page.active_bid_offers
+package com.zoom2u_customer.ui.application.bottom_navigation.bid_request.complete_bid_request.completed_bid_page.completed_bid_offers
 
 import android.content.Context
 import android.os.Bundle
@@ -9,19 +9,18 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 
 import com.zoom2u_customer.databinding.FragmentBidOffersBinding
-import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.active_bid_request.active_bid_page.BidDetailsResponse
+import com.zoom2u_customer.databinding.FragmentCompletedBidOffersBinding
 import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.complete_bid_request.completed_bid_page.CompletedDetailsResponse
 import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.active_bid_request.active_bid_page.Offer
-import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.complete_bid_request.completed_bid_page.completed_bid_offers.CompletedBidOffersAdapter
 
-class BidOffersFragment(private val bidDetails: BidDetailsResponse?) : Fragment() {
-    lateinit var binding: FragmentBidOffersBinding
+class CompletedBidOffersFragment(private val bidDetails: CompletedDetailsResponse?) : Fragment() {
+    lateinit var binding: FragmentCompletedBidOffersBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentBidOffersBinding.inflate(inflater, container, false)
+        binding = FragmentCompletedBidOffersBinding.inflate(inflater, container, false)
 
         if (container != null) {
             setAdapterView(binding, container.context)
@@ -30,11 +29,11 @@ class BidOffersFragment(private val bidDetails: BidDetailsResponse?) : Fragment(
         return binding.root
     }
 
-    fun setAdapterView(binding: FragmentBidOffersBinding, context: Context) {
+    fun setAdapterView(binding: FragmentCompletedBidOffersBinding, context: Context) {
         val layoutManager = GridLayoutManager(activity, 1)
         binding.activeBidOffersRecycler.layoutManager = layoutManager
         val adapter =
-            ActiveBidOffersAdapter(context, bidDetails?.Offers?.toList()!!, onItemClick = ::onBidOfferSelected)
+            CompletedBidOffersAdapter(context, bidDetails?.Offers?.toList()!!, onItemClick = ::onBidOfferSelected)
         binding.activeBidOffersRecycler.adapter = adapter
 
     }

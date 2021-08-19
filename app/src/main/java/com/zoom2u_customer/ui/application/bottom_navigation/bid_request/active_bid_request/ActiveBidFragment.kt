@@ -12,10 +12,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.zoom2u_customer.apiclient.ApiClient
 import com.zoom2u_customer.apiclient.ServiceApi
-import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.active_bid_request.active_bid_page.ActiveBidActivity
+import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.complete_bid_request.completed_bid_page.CompletedBidActivity
 import com.zoom2u_customer.databinding.FragmentActiveBidBinding
-import com.zoom2u_customer.ui.application.bottom_navigation.history.HistoryItemAdapter
-import com.zoom2u_customer.ui.application.bottom_navigation.history.HistoryResponse
+import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.active_bid_request.active_bid_page.ActiveBidActivity
 import com.zoom2u_customer.utility.AppUtility
 
 
@@ -25,6 +24,7 @@ class ActiveBidFragment : Fragment() {
     private var  repository: ActiveBidListRepository? = null
     private var adapter: ActiveItemAdapter? = null
     private var currentPage: Int = 1
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -48,11 +48,21 @@ class ActiveBidFragment : Fragment() {
 
         viewModel.getActiveBidListSuccess()?.observe(viewLifecycleOwner) {
             if (it != null) {
+
+                /**for first release hide freight and xl item  from list*/
+                val listWithOutFreight: MutableList<ActiveBidListResponse> = ArrayList()
                 AppUtility.progressBarDissMiss()
                 binding.swipeRefresh.isRefreshing = false
                 if (it.isNotEmpty()) {
                     AppUtility.progressBarDissMiss()
-                    adapter?.updateRecords(it)
+                    for(item in it){
+                        if(item.ItemType=="Freight"||item.ItemCategory=="XL")
+                            continue
+                        else
+                            listWithOutFreight.add(item)
+                    }
+
+                    adapter?.updateRecords(listWithOutFreight)
                     binding.noActiveBidText.visibility = View.GONE
                 }else{
                     binding.noActiveBidText.visibility = View.VISIBLE
