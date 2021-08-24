@@ -198,6 +198,7 @@
                         android:layout_centerHorizontal="true"/>-->
                     <View
                         android:id="@+id/textViewJobStatus"
+                        style="@style/style_9_regular"
                         android:layout_width="1dp"
                         android:layout_height="50dp"
                         android:layout_below="@id/imageViewStatus"

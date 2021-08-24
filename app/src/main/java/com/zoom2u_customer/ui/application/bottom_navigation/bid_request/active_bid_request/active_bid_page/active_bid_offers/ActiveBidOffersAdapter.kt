@@ -7,20 +7,20 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.zoom2u_customer.R
 
 
 import com.zoom2u_customer.databinding.ItemActiveBidOffersBinding
 import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.active_bid_request.active_bid_page.Offer
-import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.complete_bid_request.completed_bid_page.completed_bid_offers.CompletedBidOffersAdapter
 import com.zoom2u_customer.utility.AppUtility
 
 
 class ActiveBidOffersAdapter(val context: Context, private val dataList: List<Offer>,
                              private val onItemClick: (Offer) -> Unit) :
     RecyclerView.Adapter<ActiveBidOffersAdapter.BindingViewHolder>() {
-
+    private var isBidAvailable:Boolean=true
     override fun getItemCount(): Int {
         return dataList.size
     }
@@ -47,6 +47,10 @@ class ActiveBidOffersAdapter(val context: Context, private val dataList: List<Of
 
         holder.itemBinding.acceptBid.setOnClickListener(){
             onItemClick(dataList[position])
+           /* if(isBidAvailable)
+            onItemClick(dataList[position])
+            else
+                Toast.makeText(context,"This bid offer is expired.",Toast.LENGTH_LONG).show()*/
         }
 
        /**extra details data*/
@@ -59,6 +63,7 @@ class ActiveBidOffersAdapter(val context: Context, private val dataList: List<Of
 
         /**if BidActivePeriod complete 30min*/
         if (System.currentTimeMillis() > AppUtility.getDateTime(dataList[position].BidActivePeriod).time) {
+            isBidAvailable=false
             holder.itemBinding.pickupTime.setTextColor(Color.RED)
             holder.itemBinding.lastCompletedTime.setTextColor(Color.RED)
             holder.itemBinding.dropTime.setTextColor(Color.RED)

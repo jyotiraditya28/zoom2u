@@ -31,6 +31,7 @@ import com.zoom2u_customer.ui.application.bottom_navigation.home.delivery_detail
 import com.zoom2u_customer.ui.application.bottom_navigation.home.delivery_details.model.SaveDeliveryRequestReq
 import com.zoom2u_customer.ui.application.bottom_navigation.home.delivery_details.model.ShipmentsClass
 import com.zoom2u_customer.ui.application.bottom_navigation.home.delivery_details.quotes_req.UploadQuotesActivity
+import com.zoom2u_customer.ui.application.bottom_navigation.home.getAccountType.GetAccountRepository
 import com.zoom2u_customer.ui.application.bottom_navigation.home.home_fragment.Icon
 import com.zoom2u_customer.ui.application.bottom_navigation.home.pricing_payment.PricingPaymentActivity
 import com.zoom2u_customer.ui.application.bottom_navigation.profile.my_location.MyLocationRepository
@@ -60,6 +61,7 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
     lateinit var viewModel: DeliveryDetailsViewModel
     private var categories: MutableList<String> = mutableListOf()
     private var repositoryGoogleAddress: GoogleAddressRepository? = null
+    private var repositoryGetAccountType: GetAccountRepository?=null
     private var repositoryMyLoc: MyLocationRepository? = null
     private var getLocationClass: GetLocationClass? = null
 
@@ -89,6 +91,7 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
     private var isQuotesRequest: Boolean? = null
     private var isPickTimeSelectedFromTimeWindow: Boolean = false
 
+    private var accountType:String?=null
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,8 +109,10 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
         val googleServiceApi: GoogleServiceApi = GetAddressFromGoogleAPI.getGoogleServices()
         repositoryMyLoc = MyLocationRepository(serviceApi, this)
         repositoryGoogleAddress = GoogleAddressRepository(googleServiceApi, this)
+        repositoryGetAccountType = GetAccountRepository(serviceApi, this)
         viewModel.repositoryMyLoc = repositoryMyLoc
         viewModel.repositoryGoogleAddress = repositoryGoogleAddress
+        viewModel.repositoryGetAccountType = repositoryGetAccountType
         viewModel.getMyLocationList()
 
         /**for request quotes*/
@@ -256,14 +261,28 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
 
         viewModel.getMySuccess()?.observe(this) {
             if (it != null) {
-                CustomProgressBar.dismissProgressBar()
                 if (it.isNotEmpty()) {
                     setDataToContact(it)
+                    viewModel.getAccountType()
                 }
 
             }
 
         }
+
+
+        viewModel.accountTypeSuccess()?.observe(this) {
+            if (it != null) {
+                if (it.isNotEmpty()) {
+                AppUtility.progressBarDissMiss()
+                    this.accountType=it
+                }
+
+            }
+
+        }
+
+
 
         viewModel.googleSuccessUsingAdd()?.observe(this) { isGoogleAdd ->
             if (isGoogleAdd.isNotEmpty()) {
@@ -983,6 +1002,9 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
             deliveryRequest.put("AuthorityToLeave", binding.authorityToLeave.isChecked)
             deliveryRequest.put("Instructions", binding.other.text.toString())
             deliveryRequest.put("isCreatedFromQuotes", false)
+
+            /**put payment type */
+            deliveryRequest.put("PricingScheme", accountType)
 
             /**put boolean for check in next pages that is time selected from time window or not*/
             deliveryRequest.put("isPickTimeSelectedFromTimeWindow", isPickTimeSelectedFromTimeWindow)

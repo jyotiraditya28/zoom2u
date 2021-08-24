@@ -287,6 +287,8 @@
     <string name="last_completed_a_delivery_on">Last completed a delivery on</string>
     <string name="drop_eta">Drop ETA</string>
     <string name="registered_with_zoom2u_on">Registered with Zoom2u on</string>
+    <string name="no_active_bid_found">No active bid found</string>
+    <string name="no_completed_bid_found">No completed bid found</string>
 
 
 </resources>

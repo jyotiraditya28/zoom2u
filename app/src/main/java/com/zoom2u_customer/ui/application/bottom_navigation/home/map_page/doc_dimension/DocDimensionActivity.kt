@@ -31,7 +31,7 @@ class DocDimensionActivity : AppCompatActivity(), View.OnClickListener {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_doc_dimension)
         AppUtility.hideKeyboardActivityLunched(this)
         AppUtility.hideKeyBoardClickOutside(binding.parentCl,this)
-        //AppUtility.hideKeyBoardClickOutside(binding.cl1,this)
+        AppUtility.hideKeyBoardClickOutside(binding.scrollView,this)
         if (intent.hasExtra("Icon")) {
             icon = intent.getParcelableExtra("Icon")
         }
@@ -45,14 +45,13 @@ class DocDimensionActivity : AppCompatActivity(), View.OnClickListener {
         height = icon?.height
         widht = icon?.width
         getTotalWeight(icon?.quantity, icon?.weight)
-        enableError(
-            getTotalWeight(
-                icon?.quantity, icon?.weight
-            ),
+        enableError(getTotalWeight(icon?.quantity, icon?.weight),
             icon?.length,
             icon?.height,
-            icon?.width
+            icon?.width,
+            icon?.quantity
         )
+
         val text = "<font color=#ff0000>Please login with your account details on</font> " +
                 "<font color=#00A7E2>https://deliveries.zoom2u.com/  </font>" +
                 "<font color=#ff0000>to create Heavy and Large freight bookings.</font>"
@@ -84,26 +83,24 @@ class DocDimensionActivity : AppCompatActivity(), View.OnClickListener {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (s.toString() != "" && binding.itemWeight.text.toString() != "") {
-                    getTotalWeight(
-                        s.toString().toInt(),
-                        binding.itemWeight.text.toString().toDouble()
-                    )
-                    enableError(
-                        getTotalWeight(
-                            s.toString().toInt(),
-                            binding.itemWeight.text.toString().toDouble()
-                        ),
-                        length,
-                        height,
-                        widht
-                    )
-                } else if (s.toString() == "") {
-                    binding.totalWeight.text = "0.0" + " " + "Kg"
-                    binding.totalWeight1.text = "Total Weight = 0.0Kg"
-                }
+                           getTotalWeight(
+                               s.toString().toInt(),
+                               binding.itemWeight.text.toString().toDouble()
+                           )
+                           enableError(
+                               getTotalWeight(
+                                   s.toString().toInt(),
+                                   binding.itemWeight.text.toString().toDouble()
+                               ), length, height, widht,s.toString().toInt()
+                           )
+                       }
+                    else if (s.toString() == "") {
+                        binding.totalWeight.text = "0.0" + " " + "Kg"
+                        binding.totalWeight1.text = "Total Weight = 0.0Kg"
+                    }
+
             }
         })
-
 
         binding.itemWeight.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -126,7 +123,8 @@ class DocDimensionActivity : AppCompatActivity(), View.OnClickListener {
                         ),
                         length,
                         height,
-                        widht
+                        widht,
+                        icon?.quantity
                     )
 
                 } else if (s.toString() == "") {
@@ -156,7 +154,8 @@ class DocDimensionActivity : AppCompatActivity(), View.OnClickListener {
                         ),
                         length,
                         height,
-                        widht
+                        widht,
+                        icon?.quantity
                     )
                 }
             }
@@ -180,7 +179,8 @@ class DocDimensionActivity : AppCompatActivity(), View.OnClickListener {
                         ),
                         length,
                         height,
-                        widht
+                        widht,
+                        icon?.quantity
                     )
                 }
             }
@@ -203,7 +203,8 @@ class DocDimensionActivity : AppCompatActivity(), View.OnClickListener {
                         ),
                         length,
                         height,
-                        widht
+                        widht,
+                        icon?.quantity
                     )
                 }
             }
@@ -216,6 +217,34 @@ class DocDimensionActivity : AppCompatActivity(), View.OnClickListener {
         binding.backBtn.setOnClickListener(this)
     }
 
+   private fun getCountCheckResult(quantity:Int?){
+       if(!getCountCheck(quantity!!)){
+           isQuotesRequest = true
+           binding.errorText.visibility = View.VISIBLE
+           binding.noteText.visibility = View.VISIBLE
+       }else{
+           isQuotesRequest = false
+           binding.errorText.visibility = View.GONE
+           binding.noteText.visibility = View.GONE
+       }
+   }
+
+    private fun getCountCheck(quantity:Int): Boolean {
+        if(icon?.Value==10&& quantity > 30){
+            return false
+        }else if(icon?.Value==11&& quantity >15){
+            return false
+        }else if(icon?.Value==12&& quantity >15){
+            return false
+        }else if(icon?.Value==13&& quantity >15){
+            return false
+        }else if(icon?.Value==14&& quantity >4){
+            return false
+        }
+        return true
+    }
+
+
 
     fun getTotalWeight(quantity: Int?, weight: Double?): Double? {
         if (quantity != null && weight != null) {
@@ -224,15 +253,25 @@ class DocDimensionActivity : AppCompatActivity(), View.OnClickListener {
             binding.totalWeight.text = df.format(totalWight).toString() + " " + "Kg"
             binding.totalWeight1.text = "Total Weight = " + df.format(totalWight).toString() + "Kg"
 
-            if (totalWight!! > 100) {
+/*
+          if(!getCountCheck(quantity)){
+                  isQuotesRequest = true
+                  binding.errorText.visibility = View.VISIBLE
+                  binding.noteText.visibility = View.VISIBLE
+              }
+          else  if (totalWight!! > 100) {
                 isQuotesRequest = true
                 binding.errorText.visibility = View.VISIBLE
                 binding.noteText.visibility = View.VISIBLE
-            } else {
+             }
+
+
+            else {
                 isQuotesRequest = false
                 binding.errorText.visibility = View.GONE
                 binding.noteText.visibility = View.GONE
             }
+*/
 
         }
         return totalWight
@@ -278,12 +317,14 @@ class DocDimensionActivity : AppCompatActivity(), View.OnClickListener {
     }
 
 
-    private fun enableError(totalWeight: Double?, length: Int?, height: Int?, widht: Int?) {
+    private fun enableError(totalWeight: Double?, length: Int?, height: Int?, widht: Int?,quantity:Int?) {
         if (totalWeight != null) {
             if (length != null) {
                 if (height != null) {
                     if (widht != null) {
-                        if (totalWeight > 100 || length > 200 || height > 200 || widht > 200) {
+                        if (totalWeight > 100 || length > 200 || height > 200 || widht > 200 || !getCountCheck(
+                                quantity!!
+                            )) {
                             isQuotesRequest = true
                             binding.errorText.visibility = View.VISIBLE
                             binding.noteText.visibility = View.VISIBLE
@@ -312,7 +353,7 @@ class DocDimensionActivity : AppCompatActivity(), View.OnClickListener {
                 return false
             }
             quantity == "0" -> {
-                Toast.makeText(this, "Please enter item quantity greater then 0.", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Please enter item quantity greater then zero.", Toast.LENGTH_LONG).show()
                 return false
             }
             weight == "" -> {

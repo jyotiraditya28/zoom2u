@@ -1,13 +1,13 @@
-package com.zoom2u_customer.ui.application.bottom_navigation.profile.my_location
+package com.zoom2u_customer.ui.application.bottom_navigation.home.getAccountType
 
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import com.google.gson.Gson
 import com.google.gson.JsonArray
+import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
 import com.zoom2u_customer.apiclient.ServiceApi
-import com.zoom2u_customer.ui.application.bottom_navigation.profile.my_location.model.MyLocationResAndEditLocationReq
+import com.zoom2u_customer.ui.application.bottom_navigation.profile.ProfileResponse
 import com.zoom2u_customer.utility.AppUtility
 import com.zoom2u_customer.utility.DialogActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -16,30 +16,26 @@ import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
 import retrofit2.Response
 
-class MyLocationRepository(private var serviceApi: ServiceApi, var context: Context){
+class GetAccountRepository (private var serviceApi: ServiceApi, var context: Context?) {
 
-    fun getMyLocation( disposable: CompositeDisposable = CompositeDisposable(),  onSuccess: (myLocationList:List<MyLocationResAndEditLocationReq>) -> Unit) {
+    fun getAccountType(
+        disposable: CompositeDisposable = CompositeDisposable(),
+        onSuccess: (accountType: String) -> Unit
+    ) {
         if (AppUtility.isInternetConnected()) {
-            //CustomProgressBar.progressBarShow(context,"Loading...","Please wait a moment")
-            AppUtility.progressBarShow(context)
-                disposable.add(
-                serviceApi.getWithJsonArray(
-                    "breeze/customer/GetPreferredLocations",
-                    AppUtility.getApiHeaders()
-                ).subscribeOn(
-                    Schedulers.io()
-                )
+
+            // AppUtility.progressBarShow(context)
+            disposable.add(
+                serviceApi.getWithJsonObject("breeze/customer/GetCustomerAccountType", AppUtility.getApiHeaders())
+                    .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeWith(object : DisposableSingleObserver<Response<JsonArray>>() {
-                        override fun onSuccess(responce: Response<JsonArray>) {
+                    .subscribeWith(object : DisposableSingleObserver<Response<JsonObject>>() {
+                        override fun onSuccess(responce: Response<JsonObject>) {
                             if (responce.body() != null) {
-                                val listType =
-                                    object : TypeToken<List<MyLocationResAndEditLocationReq?>?>() {}.type
-                                val list: List<MyLocationResAndEditLocationReq> =
-                                    Gson().fromJson(responce.body(), listType)
-                               // CustomProgressBar.dismissProgressBar()
-                                onSuccess(list)
-                            } else if (responce.errorBody() != null) {
+                              onSuccess(responce.body()?.get("accountType").toString())
+
+                            }
+                            else if (responce.errorBody() != null) {
                                 AppUtility.progressBarDissMiss()
                                 if(responce.code()==401){
                                     DialogActivity.logoutDialog(
@@ -64,11 +60,13 @@ class MyLocationRepository(private var serviceApi: ServiceApi, var context: Cont
 
                         }
 
-
                         override fun onError(e: Throwable) {
-                            //CustomProgressBar.dismissProgressBar()
                             AppUtility.progressBarDissMiss()
-                            Toast.makeText(context, "Something went wrong please try again.", Toast.LENGTH_LONG).show()
+                            Toast.makeText(
+                                context,
+                                "something went wrong please try again.",
+                                Toast.LENGTH_LONG
+                            ).show()
                         }
                     })
             )
@@ -80,6 +78,4 @@ class MyLocationRepository(private var serviceApi: ServiceApi, var context: Cont
             )
         }
     }
-
-
 }

@@ -21,7 +21,7 @@ class ActiveItemAdapter (val context: Context, private val onItemClick:(ActiveBi
         return dataList.size
     }
     fun updateRecords(dataList1: List<ActiveBidListResponse>) {
-       if(!dataList.isNullOrEmpty()){
+       if(!dataList.isNullOrEmpty()&& !dataList1.isNullOrEmpty()){
            if(dataList[0].Id==dataList1[0].Id){
                dataList.clear()
                this.dataList.addAll(dataList1)
@@ -80,7 +80,7 @@ class ActiveItemAdapter (val context: Context, private val onItemClick:(ActiveBi
         if(dataList[position].Notes.isNullOrEmpty()){
             holder.itemBinding.notes.text="No notes available"
         }else{
-            holder.itemBinding.notes.text=dataList[position].Notes.toString()
+            holder.itemBinding.notes.text=dataList[position].Notes.toString().trim()
         }
 
 

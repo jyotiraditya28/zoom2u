@@ -17,9 +17,9 @@ import com.zoom2u_customer.ui.application.bottom_navigation.home.booking_confirm
 import com.zoom2u_customer.utility.CustomTypefaceSpan
 import com.zoom2u_customer.utility.DialogActivity
 
-class OrderConfirmActivity : AppCompatActivity() , View.OnClickListener{
+class OrderConfirmActivity : AppCompatActivity(), View.OnClickListener {
     lateinit var binding: ActivityOrderConfirmBinding
-    private var bookingResponse :BookingResponse?=null
+    private var bookingResponse: BookingResponse? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_order_confirm)
@@ -28,44 +28,57 @@ class OrderConfirmActivity : AppCompatActivity() , View.OnClickListener{
         if (intent.hasExtra("BookingResponse")) {
             bookingResponse = intent.getParcelableExtra("BookingResponse")
             setData(bookingResponse)
+        } else if (intent.hasExtra("BookingRefFromBid")) {
+            binding.yourBookingNumberTxt.text = intent.getStringExtra("BookingRefFromBid")
         }
 
-
-     binding.viewDeliveryDetails.setOnClickListener(this)
-     binding.close.setOnClickListener(this)
+        val importantTxtStr =
+            "Important: Please make sure your parcel is ready to go at your designated pickup time as you could be charged $1 a minute waiting time. This includes time waiting in the loading dock or reception."
+        val ss = SpannableStringBuilder(importantTxtStr)
+        ss.setSpan(
+            CustomTypefaceSpan("", ResourcesCompat.getFont(this, R.font.arimo_bold)!!),
+            0,
+            10,
+            Spanned.SPAN_EXCLUSIVE_INCLUSIVE
+        )
+        ss.setSpan(
+            CustomTypefaceSpan("", ResourcesCompat.getFont(this, R.font.arimo_regular)!!), 10,
+            importantTxtStr.length, Spanned.SPAN_EXCLUSIVE_INCLUSIVE
+        )
+        binding.ImportantText.text = ss
+        binding.viewDeliveryDetails.setOnClickListener(this)
+        binding.close.setOnClickListener(this)
 
     }
 
     private fun setData(bookingResponse: BookingResponse?) {
-        val importantTxtStr =
-            "Important: Please make sure your parcel is ready to go at your designated pickup time as you could be charged $1 a minute waiting time. This includes time waiting in the loading dock or reception."
-        val ss = SpannableStringBuilder(importantTxtStr)
-        ss.setSpan(CustomTypefaceSpan("", ResourcesCompat.getFont(this, R.font.arimo_bold)!!), 0, 10, Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
-        ss.setSpan(CustomTypefaceSpan("", ResourcesCompat.getFont(this, R.font.arimo_regular)!!), 10,
-            importantTxtStr.length, Spanned.SPAN_EXCLUSIVE_INCLUSIVE
-        )
-        binding.ImportantText.text=ss
-        binding.yourBookingNumberTxt.text=bookingResponse?.BookingRef
+        binding.yourBookingNumberTxt.text = bookingResponse?.BookingRef
     }
 
     override fun onClick(view: View?) {
         when (view!!.id) {
             R.id.view_delivery_details -> {
-                DialogActivity.logoutDialog(this, "Are you sure!", "Are you want make a new Booking?",
-                    "Ok","Cancel",
-                    onCancelClick=::onCancelClick,
-                    onOkClick = ::onOkClick)
+                DialogActivity.logoutDialog(
+                    this, "Are you sure!", "Are you want make a new Booking?",
+                    "Ok", "Cancel",
+                    onCancelClick = ::onCancelClick,
+                    onOkClick = ::onOkClick
+                )
             }
-            R.id.close->{
-                val intent = Intent(this, HistoryDetailsActivity::class.java)
-                intent.putExtra("BookingRef", bookingResponse?.BookingRef)
-                intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
-                startActivity(intent)
+            R.id.close -> {
+                if (intent.hasExtra("BookingRefFromBid")) {
+                      newBooking()
+                } else {
+                    val intent = Intent(this, HistoryDetailsActivity::class.java)
+                    intent.putExtra("BookingRef", bookingResponse?.BookingRef)
+                    intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
+                    startActivity(intent)
+                }
             }
         }
     }
 
-    private fun newBooking(){
+    private fun newBooking() {
         val intent = Intent(this, BasePageActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
         startActivity(intent)
@@ -73,12 +86,15 @@ class OrderConfirmActivity : AppCompatActivity() , View.OnClickListener{
     }
 
     override fun onBackPressed() {
-        DialogActivity.logoutDialog(this, "Are you sure!", "Are you want make a new Booking?",
-            "Ok","Cancel",
-            onCancelClick=::onCancelClick,
-            onOkClick = ::onOkClick)
+        DialogActivity.logoutDialog(
+            this, "Are you sure!", "Are you want make a new Booking?",
+            "Ok", "Cancel",
+            onCancelClick = ::onCancelClick,
+            onOkClick = ::onOkClick
+        )
     }
-    private fun onCancelClick(){}
+
+    private fun onCancelClick() {}
     private fun onOkClick() {
         newBooking()
     }

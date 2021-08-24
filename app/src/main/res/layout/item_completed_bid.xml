@@ -198,6 +198,7 @@
                         android:layout_centerHorizontal="true"/>-->
                     <View
                         android:id="@+id/textViewJobStatus"
+                        style="@style/style_9_regular"
                         android:layout_width="1dp"
                         android:layout_height="50dp"
                         android:layout_below="@id/imageViewStatus"
@@ -233,7 +234,7 @@
                 android:layout_height="wrap_content"
                 style="@style/style_11_bold"
                 android:layout_marginBottom="10dp"
-                android:text="@{completedbid.notes}"
+                android:text="@{completedbid.notes.toString().trim()}"
                 app:layout_constraintTop_toBottomOf="@+id/notes"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent" />

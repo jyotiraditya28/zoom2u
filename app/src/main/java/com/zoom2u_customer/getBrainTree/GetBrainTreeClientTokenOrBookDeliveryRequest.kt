@@ -3,6 +3,8 @@ package com.zoom2u_customer.getBrainTree
 import android.app.Activity
 import android.content.Context
 import android.widget.RelativeLayout
+import androidx.core.app.ActivityCompat.startActivityForResult
+import androidx.fragment.app.Fragment
 import com.braintreepayments.api.PaymentRequest
 import com.zoom2u_customer.apiclient.ApiClient
 import com.zoom2u_customer.apiclient.ServiceApi
@@ -11,7 +13,7 @@ import com.zoom2u_customer.utility.DialogActivity
 import org.json.JSONException
 import org.json.JSONObject
 
-class GetBrainTreeClientTokenOrBookDeliveryRequest(var context: Context,var requestCode:Int) {
+class GetBrainTreeClientTokenOrBookDeliveryRequest(var context: Context?,var requestCode:Int) {
 
     private var repository: GetBrainTreeRepository? = null
     var requestCod:Int=0

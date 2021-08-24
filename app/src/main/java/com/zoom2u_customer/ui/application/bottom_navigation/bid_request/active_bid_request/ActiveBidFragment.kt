@@ -62,9 +62,19 @@ class ActiveBidFragment : Fragment() {
                             listWithOutFreight.add(item)
                     }
 
+                    /**if in first page item not find without Xl and fright*/
+                    if(listWithOutFreight.isNullOrEmpty()){
+                        currentPage++
+                        viewModel.getActiveBidList(currentPage)
+                    }
+                    else
+                        adapter?.updateRecords(listWithOutFreight)
+
                     adapter?.updateRecords(listWithOutFreight)
+
                     binding.noActiveBidText.visibility = View.GONE
                 }else{
+                    if(currentPage==1)
                     binding.noActiveBidText.visibility = View.VISIBLE
                 }
             }

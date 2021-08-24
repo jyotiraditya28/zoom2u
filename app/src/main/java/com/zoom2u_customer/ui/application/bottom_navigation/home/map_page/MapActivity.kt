@@ -127,10 +127,18 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, View.OnClickListene
 
                 }, 1000)
 
+              /**1case-check if total weight >100*/
+
                 if (getTotalWeight() > 100) {
                     DialogActivity.alertDialogOkCallback(this, "Total weight : "+getTotalWeight()+"Kg", "Items weighing over 30kg each or 100kg in total will need to be placed through our Bid Request services. The same goes for items with measurements exceeding 200cm and multiple number of items exceeding the limit per booking. This is to maintain the safety and good health of our drivers.",
                         onItemClick = ::onItemClick)
-                } else {
+                }
+                /**2case-count check*/
+                else if(!getCountCheck()){
+                    DialogActivity.alertDialogOkCallback(this, "Alert!", "Items weighing over 30kg each or 100kg in total will need to be placed through our Bid Request services. The same goes for items with measurements exceeding 200cm and multiple number of items exceeding the limit per booking. This is to maintain the safety and good health of our drivers.",
+                        onItemClick = ::onItemClick)
+                }
+                else {
                     val intent = Intent(this, DeliveryDetailsActivity::class.java)
                     intent.putParcelableArrayListExtra("IconList", dataList)
                     intent.putExtra("isQuotesRequest",isQuotesRequest)
@@ -186,6 +194,23 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, View.OnClickListene
         }
     }
 
+
+    fun getCountCheck(): Boolean {
+        for (item in dataList) {
+            if(item.Value==10&&item.quantity>30){
+                return false
+            }else if(item.Value==11&&item.quantity>15){
+                return false
+            }else if(item.Value==12&&item.quantity>15){
+                return false
+            }else if(item.Value==13&&item.quantity>15){
+                return false
+            }else if(item.Value==14&&item.quantity>4){
+                return false
+            }
+        }
+        return true
+    }
 
     override fun onBackPressed() {
         DialogActivity.logoutDialog(

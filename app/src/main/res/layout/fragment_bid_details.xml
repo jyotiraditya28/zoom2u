@@ -29,7 +29,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:scrollbars="horizontal"
-                android:layout_marginEnd="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="10dp"
                 app:layout_constraintEnd_toStartOf="@id/more"
@@ -45,7 +44,6 @@
                 android:visibility="gone"
                 android:textStyle="bold"
                 android:text="more.."
-                android:paddingEnd="10dp"
                 android:paddingTop="12dp"
                 android:paddingStart="10dp"
                 android:paddingBottom="10dp"
@@ -55,7 +53,7 @@
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/less"
                 style="@style/style_13_bold"
-                android:visibility="gone"
+                 android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="#979797"
@@ -144,7 +142,7 @@
                     android:text="456 Kent St, Sydney NSW 2000, Australia"
                     android:layout_marginEnd="20dp"
                     android:textColor="@color/black"
-                    android:maxWidth="300dp"
+                    android:maxWidth="200dp"
                     app:layout_constraintStart_toEndOf="@+id/relMain"
                     app:layout_constraintTop_toBottomOf="@id/pick_txt"/>
 
@@ -219,11 +217,11 @@
                     <View
                         android:id="@+id/textViewJobStatus"
                         style="@style/style_9_regular"
-                        android:layout_width="2dp"
-                        android:layout_height="55dp"
+                        android:layout_width="1dp"
+                        android:layout_height="65dp"
                         android:layout_below="@id/imageViewStatus"
                         android:layout_centerHorizontal="true"
-                        android:background="@color/body_font_color" />
+                        android:background="@drawable/vertical_dot_line" />
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/end_icon"
@@ -305,9 +303,11 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/notes"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/style_11_bold"
+                android:paddingBottom="20dp"
+                android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
                 android:text="The boxes are 406*29.8cm and 5kg 23"
                 app:layout_constraintTop_toBottomOf="@+id/notes_txt"

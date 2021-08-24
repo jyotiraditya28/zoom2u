@@ -1,7 +1,9 @@
 package com.zoom2u_customer.ui.application.bottom_navigation.bid_request.active_bid_request.active_bid_page
 
-import androidx.appcompat.app.AppCompatActivity
+import android.R.attr
+import android.content.Intent
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -17,14 +19,12 @@ import com.zoom2u_customer.apiclient.GetAddressFromGoogle.GoogleAddressRepositor
 import com.zoom2u_customer.apiclient.GetAddressFromGoogleAPI
 import com.zoom2u_customer.apiclient.GoogleServiceApi
 import com.zoom2u_customer.apiclient.ServiceApi
-
 import com.zoom2u_customer.databinding.ActivityActiveBidBinding
-import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.complete_bid_request.completed_bid_page.CompletedDetailsRepository
-import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.complete_bid_request.completed_bid_page.CompletedDetailsViewModel
-import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.complete_bid_request.completed_bid_page.CompletedViewPagerAdapter
+import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.active_bid_request.active_bid_page.active_bid_offers.BidOffersFragment
 import com.zoom2u_customer.utility.AppUtility
 import com.zoom2u_customer.utility.RouteParser
 import org.json.JSONException
+
 
 class ActiveBidActivity : AppCompatActivity(), OnMapReadyCallback {
     lateinit var binding: ActivityActiveBidBinding
@@ -200,6 +200,15 @@ class ActiveBidActivity : AppCompatActivity(), OnMapReadyCallback {
 
         } catch (e: JSONException) {
             e.printStackTrace()
+        }
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        for (fragment in supportFragmentManager.fragments) {
+            if(fragment is BidOffersFragment)
+            fragment.onActivityResult(requestCode, resultCode, data)
         }
 
     }

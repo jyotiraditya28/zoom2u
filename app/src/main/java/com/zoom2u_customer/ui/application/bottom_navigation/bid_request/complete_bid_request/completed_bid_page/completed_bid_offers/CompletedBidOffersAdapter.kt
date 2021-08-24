@@ -1,10 +1,13 @@
 package com.zoom2u_customer.ui.application.bottom_navigation.bid_request.complete_bid_request.completed_bid_page.completed_bid_offers
 
 import android.content.Context
+import android.graphics.Color
 import android.text.TextUtils
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.zoom2u_customer.R
 
 
 import com.zoom2u_customer.databinding.ItemActiveBidOffersBinding
@@ -15,7 +18,7 @@ import com.zoom2u_customer.utility.AppUtility
 class CompletedBidOffersAdapter(val context: Context, private val dataList: List<Offer>,
                                 private val onItemClick: (Offer) -> Unit) :
     RecyclerView.Adapter<CompletedBidOffersAdapter.BindingViewHolder>() {
-
+    private var isBidAvailable:Boolean=true
     override fun getItemCount(): Int {
         return dataList.size
     }
@@ -29,6 +32,7 @@ class CompletedBidOffersAdapter(val context: Context, private val dataList: List
 
     override fun onBindViewHolder(holder: BindingViewHolder, position: Int) {
 
+
         val activeBidOffers:Offer = dataList[position]
         holder.itemBinding.activebidoffers= activeBidOffers
 
@@ -41,9 +45,48 @@ class CompletedBidOffersAdapter(val context: Context, private val dataList: List
 
         holder.itemBinding.acceptBid.setOnClickListener(){
             onItemClick(dataList[position])
+            /* if(isBidAvailable)
+             onItemClick(dataList[position])
+             else
+                 Toast.makeText(context,"This bid offer is expired.",Toast.LENGTH_LONG).show()*/
+        }
+
+        /**extra details data*/
+        holder.itemBinding.pickupTime.text=AppUtility.getDateTimeFromDeviceToServerForDate(dataList[position].PickupETA)
+        holder.itemBinding.lastCompletedTime.text=AppUtility.getDateTimeFromDeviceToServerForDate(dataList[position].LastCompletedDeliveryDateTime)
+        holder.itemBinding.dropTime.text=AppUtility.getDateTimeFromDeviceToServerForDate(dataList[position].DropETA)
+        holder.itemBinding.registerTime.text=AppUtility.getDateTimeFromDeviceToServerForDate(dataList[position].RegisteredWithZoom2uOnDateTime)
+        holder.itemBinding.bidHasTime.text=AppUtility.getDateTimeFromDeviceToServerForDate(dataList[position].BidActivePeriod)
+
+
+        /**if BidActivePeriod complete 30min*/
+        if (System.currentTimeMillis() > AppUtility.getDateTime(dataList[position].BidActivePeriod).time) {
+            isBidAvailable=false
+            holder.itemBinding.pickupTime.setTextColor(Color.RED)
+            holder.itemBinding.lastCompletedTime.setTextColor(Color.RED)
+            holder.itemBinding.dropTime.setTextColor(Color.RED)
+            holder.itemBinding.registerTime.setTextColor(Color.RED)
+            holder.itemBinding.bidHas.text="Bid has :"
+            holder.itemBinding.bidHasTime.text="Expired"
+            holder.itemBinding.bidHasTime.setTextColor(Color.RED)
+            holder.itemBinding.bidExpireNote.visibility= View.VISIBLE
+            holder.itemBinding.acceptBid.setBackgroundResource(R.drawable.expire_bid)
+            holder.itemBinding.acceptBid.text="Bid Expired"
+
+        }
+
+
+        holder.itemBinding.loadMore.setOnClickListener(){
+            holder.itemBinding.loadMore.visibility= View.GONE
+            holder.itemBinding.loadData.visibility= View.VISIBLE
+        }
+        holder.itemBinding.loadLess.setOnClickListener(){
+            holder.itemBinding.loadMore.visibility= View.VISIBLE
+            holder.itemBinding.loadData.visibility= View.GONE
         }
 
     }
+
 
 
     class BindingViewHolder(val itemBinding: ItemActiveBidOffersBinding) :

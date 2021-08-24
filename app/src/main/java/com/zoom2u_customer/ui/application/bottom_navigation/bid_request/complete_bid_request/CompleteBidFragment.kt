@@ -66,6 +66,7 @@ class CompleteBidFragment : Fragment() {
                         adapter?.updateRecords(listWithOutFreight)
                     binding.noCompletedBidText.visibility = View.GONE
                 }else{
+                    if(currentPage==1)
                     binding.noCompletedBidText.visibility = View.VISIBLE
                 }
             }

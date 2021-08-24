@@ -82,8 +82,6 @@ class BookingConfirmationActivity : AppCompatActivity(), View.OnClickListener {
                                 "BookingResponse", bookingResponse
                             )
                             intent.flags=Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
-                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
                             startActivity(loginPage)
                             finish()
                         } else {
@@ -203,21 +201,11 @@ class BookingConfirmationActivity : AppCompatActivity(), View.OnClickListener {
                 if (bookingDeliveryResponse!!.getJSONObject("_deliveryRequestModel").has("ETA"))
                 bookingDeliveryResponse!!.getJSONObject("_deliveryRequestModel").remove("ETA")
                 getBrainTreeClientToken = GetBrainTreeClientTokenOrBookDeliveryRequest(this, Request_Code)
-            /*if (MainActivity.customerAccountType.equals("0") || MainActivity.customerAccountType.equals(
-                    "Standard"
-                )
-            ) */
-            getBrainTreeClientToken?.callServiceForGetClientToken()
-            /*   else {
-                 try {
-                      jObjForConfirmation!!.getJSONObject("_deliveryRequestModel")
-                          .put("paymentNonce", "")
-                      getBrainTreeClientToken.callServiceForBookDeliveryRequest(jObjForConfirmation)
-                      getBrainTreeClientToken = null
-                  } catch (e: JSONException) {
-                      e.printStackTrace()
-                  }
-            }    */
+            if ( bookingDeliveryResponse!!.getJSONObject("_deliveryRequestModel").get("PricingScheme") =="Standard")
+                getBrainTreeClientToken?.callServiceForGetClientToken()
+              else  {
+                viewModel.getDeliveryRequest(bookingDeliveryResponse)
+            }
         } catch (e: JSONException) {
             e.printStackTrace()
         }
@@ -235,7 +223,7 @@ class BookingConfirmationActivity : AppCompatActivity(), View.OnClickListener {
                     bookingDeliveryResponse!!.getJSONObject("_deliveryRequestModel")
                         .put("paymentNonce", nonce)
                     viewModel.getDeliveryRequest(bookingDeliveryResponse)
-                    getBrainTreeClientToken = null
+
                 } catch (e: JSONException) {
                     e.printStackTrace()
                 }

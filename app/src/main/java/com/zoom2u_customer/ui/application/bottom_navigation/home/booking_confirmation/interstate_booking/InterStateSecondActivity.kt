@@ -191,22 +191,11 @@ class InterStateSecondActivity : AppCompatActivity(), View.OnClickListener {
                             binding.lName.text.toString().trim()
                 )
 
-
-            /*if (MainActivity.customerAccountType.equals("0") || MainActivity.customerAccountType.equals(
-                    "Standard"
-                )
-            ) */
-            getBrainTreeClientToken?.callServiceForGetClientToken()
-            /*   else {
-                 try {
-                      jObjForConfirmation!!.getJSONObject("_deliveryRequestModel")
-                          .put("paymentNonce", "")
-                      getBrainTreeClientToken.callServiceForBookDeliveryRequest(jObjForConfirmation)
-                      getBrainTreeClientToken = null
-                  } catch (e: JSONException) {
-                      e.printStackTrace()
-                  }
-            }    */
+            if ( bookingDeliveryResponse!!.getJSONObject("_deliveryRequestModel").get("PricingScheme") =="Standard")
+                getBrainTreeClientToken?.callServiceForGetClientToken()
+            else  {
+                viewModel.getDeliveryRequest(bookingDeliveryResponse)
+            }
         } catch (e: JSONException) {
             e.printStackTrace()
         }
