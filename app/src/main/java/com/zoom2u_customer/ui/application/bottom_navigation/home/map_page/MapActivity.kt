@@ -130,13 +130,35 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, View.OnClickListene
               /**1case-check if total weight >100*/
 
                 if (getTotalWeight() > 100) {
-                    DialogActivity.alertDialogOkCallback(this, "Total weight : "+getTotalWeight()+"Kg", "Items weighing over 30kg each or 100kg in total will need to be placed through our Bid Request services. The same goes for items with measurements exceeding 200cm and multiple number of items exceeding the limit per booking. This is to maintain the safety and good health of our drivers.",
-                        onItemClick = ::onItemClick)
+                    DialogActivity.logoutDialog(
+                        this,
+                        "Confirm!",
+                        "Due to the nature of this delivery, it will be created as a quote request and sent out to drivers for bidding on, instead of being a fixed quote. Our drivers will start providing quotes for this delivery, which you can view and accept. Do you wish to continue?",
+                        "Yes","No",
+                        onCancelClick=::onNoClick,
+                        onOkClick = ::onItemClick
+                    )
                 }
                 /**2case-count check*/
                 else if(!getCountCheck()){
-                    DialogActivity.alertDialogOkCallback(this, "Alert!", "Items weighing over 30kg each or 100kg in total will need to be placed through our Bid Request services. The same goes for items with measurements exceeding 200cm and multiple number of items exceeding the limit per booking. This is to maintain the safety and good health of our drivers.",
-                        onItemClick = ::onItemClick)
+                    DialogActivity.logoutDialog(
+                        this,
+                        "Confirm!",
+                        "Due to the nature of this delivery, it will be created as a quote request and sent out to drivers for bidding on, instead of being a fixed quote. Our drivers will start providing quotes for this delivery, which you can view and accept. Do you wish to continue?",
+                        "Yes","No",
+                        onCancelClick=::onNoClick,
+                        onOkClick = ::onItemClick
+                    )
+                }
+               else if(isQuotesRequest==true){
+                    DialogActivity.logoutDialog(
+                        this,
+                        "Confirm!",
+                        "Due to the nature of this delivery, it will be created as a quote request and sent out to drivers for bidding on, instead of being a fixed quote. Our drivers will start providing quotes for this delivery, which you can view and accept. Do you wish to continue?",
+                        "Yes","No",
+                        onCancelClick=::onNoClick,
+                        onOkClick = ::onItemClick
+                    )
                 }
                 else {
                     val intent = Intent(this, DeliveryDetailsActivity::class.java)
@@ -181,7 +203,9 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, View.OnClickListene
     private fun onOkClick() {
 
     }
+    private fun onNoClick(){
 
+    }
     override fun onMarkerClick(p0: Marker?) = false
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -195,7 +219,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback, View.OnClickListene
     }
 
 
-    fun getCountCheck(): Boolean {
+    private fun getCountCheck(): Boolean {
         for (item in dataList) {
             if(item.Value==10&&item.quantity>30){
                 return false

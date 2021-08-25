@@ -302,7 +302,7 @@
                                 android:layout_height="93dp"
                                 android:layout_below="@id/imageViewStatus"
                                 android:layout_centerHorizontal="true"
-                                android:src="@drawable/ic_broken_line" />
+                                android:src="@drawable/vertical_dot_line" />
 
 
                             <com.google.android.material.imageview.ShapeableImageView
@@ -482,7 +482,7 @@
                                 android:layout_gravity="center"
                                 android:layout_margin="5dp"
                                 android:layout_weight="0.5"
-                                android:src="@mipmap/ic_box"
+                                android:src="@drawable/a1"
                                 android:layout_marginEnd="5dp"
                                 />
 
@@ -625,7 +625,7 @@
                                 android:layout_height="55dp"
                                 android:layout_margin="5dp"
                                 android:layout_weight="0.5"
-                                android:src="@mipmap/ic_box"
+                                android:src="@drawable/a1"
                                 android:layout_marginEnd="5dp"/>
 
 
@@ -738,6 +738,7 @@
                     android:layout_marginEnd="15dp"
                     android:layout_marginBottom="20dp"
                     android:elevation="5dp"
+                    app:layout_constraintBottom_toTopOf="@+id/cancel_book"
                     android:background="@drawable/white_background"
                     app:layout_constraintTop_toBottomOf="@+id/notes">
 
@@ -748,7 +749,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="15dp"
-                        android:text="Delivery notes"
+                        android:text="@string/delivery_notes"
                         android:textColor="@color/black"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -757,9 +758,9 @@
                         android:id="@+id/delivery_note"
                         style="@style/style_9_regular"
                         android:layout_width="wrap_content"
+                        android:textColor="@color/black"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
-                        android:text="No notes available"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/delivery_note_txt" />
 
@@ -771,7 +772,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="10dp"
-                        android:text="Package notes"
+                        android:text="@string/package_notes"
                         android:textColor="@color/black"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/delivery_note" />

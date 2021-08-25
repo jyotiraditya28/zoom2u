@@ -64,36 +64,12 @@ class HistoryFragment : Fragment() {
                         }
                     }
                     if(mergeHistoryList.size>0) {
-                      /**when swipe refresh*/
-                        if (mergeHistoryList[2].BookingRef == it[0].BookingRef) {
-                            mergeHistoryList.clear()
-                            mergeHistoryList.add(HistoryResponse().apply {
-                                count = onGoingList.size
-                                type = 1
-                            })
-                            mergeHistoryList.addAll(onGoingList)
+                        /**when pagination work*/
+                        mergeHistoryList.addAll(onGoingList)
+                        mergeHistoryList.addAll(pastList)
 
-                            mergeHistoryList.add(HistoryResponse().apply {
-                                count=pastList.size
-                                type=2
-                            })
-                            mergeHistoryList.addAll(pastList)
-                        }else{
-                           /**when pagination work*/
-                            /*mergeHistoryList.add(HistoryResponse().apply {
-                                count = onGoingList.size
-                                type = 1
-                            })*/
-                            mergeHistoryList.addAll(onGoingList)
-
-                            /*mergeHistoryList.add(HistoryResponse().apply {
-                                count=pastList.size
-                                type=2
-                            })*/
-                            mergeHistoryList.addAll(pastList)
-                        }
                     }else{
-                        /**when first time activity lunch*/
+                        /**when first time and swipe refresh activity lunch*/
                         mergeHistoryList.clear()
                         mergeHistoryList.add(HistoryResponse().apply {
                             count = onGoingList.size
@@ -119,6 +95,7 @@ class HistoryFragment : Fragment() {
 
 
         binding.swipeRefresh.setOnRefreshListener(OnRefreshListener {
+            mergeHistoryList.clear()
             viewModel.getHistory(1)
         })
 

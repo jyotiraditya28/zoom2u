@@ -7,6 +7,7 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
 import com.zoom2u_customer.apiclient.ServiceApi
+import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.complete_bid_request.completed_bid_page.CompletedDetailsResponse
 import com.zoom2u_customer.ui.application.bottom_navigation.profile.ProfileResponse
 import com.zoom2u_customer.utility.AppUtility
 import com.zoom2u_customer.utility.DialogActivity
@@ -20,7 +21,7 @@ class GetAccountRepository (private var serviceApi: ServiceApi, var context: Con
 
     fun getAccountType(
         disposable: CompositeDisposable = CompositeDisposable(),
-        onSuccess: (accountType: String) -> Unit
+        onSuccess: (accountType: AccountTypeModel) -> Unit
     ) {
         if (AppUtility.isInternetConnected()) {
 
@@ -32,20 +33,17 @@ class GetAccountRepository (private var serviceApi: ServiceApi, var context: Con
                     .subscribeWith(object : DisposableSingleObserver<Response<JsonObject>>() {
                         override fun onSuccess(responce: Response<JsonObject>) {
                             if (responce.body() != null) {
-                              onSuccess(responce.body()?.get("accountType").toString())
+                                val bid: AccountTypeModel =
+                                    Gson().fromJson(responce.body(),AccountTypeModel::class.java)
+                                onSuccess(bid)
 
                             }
                             else if (responce.errorBody() != null) {
                                 AppUtility.progressBarDissMiss()
                                 if(responce.code()==401){
-                                    DialogActivity.logoutDialog(
+                                    DialogActivity.alertDialogOnSessionExpire(
                                         context,
-                                        "Confirm!",
-                                        "Your token has expired you have to login again.",
-                                        "Ok","Cancel",
-                                        onCancelClick=::onCancelClick,
-                                        onOkClick = ::onOkClick
-                                    )
+                                        onItemClick = ::onOkClick)
                                 }
                                 else{
                                     Toast.makeText(context, "Something went wrong please try again.", Toast.LENGTH_LONG).show() }
@@ -56,9 +54,6 @@ class GetAccountRepository (private var serviceApi: ServiceApi, var context: Con
                             AppUtility.onLogoutCall(context)
                         }
 
-                        private fun onCancelClick(){
-
-                        }
 
                         override fun onError(e: Throwable) {
                             AppUtility.progressBarDissMiss()

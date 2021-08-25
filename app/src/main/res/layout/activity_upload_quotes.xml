@@ -94,7 +94,7 @@
                     android:background="@drawable/location_box"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
-                    android:hint="@string/describe_in_as_much_detail_as_possible_the_item_s_you_need_delivered"
+                    android:hint="Heavy &amp; Bulk Building material that need extra assistance."
                     android:textColorHint="@color/black"
                     android:gravity="top"
                     android:inputType="textMultiLine"

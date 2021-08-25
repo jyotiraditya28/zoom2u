@@ -40,9 +40,9 @@
     <!--home page-->
     <string name="home_header">What would you like to send today?</string>
     <string name="delivery_redesigned">Delivery, Redesigned.</string>
-    <string name="home_text">At Zoom2u we know how important it is to know where your parcel is and when it will be delivered.</string>
+    <string name="home_text">At zoom2u we know how important it is to know where your parcel is and when it will be delivered.</string>
     <string name="get_a_quote">Get a Quote</string>
-    <string name="make_a_booking">Make a booking</string>
+    <string name="make_a_booking">Make another booking</string>
     <!--profile page-->
     <string name="my_profile">My Profile</string>
     <string name="my_location">My Location</string>
@@ -118,7 +118,7 @@
     <string name="drop_check2_desc">(please provide a phone number above and provide notes regarding the location of the package)</string>
     <string name="commercial">Commercial</string>
     <string name="parcel_after">Shipment available after</string>
-    <string name="parcel_after_txt">(your parcel will be picked up and deliver within the requested window.it may not be at this exact time)</string>
+    <string name="parcel_after_txt">(Your parcel will be picked up and delivered within the requested window.it may not be at this exact time)</string>
     <string name="date">Date</string>
     <string name="time">Time</string>
     <string name="required_before">Required before</string>
@@ -256,9 +256,9 @@
     <string name="track_your_booking">Track your booking</string>
     <string name="quote_request">Quote Request</string>
     <string name="describe_shipment">Describe Shipment</string>
-    <string name="describe_in_as_much_detail_as_possible_the_item_s_you_need_delivered">Describe in as much detail as possible the item(s) you need delivered</string>
+
     <string name="image_of_freight_png_jpg_or_pdf">Image of Freight (.png, .jpg or .pdf)</string>
-    <string name="click_hear_upload_photos">Click hear to upload photos</string>
+    <string name="click_hear_upload_photos">Click here to upload photos</string>
     <string name="submit_quote_req">Submit quote request</string>
     <string name="the_appropriate_label_has_been_attached_label_for_laptops_and_mobile_phones_can_be_downloaded_here">The appropriate label has been attached (Label for laptops and mobile phones can be downloaded here).</string>
     <string name="packaging">Packaging</string>
@@ -266,7 +266,7 @@
     <string name="item_will_be_packaged_not_in_original_packaging">Item will be packaged (Not in original packaging)</string>
     <string name="packing_term2">Item will not be packaged. (Please note: This option will void any damage cover for this delivery. Items sent without packaging are at the customers own risk.)</string>
     <string name="deliver_before">Deliver before</string>
-    <string name="parcel_drop_text">(your parcel will be droped off and deliver within the requested window.it may not be at this exact time)</string>
+    <string name="parcel_drop_text">(Your parcel will be droped off and deliver within the requested window.it may not be at this exact time.)</string>
     <string name="minutes">minutes.</string>
     <string name="not_available">Not Available</string>
     <string name="register_text">Don\'t have an account?Register</string>
@@ -288,7 +288,10 @@
     <string name="drop_eta">Drop ETA</string>
     <string name="registered_with_zoom2u_on">Registered with Zoom2u on</string>
     <string name="no_active_bid_found">No active bid found</string>
-    <string name="no_completed_bid_found">No completed bid found</string>
+    <string name="delivery_notes">Delivery notes</string>
+    <string name="package_notes">Package notes</string>
+    <string name="update_details">Update details</string>
+    <string name="make_a1_booking">Make a booking</string>
 
 
 </resources>

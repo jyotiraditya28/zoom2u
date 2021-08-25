@@ -3,6 +3,7 @@ package com.zoom2u_customer.ui.application.bottom_navigation.history.history_det
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -154,8 +155,19 @@ class HistoryDetailsActivity : AppCompatActivity(),  OnMapReadyCallback, View.On
         if (!TextUtils.isEmpty(it.PackageNotes))
             binding.packageNote.text = it.PackageNotes
         else
-            binding.packageNote.text = "Important Documents Please take care of those boxes."
+            binding.packageNote.text = "No package notes available."
 
+
+        if(!TextUtils.isEmpty(it.PickupNotes)){
+            binding.deliveryNote.text =it.PickupNotes
+        }else{
+            binding.deliveryNote.text = "No delivery notes available"
+        }
+
+
+        if (!TextUtils.isEmpty(it.PackageImage)) {
+            binding.pickImage.setImageBitmap(AppUtility.getBitmapFromURL(it.PackageImage))
+        }
 
 
         if (!TextUtils.isEmpty(it.PickupSignature)) {
@@ -169,18 +181,28 @@ class HistoryDetailsActivity : AppCompatActivity(),  OnMapReadyCallback, View.On
             binding.dropImage.setImageBitmap(AppUtility.getBitmapFromURL(it.DropPhoto))
         }
 
+
         if(it.IsCancel==true){
             binding.cancelBook.visibility=View.GONE
             binding.price.text = "No Charge"
-            binding.status.text = "Cancelled"
+            binding.status.text = "cancellation"
+            binding.status.setBackgroundColor(Color.parseColor("#ff0000"))
+            binding.status.setTextColor(Color.WHITE)
+        }
+        else if(it.IsOnHold==true){
+            binding.cancelBook.visibility=View.VISIBLE
+            binding.price.text = "$"+it.Price.toString()
+            binding.status.text = "On Hold"
             binding.status.setBackgroundColor(Color.parseColor("#ff0000"))
             binding.status.setTextColor(Color.WHITE)
         }
         else {
-            binding.cancelBook.visibility = View.VISIBLE
             setStatus(it.Status)
             binding.price.text = "$"+it.Price.toString()
         }
+
+
+
         /*if(!TextUtils.isEmpty(it.PickP)) {
             binding.dropImage.setImageBitmap(AppUtility.getBitmapFromURL(it.DropPhoto))
         }*/
@@ -190,7 +212,8 @@ class HistoryDetailsActivity : AppCompatActivity(),  OnMapReadyCallback, View.On
         binding.dropImage.setOnClickListener(this)
         binding.backIcon.setOnClickListener(this)
         binding.cancelBook.setOnClickListener(this)
-
+        binding.card4.setOnClickListener(this)
+        binding.pickImage.setOnClickListener(this)
 
         /**condition for actual pick drop*/
         if(it.PickupActual.isNullOrEmpty() || it.DropActual.isNullOrEmpty()){
@@ -215,31 +238,37 @@ class HistoryDetailsActivity : AppCompatActivity(),  OnMapReadyCallback, View.On
     private fun setStatus(status: String?) {
         when (status) {
             "Accepted" -> {
+                binding.cancelBook.visibility = View.VISIBLE
                 binding.status.text = "Allocated"
                 binding.status.setBackgroundColor(Color.parseColor("#00A7E2"))
                 binding.status.setTextColor(Color.BLACK)
             }
             "Picked up" -> {
+                binding.cancelBook.visibility = View.GONE
                 binding.status.text = "Picked up"
                 binding.status.setBackgroundColor(Color.parseColor("#00A7E2"))
                 binding.status.setTextColor(Color.WHITE)
             }
             "Dropped Off" -> {
+                binding.cancelBook.visibility = View.GONE
                 binding.status.text = "Delivered"
                 binding.status.setBackgroundColor(Color.parseColor("#76D750"))
                 binding.status.setTextColor(Color.BLACK)
             }
             "On Route to Pickup" -> {
+                binding.cancelBook.visibility = View.GONE
                 binding.status.text = "On Route to-Pickup"
                 binding.status.setBackgroundColor(Color.parseColor("#00A7E2"))
                 binding.status.setTextColor(Color.WHITE)
             }
             "On Route to Dropoff" -> {
+                binding.cancelBook.visibility = View.GONE
                 binding.status.text = "On Route to-Dropoff"
                 binding.status.setBackgroundColor(Color.parseColor("#00A7E2"))
                 binding.status.setTextColor(Color.WHITE)
             }
             else -> {
+                binding.cancelBook.visibility = View.VISIBLE
                 binding.status.text = "Accepted"
                 binding.status.setBackgroundColor(Color.parseColor("#FFD100"))
                 binding.status.setTextColor(Color.BLACK)
@@ -270,6 +299,12 @@ class HistoryDetailsActivity : AppCompatActivity(),  OnMapReadyCallback, View.On
                 else
                     Toast.makeText(this, "No dropoff image found.", Toast.LENGTH_LONG).show()
             }
+            R.id.pick_image -> {
+                if (!TextUtils.isEmpty(response?.PackageImage))
+                    AppUtility.fullSizeImageView(this, response?.PackageImage.toString())
+                else
+                    Toast.makeText(this, "No pickup image found.", Toast.LENGTH_LONG).show()
+            }
             R.id.back_icon ->{
                 finish()
             }
@@ -282,6 +317,17 @@ class HistoryDetailsActivity : AppCompatActivity(),  OnMapReadyCallback, View.On
                     onCancelClick=::onNoClick,
                     onOkClick = ::onYesClick
                 )
+            }
+            R.id.card4->{
+                try {
+                    val browserIntent: Intent = Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse(response?.TrackingLink)
+                    )
+                    startActivity(browserIntent)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
         }
     }

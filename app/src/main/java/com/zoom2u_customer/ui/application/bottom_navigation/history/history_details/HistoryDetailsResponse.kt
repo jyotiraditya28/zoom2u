@@ -85,6 +85,7 @@ data class HistoryDetailsResponse(
     var RequestedPickupDateTimeWindowEnd: String? = null,
     var DeclarationSignature: String? = null,
     var Source: String? = null,
+    var TrackingLink: String? =null,
     var ThirdPartyCarrierBookingReference: String? = null,
     var ThirdPartyCarrierLabelUrl: String? = null,
     var ThirdPartyCarrierConsignmentNumber: String? = null,

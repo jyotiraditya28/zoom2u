@@ -19,6 +19,7 @@ class HistoryItemAdapter(val context: Context, private val onItemClick:(HistoryR
 
 
     fun updateRecords(dataList: MutableList<HistoryResponse>) {
+
         dataList1.clear()
         this.dataList1.addAll(dataList)
         notifyDataSetChanged()
@@ -72,10 +73,16 @@ class HistoryItemAdapter(val context: Context, private val onItemClick:(HistoryR
 
             if(dataList1[position].IsCancel==true) {
                 holder.itemBinding.price.text = "No Charge"
-                holder.itemBinding.status.text = "Cancelled"
+                holder.itemBinding.status.text = "cancellation"
                 holder.itemBinding.status.setBackgroundColor(Color.parseColor("#ff0000"))
                 holder.itemBinding.status.setTextColor(Color.WHITE)
-            }else {
+             }else if(dataList1[position].IsOnHold==true){
+                holder.itemBinding.price.text = "$" + dataList1[position].Price.toString()
+                 holder.itemBinding.status.text = "On Hold"
+                holder.itemBinding.status.setBackgroundColor(Color.parseColor("#ff0000"))
+                holder.itemBinding.status.setTextColor(Color.WHITE)
+            }
+            else {
                 holder.itemBinding.price.text = "$" + dataList1[position].Price.toString()
                 setStatus(dataList1[position].Status,holder)
             }

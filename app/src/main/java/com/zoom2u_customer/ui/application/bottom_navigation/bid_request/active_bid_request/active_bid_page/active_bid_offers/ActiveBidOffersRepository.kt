@@ -20,6 +20,7 @@ class ActiveBidOffersRepository(private var serviceApi: ServiceApi, var context:
         nonce: String,
         requestId: String,
         offerId: String,
+        orderNo:String,
         disposable: CompositeDisposable = CompositeDisposable(),
         onSuccess: (msg: String) -> Unit
     ) {
@@ -27,7 +28,7 @@ class ActiveBidOffersRepository(private var serviceApi: ServiceApi, var context:
             AppUtility.progressBarShow(context)
             disposable.add(
                 serviceApi.postWithJsonObject(
-                    "breeze/ExtraLargeQuoteRequest/AcceptQuoteOffer?requestId=$requestId&offerId=$offerId&paymentNonce=$nonce&purchaseOrderNumber=ggfngfn1w1",
+                    "breeze/ExtraLargeQuoteRequest/AcceptQuoteOffer?requestId=$requestId&offerId=$offerId&paymentNonce=$nonce&purchaseOrderNumber=$orderNo",
                     AppUtility.getApiHeaders()
                 ).subscribeOn(
                     Schedulers.io()

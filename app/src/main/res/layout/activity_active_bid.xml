@@ -14,8 +14,9 @@
 
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:id="@+id/back"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_margin="10dp"
             android:src="@drawable/ic_arrow_back"
             app:layout_constraintStart_toStartOf="parent"

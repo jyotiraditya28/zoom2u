@@ -44,17 +44,12 @@ class ActiveBidListRepository(private var serviceApi: ServiceApi, var context: C
                             else if (responce.errorBody() != null) {
                                 AppUtility.progressBarDissMiss()
                                 if(responce.code()==401){
-                                    DialogActivity.logoutDialog(
+                                    DialogActivity.alertDialogOnSessionExpire(
                                         context,
-                                        "Confirm!",
-                                        "Your token has expired you have to login again.",
-                                        "Ok","Cancel",
-                                        onCancelClick=::onCancelClick,
-                                        onOkClick = ::onOkClick
-                                    )
+                                        onItemClick = ::onOkClick)
                                 }
                                 else{
-                                    Toast.makeText(context, "Error Code:${responce.code()} something went wrong please try again.", Toast.LENGTH_LONG).show() }
+                                    Toast.makeText(context, "Something went wrong please try again.", Toast.LENGTH_LONG).show() }
 
                             }
                         }
@@ -62,10 +57,87 @@ class ActiveBidListRepository(private var serviceApi: ServiceApi, var context: C
                             AppUtility.onLogoutCall(context)
                         }
 
-                        private fun onCancelClick(){
 
+
+                        override fun onError(e: Throwable) {
+                            AppUtility.progressBarDissMiss()
+                            Toast.makeText(
+                                context,
+                                "something went wrong please try again.",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    })
+            )
+        } else {
+            DialogActivity.alertDialogSingleButton(
+                context,
+                "No Network !",
+                "No network connection, Please try again later."
+            )
+        }
+    }
+
+
+    fun getBidCancel(
+        bookingID: Int?,
+        disposable: CompositeDisposable = CompositeDisposable(),
+        onSuccess: (msg: String) -> Unit
+    ) {
+        if (AppUtility.isInternetConnected()) {
+            AppUtility.progressBarShow(context)
+            disposable.add(
+                serviceApi.cancelBooking(
+                    "breeze/ExtraLargeQuoteRequest/CloseQuoteRequest?requestId=$bookingID",
+                    AppUtility.getApiHeaders()
+                ).subscribeOn(
+                    Schedulers.io()
+                )
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeWith(object : DisposableSingleObserver<Response<Void>>() {
+                        override fun onSuccess(responce: Response<Void>) {
+                            onSuccess("true")
                         }
 
+                        override fun onError(e: Throwable) {
+                            AppUtility.progressBarDissMiss()
+                            Toast.makeText(
+                                context,
+                                "something went wrong please try again.",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    })
+            )
+        } else {
+            DialogActivity.alertDialogSingleButton(
+                context,
+                "No Network !",
+                "No network connection, Please try again later."
+            )
+        }
+    }
+
+
+    fun getHeavyBidCancel(
+        bookingID: Int?,
+        disposable: CompositeDisposable = CompositeDisposable(),
+        onSuccess: (msg: String) -> Unit
+    ) {
+        if (AppUtility.isInternetConnected()) {
+            AppUtility.progressBarShow(context)
+            disposable.add(
+                serviceApi.cancelBooking(
+                    "breeze/HeavyFreight/CloseFreightRequest?requestId=$bookingID",
+                    AppUtility.getApiHeaders()
+                ).subscribeOn(
+                    Schedulers.io()
+                )
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeWith(object : DisposableSingleObserver<Response<Void>>() {
+                        override fun onSuccess(responce: Response<Void>) {
+                            onSuccess("true")
+                        }
 
                         override fun onError(e: Throwable) {
                             AppUtility.progressBarDissMiss()

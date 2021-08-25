@@ -270,12 +270,11 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
 
         }
 
-
         viewModel.accountTypeSuccess()?.observe(this) {
             if (it != null) {
-                if (it.isNotEmpty()) {
+                if (!TextUtils.isEmpty(it.accountType)) {
                 AppUtility.progressBarDissMiss()
-                    this.accountType=it
+                    this.accountType=it.accountType
                 }
 
             }
@@ -569,7 +568,16 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
                                 "Unfortunately extra large items are unable to be sent interstate at this stage,in the future we hope to make  this available."+"\n"+"Sorry!"
                             )
                         }
-                    } else {
+                    }
+                    else if(pickGpx==dropGpx&&pickGpy==dropGpy){
+                        DialogActivity.alertDialogSingleButton(
+                            this,
+                            "Oops!",
+                            "Please select different pick and drop address."+"\n"+"Sorry!"
+                        )
+                    }
+
+                    else {
 
                         val intent = Intent(this, PricingPaymentActivity::class.java)
                         /**for Intra State**/
@@ -821,6 +829,9 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
             if (checkPickFutureTime(time)) {
                 binding.pickTime.text = time
                 isPickTimeSelectedFromTimeWindow = true
+                //add3HourInPickTime(time)
+
+
             }
         }
     }
@@ -845,14 +856,18 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
             binding.dropDate.text = s.toString()
     }
 
-    fun add3HourInPickTime(time: String?) {
+    private fun add3HourInPickTime(time: String?) {
         val serverDateTimeValue = binding.pickDate.text.toString() + " " +
                 time
         val millisToAdd: Long = 7_200_000
-        val converter = SimpleDateFormat("hh:mm a")
+        val c = Calendar.getInstance()
+
+
+
+        val format = SimpleDateFormat("hh:mm aaa")
         val convertedDate: Date?
         try {
-            convertedDate = converter.parse(serverDateTimeValue)
+           convertedDate=format.parse(serverDateTimeValue)
 
 
         } catch (e: Exception) {

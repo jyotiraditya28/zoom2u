@@ -40,32 +40,23 @@ class MyLocationRepository(private var serviceApi: ServiceApi, var context: Cont
                                // CustomProgressBar.dismissProgressBar()
                                 onSuccess(list)
                             } else if (responce.errorBody() != null) {
-                                AppUtility.progressBarDissMiss()
-                                if(responce.code()==401){
-                                    DialogActivity.logoutDialog(
-                                        context,
-                                        "Confirm!",
-                                        "Your token has expired you have to login again.",
-                                        "Ok","Cancel",
-                                        onCancelClick=::onCancelClick,
-                                        onOkClick = ::onOkClick
-                                    )
+                                    AppUtility.progressBarDissMiss()
+                                    if(responce.code()==401){
+                                        DialogActivity.alertDialogOnSessionExpire(
+                                            context,
+                                            onItemClick = ::onOkClick)
+                                    }
+                                    else{
+                                        Toast.makeText(context, "Something went wrong please try again.", Toast.LENGTH_LONG).show() }
+
                                 }
-                                else{
-                                    Toast.makeText(context, "Something went wrong please try again.", Toast.LENGTH_LONG).show() }
-
                             }
-                        }
-                        private fun onOkClick(){
-                            AppUtility.onLogoutCall(context)
-                        }
-
-                        private fun onCancelClick(){
-
-                        }
+                            private fun onOkClick(){
+                                AppUtility.onLogoutCall(context)
+                            }
 
 
-                        override fun onError(e: Throwable) {
+                            override fun onError(e: Throwable) {
                             //CustomProgressBar.dismissProgressBar()
                             AppUtility.progressBarDissMiss()
                             Toast.makeText(context, "Something went wrong please try again.", Toast.LENGTH_LONG).show()

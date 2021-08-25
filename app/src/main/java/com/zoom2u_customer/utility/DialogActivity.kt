@@ -130,6 +130,29 @@ class DialogActivity {
         }
 
 
+        fun alertDialogOnSessionExpire(context: Context?, onItemClick: () -> Unit) {
+
+            val viewGroup = (context as Activity).findViewById<ViewGroup>(R.id.content)
+
+            val dialogView: View =
+                LayoutInflater.from(context).inflate(R.layout.session_expire, viewGroup, false)
+
+            val builder = AlertDialog.Builder(context)
+
+            builder.setView(dialogView)
+
+            val alertDialog = builder.create()
+            alertDialog.show()
+            alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+
+            val logOut: TextView = dialogView.findViewById(R.id.okBtn)
+            logOut.setOnClickListener {
+                onItemClick()
+                alertDialog.dismiss()
+            }
+
+        }
 
 
     }

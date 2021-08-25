@@ -79,6 +79,10 @@ class ActiveBidActivity : AppCompatActivity(), OnMapReadyCallback {
             if (!it.isNullOrEmpty())
                RouteParser.parserTask(this,map,it)
         }
+
+        binding.back.setOnClickListener{
+            finish()
+        }
     }
 
 

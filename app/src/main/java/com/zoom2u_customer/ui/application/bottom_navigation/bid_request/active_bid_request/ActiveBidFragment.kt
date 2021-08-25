@@ -3,6 +3,7 @@ package com.zoom2u_customer.ui.application.bottom_navigation.bid_request.active_
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,15 +17,18 @@ import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.complete
 import com.zoom2u_customer.databinding.FragmentActiveBidBinding
 import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.active_bid_request.active_bid_page.ActiveBidActivity
 import com.zoom2u_customer.utility.AppUtility
+import com.zoom2u_customer.utility.DialogActivity
 
 
 class ActiveBidFragment : Fragment() {
+    private var selectForCancel: Int? = null
+    private var selectForCancelItemType: String? = null
     lateinit var binding: FragmentActiveBidBinding
     lateinit var viewModel: ActiveBidListViewModel
-    private var  repository: ActiveBidListRepository? = null
+    private var repository: ActiveBidListRepository? = null
     private var adapter: ActiveItemAdapter? = null
     private var currentPage: Int = 1
-
+    val listData: MutableList<ActiveBidListResponse> = ArrayList()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -33,7 +37,7 @@ class ActiveBidFragment : Fragment() {
         binding = FragmentActiveBidBinding.inflate(inflater, container, false)
 
         if (container != null) {
-            setAdapterView(binding,container.context)
+            setAdapterView(binding, container.context)
         }
         viewModel = ViewModelProvider(this).get(ActiveBidListViewModel::class.java)
         val serviceApi: ServiceApi = ApiClient.getServices()
@@ -43,54 +47,68 @@ class ActiveBidFragment : Fragment() {
         viewModel.getActiveBidList(currentPage)
 
         binding.swipeRefresh.setOnRefreshListener(OnRefreshListener {
+            listData.clear()
             viewModel.getActiveBidList(1)
         })
 
         viewModel.getActiveBidListSuccess()?.observe(viewLifecycleOwner) {
             if (it != null) {
-
-                /**for first release hide freight and xl item  from list*/
-                val listWithOutFreight: MutableList<ActiveBidListResponse> = ArrayList()
                 AppUtility.progressBarDissMiss()
                 binding.swipeRefresh.isRefreshing = false
                 if (it.isNotEmpty()) {
                     AppUtility.progressBarDissMiss()
-                    for(item in it){
-                        if(item.ItemType=="Freight"||item.ItemCategory=="XL")
-                            continue
-                        else
-                            listWithOutFreight.add(item)
-                    }
 
-                    /**if in first page item not find without Xl and fright*/
-                    if(listWithOutFreight.isNullOrEmpty()){
-                        currentPage++
-                        viewModel.getActiveBidList(currentPage)
-                    }
-                    else
-                        adapter?.updateRecords(listWithOutFreight)
-
-                    adapter?.updateRecords(listWithOutFreight)
-
+                    updateRecord(it.toMutableList())
                     binding.noActiveBidText.visibility = View.GONE
-                }else{
-                    if(currentPage==1)
+                } else {
+
                     binding.noActiveBidText.visibility = View.VISIBLE
                 }
             }
         }
 
+        viewModel.getBidCancelSuccess()?.observe(viewLifecycleOwner) {
+            if (!TextUtils.isEmpty(it)) {
+                AppUtility.progressBarDissMiss()
+                listData.clear()
+                viewModel.getActiveBidList(1)
+            }
+        }
+
+
+        viewModel.getHeavyBidCancelSuccess()?.observe(viewLifecycleOwner) {
+            if (!TextUtils.isEmpty(it)) {
+                AppUtility.progressBarDissMiss()
+                listData.clear()
+                viewModel.getActiveBidList(1)
+            }
+        }
 
         return binding.root
 
     }
+
+    private fun updateRecord(listWithOutFreight: MutableList<ActiveBidListResponse>) {
+        if (listWithOutFreight.size > 0)
+            listData.addAll(listWithOutFreight)
+        else {
+            listData.clear()
+            listData.addAll(listWithOutFreight)
+        }
+
+        adapter?.updateRecords(listData)
+    }
+
     private fun setAdapterView(binding: FragmentActiveBidBinding, context: Context) {
         val layoutManager = GridLayoutManager(activity, 1)
         binding.activeBidRecycler.layoutManager = layoutManager
-        adapter = ActiveItemAdapter(context,
+        adapter = ActiveItemAdapter(
+            context,
             onItemClick = ::onItemClick,
-            onApiCall = ::onApiCall)
-        binding.activeBidRecycler.adapter=adapter
+            onApiCall = ::onApiCall,
+            onCancelClick = ::onCancelClick
+        )
+        binding.activeBidRecycler.adapter = adapter
 
     }
 
@@ -99,10 +117,32 @@ class ActiveBidFragment : Fragment() {
         AppUtility.progressBarShow(activity)
         viewModel.getActiveBidList(currentPage)
     }
-    private fun onItemClick(activeBidItem: ActiveBidListResponse){
+
+    private fun onItemClick(activeBidItem: ActiveBidListResponse) {
         val intent = Intent(activity, ActiveBidActivity::class.java)
-        intent.putExtra("QuoteId",activeBidItem.Id.toString())
+        intent.putExtra("QuoteId", activeBidItem.Id.toString())
         startActivity(intent)
+    }
+
+    private fun onCancelClick(Id: Int, itemType: String) {
+        selectForCancel = Id
+        selectForCancelItemType = itemType
+        DialogActivity.logoutDialog(
+            activity,
+            "Confirm!",
+            "Are you sure you want to cancel your request?",
+            "Yes", "No",
+            onCancelClick = ::onNoClick,
+            onOkClick = ::onYesClick
+        )
+    }
+
+    fun onNoClick() {}
+    private fun onYesClick() {
+        if (selectForCancelItemType == "Freight")
+            viewModel.getHeavyBidCancel(selectForCancel)
+        else if (selectForCancelItemType == "ExtraLargeItem")
+            viewModel.getBidCancel(selectForCancel)
     }
 
 }

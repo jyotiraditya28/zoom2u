@@ -5,14 +5,19 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.zoom2u_customer.R
 import com.zoom2u_customer.databinding.ItemActiveBidBinding
+import com.zoom2u_customer.ui.application.bottom_navigation.history.HistoryItemAdapter
 import com.zoom2u_customer.ui.application.bottom_navigation.history.HistoryResponse
 import com.zoom2u_customer.utility.AppUtility
+import com.zoom2u_customer.utility.DialogActivity
 import java.util.ArrayList
 
 
-class ActiveItemAdapter (val context: Context, private val onItemClick:(ActiveBidListResponse) -> Unit, private val onApiCall:() ->Unit) :
+class ActiveItemAdapter (val context: Context, private val onItemClick:(ActiveBidListResponse) -> Unit, private val onApiCall:() ->Unit,
+                         private val onCancelClick:(Int,String) -> Unit) :
     RecyclerView.Adapter<ActiveItemAdapter.BindingViewHolder>() {
     private var dataList:MutableList<ActiveBidListResponse> = ArrayList()
     private var lastApiCallPosition:Int=-1
@@ -21,20 +26,9 @@ class ActiveItemAdapter (val context: Context, private val onItemClick:(ActiveBi
         return dataList.size
     }
     fun updateRecords(dataList1: List<ActiveBidListResponse>) {
-       if(!dataList.isNullOrEmpty()&& !dataList1.isNullOrEmpty()){
-           if(dataList[0].Id==dataList1[0].Id){
-               dataList.clear()
-               this.dataList.addAll(dataList1)
-           }else {
-               this.dataList.addAll(dataList1)
-           }
-
-       }else{
-           this.dataList.addAll(dataList1)
-       }
-
+        dataList.clear()
+        this.dataList.addAll(dataList1)
         notifyDataSetChanged()
-
 
     }
 
@@ -55,7 +49,10 @@ class ActiveItemAdapter (val context: Context, private val onItemClick:(ActiveBi
         holder.itemBinding.activebid= activeBidItem
 
         holder.itemBinding.root.setOnClickListener {
-            onItemClick(activeBidItem)
+           if(dataList[position].ItemType=="Freight"||dataList[position].ItemCategory=="XL"){
+               DialogActivity.alertDialogSingleButton(context, "Alert!", "Currently not showing Freight and Extra Large item information try in portal.")
+           }else
+               onItemClick(activeBidItem)
         }
 
     /**for pagination*/
@@ -81,6 +78,81 @@ class ActiveItemAdapter (val context: Context, private val onItemClick:(ActiveBi
             holder.itemBinding.notes.text="No notes available"
         }else{
             holder.itemBinding.notes.text=dataList[position].Notes.toString().trim()
+        }
+
+
+        holder.itemBinding.ref.text= "Ref #:${dataList[position].QuoteRef.toString()}"
+
+        holder.itemBinding.cancel.setOnClickListener{
+            onCancelClick(dataList[position].Id!!,dataList[position].ItemType!!)
+        }
+
+        setItemType(holder,dataList[position])
+    }
+
+
+    fun setItemType(holder: BindingViewHolder,data:ActiveBidListResponse){
+        if(data.ItemType=="ExtraLargeItem") {
+            when (data.ItemCategory) {
+                "Documents" -> {
+                    holder.itemBinding.docTxt.text = "Documents"
+                    holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_documents_low)
+                }
+                "Bag"
+                -> {
+                    holder.itemBinding.docTxt.text = "Satchel,laptops"
+                    holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_satchelandlaptops_low)
+                }
+                "Box" -> {
+                    holder.itemBinding.docTxt.text = "Small box"
+                    holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_smallbox_low)
+                }
+                "Flowers" -> {
+                    holder.itemBinding.docTxt.text = "Cakes, flowers,delicates"
+                    holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_cakesflowersdelicates_low)
+                }
+                "Large" -> {
+                    holder.itemBinding.docTxt.text = "Large box"
+                    holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_largebox_low)
+                }
+                "XL" ->{
+                    holder.itemBinding.docTxt.text = "Large items"
+                    holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_machinery)
+                }
+            }
+        }
+        if(data.ItemType=="Freight") {
+            when (data.ItemCategory) {
+                "2" -> {
+                    holder.itemBinding.docTxt.text = "Building Materials"
+                    holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_building_materials)
+                }
+                "3"
+                -> {
+                    holder.itemBinding.docTxt.text = "General Truck Shipments"
+                    holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_general_truck_shipments)
+                }
+                "4" -> {
+                    holder.itemBinding.docTxt.text = "Pallets"
+                    holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_pallets)
+                }
+                "5" -> {
+                    holder.itemBinding.docTxt.text = "Marchinery"
+                    holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_machinery)
+                }
+                "6" -> {
+                    holder.itemBinding.docTxt.text = "Vehicles"
+                    holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_vehicles)
+                }
+                "7" ->{
+                    holder.itemBinding.docTxt.text = "Container"
+                    holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_container)
+                }
+                "8" ->{
+                    holder.itemBinding.docTxt.text = "Full Truck Load"
+                    holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_full_truck_load)
+                }
+            }
         }
 
 

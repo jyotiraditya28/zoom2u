@@ -44,28 +44,18 @@ class HistoryRepository(private var serviceApi: ServiceApi, var context: Context
                             else if (responce.errorBody() != null) {
                                 AppUtility.progressBarDissMiss()
                                 if(responce.code()==401){
-                                    DialogActivity.logoutDialog(
+                                    DialogActivity.alertDialogOnSessionExpire(
                                         context,
-                                        "Confirm!",
-                                        "Your token has expired you have to login again.",
-                                        "Ok","Cancel",
-                                        onCancelClick=::onCancelClick,
-                                        onOkClick = ::onOkClick
-                                    )
+                                        onItemClick = ::onOkClick)
                                 }
                                 else{
-                                    Toast.makeText(context, "Error Code:${responce.code()} something went wrong please try again.", Toast.LENGTH_LONG).show() }
+                                    Toast.makeText(context, "Something went wrong please try again.", Toast.LENGTH_LONG).show() }
 
                             }
                         }
                         private fun onOkClick(){
                             AppUtility.onLogoutCall(context)
                         }
-
-                        private fun onCancelClick(){
-
-                        }
-
 
                         override fun onError(e: Throwable) {
                             AppUtility.progressBarDissMiss()

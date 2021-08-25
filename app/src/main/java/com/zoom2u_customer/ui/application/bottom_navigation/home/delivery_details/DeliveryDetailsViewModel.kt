@@ -3,6 +3,7 @@ package com.zoom2u_customer.ui.application.bottom_navigation.home.delivery_detai
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.zoom2u_customer.apiclient.GetAddressFromGoogle.GoogleAddressRepository
+import com.zoom2u_customer.ui.application.bottom_navigation.home.getAccountType.AccountTypeModel
 import com.zoom2u_customer.ui.application.bottom_navigation.home.getAccountType.GetAccountRepository
 import com.zoom2u_customer.ui.application.bottom_navigation.profile.my_location.MyLocationRepository
 import com.zoom2u_customer.ui.application.bottom_navigation.profile.my_location.model.MyLocationResAndEditLocationReq
@@ -12,7 +13,7 @@ class DeliveryDetailsViewModel : ViewModel() {
     var success: MutableLiveData<List<MyLocationResAndEditLocationReq>>? = MutableLiveData(null)
     private var googleAddUsingAdd: MutableLiveData<HashMap<String, Any>>? = MutableLiveData()
     private var googleAddUsingLatLang: MutableLiveData<HashMap<String, Any>>? = MutableLiveData()
-    private var accountType: MutableLiveData<String>?= MutableLiveData("")
+    private var accountType: MutableLiveData<AccountTypeModel>?= MutableLiveData(null)
     var repositoryMyLoc: MyLocationRepository? = null
     var repository: DeliveryDetailsRepository? = null
     var repositoryGoogleAddress: GoogleAddressRepository? = null
@@ -42,7 +43,7 @@ class DeliveryDetailsViewModel : ViewModel() {
         repositoryGetAccountType?.getAccountType(onSuccess = ::getAccountSuccess)
 
 
-    fun getAccountSuccess(account_Type:String){
+    fun getAccountSuccess(account_Type:AccountTypeModel){
         accountType?.value=account_Type
     }
 
@@ -71,7 +72,7 @@ class DeliveryDetailsViewModel : ViewModel() {
     }
 
 
-    fun accountTypeSuccess():MutableLiveData<String>?{
+    fun accountTypeSuccess():MutableLiveData<AccountTypeModel>?{
         return accountType
     }
 

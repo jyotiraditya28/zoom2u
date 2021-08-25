@@ -8,7 +8,7 @@ class ActiveBidOffersViewModel : ViewModel() {
     private var success: MutableLiveData<String>? = MutableLiveData("")
     var repository: ActiveBidOffersRepository? = null
 
-    fun quotePayment(nonce:String,requestId:String,offerId: String) = repository?.quotePayment(nonce,requestId,offerId,onSuccess = ::onSuccess)
+    fun quotePayment(nonce:String,requestId:String,offerId: String,orderNo:String) = repository?.quotePayment(nonce,requestId,offerId,orderNo,onSuccess = ::onSuccess)
 
     private fun onSuccess(msg:String){
         success?.value=msg

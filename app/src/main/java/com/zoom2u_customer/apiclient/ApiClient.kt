@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit
 class ApiClient {
 
     companion object {
-        private val BaseUrl = "https://api-test.zoom2u.com/"
+        private val BaseUrl = "https://api-staging.zoom2u.com/"
         private lateinit var retrofit: Retrofit
         var gson = GsonBuilder()
             .setLenient()

@@ -21,7 +21,7 @@
             style="@style/style_15_bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/no_completed_bid_found"
+            android:text="No completed bid found"
             android:textColor="@color/black"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"

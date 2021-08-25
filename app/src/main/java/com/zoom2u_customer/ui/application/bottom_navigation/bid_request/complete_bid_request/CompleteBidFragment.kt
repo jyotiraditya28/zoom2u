@@ -24,6 +24,7 @@ class CompleteBidFragment : Fragment() {
     private var  repository: CompletedBidListRepository? = null
     private var adapter:CompletedItemAdapter? = null
     private var currentPage: Int = 1
+    val listData: MutableList<CompletedBidListResponse> = ArrayList()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -41,32 +42,20 @@ class CompleteBidFragment : Fragment() {
         viewModel.getCompletedBidList(currentPage)
 
         binding.swipeRefresh.setOnRefreshListener(OnRefreshListener {
+           listData.clear()
             viewModel.getCompletedBidList(1)
         })
 
         viewModel.getCompletedBidListSuccess()?.observe(viewLifecycleOwner) {
             if (it != null) {
-                val listWithOutFreight: MutableList<CompletedBidListResponse> = ArrayList()
+
                 AppUtility.progressBarDissMiss()
                 binding.swipeRefresh.isRefreshing = false
                 if (it.isNotEmpty()) {
-                    for(item in it){
-                        /**for first release hide freight and xl item  from list*/
-                        if(item.ItemType=="Freight"||item.ItemCategory=="XL")
-                            continue
-                        else
-                            listWithOutFreight.add(item)
-                    }
-                   /**if in first page item not find without Xl and fright*/
-                   if(listWithOutFreight.isNullOrEmpty()){
-                       currentPage++
-                       viewModel.getCompletedBidList(currentPage)
-                   }
-                    else
-                        adapter?.updateRecords(listWithOutFreight)
+                    updateRecord(it.toMutableList())
                     binding.noCompletedBidText.visibility = View.GONE
                 }else{
-                    if(currentPage==1)
+
                     binding.noCompletedBidText.visibility = View.VISIBLE
                 }
             }
@@ -76,6 +65,20 @@ class CompleteBidFragment : Fragment() {
         return binding.root
 
     }
+
+    private fun updateRecord(listWithOutFreight: MutableList<CompletedBidListResponse>) {
+        if (listWithOutFreight.size > 0)
+            listData.addAll(listWithOutFreight)
+        else {
+            listData.clear()
+            listData.addAll(listWithOutFreight)
+        }
+
+        adapter?.updateRecords(listData)
+    }
+
+
+
     private fun setAdapterView(binding: FragmentCompleteBidBinding, context: Context) {
         val layoutManager = GridLayoutManager(activity, 1)
         binding.completedBidRecycler.layoutManager = layoutManager
