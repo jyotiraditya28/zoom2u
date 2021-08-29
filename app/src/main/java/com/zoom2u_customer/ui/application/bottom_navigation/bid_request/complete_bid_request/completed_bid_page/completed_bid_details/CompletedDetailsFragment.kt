@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
+import com.zoom2u_customer.R
 import com.zoom2u_customer.databinding.FragmentBidDetailsBinding
 import com.zoom2u_customer.databinding.FragmentCompletedBidDetailsBinding
 import com.zoom2u_customer.ui.DocItemShowAdapter
@@ -18,7 +19,7 @@ import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.complete
 import com.zoom2u_customer.utility.AppUtility
 
 
-class CompletedDetailsFragment(var bidDetails: CompletedDetailsResponse?) : Fragment() {
+class CompletedDetailsFragment(var bidDetails: CompletedDetailsResponse?) : Fragment(), View.OnClickListener {
     lateinit var binding: FragmentCompletedBidDetailsBinding
     var bidDetail: CompletedDetailsResponse? = null
     private var imageAdapter: ShowBidImageAdapter?=null
@@ -54,6 +55,11 @@ class CompletedDetailsFragment(var bidDetails: CompletedDetailsResponse?) : Frag
 
         binding.offer.text=bidDetail?.Offers?.size.toString()
         binding.notes.text=bidDetail?.Notes
+
+        /**show more less option*/
+        if( bidDetail?.Shipments!!.size>2){
+            binding.more.visibility=View.VISIBLE
+        }
     }
 
 
@@ -73,16 +79,32 @@ class CompletedDetailsFragment(var bidDetails: CompletedDetailsResponse?) : Frag
         }
 
 
-       /* val layoutManager1 = GridLayoutManager(activity, 2)
+        val layoutManager1 = GridLayoutManager(activity, 2)
         binding.docRecycler.layoutManager = layoutManager1
         (binding.docRecycler.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
          docAdapter = DocItemShowAdapter(context, bidDetail?.Shipments!!)
-        binding.docRecycler.adapter =docAdapter*/
+        binding.docRecycler.adapter =docAdapter
 
 
 
     }
     fun onItemClick(imagePath:String){
 
+    }
+
+    override fun onClick(view: View?) {
+        when (view?.id) {
+            R.id.more -> {
+                docAdapter?.isMoreEnable(true)
+                binding.more.visibility=View.GONE
+                binding.less.visibility=View.VISIBLE
+            }
+            R.id.less -> {
+                docAdapter?.isMoreEnable(false)
+                binding.more.visibility=View.VISIBLE
+                binding.less.visibility=View.GONE
+
+            }
+        }
     }
 }

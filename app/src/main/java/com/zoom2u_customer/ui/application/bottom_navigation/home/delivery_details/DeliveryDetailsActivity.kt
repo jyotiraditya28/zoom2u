@@ -712,6 +712,7 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
                 .setCountry("AU")
                 .setTypeFilter(TypeFilter.ADDRESS)
                 .build(this)
+            intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
             startActivityForResult(intent, dropAutocompleteRequest)
         } catch (e: Exception) {
             e.printStackTrace()
@@ -730,6 +731,7 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
                 .setCountry("AU")
                 .setTypeFilter(TypeFilter.ADDRESS)
                 .build(this)
+            intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
             startActivityForResult(intent, pickAutocompleteRequest)
         } catch (e: Exception) {
             e.printStackTrace()
@@ -829,7 +831,7 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
             if (checkPickFutureTime(time)) {
                 binding.pickTime.text = time
                 isPickTimeSelectedFromTimeWindow = true
-                //add3HourInPickTime(time)
+                add3HourInPickTime(time)
 
 
             }
@@ -859,15 +861,29 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
     private fun add3HourInPickTime(time: String?) {
         val serverDateTimeValue = binding.pickDate.text.toString() + " " +
                 time
-        val millisToAdd: Long = 7_200_000
-        val c = Calendar.getInstance()
+        val millisToAdd: Long = 3*60*60*1000
+        var timePlus3Hour:Long?=null
 
 
 
-        val format = SimpleDateFormat("hh:mm aaa")
-        val convertedDate: Date?
+
+        val pickDate: Date?
         try {
-           convertedDate=format.parse(serverDateTimeValue)
+        pickDate = DateTimeUtil.getTimeFromDateFormat(serverDateTimeValue)
+
+            val c = Calendar.getInstance(Locale.ENGLISH)
+            c.timeInMillis=pickDate?.time!!*1000
+            c.add(Calendar.HOUR, 3)
+            val d = c.time
+            val f: DateFormat = SimpleDateFormat("hh:mm aaa")
+            binding.dropTime.text=  f.format(d)
+
+
+
+         /*   timePlus3Hour = pickDate?.time!! + millisToAdd
+
+            val d = Date(timePlus3Hour.toLong() * 1000)*/
+
 
 
         } catch (e: Exception) {

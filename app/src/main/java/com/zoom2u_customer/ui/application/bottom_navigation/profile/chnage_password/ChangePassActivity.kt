@@ -89,19 +89,19 @@ open class ChangePassActivity : AppCompatActivity(), View.OnClickListener {
             DialogActivity.alertDialogSingleButton(
                 this,
                 "Alert!",
-                "1) Please enter new password at least 6 characters\n2) Please confirm your new password"
+                "1) Password must be atleast 6 characters long\n2) Please confirm your new password"
             )
         } else {
             if (newPasswordStr?.length!! < 6) {
                 alertCount++
                 AppUtility.validateTextField(binding.currPass)
-                alertMsg = "$alertMsg$alertCount) Please enter new password at least 6 characters"
+                alertMsg = "$alertMsg$alertCount) Password must be atleast 6 characters long."
             }
             if (newPasswordStr != confirmNewPassStr) {
                 alertCount++
                 AppUtility.validateTextField(binding.currPass)
                 alertMsg =
-                    if (alertMsg == "") "$alertMsg$alertCount) Please confirm your new password" else "$alertMsg\n$alertCount) Password and confirm Password mismatch"
+                    if (alertMsg == "") "$alertMsg$alertCount) Password and confirm password do not match." else "$alertMsg\n$alertCount) Password and confirm Password mismatch"
             }
             DialogActivity.alertDialogSingleButton(
                 this,
@@ -120,7 +120,7 @@ open class ChangePassActivity : AppCompatActivity(), View.OnClickListener {
             DialogActivity.alertDialogSingleButton(
                 this,
                 "Alert!",
-                "1) Please enter your current password\n2) Please enter at least 6 characters\n3) Please confirm your new password"
+                "1) Please enter your current password.\n2) Password must be atleast 6 characters long.\n3) Password and confirm password do not match."
             )
         } else {
             var alertCount = 0
@@ -134,9 +134,9 @@ open class ChangePassActivity : AppCompatActivity(), View.OnClickListener {
                 alertCount++
                 AppUtility.validateTextField(binding.newPass)
                 alertMsg = if (alertMsg == "")
-                    "$alertMsg$alertCount) Please enter new password at least 6 characters"
+                    "$alertMsg$alertCount) Password must be atleast 6 characters long."
                 else
-                    "$alertMsg\n$alertCount) Please enter new password at least 6 characters"
+                    "$alertMsg\n$alertCount) Password must be atleast 6 characters long."
 
 
             }
@@ -144,9 +144,9 @@ open class ChangePassActivity : AppCompatActivity(), View.OnClickListener {
                 alertCount++
                 AppUtility.validateTextField(binding.cnfrmPass)
                 alertMsg = if (alertMsg == "")
-                    "$alertMsg$alertCount) Please confirm your new password"
+                    "$alertMsg$alertCount) Password and confirm password do not match."
                 else
-                    "$alertMsg\n$alertCount) Please confirm your new password"
+                    "$alertMsg\n$alertCount) Password and confirm password do not match."
 
             }
             DialogActivity.alertDialogSingleButton(

@@ -174,7 +174,14 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener,
             DialogActivity.alertDialogSingleButton(this, "Alert!", "Please enter your phone number")
             AppUtility.validateTextField(binding.phone)
             return false
-        } else if (!phone.matches(("^[\\s0-9\\()\\-\\+]+$").toRegex())) {
+        }
+        else if (phone.length>20) {
+            DialogActivity.alertDialogSingleButton(this, "Alert!", "Please enter valid phone number")
+            AppUtility.validateTextField(binding.phone)
+            return false
+        }
+
+        else if (!phone.matches(("^[\\s0-9\\()\\-\\+]+$").toRegex())) {
             DialogActivity.alertDialogSingleButton(this, "Alert!", "Please enter valid phone number")
             AppUtility.validateTextField(binding.phone)
             return false

@@ -10,8 +10,10 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.net.ConnectivityManager
+import android.net.Uri
 import android.os.Build
 import android.os.StrictMode
+import android.provider.MediaStore
 import android.util.DisplayMetrics
 import android.view.View
 import android.view.Window
@@ -29,6 +31,7 @@ import com.google.gson.JsonParser
 import com.zoom2u_customer.R
 import com.zoom2u_customer.ui.log_in.LoginResponce
 import com.zoom2u_customer.ui.splash_screen.LogInSignupMainActivity
+import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.InputStream
 import java.net.URL
@@ -311,6 +314,17 @@ class AppUtility {
         }
 
 
+        fun getImageUri(inContext: Context, inImage: Bitmap): Uri? {
+            val bytes = ByteArrayOutputStream()
+            inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+            val path = MediaStore.Images.Media.insertImage(
+                inContext.contentResolver,
+                inImage,
+                "Zoom2u",
+                null
+            )
+            return Uri.parse(path)
+        }
 
     }
 }

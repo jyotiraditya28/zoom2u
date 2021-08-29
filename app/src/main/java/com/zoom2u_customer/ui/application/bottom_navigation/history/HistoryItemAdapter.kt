@@ -73,7 +73,7 @@ class HistoryItemAdapter(val context: Context, private val onItemClick:(HistoryR
 
             if(dataList1[position].IsCancel==true) {
                 holder.itemBinding.price.text = "No Charge"
-                holder.itemBinding.status.text = "cancellation"
+                holder.itemBinding.status.text = "Cancellation"
                 holder.itemBinding.status.setBackgroundColor(Color.parseColor("#ff0000"))
                 holder.itemBinding.status.setTextColor(Color.WHITE)
              }else if(dataList1[position].IsOnHold==true){

@@ -174,7 +174,7 @@ class HistoryDetailsActivity : AppCompatActivity(),  OnMapReadyCallback, View.On
             binding.pickSignature.setImageBitmap(AppUtility.getBitmapFromURL(it.PickupSignature))
         }
         if (!TextUtils.isEmpty(it.DropSignature)) {
-            binding.dropSignature.setImageBitmap(AppUtility.getBitmapFromURL(it.PickupSignature))
+            binding.dropSignature.setImageBitmap(AppUtility.getBitmapFromURL(it.DropSignature))
         }
 
         if (!TextUtils.isEmpty(it.DropPhoto)) {
@@ -185,7 +185,7 @@ class HistoryDetailsActivity : AppCompatActivity(),  OnMapReadyCallback, View.On
         if(it.IsCancel==true){
             binding.cancelBook.visibility=View.GONE
             binding.price.text = "No Charge"
-            binding.status.text = "cancellation"
+            binding.status.text = "Cancellation"
             binding.status.setBackgroundColor(Color.parseColor("#ff0000"))
             binding.status.setTextColor(Color.WHITE)
         }

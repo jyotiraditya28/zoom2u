@@ -161,6 +161,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/phone"
+                android:inputType="number"
                 style="@style/login_signup_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />

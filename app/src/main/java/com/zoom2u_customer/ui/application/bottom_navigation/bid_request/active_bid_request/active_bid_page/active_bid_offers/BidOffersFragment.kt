@@ -6,6 +6,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.TextUtils
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -34,6 +35,7 @@ import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.complete
 import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.active_bid_request.active_bid_page.Offer
 import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.complete_bid_request.completed_bid_page.completed_bid_offers.CompletedBidOffersAdapter
 import com.zoom2u_customer.ui.application.bottom_navigation.home.booking_confirmation.order_confirm_hold.OrderConfirmActivity
+import com.zoom2u_customer.ui.application.bottom_navigation.home.getAccountType.GetAccountRepository
 import com.zoom2u_customer.utility.AppUtility
 import org.json.JSONException
 
@@ -42,9 +44,11 @@ class BidOffersFragment(private val bidDetails: BidDetailsResponse?) : Fragment(
     lateinit var viewModel: ActiveBidOffersViewModel
     private var repository: ActiveBidOffersRepository? = null
     private var getBrainTreeClientToken: GetBrainTreeClientTokenOrBookDeliveryRequest? = null
+    private var repositoryGetAccountType: GetAccountRepository? = null
     private var request_Code = 1002
     private var offers: Offer? = null
-    private var purOrderNo:String? =null
+    private var purOrderNo: String? = null
+    private var accountType: String? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -58,8 +62,10 @@ class BidOffersFragment(private val bidDetails: BidDetailsResponse?) : Fragment(
         viewModel = ViewModelProvider(this).get(ActiveBidOffersViewModel::class.java)
         val serviceApi: ServiceApi = ApiClient.getServices()
         repository = ActiveBidOffersRepository(serviceApi, container?.context)
+        repositoryGetAccountType = GetAccountRepository(serviceApi, container?.context)
         viewModel.repository = repository
-
+        viewModel.repositoryGetAccountType = repositoryGetAccountType
+        viewModel.getAccountType()
 
         viewModel.getQuotePayment()?.observe(viewLifecycleOwner) {
             if (!it.isNullOrEmpty()) {
@@ -73,7 +79,16 @@ class BidOffersFragment(private val bidDetails: BidDetailsResponse?) : Fragment(
             }
         }
 
+        viewModel.accountTypeSuccess()?.observe(viewLifecycleOwner) {
+            if (it != null) {
+                if (!TextUtils.isEmpty(it.accountType)) {
+                    AppUtility.progressBarDissMiss()
+                    this.accountType = it.accountType
+                }
 
+            }
+
+        }
 
 
         return binding.root
@@ -95,8 +110,6 @@ class BidOffersFragment(private val bidDetails: BidDetailsResponse?) : Fragment(
     private fun onBidOfferSelected(offer: Offer) {
         this.offers = offer
 
-
-
         val viewGroup = (context as Activity).findViewById<ViewGroup>(R.id.content)
         val dialogView: View =
             LayoutInflater.from(context).inflate(R.layout.purchase_dialogview, viewGroup, false)
@@ -108,27 +121,34 @@ class BidOffersFragment(private val bidDetails: BidDetailsResponse?) : Fragment(
         alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
 
-       val orderNo: TextInputEditText =dialogView.findViewById(R.id.pur_no)
+        val orderNo: TextInputEditText = dialogView.findViewById(R.id.pur_no)
 
 
-        val submitBtn:  TextView = dialogView.findViewById(R.id.ok)
+        val submitBtn: TextView = dialogView.findViewById(R.id.ok)
         submitBtn.setOnClickListener {
-            if(orderNo.text.toString().trim()=="")
+            if (orderNo.text.toString().trim() == "")
                 AppUtility.validateEditTextField(orderNo, "Please enter purchase order number.")
-           else{
+            else {
                 purOrderNo = orderNo.text.toString().trim()
-                getBrainTreeClientToken?.callServiceForGetClientToken()
+              /**check account type for payment*/
+                if (accountType == "Standard")
+                    getBrainTreeClientToken?.callServiceForGetClientToken()
+                else
+                    viewModel.quotePayment(
+                        "",
+                        bidDetails?.Id.toString(),
+                        offers?.OfferId.toString(),
+                        purOrderNo.toString()
+                    )
                 alertDialog.dismiss()
             }
         }
-        val cancelBtn: TextView= dialogView.findViewById(R.id.cancel)
-        cancelBtn.setOnClickListener{
+        val cancelBtn: TextView = dialogView.findViewById(R.id.cancel)
+        cancelBtn.setOnClickListener {
             alertDialog.dismiss()
         }
 
     }
-
-
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

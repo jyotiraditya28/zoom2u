@@ -123,6 +123,13 @@ class ActiveItemAdapter (val context: Context, private val onItemClick:(ActiveBi
         }
         if(data.ItemType=="Freight") {
             when (data.ItemCategory) {
+              "0" ->{
+                  holder.itemBinding.docTxt.text = "General Van Shipments"
+                  holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_general_van_shipments)
+              }
+
+
+
                 "2" -> {
                     holder.itemBinding.docTxt.text = "Building Materials"
                     holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_building_materials)
@@ -151,6 +158,12 @@ class ActiveItemAdapter (val context: Context, private val onItemClick:(ActiveBi
                 "8" ->{
                     holder.itemBinding.docTxt.text = "Full Truck Load"
                     holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_full_truck_load)
+                }
+                "9" ->{
+
+                }
+                "10" ->{
+
                 }
             }
         }
