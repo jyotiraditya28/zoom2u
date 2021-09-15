@@ -59,6 +59,19 @@ class BidDetailsFragment(var bidDetails: BidDetailsResponse?) : Fragment() , Vie
         if( bidDetail?.Shipments!!.size>2){
             binding.more.visibility=View.VISIBLE
         }
+
+        binding.pickName.text = bidDetail.PickupLocation?.ContactName
+        binding.pickPhone.text = bidDetail.PickupPhone
+        binding.pickEmail.text = bidDetail.PickupEmail
+
+
+        binding.dropName.text = bidDetail.DropLocation?.ContactName
+        binding.dropPhone.text = bidDetail.DropPhone
+        binding.dropEmail.text = bidDetail.DropEmail
+
+        binding.distance.text = bidDetail.Distance
+
+        binding.ref.text =bidDetail.QuoteRef
     }
 
 

@@ -6,6 +6,7 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.zoom2u_customer.R
 
@@ -39,16 +40,12 @@ class CompletedBidOffersAdapter(val context: Context, private val dataList: List
         holder.itemBinding.name.text=activeBidOffers.Courier.toString()
         holder.itemBinding.price.text="$"+activeBidOffers.Price.toString()
 
-        if(!TextUtils.isEmpty(activeBidOffers.CustomerImage)) {
-            holder.itemBinding.dp.setImageBitmap(AppUtility.getBitmapFromURL(activeBidOffers.CustomerImage))
+        if(!TextUtils.isEmpty(activeBidOffers.CourierImage)) {
+            holder.itemBinding.dp.setImageBitmap(AppUtility.getBitmapFromURL(activeBidOffers.CourierImage))
         }
 
         holder.itemBinding.acceptBid.setOnClickListener(){
-            onItemClick(dataList[position])
-            /* if(isBidAvailable)
-             onItemClick(dataList[position])
-             else
-                 Toast.makeText(context,"This bid offer is expired.",Toast.LENGTH_LONG).show()*/
+            Toast.makeText(context,"This bid is completed.",Toast.LENGTH_SHORT).show()
         }
 
         /**extra details data*/

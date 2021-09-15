@@ -45,6 +45,7 @@ class BookingConfirmationActivity : AppCompatActivity(), View.OnClickListener {
     private var getBrainTreeClientToken: GetBrainTreeClientTokenOrBookDeliveryRequest? = null
     lateinit var binding: ActivityBookingConfirmationBinding
     private lateinit var itemDataList: ArrayList<Icon>
+    private var nonce:String?=null
     private lateinit var adapter: BookingPackageAdapter
     lateinit var viewModel: BookingConfirmationViewModel
     private var repository: BookingConfirmationRepository? = null
@@ -87,7 +88,7 @@ class BookingConfirmationActivity : AppCompatActivity(), View.OnClickListener {
                         } else {
                             val intentOnHold = Intent(this, OnHoldActivity::class.java)
                             intentOnHold.putExtra("BookingResponse", bookingResponse)
-                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            intentOnHold.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
                             startActivity(intentOnHold)
                             finish()
                         }
@@ -195,15 +196,17 @@ class BookingConfirmationActivity : AppCompatActivity(), View.OnClickListener {
         try {
 
            /**check if in delivery details page time not selected from time window*/
-            if(bookingDeliveryResponse!!.getJSONObject("_deliveryRequestModel").has("isPickTimeSelectedFromTimeWindow"))
-                bookingDeliveryResponse!!.getJSONObject("_deliveryRequestModel").remove("isPickTimeSelectedFromTimeWindow")
+            if(bookingDeliveryResponse?.getJSONObject("_deliveryRequestModel")?.has("isPickTimeSelectedFromTimeWindow") == true)
+                bookingDeliveryResponse?.getJSONObject("_deliveryRequestModel")?.remove("isPickTimeSelectedFromTimeWindow")
 
-                if (bookingDeliveryResponse!!.getJSONObject("_deliveryRequestModel").has("ETA"))
-                bookingDeliveryResponse!!.getJSONObject("_deliveryRequestModel").remove("ETA")
+                if (bookingDeliveryResponse?.getJSONObject("_deliveryRequestModel")?.has("ETA") == true)
+                bookingDeliveryResponse?.getJSONObject("_deliveryRequestModel")?.remove("ETA")
                 getBrainTreeClientToken = GetBrainTreeClientTokenOrBookDeliveryRequest(this, Request_Code)
-            if ( bookingDeliveryResponse!!.getJSONObject("_deliveryRequestModel").get("PricingScheme") =="Standard")
+            if ( bookingDeliveryResponse?.getJSONObject("_deliveryRequestModel")?.get("PricingScheme") =="Standard") {
                 getBrainTreeClientToken?.callServiceForGetClientToken()
-              else  {
+                bookingDeliveryResponse?.getJSONObject("_deliveryRequestModel")?.remove("PricingScheme")
+            }  else  {
+                bookingDeliveryResponse?.getJSONObject("_deliveryRequestModel")?.remove("PricingScheme")
                 viewModel.getDeliveryRequest(bookingDeliveryResponse)
             }
         } catch (e: JSONException) {
@@ -218,7 +221,7 @@ class BookingConfirmationActivity : AppCompatActivity(), View.OnClickListener {
 
                 val paymentMethodNonce: PaymentMethodNonce? =
                     data?.getParcelableExtra(BraintreePaymentActivity.EXTRA_PAYMENT_METHOD_NONCE)
-                val nonce = paymentMethodNonce?.nonce
+                nonce = paymentMethodNonce?.nonce
                 try {
                     bookingDeliveryResponse!!.getJSONObject("_deliveryRequestModel")
                         .put("paymentNonce", nonce)

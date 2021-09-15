@@ -5,13 +5,16 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.zoom2u_customer.R
 import com.zoom2u_customer.databinding.ItemActiveBidBinding
 import com.zoom2u_customer.databinding.ItemCompletedBidBinding
 import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.active_bid_request.ActiveBidListResponse
 import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.active_bid_request.ActiveItemAdapter
 import com.zoom2u_customer.ui.application.bottom_navigation.history.HistoryResponse
+import com.zoom2u_customer.ui.application.bottom_navigation.history.history_details.DocItemListShowAdapter
 import com.zoom2u_customer.utility.AppUtility
 import com.zoom2u_customer.utility.DialogActivity
 import java.util.ArrayList
@@ -21,6 +24,7 @@ class CompletedItemAdapter (val context: Context, private val onItemClick:(Compl
     RecyclerView.Adapter<CompletedItemAdapter.BindingViewHolder>() {
     private var dataList:MutableList<CompletedBidListResponse> = ArrayList()
     private var lastApiCallPosition:Int=-1
+    private var docAdapter: DocItemListShowAdapter?=null
     override fun getItemCount(): Int {
         return dataList.size
     }
@@ -79,37 +83,14 @@ class CompletedItemAdapter (val context: Context, private val onItemClick:(Compl
 
 
     fun setItemType(holder: BindingViewHolder, data:CompletedBidListResponse){
-        if(data.ItemType=="ExtraLargeItem") {
-            when (data.ItemCategory) {
-                "Documents" -> {
-                    holder.itemBinding.docTxt.text = "Documents"
-                    holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_documents_low)
-                }
-                "Bag"
-                -> {
-                    holder.itemBinding.docTxt.text = "Satchel,laptops"
-                    holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_satchelandlaptops_low)
-                }
-                "Box" -> {
-                    holder.itemBinding.docTxt.text = "Small box"
-                    holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_smallbox_low)
-                }
-                "Flowers" -> {
-                    holder.itemBinding.docTxt.text = "Cakes, flowers,delicates"
-                    holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_cakesflowersdelicates_low)
-                }
-                "Large" -> {
-                    holder.itemBinding.docTxt.text = "Large box"
-                    holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_largebox_low)
-                }
-                "XL" ->{
-                    holder.itemBinding.docTxt.text = "Large items"
-                    holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_machinery)
-                }
-            }
-        }
         if(data.ItemType=="Freight") {
+            holder.itemBinding.ll1.visibility=View.VISIBLE
             when (data.ItemCategory) {
+                "0" ->{
+                    holder.itemBinding.docTxt.text = "General Van Shipments"
+                    holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_general_van_shipments)
+                }
+
                 "2" -> {
                     holder.itemBinding.docTxt.text = "Building Materials"
                     holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_building_materials)
@@ -139,10 +120,37 @@ class CompletedItemAdapter (val context: Context, private val onItemClick:(Compl
                     holder.itemBinding.docTxt.text = "Full Truck Load"
                     holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_full_truck_load)
                 }
+                "9" ->{
+
+                }
+                "10" ->{
+
+                }
+            }
+
+        }
+        else if(data.ItemCategory=="XL") {
+            holder.itemBinding.ll1.visibility=View.VISIBLE
+            holder.itemBinding.docTxt.text = "Large items"
+            holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_machinery)
+        }else if(data.ItemCategory!="XL"&&data.ItemType!="Freight")  {
+            holder.itemBinding.doc.visibility=View.VISIBLE
+            if(data.Shipments!=null) {
+                val layoutManager1 = GridLayoutManager(context, 2)
+                holder.itemBinding.docRecycler.layoutManager = layoutManager1
+                (holder.itemBinding.docRecycler.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+                docAdapter = DocItemListShowAdapter(context, data.Shipments!!)
+                holder.itemBinding.docRecycler.adapter = docAdapter
+
             }
         }
 
 
+
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return position
     }
 
 

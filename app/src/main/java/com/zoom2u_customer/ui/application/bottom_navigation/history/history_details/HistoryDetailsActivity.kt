@@ -1,21 +1,19 @@
 package com.zoom2u_customer.ui.application.bottom_navigation.history.history_details
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.text.Html
-import android.text.SpannableString
 import android.text.TextUtils
-import android.text.style.UnderlineSpan
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -23,7 +21,6 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.gms.maps.model.PolylineOptions
 import com.zoom2u_customer.R
 import com.zoom2u_customer.apiclient.ApiClient.Companion.getServices
 import com.zoom2u_customer.apiclient.GetAddressFromGoogle.GoogleAddressRepository
@@ -31,19 +28,17 @@ import com.zoom2u_customer.apiclient.GetAddressFromGoogleAPI
 import com.zoom2u_customer.apiclient.GoogleServiceApi
 import com.zoom2u_customer.apiclient.ServiceApi
 import com.zoom2u_customer.databinding.ActivityHistoryDetailsBinding
+import com.zoom2u_customer.ui.DocItemShowAdapter
 import com.zoom2u_customer.ui.application.bottom_navigation.history.HistoryResponse
-import com.zoom2u_customer.ui.application.bottom_navigation.home.home_fragment.Icon
+import com.zoom2u_customer.ui.application.bottom_navigation.home.booking_confirmation.BookingResponse
 import com.zoom2u_customer.utility.AppUtility
 import com.zoom2u_customer.utility.DialogActivity
-import com.zoom2u_customer.utility.DirectionJsonParser
 import com.zoom2u_customer.utility.RouteParser
 import org.json.JSONException
-import org.json.JSONObject
 import java.util.*
-import java.util.concurrent.Executors
 
 
-class HistoryDetailsActivity : AppCompatActivity(),  OnMapReadyCallback, View.OnClickListener {
+class HistoryDetailsActivity : AppCompatActivity(), OnMapReadyCallback, View.OnClickListener {
     private var arrayCourierPick: List<String>? = null
     private var arrayCourierDrop: List<String>? = null
     private lateinit var map: GoogleMap
@@ -53,7 +48,8 @@ class HistoryDetailsActivity : AppCompatActivity(),  OnMapReadyCallback, View.On
     private var repositoryGoogleAddress: GoogleAddressRepository? = null
     private var repository: HistoryDetailsRepository? = null
     lateinit var binding: ActivityHistoryDetailsBinding
-
+    private var bookingResponse: BookingResponse? = null
+    private var docAdapter: DocItemShowAdapter?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_history_details)
@@ -70,7 +66,8 @@ class HistoryDetailsActivity : AppCompatActivity(),  OnMapReadyCallback, View.On
             historyItem = intent.getParcelableExtra("HistoryItem")
             viewModel.setHistoryDetails(historyItem?.BookingRef)
         } else if (intent.hasExtra("BookingRef")) {
-            viewModel.setHistoryDetails(intent.getStringExtra("BookingRef"))
+            bookingResponse = intent.getParcelableExtra("BookingRef")
+            viewModel.setHistoryDetails(bookingResponse?.BookingRef)
         }
 
         viewModel.getHistoryDetails()?.observe(this) {
@@ -84,20 +81,42 @@ class HistoryDetailsActivity : AppCompatActivity(),  OnMapReadyCallback, View.On
         fragment.getMapAsync(this)
 
 
-        viewModel.getRouteSuccess()?.observe(this) {
+        viewModel.getRouteSuccess().observe(this) {
             if (!it.isNullOrEmpty())
-               RouteParser.parserTask(this,map,it)
+                RouteParser.parserTask(this, map, it)
         }
 
-        viewModel.getCancelBooking()?.observe(this) {
-            if (!it.isNullOrEmpty()) {
-                if(it=="true"){
-                    val intent = Intent()
-                    historyItem?.IsCancel=true
-                    intent.putExtra("historyItem",historyItem)
-                    setResult(3, intent)
-                    Toast.makeText(this, "Booking cancelation successfully.", Toast.LENGTH_LONG).show()
-                    finish()
+        viewModel.getCancelBooking().observe(this) {
+            if (it != null) {
+                AppUtility.progressBarDissMiss()
+                val intent = Intent()
+                historyItem?.IsCancel = true
+                intent.putExtra("historyItem", historyItem)
+                setResult(85, intent)
+                Toast.makeText(this, "Booking cancellation successfully.", Toast.LENGTH_SHORT)
+                    .show()
+                finish()
+
+            }
+
+        }
+
+
+
+
+        viewModel.getCancelBookingMAB().observe(this) {
+            if (it != null) {
+                if (it == "true") {
+                    AppUtility.progressBarDissMiss()
+                    if (intent.hasExtra("BookingRef")) {
+                        Toast.makeText(
+                            this,
+                            "Booking cancellation successfully.",
+                            Toast.LENGTH_LONG
+                        )
+                            .show()
+                        finish()
+                    }
                 }
             }
         }
@@ -106,6 +125,15 @@ class HistoryDetailsActivity : AppCompatActivity(),  OnMapReadyCallback, View.On
     @SuppressLint("SetTextI18n")
     private fun setDataToView(it: HistoryDetailsResponse) {
         this.response = it
+
+
+
+            /**show more less option*/
+            if (it.DeliveryShipments!!.size > 2) {
+                binding.more.visibility = View.VISIBLE
+            }
+            setAdapterView(this, it)
+
         arrayCourierPick = it.PickupLocation?.split(",")
         arrayCourierDrop = it.DropLocation?.split(",")
         initializeMap()
@@ -148,8 +176,8 @@ class HistoryDetailsActivity : AppCompatActivity(),  OnMapReadyCallback, View.On
         binding.dropPhone.text = it.DropPhone
         binding.dropEmail.text = it.DropEmail
         binding.dropAdd.text = it.DropAddress
-        binding.refId.text=it.BookingRef
-        binding.price.text = "$"+it.Price.toString()
+        binding.refId.text = it.BookingRef
+        binding.price.text = "$" + it.Price.toString()
 
 
         if (!TextUtils.isEmpty(it.PackageNotes))
@@ -158,9 +186,9 @@ class HistoryDetailsActivity : AppCompatActivity(),  OnMapReadyCallback, View.On
             binding.packageNote.text = "No package notes available."
 
 
-        if(!TextUtils.isEmpty(it.PickupNotes)){
-            binding.deliveryNote.text =it.PickupNotes
-        }else{
+        if (!TextUtils.isEmpty(it.PickupNotes)) {
+            binding.deliveryNote.text = it.PickupNotes
+        } else {
             binding.deliveryNote.text = "No delivery notes available"
         }
 
@@ -182,25 +210,22 @@ class HistoryDetailsActivity : AppCompatActivity(),  OnMapReadyCallback, View.On
         }
 
 
-        if(it.IsCancel==true){
-            binding.cancelBook.visibility=View.GONE
+        if (it.IsCancel == true) {
+            binding.cancelBook.visibility = View.GONE
             binding.price.text = "No Charge"
-            binding.status.text = "Cancellation"
+            binding.status.text = "Cancelled"
             binding.status.setBackgroundColor(Color.parseColor("#ff0000"))
             binding.status.setTextColor(Color.WHITE)
-        }
-        else if(it.IsOnHold==true){
-            binding.cancelBook.visibility=View.VISIBLE
-            binding.price.text = "$"+it.Price.toString()
+        } else if (it.IsOnHold == true) {
+            binding.cancelBook.visibility = View.VISIBLE
+            binding.price.text = "$" + it.Price.toString()
             binding.status.text = "On Hold"
             binding.status.setBackgroundColor(Color.parseColor("#ff0000"))
             binding.status.setTextColor(Color.WHITE)
-        }
-        else {
+        } else {
             setStatus(it.Status)
-            binding.price.text = "$"+it.Price.toString()
+            binding.price.text = "$" + it.Price.toString()
         }
-
 
 
         /*if(!TextUtils.isEmpty(it.PickP)) {
@@ -214,22 +239,29 @@ class HistoryDetailsActivity : AppCompatActivity(),  OnMapReadyCallback, View.On
         binding.cancelBook.setOnClickListener(this)
         binding.card4.setOnClickListener(this)
         binding.pickImage.setOnClickListener(this)
-
+        binding.more.setOnClickListener(this)
+        binding.less.setOnClickListener(this)
         /**condition for actual pick drop*/
-        if(it.PickupActual.isNullOrEmpty() || it.DropActual.isNullOrEmpty()){
-          binding.pickTimeActual.visibility=View.GONE
-          binding.pickActual.visibility=View.GONE
-          binding.dropTimeActual.visibility=View.GONE
-          binding.dropActual.visibility=View.GONE
+        if (it.PickupActual.isNullOrEmpty() || it.DropActual.isNullOrEmpty()) {
+            binding.pickTimeActual.visibility = View.GONE
+            binding.pickActual.visibility = View.GONE
+            binding.dropTimeActual.visibility = View.GONE
+            binding.dropActual.visibility = View.GONE
 
-        }else {
+        } else {
             val pickActualReq = AppUtility.getDateTimeFromDeviceToServerForDate(it.PickupActual)
             val pickActualSplit: Array<String>? = pickActualReq?.split(" ")?.toTypedArray()
-            binding.pickTimeActual.text =pickActualSplit?.get(1) + " " + pickActualSplit?.get(2) + " | " + pickActualSplit?.get(0)
+            binding.pickTimeActual.text =
+                pickActualSplit?.get(1) + " " + pickActualSplit?.get(2) + " | " + pickActualSplit?.get(
+                    0
+                )
 
             val dropActualReq = AppUtility.getDateTimeFromDeviceToServerForDate(it.DropActual)
             val dropActualSplit: Array<String>? = dropActualReq?.split(" ")?.toTypedArray()
-            binding.dropTimeActual.text = dropActualSplit?.get(1) + " " + dropActualSplit?.get(2) + " | " + dropActualSplit?.get(0)
+            binding.dropTimeActual.text =
+                dropActualSplit?.get(1) + " " + dropActualSplit?.get(2) + " | " + dropActualSplit?.get(
+                    0
+                )
 
         }
     }
@@ -267,6 +299,11 @@ class HistoryDetailsActivity : AppCompatActivity(),  OnMapReadyCallback, View.On
                 binding.status.setBackgroundColor(Color.parseColor("#00A7E2"))
                 binding.status.setTextColor(Color.WHITE)
             }
+            "Tried to deliver" -> {
+                binding.cancelBook.visibility = View.GONE
+                binding.status.text ="Tried to deliver"
+                binding.status.setBackgroundColor(Color.parseColor("#00A7E2"))
+                binding.status.setTextColor(Color.WHITE) }
             else -> {
                 binding.cancelBook.visibility = View.VISIBLE
                 binding.status.text = "Accepted"
@@ -277,48 +314,72 @@ class HistoryDetailsActivity : AppCompatActivity(),  OnMapReadyCallback, View.On
 
     }
 
+
+
+    fun setAdapterView(context: Context?, historyDetailsResponse: HistoryDetailsResponse) {
+
+        val layoutManager1 = GridLayoutManager(this, 2)
+        binding.docRecycler.layoutManager = layoutManager1
+        (binding.docRecycler.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+        docAdapter = DocItemShowAdapter(context, historyDetailsResponse.DeliveryShipments!!)
+        binding.docRecycler.adapter =docAdapter
+
+    }
+
+
     override fun onClick(view: View?) {
         when (view?.id) {
             R.id.pick_signature -> {
                 if (!TextUtils.isEmpty(response?.PickupSignature))
                     AppUtility.fullSizeImageView(this, response?.PickupSignature.toString())
                 else
-                    Toast.makeText(this, "No pickup signature found.", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "No pickup signature found.", Toast.LENGTH_SHORT).show()
 
             }
             R.id.drop_signature -> {
                 if (!TextUtils.isEmpty(response?.DropSignature))
                     AppUtility.fullSizeImageView(this, response?.DropSignature.toString())
                 else
-                    Toast.makeText(this, "No dropoff signature found.", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "No dropoff signature found.", Toast.LENGTH_SHORT).show()
+
+            }
+            R.id.more -> {
+                docAdapter?.isMoreEnable(true)
+                binding.more.visibility=View.GONE
+                binding.less.visibility=View.VISIBLE
+            }
+            R.id.less -> {
+                docAdapter?.isMoreEnable(false)
+                binding.more.visibility=View.VISIBLE
+                binding.less.visibility=View.GONE
 
             }
             R.id.drop_image -> {
                 if (!TextUtils.isEmpty(response?.PickupSignature))
                     AppUtility.fullSizeImageView(this, response?.DropPhoto.toString())
                 else
-                    Toast.makeText(this, "No dropoff image found.", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "No dropoff image found.", Toast.LENGTH_SHORT).show()
             }
             R.id.pick_image -> {
                 if (!TextUtils.isEmpty(response?.PackageImage))
                     AppUtility.fullSizeImageView(this, response?.PackageImage.toString())
                 else
-                    Toast.makeText(this, "No pickup image found.", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "No pickup image found.", Toast.LENGTH_SHORT).show()
             }
-            R.id.back_icon ->{
+            R.id.back_icon -> {
                 finish()
             }
-            R.id.cancel_book->{
+            R.id.cancel_book -> {
                 DialogActivity.logoutDialog(
                     this,
                     "Confirm!",
                     "Are you sure you want to cancel your booking?",
-                    "Yes","No",
-                    onCancelClick=::onNoClick,
+                    "Yes", "No",
+                    onCancelClick = ::onNoClick,
                     onOkClick = ::onYesClick
                 )
             }
-            R.id.card4->{
+            R.id.card4 -> {
                 try {
                     val browserIntent: Intent = Intent(
                         Intent.ACTION_VIEW,
@@ -331,21 +392,26 @@ class HistoryDetailsActivity : AppCompatActivity(),  OnMapReadyCallback, View.On
             }
         }
     }
-    private fun onNoClick(){
+
+    private fun onNoClick() {
 
     }
 
-    private fun onYesClick(){
-        viewModel.cancelBooking(historyItem?.BookingId.toString())
+    private fun onYesClick() {
+        if (intent.hasExtra("BookingRef"))
+            viewModel.cancelBooking(bookingResponse?.BookingId)
+        else
+            viewModel.cancelBooking(historyItem)
     }
+
     override fun onMapReady(googleMap: GoogleMap) {
-         map=googleMap
+        map = googleMap
         //hide zoom in out button in map
         map.uiSettings.isZoomControlsEnabled = false
         //googleMap.setInfoWindowAdapter(new CustomInfoWindowAdapter());
         map.mapType = GoogleMap.MAP_TYPE_NORMAL
         //googleMap.setMyLocationEnabled(true);
-       // map.uiSettings.isZoomControlsEnabled = true
+        // map.uiSettings.isZoomControlsEnabled = true
         // Enable / Disable my location button
         map.uiSettings.isMyLocationButtonEnabled = true
         // Enable / Disable Compass icon
@@ -356,190 +422,210 @@ class HistoryDetailsActivity : AppCompatActivity(),  OnMapReadyCallback, View.On
         map.uiSettings.isZoomGesturesEnabled = true
     }
 
-   private fun initializeMap() {
+    private fun initializeMap() {
 
-       try {
-           map.animateCamera(
-               CameraUpdateFactory.newLatLngZoom(
-                   LatLng(
-                       arrayCourierPick?.get(0)!!.toDouble(),
-                       arrayCourierPick?.get(1)!!.toDouble()
-                   ), 10F
-               )
-           )
-       } catch (e: Exception) {
-           e.printStackTrace()
-           map.animateCamera(
-               CameraUpdateFactory.newLatLngZoom(
-                   LatLng(
-                       -33.8619486,
-                       151.00586
-                   ), 12F
-               )
-           )
-       }
-       addMarkers()
-       try {
-           // Getting URL to the Google Directions API
-           if (response?.Status == "Accepted" || response?.Status == "On Route to Pickup") {
-               val url: String? = getDirectionsUrl(
-                   LatLng(
-                       response?.Latitude?.toDouble()!!,
-                       response?.Longitude?.toDouble()!!
-                   ),
-                   LatLng(
-                       arrayCourierPick?.get(0)!!.toDouble(),
-                       arrayCourierPick?.get(1)!!.toDouble()
-                   )
-               )
-               viewModel.getRoute(url)
-               val url1: String? = getDirectionsUrl(
-                   LatLng(
-                       arrayCourierPick?.get(0)!!.toDouble(),
-                       arrayCourierPick?.get(1)!!.toDouble()
-                   ),
-                   LatLng(
-                       arrayCourierDrop?.get(0)!!.toDouble(),
-                       arrayCourierDrop?.get(1)!!.toDouble()
-                   )
-               )
-              viewModel.getRoute(url1)
-           } else if (response?.Status == "Picked up" || response?.Status == "On Route to Dropoff" || response?.Status == "Tried to deliver"
-           ) {
-               val url2: String? = getDirectionsUrl(
-                   LatLng(
-                       response?.Latitude!!.toDouble(),
-                       response?.Longitude!!.toDouble()
-                   ),
-                   LatLng(
-                       arrayCourierDrop?.get(0)!!.toDouble(),
-                       arrayCourierDrop?.get(1)!!.toDouble()
-                   )
-               )
-               viewModel.getRoute(url2)
-           } else {
-               val url3: String? = getDirectionsUrl(
-                   LatLng(
-                       arrayCourierPick?.get(0)!!.toDouble(),
-                       arrayCourierPick?.get(1)!!.toDouble()
-                   ),
-                   LatLng(
-                       arrayCourierDrop?.get(0)!!.toDouble(),
-                       arrayCourierDrop?.get(1)!!.toDouble()
-                   )
-               )
-               viewModel.getRoute(url3)
-           }
-       } catch (e: JSONException) {
-           e.printStackTrace()
-       }
-   }
+        try {
+            map.animateCamera(
+                CameraUpdateFactory.newLatLngZoom(
+                    LatLng(
+                        arrayCourierPick?.get(0)!!.toDouble(),
+                        arrayCourierPick?.get(1)!!.toDouble()
+                    ), 10F
+                )
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
+            map.animateCamera(
+                CameraUpdateFactory.newLatLngZoom(
+                    LatLng(
+                        -33.8619486,
+                        151.00586
+                    ), 12F
+                )
+            )
+        }
+        addMarkers()
+        try {
+            // Getting URL to the Google Directions API
+            if (response?.Status == "Accepted" || response?.Status == "On Route to Pickup") {
+                val url: String? = getDirectionsUrl(
+                    LatLng(
+                        response?.Latitude?.toDouble()!!,
+                        response?.Longitude?.toDouble()!!
+                    ),
+                    LatLng(
+                        arrayCourierPick?.get(0)!!.toDouble(),
+                        arrayCourierPick?.get(1)!!.toDouble()
+                    )
+                )
+                viewModel.getRoute(url)
+                val url1: String? = getDirectionsUrl(
+                    LatLng(
+                        arrayCourierPick?.get(0)!!.toDouble(),
+                        arrayCourierPick?.get(1)!!.toDouble()
+                    ),
+                    LatLng(
+                        arrayCourierDrop?.get(0)!!.toDouble(),
+                        arrayCourierDrop?.get(1)!!.toDouble()
+                    )
+                )
+                viewModel.getRoute(url1)
+            } else if (response?.Status == "Picked up" || response?.Status == "On Route to Dropoff" || response?.Status == "Tried to deliver"
+            ) {
+                val url2: String? = getDirectionsUrl(
+                    LatLng(
+                        response?.Latitude!!.toDouble(),
+                        response?.Longitude!!.toDouble()
+                    ),
+                    LatLng(
+                        arrayCourierDrop?.get(0)!!.toDouble(),
+                        arrayCourierDrop?.get(1)!!.toDouble()
+                    )
+                )
+                viewModel.getRoute(url2)
+            } else {
+                val url3: String? = getDirectionsUrl(
+                    LatLng(
+                        arrayCourierPick?.get(0)!!.toDouble(),
+                        arrayCourierPick?.get(1)!!.toDouble()
+                    ),
+                    LatLng(
+                        arrayCourierDrop?.get(0)!!.toDouble(),
+                        arrayCourierDrop?.get(1)!!.toDouble()
+                    )
+                )
+                viewModel.getRoute(url3)
+            }
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+    }
+
     private fun getDirectionsUrl(origin: LatLng, dest: LatLng): String? {
-           // Origin of route
-           val str_origin =
-               "origin=" + origin.latitude.toString() + "," + origin.longitude
+        // Origin of route
+        val str_origin =
+            "origin=" + origin.latitude.toString() + "," + origin.longitude
 
-           // Destination of route
-           val str_dest =
-               "destination=" + dest.latitude.toString() + "," + dest.longitude
+        // Destination of route
+        val str_dest =
+            "destination=" + dest.latitude.toString() + "," + dest.longitude
 
-           // Sensor enabled
-           val sensor =
-               "sensor=false&key=" + "AIzaSyDXy3Z6OzAQ3siNfARS3Y54-sbhNQSBL0U" // Purchased account zoom.2ua@gmail.com
-
-
-           // Building the parameters to the web service
-           val parameters = "$str_origin&$str_dest&$sensor"
-
-           // Output format
-           val output = "json"
-
-           // Building the url to the web service
-           return "https://maps.googleapis.com/maps/api/directions/$output?$parameters"
-       }
+        // Sensor enabled
+        val sensor =
+            "sensor=false&key=" + "AIzaSyDXy3Z6OzAQ3siNfARS3Y54-sbhNQSBL0U" // Purchased account zoom.2ua@gmail.com
 
 
-       private fun addMarkers() {
-           try {
-               if (response?.Status == "Accepted" || response?.Status == "On Route to Pickup" || response?.Status== "On Route to Dropoff") {
-                   if(response?.Latitude!!.toDouble() !=arrayCourierPick!![0].toDouble()){
-                   when (response?.Vehicle) {
-                       "Van" -> {
-                           map.addMarker(MarkerOptions().position(LatLng(response?.Latitude!!.toDouble(), response?.Longitude!!.toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.icontruck)))
-                           map.addMarker(MarkerOptions().position(LatLng(arrayCourierPick!![0].toDouble(),arrayCourierPick!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pickup_icon)))
-                           map.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon)))
-                       }
-                       "Bike" -> {
-                           map.addMarker(MarkerOptions().position(LatLng(response?.Latitude!!.toDouble(), response?.Longitude!!.toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.iconbike)))
-                           map.addMarker(MarkerOptions().position(LatLng(arrayCourierPick!![0].toDouble(), arrayCourierPick!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pickup_icon)))
-                           map.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon)))
-                       }
-                       "Car" -> {
-                           map.addMarker(MarkerOptions().position(LatLng(response?.Latitude!!.toDouble(), response?.Longitude!!.toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.iconcar)))
-                           map.addMarker(MarkerOptions().position(LatLng(arrayCourierPick!![0].toDouble(), arrayCourierPick!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pickup_icon)))
-                           map.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon)))
-                       }
-                   }
-                       }else{
-                       when (response?.Vehicle) {
-                           "Van" -> {
-                               map.addMarker(MarkerOptions().position(LatLng(response?.Latitude!!.toDouble(), response?.Latitude!!.toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.icontruck)))
-                               map.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon)))
-                           }
-                           "Bike" -> {
-                               map.addMarker(
-                                   MarkerOptions().position(LatLng(response?.Latitude!!.toDouble(), response?.Longitude!!.toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.iconbike)))
-                               map.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon)))
-                           }
-                           "Car" -> {
-                               map.addMarker(MarkerOptions().position(LatLng(response?.Latitude!!.toDouble(), response?.Longitude!!.toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.iconcar)))
-                               map.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon)))
-                           }
-                       }
-                       }
-               } else if ( response?.Status=="Picked up"  ||response?.Status== "Tried to deliver") {
-                   when (response?.Vehicle) {
-                       "Van" -> {
-                           map.addMarker(MarkerOptions().position(LatLng(response?.Latitude!!.toDouble(), response?.Latitude!!.toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.icontruck)))
-                           map.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon)))
-                       }
-                       "Bike" -> {
-                           map.addMarker(
-                               MarkerOptions().position(
-                                   LatLng(response?.Latitude!!.toDouble(), response?.Longitude!!.toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.iconbike)))
-                           map.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon)))
-                       }
-                       "Car" -> {
-                           map.addMarker(
-                               MarkerOptions().position(
-                                   LatLng(response?.Latitude!!.toDouble(), response?.Longitude!!.toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.iconcar)))
-                           map.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon)))
-                       }
-                   }
-               } else {
-                   when (response?.Vehicle) {
-                       "Van" -> {
-                           map.addMarker(MarkerOptions().position(LatLng(arrayCourierPick!![0].toDouble(),arrayCourierPick!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pickup_icon)))
-                           map.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon)))
-                       }
-                       "Bike" -> {
-                           map.addMarker(MarkerOptions().position(LatLng(arrayCourierPick!![0].toDouble(),arrayCourierPick!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pickup_icon)))
-                           map.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon)))
-                       }
-                       "Car" -> {
-                           map.addMarker(MarkerOptions().position(LatLng(arrayCourierPick!![0].toDouble(), arrayCourierPick!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pickup_icon)))
-                           map.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon))
-                           )
-                       }
-                   }
-               }
-           } catch (e: JSONException) {
-               e.printStackTrace()
-           }
+        // Building the parameters to the web service
+        val parameters = "$str_origin&$str_dest&$sensor"
 
-       }
+        // Output format
+        val output = "json"
+
+        // Building the url to the web service
+        return "https://maps.googleapis.com/maps/api/directions/$output?$parameters"
+    }
 
 
+    private fun addMarkers() {
+        try {
+            if (response?.Status == "Accepted" || response?.Status == "On Route to Pickup" || response?.Status == "On Route to Dropoff") {
+                when (response?.Vehicle) {
+                        "Van" -> {
+                            map.addMarker(MarkerOptions().position(LatLng(response?.Latitude!!.toDouble(), response?.Longitude!!.toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.icontruck)))
+                            map.addMarker(MarkerOptions().position(LatLng(arrayCourierPick!![0].toDouble(), arrayCourierPick!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pickup_icon)))
+                            map.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon)))
+                        }
+                        "Bike" -> {
+                            map.addMarker(MarkerOptions().position(LatLng(response?.Latitude!!.toDouble(), response?.Longitude!!.toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.iconbike)))
+                            map.addMarker(MarkerOptions().position(LatLng(arrayCourierPick!![0].toDouble(), arrayCourierPick!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pickup_icon)))
+                            map.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon)))
+                        }
+                        "Car" -> {
+                            map.addMarker(MarkerOptions().position(LatLng(response?.Latitude!!.toDouble(), response?.Longitude!!.toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.iconcar)))
+                            map.addMarker(MarkerOptions().position(LatLng(arrayCourierPick!![0].toDouble(), arrayCourierPick!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pickup_icon)))
+                            map.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon))
+                            )
+                        }
+                    }
+                }
+             else if (response?.Status == "Picked up" || response?.Status == "Tried to deliver") {
+                when (response?.Vehicle) {
+                    "Van" -> {
+                        map.addMarker(MarkerOptions().position(LatLng(arrayCourierPick!![0].toDouble(), arrayCourierPick!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.icontruck)))
+                        map.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon)))
+                    }
+                    "Bike" -> {
+                        map.addMarker(MarkerOptions().position(LatLng(arrayCourierPick!![0].toDouble(), arrayCourierPick!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.iconbike)))
+                        map.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon)))
+                    }
+                    "Car" -> {
+                        map.addMarker(MarkerOptions().position(LatLng(arrayCourierPick!![0].toDouble(), arrayCourierPick!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.iconcar)))
+                        map.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon)))
+                    }
+                }
+            } else {
+                when (response?.Vehicle) {
+                    "Van" -> {
+                        map.addMarker(MarkerOptions().position(LatLng(arrayCourierPick!![0].toDouble(), arrayCourierPick!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pickup_icon)))
+                        map.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon)))
+                    }
+                    "Bike" -> {
+                        map.addMarker(MarkerOptions().position(LatLng(arrayCourierPick!![0].toDouble(), arrayCourierPick!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pickup_icon)))
+                        map.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon)))
+                    }
+                    "Car" -> {
+                        map.addMarker(MarkerOptions().position(LatLng(arrayCourierPick!![0].toDouble(), arrayCourierPick!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pickup_icon)))
+                        map.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon)))
+                    }
+                }
+            }
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
+    }
+
+
+    private fun addMarkers1() {
+        try {
+            if (response?.Status == "Accepted" || response?.Status == "On Route to Pickup" || response?.Status == "On Route to Dropoff") {
+                when (response?.Vehicle) {
+                        "Van" -> {
+                            map.addMarker(MarkerOptions().position(LatLng(arrayCourierPick!![0].toDouble(), arrayCourierPick!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.icontruck)))
+                            map.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon)))
+                        }
+                        "Bike" -> {
+                            map.addMarker(MarkerOptions().position(LatLng(arrayCourierPick!![0].toDouble(), arrayCourierPick!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.iconbike)))
+                            map.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon)))
+                        }
+                        "Car" -> {
+                            map.addMarker(MarkerOptions().position(LatLng(arrayCourierPick!![0].toDouble(), arrayCourierPick!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.iconcar)))
+                            map.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon))
+                            )
+                        }
+                    }
+                }
+                else if (response?.Status == "Picked up" || response?.Status == "Tried to deliver") {
+                when (response?.Vehicle) {
+                    "Van" -> {
+                        map.addMarker(MarkerOptions().position(LatLng(response?.Latitude!!.toDouble(), response?.Latitude!!.toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.icontruck)))
+                        map.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon)))
+                    }
+                    "Bike" -> {
+                        map.addMarker(MarkerOptions().position(LatLng(response?.Latitude!!.toDouble(), response?.Longitude!!.toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.iconbike)))
+                        map.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon)))
+                    }
+                    "Car" -> {
+                        map.addMarker(MarkerOptions().position(LatLng(response?.Latitude!!.toDouble(), response?.Longitude!!.toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.iconcar)))
+                        map.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon)))
+                    }
+                }
+            }
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
+    }
 
 
 }

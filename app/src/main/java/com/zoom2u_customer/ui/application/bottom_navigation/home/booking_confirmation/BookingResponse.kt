@@ -10,6 +10,6 @@ data class BookingResponse(
     var BookingId: String? = null,
     var BookingRef: String? = null,
     var DeliverySpeed: String? = null,
-    var Verified: Boolean? = null,
+    var Verified: Boolean? = null
 
 ): Parcelable

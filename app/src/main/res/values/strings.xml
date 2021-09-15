@@ -118,7 +118,7 @@
     <string name="drop_check2_desc">(please provide a phone number above and provide notes regarding the location of the package)</string>
     <string name="commercial">Commercial</string>
     <string name="parcel_after">Shipment available after</string>
-    <string name="parcel_after_txt">(Your parcel will be picked up and delivered within the requested window. it may not be at this exact time)</string>
+    <string name="parcel_after_txt">(Your parcel will be picked up and delivered within the requested window, it may not be at this exact time)</string>
     <string name="date">Date</string>
     <string name="time">Time</string>
     <string name="required_before">Required before</string>
@@ -227,7 +227,7 @@
     <string name="bids">Bids</string>
 
 
-    <string name="google_api_key" translatable="false">AIzaSyDXy3Z6OzAQ3siNfARS3Y54-sbhNQSBL0U</string>
+
     <string name="_3">3</string>
     <string name="_2">2</string>
     <string name="_1">1</string>
@@ -266,7 +266,7 @@
     <string name="item_will_be_packaged_not_in_original_packaging">Item will be packaged (Not in original packaging)</string>
     <string name="packing_term2">Item will not be packaged. (Please note: This option will void any damage cover for this delivery. Items sent without packaging are at the customers own risk.)</string>
     <string name="deliver_before">Deliver before</string>
-    <string name="parcel_drop_text">(Your parcel will be droped off and deliver within the requested window.it may not be at this exact time.)</string>
+    <string name="parcel_drop_text">(Your parcel will be drooped off and delivered within the requested window, it may not be at this exact time.)</string>
     <string name="minutes">minutes.</string>
     <string name="not_available">Not Available</string>
     <string name="register_text">Don\'t have an account?Register</string>
@@ -294,5 +294,11 @@
     <string name="make_a1_booking">Make a booking</string>
     <string name="term_con2">I have read, and accept, the customer terms and conditions as well as the chain of responsibility policy.</string>
     <string name="term_con3">I Accept the customer<a href="https://www.zoom2u.com.au/customer-terms/"> terms and conditions</a> and<a href="https://www.freightmatch.com.au/chain-of-responsibility/"> chain of responsibility policy.</a></string>
+    <string name="diver_txt">Drivers will be bidding on your work in a matter of seconds.</string>
+    <string name="bids_will_appear_here_as_they_come_in">Bids will appear here as they come in.</string>
+    <string name="rate_your_delivery">Rate your delivery</string>
+    <string name="pickup_address">Pickup address</string>
+    <string name="deliver_address">Deliver address</string>
+    <string name="how_did_we_do_today">How did we do today?</string>
 
 </resources>

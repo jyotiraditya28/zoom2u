@@ -15,7 +15,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.Zoom2u">
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".ui.notification.NotificationActivity"></activity>
+        <activity android:name=".MainActivity" />
         <activity android:name=".ui.application.bottom_navigation.home.delivery_details.quotes_req.quote_confirmation_page.QuoteConfirmationActivity" />
         <activity
             android:name=".ui.application.bottom_navigation.home.delivery_details.quotes_req.UploadQuotesActivity"
@@ -84,7 +85,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_api_key" />
+            android:value="AIzaSyDXy3Z6OzAQ3siNfARS3Y54-sbhNQSBL0U" />
 
         <activity
             android:name=".ui.application.bottom_navigation.bid_request.complete_bid_request.completed_bid_page.CompletedBidActivity"
@@ -92,7 +93,6 @@
         <activity
             android:name=".ui.application.bottom_navigation.bid_request.active_bid_request.active_bid_page.ActiveBidActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.application.qutote_request.QuoteRequestActivity"
             android:screenOrientation="portrait" /> <!-- <activity android:name=".application.ui.chat.MessageActivity" /> -->
@@ -123,7 +123,15 @@
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
 
-
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -134,20 +142,14 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}.provider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths" />
-        </provider>
+        <service
+            android:name=".services.MyFcmListenerService">
+        <intent-filter>
+            <action android:name="com.google.firebase.MESSAGING_EVENT" />
+        </intent-filter>
+        </service>
+
 
     </application>
-
-
-
-
 
 </manifest>

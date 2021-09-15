@@ -1,8 +1,9 @@
 package com.zoom2u_customer.ui.application.bottom_navigation.bid_request.active_bid_request.active_bid_page
 
-import android.R.attr
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -20,13 +21,16 @@ import com.zoom2u_customer.apiclient.GetAddressFromGoogleAPI
 import com.zoom2u_customer.apiclient.GoogleServiceApi
 import com.zoom2u_customer.apiclient.ServiceApi
 import com.zoom2u_customer.databinding.ActivityActiveBidBinding
+import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.active_bid_request.ActiveBidListRepository
 import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.active_bid_request.active_bid_page.active_bid_offers.BidOffersFragment
 import com.zoom2u_customer.utility.AppUtility
+import com.zoom2u_customer.utility.DialogActivity
 import com.zoom2u_customer.utility.RouteParser
 import org.json.JSONException
 
 
 class ActiveBidActivity : AppCompatActivity(), OnMapReadyCallback {
+    private var ItemType: String? = null
     lateinit var binding: ActivityActiveBidBinding
     private var quoteID: Int? = null
     private lateinit var map: GoogleMap
@@ -34,13 +38,17 @@ class ActiveBidActivity : AppCompatActivity(), OnMapReadyCallback {
     lateinit var viewModel: BidDetailsViewModel
     private var repositoryGoogleAddress: GoogleAddressRepository? = null
     private var repository: BidDetailsRepository? = null
-
+    private var repositoryActive: ActiveBidListRepository? = null
+    private var bidDetailsResponse:BidDetailsResponse?=null
+    private var pos:Int?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_active_bid)
 
         if (intent.hasExtra("QuoteId")) {
             quoteID = intent.getStringExtra("QuoteId")?.toInt()
+            ItemType =intent.getStringExtra("ItemType")
+            pos = intent.getStringExtra("pos")?.toInt()
         }
 
         viewModel = ViewModelProvider(this).get(BidDetailsViewModel::class.java)
@@ -48,6 +56,8 @@ class ActiveBidActivity : AppCompatActivity(), OnMapReadyCallback {
         val serviceApi: ServiceApi = ApiClient.getServices()
         repositoryGoogleAddress = GoogleAddressRepository(googleServiceApi, this)
         repository = BidDetailsRepository(serviceApi, this)
+        repositoryActive = ActiveBidListRepository(serviceApi, this)
+        viewModel.repositoryActive = repositoryActive
         viewModel.repository = repository
         viewModel.repositoryGoogleAddress = repositoryGoogleAddress
 
@@ -60,6 +70,7 @@ class ActiveBidActivity : AppCompatActivity(), OnMapReadyCallback {
         viewModel.getBidDetailsSuccess()?.observe(this) {
             if (it != null) {
                 AppUtility.progressBarDissMiss()
+                bidDetailsResponse=it
                 val arrayCourierPick: MutableList<String> = ArrayList()
                 val arrayCourierDrop: MutableList<String> = ArrayList()
                 arrayCourierPick.add(it.PickupLatitude.toString())
@@ -83,8 +94,60 @@ class ActiveBidActivity : AppCompatActivity(), OnMapReadyCallback {
         binding.back.setOnClickListener{
             finish()
         }
-    }
 
+        binding.cancel.setOnClickListener{
+            DialogActivity.logoutDialog(
+                this,
+                "Confirm!",
+                "Are you sure you want to cancel your request?",
+                "Yes", "No",
+                onCancelClick = ::onNoClick,
+                onOkClick = ::onYesClick
+            )
+        }
+
+
+
+        viewModel.getBidCancelSuccess()?.observe(this) {
+            if (!TextUtils.isEmpty(it)) {
+                AppUtility.progressBarDissMiss()
+                val intent = Intent()
+                intent.putExtra("pos",it)
+                setResult(3, intent)
+                Toast.makeText(
+                    this,
+                    "Bid delete successfully.",
+                    Toast.LENGTH_LONG
+                ).show()
+                finish()
+            }
+        }
+
+
+        viewModel.getHeavyBidCancelSuccess()?.observe(this) {
+            if (!TextUtils.isEmpty(it)) {
+                AppUtility.progressBarDissMiss()
+                val intent = Intent()
+                intent.putExtra("pos",it)
+                setResult(3, intent)
+                Toast.makeText(
+                    this,
+                    "Bid delete successfully.",
+                    Toast.LENGTH_LONG
+                ).show()
+                finish()
+            }
+        }
+
+
+    }
+    fun onNoClick() {}
+    private fun onYesClick() {
+        if (ItemType == "Freight")
+            viewModel.getHeavyBidCancel(bidDetailsResponse?.Id,pos)
+        else if (ItemType == "ExtraLargeItem")
+            viewModel.getBidCancel(bidDetailsResponse?.Id,pos)
+    }
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap

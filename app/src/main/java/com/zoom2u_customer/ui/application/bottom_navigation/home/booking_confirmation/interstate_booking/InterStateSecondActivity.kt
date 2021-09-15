@@ -191,9 +191,11 @@ class InterStateSecondActivity : AppCompatActivity(), View.OnClickListener {
                             binding.lName.text.toString().trim()
                 )
 
-            if ( bookingDeliveryResponse!!.getJSONObject("_deliveryRequestModel").get("PricingScheme") =="Standard")
+            if ( bookingDeliveryResponse!!.getJSONObject("_deliveryRequestModel").get("PricingScheme") =="Standard") {
                 getBrainTreeClientToken?.callServiceForGetClientToken()
-            else  {
+                bookingDeliveryResponse?.getJSONObject("_deliveryRequestModel")?.remove("PricingScheme")
+            }else  {
+                bookingDeliveryResponse?.getJSONObject("_deliveryRequestModel")?.remove("PricingScheme")
                 viewModel.getDeliveryRequest(bookingDeliveryResponse)
             }
         } catch (e: JSONException) {

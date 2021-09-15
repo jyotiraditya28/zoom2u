@@ -35,6 +35,7 @@ class DocItemShowAdapter(val context : Context?,
         notifyDataSetChanged()
     }
 
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BindingViewHolder {
         val rootView: ItemDocShowBinding =
             ItemDocShowBinding.inflate(LayoutInflater.from(context), parent, false)

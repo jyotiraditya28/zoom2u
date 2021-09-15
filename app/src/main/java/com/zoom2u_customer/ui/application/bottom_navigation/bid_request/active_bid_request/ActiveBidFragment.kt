@@ -56,18 +56,15 @@ class ActiveBidFragment : Fragment() {
                 AppUtility.progressBarDissMiss()
                 binding.swipeRefresh.isRefreshing = false
                 if (it.isNotEmpty()) {
-                    AppUtility.progressBarDissMiss()
-
                     updateRecord(it.toMutableList())
                     binding.noActiveBidText.visibility = View.GONE
-                } else {
-
+                }else{
                     binding.noActiveBidText.visibility = View.VISIBLE
                 }
             }
         }
 
-        viewModel.getBidCancelSuccess()?.observe(viewLifecycleOwner) {
+      /*  viewModel.getBidCancelSuccess()?.observe(viewLifecycleOwner) {
             if (!TextUtils.isEmpty(it)) {
                 AppUtility.progressBarDissMiss()
                 listData.clear()
@@ -82,7 +79,7 @@ class ActiveBidFragment : Fragment() {
                 listData.clear()
                 viewModel.getActiveBidList(1)
             }
-        }
+        }*/
 
         return binding.root
 
@@ -114,14 +111,18 @@ class ActiveBidFragment : Fragment() {
 
     private fun onApiCall() {
         currentPage++
-        AppUtility.progressBarShow(activity)
-        viewModel.getActiveBidList(currentPage)
+        if(listData.size>9) {
+            AppUtility.progressBarShow(activity)
+            viewModel.getActiveBidList(currentPage)
+        }
     }
 
-    private fun onItemClick(activeBidItem: ActiveBidListResponse) {
+    private fun onItemClick(activeBidItem: ActiveBidListResponse,pos:Int) {
         val intent = Intent(activity, ActiveBidActivity::class.java)
         intent.putExtra("QuoteId", activeBidItem.Id.toString())
-        startActivity(intent)
+        intent.putExtra("ItemType",activeBidItem.ItemType.toString())
+        intent.putExtra("pos",pos.toString())
+        startActivityForResult(intent,3)
     }
 
     private fun onCancelClick(Id: Int, itemType: String) {
@@ -139,10 +140,18 @@ class ActiveBidFragment : Fragment() {
 
     fun onNoClick() {}
     private fun onYesClick() {
-        if (selectForCancelItemType == "Freight")
+       /* if (selectForCancelItemType == "Freight")
             viewModel.getHeavyBidCancel(selectForCancel)
         else if (selectForCancelItemType == "ExtraLargeItem")
-            viewModel.getBidCancel(selectForCancel)
+            viewModel.getBidCancel(selectForCancel)*/
     }
-
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+       if(data!=null) {
+           if (requestCode == 3) {
+               val pos: Int = data.getStringExtra("pos")!!.toInt()
+               adapter?.removeItem(pos)
+           }
+       }
+    }
 }

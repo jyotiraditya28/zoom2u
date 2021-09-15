@@ -1,6 +1,7 @@
 package com.zoom2u_customer.ui.application.bottom_navigation.history.history_details
 
 import android.os.Parcelable
+import com.zoom2u_customer.ui.application.bottom_navigation.home.delivery_details.model.ShipmentsClass
 import kotlinx.parcelize.Parcelize
 
 
@@ -70,7 +71,7 @@ data class HistoryDetailsResponse(
     var IsOnHold: Boolean? = null,
     var IsInterstate: Boolean? = null,
     var BookingCallHistory: List<BookingCallHistoryClass>? = null,
-    //var DeliveryAttemptDetails: List<String>? = null,
+    var DeliveryShipments: MutableList<ShipmentsClass>? = null,
     var OrderNumber: String? = null,
     var IsCancel: Boolean? = null,
     var PickupSigneePosition: Int? = null,

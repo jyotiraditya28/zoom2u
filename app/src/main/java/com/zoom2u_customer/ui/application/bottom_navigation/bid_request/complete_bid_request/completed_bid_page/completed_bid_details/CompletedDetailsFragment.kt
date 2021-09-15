@@ -36,7 +36,8 @@ class CompletedDetailsFragment(var bidDetails: CompletedDetailsResponse?) : Frag
 
         setDataToView(bidDetail)
         setAdapterView(container?.context)
-
+        binding.more.setOnClickListener(this)
+        binding.less.setOnClickListener(this)
         return binding.root
     }
 
@@ -60,13 +61,27 @@ class CompletedDetailsFragment(var bidDetails: CompletedDetailsResponse?) : Frag
         if( bidDetail?.Shipments!!.size>2){
             binding.more.visibility=View.VISIBLE
         }
+
+        binding.pickName.text = bidDetail.PickupLocation?.ContactName
+        binding.pickPhone.text = bidDetail.PickupPhone
+        binding.pickEmail.text = bidDetail.PickupEmail
+
+
+        binding.dropName.text = bidDetail.DropLocation?.ContactName
+        binding.dropPhone.text = bidDetail.DropPhone
+        binding.dropEmail.text = bidDetail.DropEmail
+
+        binding.distance.text = bidDetail.Distance
+        binding.ref.text =bidDetail.QuoteRef
     }
 
 
     fun setAdapterView(context: Context?) {
         if(bidDetail?.PackageImages!!.isNullOrEmpty()) {
            binding.defaultImage.visibility=View.VISIBLE
+            binding.bidImages.visibility=View.GONE
         }else{
+            binding.bidImages.visibility=View.VISIBLE
             binding.defaultImage.visibility=View.GONE
             val layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             binding.bidImages.layoutManager = layoutManager

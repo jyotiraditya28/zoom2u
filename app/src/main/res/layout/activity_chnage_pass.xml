@@ -78,12 +78,14 @@
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             app:boxStrokeWidthFocused="0dp"
+            app:passwordToggleEnabled="true"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/zoom2u_header">
 
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/curr_pass"
+                android:inputType="textPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/login_signup_text" />
@@ -102,12 +104,14 @@
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             app:boxStrokeWidthFocused="0dp"
+            app:passwordToggleEnabled="true"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/curr_pass_header">
 
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/new_pass"
+                android:inputType="textPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/login_signup_text" />
@@ -124,6 +128,7 @@
             app:boxStrokeWidth="0dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
+            app:passwordToggleEnabled="true"
             app:boxStrokeWidthFocused="0dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/new_pass_header">
@@ -132,6 +137,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/cnfrm_pass"
                 android:layout_width="match_parent"
+                android:inputType="textPassword"
                 android:layout_height="wrap_content"
                 style="@style/login_signup_text" />
 

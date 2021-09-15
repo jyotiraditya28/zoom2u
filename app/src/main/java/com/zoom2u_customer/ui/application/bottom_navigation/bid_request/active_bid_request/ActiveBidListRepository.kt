@@ -81,6 +81,7 @@ class ActiveBidListRepository(private var serviceApi: ServiceApi, var context: C
 
     fun getBidCancel(
         bookingID: Int?,
+        pos:Int?,
         disposable: CompositeDisposable = CompositeDisposable(),
         onSuccess: (msg: String) -> Unit
     ) {
@@ -96,7 +97,7 @@ class ActiveBidListRepository(private var serviceApi: ServiceApi, var context: C
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeWith(object : DisposableSingleObserver<Response<Void>>() {
                         override fun onSuccess(responce: Response<Void>) {
-                            onSuccess("true")
+                            onSuccess(pos.toString())
                         }
 
                         override fun onError(e: Throwable) {
@@ -121,6 +122,7 @@ class ActiveBidListRepository(private var serviceApi: ServiceApi, var context: C
 
     fun getHeavyBidCancel(
         bookingID: Int?,
+        pos:Int?,
         disposable: CompositeDisposable = CompositeDisposable(),
         onSuccess: (msg: String) -> Unit
     ) {
@@ -136,7 +138,7 @@ class ActiveBidListRepository(private var serviceApi: ServiceApi, var context: C
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeWith(object : DisposableSingleObserver<Response<Void>>() {
                         override fun onSuccess(responce: Response<Void>) {
-                            onSuccess("true")
+                            onSuccess(pos.toString())
                         }
 
                         override fun onError(e: Throwable) {

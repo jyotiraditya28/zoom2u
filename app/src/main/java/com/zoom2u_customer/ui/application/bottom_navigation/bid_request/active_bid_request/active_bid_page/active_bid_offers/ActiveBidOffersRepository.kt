@@ -2,6 +2,7 @@ package com.zoom2u_customer.ui.application.bottom_navigation.bid_request.active_
 
 import android.content.Context
 import android.widget.Toast
+import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.zoom2u_customer.R
 import com.zoom2u_customer.apiclient.ServiceApi
@@ -37,7 +38,7 @@ class ActiveBidOffersRepository(private var serviceApi: ServiceApi, var context:
                     .subscribeWith(object : DisposableSingleObserver<Response<JsonObject>>() {
                         override fun onSuccess(responce: Response<JsonObject>) {
                             if (responce.body() != null)
-                                onSuccess(responce.body()!!.get("BookingRef").toString())
+                                onSuccess(Gson().toJson(responce.body()))
                             else if (responce.errorBody() != null) {
                                 AppUtility.progressBarDissMiss()
                                 DialogActivity.alertDialogSingleButton(

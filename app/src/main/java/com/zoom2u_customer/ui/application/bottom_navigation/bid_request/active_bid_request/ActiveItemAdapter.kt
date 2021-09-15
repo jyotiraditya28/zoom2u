@@ -6,22 +6,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.zoom2u_customer.R
 import com.zoom2u_customer.databinding.ItemActiveBidBinding
 import com.zoom2u_customer.ui.application.bottom_navigation.history.HistoryItemAdapter
 import com.zoom2u_customer.ui.application.bottom_navigation.history.HistoryResponse
+import com.zoom2u_customer.ui.application.bottom_navigation.history.history_details.DocItemListShowAdapter
 import com.zoom2u_customer.utility.AppUtility
 import com.zoom2u_customer.utility.DialogActivity
 import java.util.ArrayList
 
 
-class ActiveItemAdapter (val context: Context, private val onItemClick:(ActiveBidListResponse) -> Unit, private val onApiCall:() ->Unit,
+class ActiveItemAdapter (val context: Context, private val onItemClick:(ActiveBidListResponse,pos:Int) -> Unit, private val onApiCall:() ->Unit,
                          private val onCancelClick:(Int,String) -> Unit) :
     RecyclerView.Adapter<ActiveItemAdapter.BindingViewHolder>() {
     private var dataList:MutableList<ActiveBidListResponse> = ArrayList()
     private var lastApiCallPosition:Int=-1
-
+    private var docAdapter: DocItemListShowAdapter?=null
     override fun getItemCount(): Int {
         return dataList.size
     }
@@ -38,6 +41,10 @@ class ActiveItemAdapter (val context: Context, private val onItemClick:(ActiveBi
         return BindingViewHolder(rootView)
     }
 
+    fun removeItem(position: Int){
+        dataList.removeAt(position)
+        notifyItemRemoved(position)
+    }
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: BindingViewHolder, position: Int) {
@@ -52,8 +59,10 @@ class ActiveItemAdapter (val context: Context, private val onItemClick:(ActiveBi
            if(dataList[position].ItemType=="Freight"||dataList[position].ItemCategory=="XL"){
                DialogActivity.alertDialogSingleButton(context, "Alert!", "Currently not showing Freight and Extra Large item information try in portal.")
            }else
-               onItemClick(activeBidItem)
+               onItemClick(activeBidItem,position)
         }
+
+
 
     /**for pagination*/
         if(position==dataList.size-1) {
@@ -62,6 +71,8 @@ class ActiveItemAdapter (val context: Context, private val onItemClick:(ActiveBi
                 onApiCall()
             }
         }
+
+
 
 
         val pickDateTime = AppUtility.getDateTimeFromDeviceToServerForDate(dataList[position].PickupDateTime)
@@ -83,52 +94,22 @@ class ActiveItemAdapter (val context: Context, private val onItemClick:(ActiveBi
 
         holder.itemBinding.ref.text= "Ref #:${dataList[position].QuoteRef.toString()}"
 
-        holder.itemBinding.cancel.setOnClickListener{
+      /*  holder.itemBinding.cancel.setOnClickListener{
             onCancelClick(dataList[position].Id!!,dataList[position].ItemType!!)
-        }
+        } */
 
         setItemType(holder,dataList[position])
     }
 
 
     fun setItemType(holder: BindingViewHolder,data:ActiveBidListResponse){
-        if(data.ItemType=="ExtraLargeItem") {
-            when (data.ItemCategory) {
-                "Documents" -> {
-                    holder.itemBinding.docTxt.text = "Documents"
-                    holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_documents_low)
-                }
-                "Bag"
-                -> {
-                    holder.itemBinding.docTxt.text = "Satchel,laptops"
-                    holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_satchelandlaptops_low)
-                }
-                "Box" -> {
-                    holder.itemBinding.docTxt.text = "Small box"
-                    holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_smallbox_low)
-                }
-                "Flowers" -> {
-                    holder.itemBinding.docTxt.text = "Cakes, flowers,delicates"
-                    holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_cakesflowersdelicates_low)
-                }
-                "Large" -> {
-                    holder.itemBinding.docTxt.text = "Large box"
-                    holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_largebox_low)
-                }
-                "XL" ->{
-                    holder.itemBinding.docTxt.text = "Large items"
-                    holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_machinery)
-                }
-            }
-        }
         if(data.ItemType=="Freight") {
+            holder.itemBinding.ll1.visibility=View.VISIBLE
             when (data.ItemCategory) {
               "0" ->{
                   holder.itemBinding.docTxt.text = "General Van Shipments"
                   holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_general_van_shipments)
               }
-
-
 
                 "2" -> {
                     holder.itemBinding.docTxt.text = "Building Materials"
@@ -166,9 +147,30 @@ class ActiveItemAdapter (val context: Context, private val onItemClick:(ActiveBi
 
                 }
             }
+
+        }
+        else if(data.ItemCategory=="XL") {
+            holder.itemBinding.ll1.visibility=View.VISIBLE
+            holder.itemBinding.docTxt.text = "Large items"
+            holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_machinery)
+        }else if(data.ItemCategory!="XL"&&data.ItemType!="Freight")  {
+            holder.itemBinding.doc.visibility=View.VISIBLE
+            if(data.Shipments!=null) {
+                val layoutManager1 = GridLayoutManager(context, 2)
+                holder.itemBinding.docRecycler.layoutManager = layoutManager1
+                (holder.itemBinding.docRecycler.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+                docAdapter = DocItemListShowAdapter(context, data.Shipments!!)
+                holder.itemBinding.docRecycler.adapter = docAdapter
+
+            }
         }
 
 
+
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return position
     }
 
 

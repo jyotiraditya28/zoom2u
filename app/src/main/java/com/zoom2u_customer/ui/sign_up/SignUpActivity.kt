@@ -35,13 +35,13 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener,
         setContentView(R.layout.activity_sign_up)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_sign_up)
         AppUtility.hideKeyboardActivityLunched(this)
-        AppUtility.hideKeyBoardClickOutside(binding.parentCl,this)
+        AppUtility.hideKeyBoardClickOutside(binding.parentCl, this)
 
         try {
             val popup: Field = Spinner::class.java.getDeclaredField("mPopup")
             popup.isAccessible = true
             val popupWindow = popup.get(binding.spinner) as ListPopupWindow
-            popupWindow.height=300
+            popupWindow.height = 300
         } catch (e: NoClassDefFoundError) {
 
         } catch (e: ClassCastException) {
@@ -77,7 +77,11 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener,
                     val email = binding.email.text.toString()
                     val pass = binding.pass.text.toString()
                     viewModel.getLogin(LoginRequest(username = email, password = pass))
-                    Toast.makeText(this, "You have been successfully Registered.", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        this,
+                        "You have been successfully Registered.",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
 
             }
@@ -91,7 +95,11 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener,
                     startActivity(intent)
                     finish()
                 } else
-                    DialogActivity.alertDialogSingleButton(this, "Alert!", "You have been successfully Registered please Login.")
+                    DialogActivity.alertDialogSingleButton(
+                        this,
+                        "Alert!",
+                        "You have been successfully Registered please Login."
+                    )
 
             }
 
@@ -108,7 +116,6 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener,
         binding.findUs.setOnClickListener(this)
         binding.terms.setOnClickListener(this)
     }
-
 
 
     override fun onClick(view: View?) {
@@ -140,12 +147,43 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener,
     }
 
     private fun setSignUpData() {
-        if(checkValidation(binding.firstName.text.toString(), binding.lastName.text.toString(), binding.email.text.toString(), binding.phone.text.toString(),binding.pass.text.toString(), binding.confirmPass.text.toString(),binding.chkTerms.isChecked))
-        viewModel.getSignUp(SignUpRequest(binding.firstName.text.toString(), binding.lastName.text.toString(), binding.company.text.toString(), binding.email.text.toString(), binding.phone.text.toString(), binding.findUs.text.toString(), binding.pass.text.toString(), binding.confirmPass.text.toString(), "true", "0", "Deliveries"))
+        if (checkValidation(
+                binding.firstName.text.toString(),
+                binding.lastName.text.toString(),
+                binding.email.text.toString(),
+                binding.phone.text.toString(),
+                binding.pass.text.toString(),
+                binding.confirmPass.text.toString(),
+                binding.chkTerms.isChecked
+            )
+        )
+            viewModel.getSignUp(
+                SignUpRequest(
+                    binding.firstName.text.toString(),
+                    binding.lastName.text.toString(),
+                    binding.company.text.toString(),
+                    binding.email.text.toString(),
+                    binding.phone.text.toString(),
+                    binding.findUs.text.toString(),
+                    binding.pass.text.toString(),
+                    binding.confirmPass.text.toString(),
+                    "true",
+                    "0",
+                    "Deliveries"
+                )
+            )
     }
 
 
-    private fun checkValidation(first_name: String, last_name: String,  email: String, phone: String, pass: String, confirmPass: String, isChecked:Boolean): Boolean {
+    private fun checkValidation(
+        first_name: String,
+        last_name: String,
+        email: String,
+        phone: String,
+        pass: String,
+        confirmPass: String,
+        isChecked: Boolean
+    ): Boolean {
         if (first_name == "") {
             DialogActivity.alertDialogSingleButton(this, "Alert!", "Please enter your first name")
             AppUtility.validateTextField(binding.firstName)
@@ -162,7 +200,7 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener,
             DialogActivity.alertDialogSingleButton(this, "Alert!", "Please enter alphabets in last name")
             AppUtility.validateTextField(binding.lastName)
             return false
-        }*/  else if (email == "") {
+        }*/ else if (email == "") {
             DialogActivity.alertDialogSingleButton(this, "Alert!", "Please enter your email")
             AppUtility.validateTextField(binding.email)
             return false
@@ -174,23 +212,36 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener,
             DialogActivity.alertDialogSingleButton(this, "Alert!", "Please enter your phone number")
             AppUtility.validateTextField(binding.phone)
             return false
-        }
-        else if (phone.length>20) {
-            DialogActivity.alertDialogSingleButton(this, "Alert!", "Please enter valid phone number")
+        } else if (phone.length > 20) {
+            DialogActivity.alertDialogSingleButton(
+                this,
+                "Alert!",
+                "Please enter valid phone number"
+            )
             AppUtility.validateTextField(binding.phone)
             return false
-        }
-
-        else if (!phone.matches(("^[\\s0-9\\()\\-\\+]+$").toRegex())) {
-            DialogActivity.alertDialogSingleButton(this, "Alert!", "Please enter valid phone number")
+        } else if (!phone.matches(("^[\\s0-9\\()\\-\\+]+$").toRegex())) {
+            DialogActivity.alertDialogSingleButton(
+                this,
+                "Alert!",
+                "Please enter valid phone number"
+            )
             AppUtility.validateTextField(binding.phone)
             return false
         } else if (pass == "") {
-            DialogActivity.alertDialogSingleButton(this, "Alert!", "Password must be at least 6 characters long")
+            DialogActivity.alertDialogSingleButton(
+                this,
+                "Alert!",
+                "Password must be at least 6 characters long"
+            )
             AppUtility.validateTextField(binding.pass)
             return false
         } else if (pass.length < 6) {
-            DialogActivity.alertDialogSingleButton(this, "Alert!", "Password must be at least 6 characters long")
+            DialogActivity.alertDialogSingleButton(
+                this,
+                "Alert!",
+                "Password must be at least 6 characters long"
+            )
             AppUtility.validateTextField(binding.pass)
             return false
         } else if (confirmPass == "") {
@@ -198,31 +249,40 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener,
             AppUtility.validateTextField(binding.confirmPass)
             return false
         } else if (confirmPass != pass) {
-            DialogActivity.alertDialogSingleButton(this, "Alert!", "Password confirmation and Password must match.")
-            AppUtility . validateTextField (binding.pass)
-            AppUtility . validateTextField (binding.confirmPass)
+            DialogActivity.alertDialogSingleButton(
+                this,
+                "Alert!",
+                "Password confirmation and Password must match."
+            )
+            AppUtility.validateTextField(binding.pass)
+            AppUtility.validateTextField(binding.confirmPass)
             return false
-        }else if(!isChecked){
+        } else if (!isChecked) {
             //DialogActivity.alertDialogSingleButton(this, "Alert!", "Please Accept the customer Terms and Conditions.")
-            Toast.makeText(this,"Please Accept the customer Terms and Conditions.",Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                this,
+                "Please Accept the customer Terms and Conditions.",
+                Toast.LENGTH_LONG
+            ).show()
             return false
         }
-      return true
+        return true
     }
 
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         val selectedText = categories[position]
-        if(position>0) {
+        if (position == 0)
+            binding.findUs.setText("")
+        else
             binding.findUs.setText(selectedText)
             binding.whereFindUs.isHintAnimationEnabled = true
-        }
+
     }
 
     override fun onNothingSelected(p0: AdapterView<*>?) {
 
     }
-
 
 
 }

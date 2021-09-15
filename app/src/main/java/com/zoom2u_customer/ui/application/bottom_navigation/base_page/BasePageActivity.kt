@@ -1,31 +1,57 @@
 package com.zoom2u_customer.ui.application.bottom_navigation.base_page
 
-import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.gson.Gson
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.messaging.FirebaseMessaging
+import com.zoom2u_customer.MainActivity
 import com.zoom2u_customer.R
+import com.zoom2u_customer.apiclient.ApiClient.Companion.getServices
+import com.zoom2u_customer.apiclient.ServiceApi
 import com.zoom2u_customer.databinding.ActivityBasepageBinding
-import com.zoom2u_customer.ui.log_in.LoginResponce
-import com.zoom2u_customer.ui.splash_screen.LogInSignupMainActivity
-import com.zoom2u_customer.utility.AppPreference
+import com.zoom2u_customer.ui.application.get_location.GetLocationClass
 import com.zoom2u_customer.utility.AppUtility
 import com.zoom2u_customer.utility.DialogActivity
 
 class BasePageActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItemSelectedListener {
+
+    lateinit var viewModel: BasePageViewModel
+    private var repository: BasePageRepository? = null
     lateinit var binding: ActivityBasepageBinding
     private lateinit var mainPagerAdapter: MainPagerAdapter
-
-
+    var mAuth_Firebase: FirebaseAuth? = null
+    var firebase_CurrentUser: FirebaseUser? = null
+    private var getLocationClass: GetLocationClass? = null
+    /** get gcm token id*/
+    companion object {
+        var gcmTokenID: String? = null
+        var isMainActivityIsActive = false
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= DataBindingUtil.setContentView(this, R.layout.activity_basepage)
 
+        isMainActivityIsActive = true
+        viewModel = ViewModelProvider(this).get(BasePageViewModel::class.java)
+        val serviceApi: ServiceApi = getServices()
+        repository = BasePageRepository(serviceApi, this)
+        viewModel.repository = repository
+
+
+        getLocationClass = GetLocationClass(this)
+        getLocationClass?.getCurrentLocation(onAddress = ::getAddress)
+
+        // mAuth_Firebase = FirebaseAuth.getInstance()
+       // gcmTokenID = FirebaseMessaging.getInstance().token.toString()
         mainPagerAdapter = MainPagerAdapter(supportFragmentManager)
 
         mainPagerAdapter.setItems(arrayListOf(
@@ -51,6 +77,32 @@ class BasePageActivity : AppCompatActivity(),  BottomNavigationView.OnNavigation
             }
         })
     }
+
+    private fun getAddress(lat: Double, lang: Double) {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                //Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+
+            // Get new FCM registration token
+            val token = task.result
+
+            viewModel.sendDeviceTokenID(lat,lang,token)
+
+        })
+
+
+
+    }
+    override fun onStart() {
+        super.onStart()
+        //Batch.onStart(this)
+        // Check if user is signed in (non-null) and update UI accordingly.
+        firebase_CurrentUser = mAuth_Firebase?.currentUser
+        Log.i("", "---  Current firebase user --- $firebase_CurrentUser")
+    }
+
 
     private fun scrollToScreen(mainScreen: MainScreen) {
         val screenPosition = mainPagerAdapter.getItems().indexOf(mainScreen)

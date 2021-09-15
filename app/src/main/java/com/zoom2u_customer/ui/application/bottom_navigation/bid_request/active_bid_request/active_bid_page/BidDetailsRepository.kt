@@ -83,42 +83,5 @@ class BidDetailsRepository(private var serviceApi: ServiceApi, var context: Cont
     }
 
 
-    fun cancelBooking(
-        bookingID: String?,
-        disposable: CompositeDisposable = CompositeDisposable(),
-        onSuccess: (msg: String) -> Unit
-    ) {
-        if (AppUtility.isInternetConnected()) {
-            AppUtility.progressBarShow(context)
-            disposable.add(
-                serviceApi.cancelBooking(
-                    "breeze/customer/CancelBooking?bookingId=$bookingID",
-                    AppUtility.getApiHeaders()
-                ).subscribeOn(
-                    Schedulers.io()
-                )
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeWith(object : DisposableSingleObserver<Response<Void>>() {
-                        override fun onSuccess(responce: Response<Void>) {
-                            onSuccess("true")
-                        }
 
-                        override fun onError(e: Throwable) {
-                            AppUtility.progressBarDissMiss()
-                            Toast.makeText(
-                                context,
-                                "something went wrong please try again.",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-                    })
-            )
-        } else {
-            DialogActivity.alertDialogSingleButton(
-                context,
-                "No Network !",
-                "No network connection, Please try again later."
-            )
-        }
-    }
 }

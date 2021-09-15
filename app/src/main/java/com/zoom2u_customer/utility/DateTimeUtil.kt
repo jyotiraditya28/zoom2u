@@ -53,22 +53,23 @@ class DateTimeUtil {
 
 
         @SuppressLint("SimpleDateFormat")
-        fun getTimeFromDateFormat(serverDateTimeValue: String?): Date? {
-            var convertedDate: Date? = Date()
+        fun getTimeFromDateFormat(serverDateTimeValue: String?): String? {
             try {
                 if (serverDateTimeValue != "") {
                     val converter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
-
-
+                    var convertedDate: Date? = Date()
+                    try {
                         convertedDate = converter.parse(serverDateTimeValue)
-
-                        return convertedDate
-
+                        val dateFormatter = SimpleDateFormat("yyyy:MM:dd:HH:mm")
+                        return dateFormatter.format(convertedDate)
+                    } catch (e: java.lang.Exception) {
+                        e.printStackTrace()
+                    }
                 }
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
             }
-            return convertedDate
+            return null
         }
 
 

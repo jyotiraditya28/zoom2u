@@ -1,12 +1,12 @@
 package com.zoom2u_customer.ui.application.bottom_navigation.home.delivery_details.quotes_req
 
 
+import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.ContentValues
-import android.content.DialogInterface
-import android.content.Intent
+import android.content.*
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.media.MediaScannerConnection
@@ -26,6 +26,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -44,6 +46,7 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -62,7 +65,7 @@ class UploadQuotesActivity : AppCompatActivity(), View.OnClickListener {
     private val GALLERY = 1
     private val CAMERA = 2
     private val IMAGE_DIRECTORY = "/demonuts"
-
+    private val CAMERA_PERMISSION_CODE = 100
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_upload_quotes)
@@ -233,14 +236,23 @@ class UploadQuotesActivity : AppCompatActivity(), View.OnClickListener {
         pictureDialog.setItems(pictureDialogItems,
             DialogInterface.OnClickListener { _, which ->
                 when (which) {
-                    0 -> pickFromGallery()
-                    1 -> takePhotoFromCamera()
+                    0 ->
+                        pickFromGallery()
+                    1 -> checkPermission(
+                        Manifest.permission.CAMERA,
+                        CAMERA_PERMISSION_CODE)
                     //2 -> removeImage()
                 }
             })
         pictureDialog.show()
     }
-
+    private fun checkPermission(permission: String, requestCode: Int) {
+        if (ContextCompat.checkSelfPermission(this@UploadQuotesActivity, permission) == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(this@UploadQuotesActivity, arrayOf(permission), requestCode)
+        } else {
+            takePhotoFromCamera()
+        }
+    }
     private fun pickFromGallery() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         intent.type = "image/*"
@@ -260,33 +272,25 @@ class UploadQuotesActivity : AppCompatActivity(), View.OnClickListener {
         startActivityForResult(intent, CAMERA)
     }
 
-    fun saveImage(myBitmap: Bitmap): String {
-        val bytes = ByteArrayOutputStream()
-        myBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes)
-        val wallpaperDirectory = File(
-            Environment.getExternalStorageState() + IMAGE_DIRECTORY
-        )
-        // have the object build the directory structure, if needed.
-        if (!wallpaperDirectory.exists()) {
-            wallpaperDirectory.mkdirs()
+    fun saveImage(bitmap: Bitmap){
+        val cw = ContextWrapper(applicationContext)
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val directory = cw.getDir("Zoom2u", Context.MODE_PRIVATE)
+        val file = File(directory, "Zoom2u_${timeStamp}" + ".jpg")
+        if (!file.exists()) {
+
+            var fos: FileOutputStream? = null
+            try {
+                fos = FileOutputStream(file)
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos)
+                fos.flush()
+                fos.close()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
         }
-        try {
-            val f = File(
-                wallpaperDirectory, Calendar.getInstance()
-                    .timeInMillis.toString() + ".jpg"
-            )
-            f.createNewFile()
-            val fo = FileOutputStream(f)
-            fo.write(bytes.toByteArray())
-            MediaScannerConnection.scanFile(this, arrayOf(f.path), arrayOf("image/jpeg"), null)
-            fo.close()
-            Log.d("TAG", "File Saved::--->" + f.absolutePath)
-            return f.absolutePath
-        } catch (e1: IOException) {
-            e1.printStackTrace()
-        }
-        return ""
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -304,10 +308,11 @@ class UploadQuotesActivity : AppCompatActivity(), View.OnClickListener {
             }
 
             CAMERA ->{
-                val thumbnail = data?.extras?.get("data") as Bitmap
-                launchImageCrop(AppUtility.getImageUri(this,thumbnail)!!)
-                saveImage(thumbnail)
-
+                if(data!=null) {
+                    val thumbnail = data.extras?.get("data") as Bitmap
+                    launchImageCrop(AppUtility.getImageUri(this, thumbnail))
+                    saveImage(thumbnail)
+                }
             }
 
             CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE -> {
@@ -317,31 +322,31 @@ class UploadQuotesActivity : AppCompatActivity(), View.OnClickListener {
                     if (imageClicked == 0) {
                         when (count) {
                             1 -> {
-                                Picasso.with(this).load(resultUri).into(binding.imv1)
+                                Picasso.get().load(resultUri).into(binding.imv1)
                                 binding.imv1.isEnabled = true
                                 count++
                                 arrayOfImageFiles.add( resultUri.path.toString())
                             }
                             2 -> {
-                                Picasso.with(this).load(resultUri).into(binding.imv2)
+                                Picasso.get().load(resultUri).into(binding.imv2)
                                 count++
                                 binding.imv2.isEnabled = true
                                 arrayOfImageFiles.add( resultUri.path.toString())
                             }
                             3 -> {
-                                Picasso.with(this).load(resultUri).into(binding.imv3)
+                                Picasso.get().load(resultUri).into(binding.imv3)
                                 count++
                                 binding.imv3.isEnabled = true
                                 arrayOfImageFiles.add( resultUri.path.toString())
                             }
                             4 -> {
-                                Picasso.with(this).load(resultUri).into(binding.imv4)
+                                Picasso.get().load(resultUri).into(binding.imv4)
                                 count++
                                 binding.imv4.isEnabled = true
                                 arrayOfImageFiles.add( resultUri.path.toString())
                             }
                             5 -> {
-                                Picasso.with(this).load(resultUri).into(binding.imv5)
+                                Picasso.get().load(resultUri).into(binding.imv5)
                                 count++
                                 binding.imv5.isEnabled = true
                                 arrayOfImageFiles.add( resultUri.path.toString())
@@ -351,28 +356,28 @@ class UploadQuotesActivity : AppCompatActivity(), View.OnClickListener {
                     } else {
                         when (imageClicked) {
                             1 -> {
-                                Picasso.with(this).load(resultUri).into(binding.imv1)
-                                arrayOfImageFiles.add(1, resultUri.path.toString())
+                                Picasso.get().load(resultUri).into(binding.imv1)
+                                arrayOfImageFiles[0] = resultUri.path.toString()
                                 imageClicked=0
                             }
                             2 -> {
-                                Picasso.with(this).load(resultUri).into(binding.imv2)
-                                arrayOfImageFiles.add(2, resultUri.path.toString())
+                                Picasso.get().load(resultUri).into(binding.imv2)
+                                arrayOfImageFiles[1] = resultUri.path.toString()
                                 imageClicked=0
                             }
                             3 -> {
-                                Picasso.with(this).load(resultUri).into(binding.imv3)
-                                arrayOfImageFiles.add(3, resultUri.path.toString())
+                                Picasso.get().load(resultUri).into(binding.imv3)
+                                arrayOfImageFiles[2] = resultUri.path.toString()
                                 imageClicked=0
                             }
                             4 -> {
-                                Picasso.with(this).load(resultUri).into(binding.imv4)
-                                arrayOfImageFiles.add(4, resultUri.path.toString())
+                                Picasso.get().load(resultUri).into(binding.imv4)
+                                arrayOfImageFiles[3] = resultUri.path.toString()
                                 imageClicked=0
                             }
                             5 -> {
-                                Picasso.with(this).load(resultUri).into(binding.imv5)
-                                arrayOfImageFiles.add(5, resultUri.path.toString())
+                                Picasso.get().load(resultUri).into(binding.imv5)
+                                arrayOfImageFiles[4] = resultUri.path.toString()
                                 imageClicked=0
                             }
 
@@ -382,14 +387,20 @@ class UploadQuotesActivity : AppCompatActivity(), View.OnClickListener {
             }
         }
 
-
-
-
-
-
     }
 
-
+    override fun onRequestPermissionsResult(requestCode: Int,
+                                            permissions: Array<String>,
+                                            grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == CAMERA_PERMISSION_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this@UploadQuotesActivity, "Camera Permission Granted", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this@UploadQuotesActivity, "Camera Permission Denied: Allow permission from app setting.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
 }
 

@@ -6,7 +6,7 @@ import org.json.JSONObject
 
 class BookingConfirmationViewModel : ViewModel() {
     var repository: BookingConfirmationRepository? = null
-    private var deliveryRequestSuccess: MutableLiveData<String>? = MutableLiveData(null)
+    private var deliveryRequestSuccess: MutableLiveData<String>? = MutableLiveData("")
 
 
     fun getDeliveryRequest(jObjForPlaceBooking: JSONObject?) = repository?.getSaveDeliveryRequest(jObjForPlaceBooking,onSuccess = ::onDeliverySuccess)

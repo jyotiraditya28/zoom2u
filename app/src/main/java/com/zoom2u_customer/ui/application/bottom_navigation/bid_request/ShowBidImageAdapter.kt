@@ -1,13 +1,13 @@
 package com.zoom2u_customer.ui.application.bottom_navigation.bid_request
 
+
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.zoom2u_customer.databinding.BidImagesShowBinding
-import com.zoom2u_customer.ui.application.chat.Chat
-import java.lang.reflect.Array.get
+
 
 
 class ShowBidImageAdapter(val context : Context?, private val dataList: List<String>,
@@ -28,7 +28,7 @@ class ShowBidImageAdapter(val context : Context?, private val dataList: List<Str
     override fun onBindViewHolder(holder: BindingViewHolder, position: Int) {
 
         val imagePath: String = dataList[position]
-        Picasso.with(context).load(imagePath).into(holder.itemBinding.imagePath)
+        Picasso.get().load(imagePath).into(holder.itemBinding.imagePath)
         holder.itemBinding.imagePath
 
 

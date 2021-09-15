@@ -11,6 +11,7 @@ import androidx.databinding.DataBindingUtil
 import com.zoom2u_customer.R
 import com.zoom2u_customer.databinding.ActivityOrderConfirmBinding
 import com.zoom2u_customer.ui.application.bottom_navigation.base_page.BasePageActivity
+import com.zoom2u_customer.ui.application.bottom_navigation.history.HistoryResponse
 import com.zoom2u_customer.ui.application.bottom_navigation.history.history_details.HistoryDetailsActivity
 import com.zoom2u_customer.ui.application.bottom_navigation.home.booking_confirmation.BookingResponse
 import com.zoom2u_customer.ui.application.bottom_navigation.home.booking_confirmation.interstate_booking.InterStateSecondActivity
@@ -20,6 +21,8 @@ import com.zoom2u_customer.utility.DialogActivity
 class OrderConfirmActivity : AppCompatActivity(), View.OnClickListener {
     lateinit var binding: ActivityOrderConfirmBinding
     private var bookingResponse: BookingResponse? = null
+    var historyResponse: HistoryResponse?=null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_order_confirm)
@@ -30,8 +33,10 @@ class OrderConfirmActivity : AppCompatActivity(), View.OnClickListener {
             setData(bookingResponse)
         } else if (intent.hasExtra("BookingRefFromBid")) {
             binding.yourBookingNumberTxt.text = intent.getStringExtra("BookingRefFromBid")
+        }else if(intent.hasExtra("historyResponse")) {
+            historyResponse = intent.getParcelableExtra("historyResponse")
+            binding.yourBookingNumberTxt.text = historyResponse?.BookingRef
         }
-
         val importantTxtStr =
             "Important: Please make sure your parcel is ready to go at your designated pickup time as you could be charged $1 a minute waiting time. This includes time waiting in the loading dock or reception."
         val ss = SpannableStringBuilder(importantTxtStr)
@@ -66,14 +71,13 @@ class OrderConfirmActivity : AppCompatActivity(), View.OnClickListener {
                 )
             }
             R.id.close -> {
-                if (intent.hasExtra("BookingRefFromBid")) {
-                      newBooking()
-                } else {
+                if (intent.hasExtra("BookingResponse")) {
                     val intent = Intent(this, HistoryDetailsActivity::class.java)
-                    intent.putExtra("BookingRef", bookingResponse?.BookingRef)
+                    intent.putExtra("BookingRef", bookingResponse)
                     intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
                     startActivity(intent)
-                }
+                }else
+                    newBooking()
             }
         }
     }

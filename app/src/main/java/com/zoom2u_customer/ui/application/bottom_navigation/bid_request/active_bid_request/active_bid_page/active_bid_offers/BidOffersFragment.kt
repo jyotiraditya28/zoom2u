@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.braintreepayments.api.BraintreePaymentActivity
 import com.braintreepayments.api.models.PaymentMethodNonce
 import com.google.android.material.textfield.TextInputEditText
+import com.google.gson.Gson
 import com.zoom2u_customer.R
 import com.zoom2u_customer.apiclient.ApiClient
 import com.zoom2u_customer.apiclient.ServiceApi
@@ -34,6 +35,8 @@ import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.active_b
 import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.complete_bid_request.completed_bid_page.CompletedDetailsResponse
 import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.active_bid_request.active_bid_page.Offer
 import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.complete_bid_request.completed_bid_page.completed_bid_offers.CompletedBidOffersAdapter
+import com.zoom2u_customer.ui.application.bottom_navigation.home.booking_confirmation.BookingResponse
+import com.zoom2u_customer.ui.application.bottom_navigation.home.booking_confirmation.order_confirm_hold.OnHoldActivity
 import com.zoom2u_customer.ui.application.bottom_navigation.home.booking_confirmation.order_confirm_hold.OrderConfirmActivity
 import com.zoom2u_customer.ui.application.bottom_navigation.home.getAccountType.GetAccountRepository
 import com.zoom2u_customer.utility.AppUtility
@@ -70,12 +73,25 @@ class BidOffersFragment(private val bidDetails: BidDetailsResponse?) : Fragment(
         viewModel.getQuotePayment()?.observe(viewLifecycleOwner) {
             if (!it.isNullOrEmpty()) {
                 AppUtility.progressBarDissMiss()
-                val intent = Intent(activity, OrderConfirmActivity::class.java)
-                intent.putExtra("BookingRefFromBid", it)
-                intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
-                startActivity(intent)
-                activity?.finish()
-
+                val bookingResponse: BookingResponse =
+                    Gson().fromJson(it, BookingResponse::class.java)
+                if (!bookingResponse.`$type`
+                        .equals("System.Web.Http.HttpError, System.Web.Http", ignoreCase = true)
+                ) {
+                    if (bookingResponse.Verified == true) {
+                        val intent = Intent(activity, OrderConfirmActivity::class.java)
+                        intent.putExtra("BookingRefFromBid", bookingResponse.BookingRef)
+                        intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
+                        startActivity(intent)
+                        activity?.finish()
+                    }else {
+                        val intentOnHold = Intent(activity, OnHoldActivity::class.java)
+                        intentOnHold.putExtra("BookingResponse", bookingResponse)
+                        intentOnHold.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(intentOnHold)
+                        activity?.finish()
+                    }
+                }
             }
         }
 
@@ -95,16 +111,18 @@ class BidOffersFragment(private val bidDetails: BidDetailsResponse?) : Fragment(
     }
 
     fun setAdapterView(binding: FragmentBidOffersBinding, context: Context) {
-        val layoutManager = GridLayoutManager(activity, 1)
-        binding.activeBidOffersRecycler.layoutManager = layoutManager
-        val adapter =
-            ActiveBidOffersAdapter(
+        if(bidDetails?.Offers?.isNotEmpty() == true) {
+            val layoutManager = GridLayoutManager(activity, 1)
+            binding.activeBidOffersRecycler.layoutManager = layoutManager
+            val adapter = ActiveBidOffersAdapter(
                 context,
-                bidDetails?.Offers?.toList()!!,
+                bidDetails.Offers?.toList()!!,
                 onItemClick = ::onBidOfferSelected
             )
-        binding.activeBidOffersRecycler.adapter = adapter
-
+            binding.activeBidOffersRecycler.adapter = adapter
+        }else{
+            binding.emptyView.visibility=View.VISIBLE
+        }
     }
 
     private fun onBidOfferSelected(offer: Offer) {

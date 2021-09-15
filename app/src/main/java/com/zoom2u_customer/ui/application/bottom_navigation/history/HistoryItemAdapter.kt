@@ -2,21 +2,28 @@ package com.zoom2u_customer.ui.application.bottom_navigation.history
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.zoom2u_customer.databinding.ItemDeliveryHistoryBinding
+import com.zoom2u_customer.ui.DocItemShowAdapter
+import com.zoom2u_customer.ui.application.bottom_navigation.history.history_details.DocItemListShowAdapter
+import com.zoom2u_customer.ui.application.bottom_navigation.home.booking_confirmation.order_confirm_hold.OnHoldActivity
 import com.zoom2u_customer.utility.AppUtility
 import java.text.SimpleDateFormat
 import java.util.*
 
-class HistoryItemAdapter(val context: Context, private val onItemClick:(HistoryResponse) -> Unit,private val onApiCall:() ->Unit) :
+class HistoryItemAdapter(val context: Context, private val onItemClick:(HistoryResponse) -> Unit,private val onHoldClick:(HistoryResponse) -> Unit,
+                         private val onApiCall:() ->Unit) :
     RecyclerView.Adapter<HistoryItemAdapter.BindingViewHolder>() {
     private var dataList1:MutableList<HistoryResponse> = ArrayList()
     private var lastApiCallPosition:Int=-1
-
+    private var docAdapter: DocItemListShowAdapter?=null
 
     fun updateRecords(dataList: MutableList<HistoryResponse>) {
 
@@ -60,8 +67,17 @@ class HistoryItemAdapter(val context: Context, private val onItemClick:(HistoryR
 
             val historyResponse: HistoryResponse = dataList1[position]
             holder.itemBinding.historyitem= historyResponse
+
+
+            holder.itemBinding.status.setOnClickListener{
+                if(dataList1[position].IsOnHold==true&&dataList1[position].IsCancel!=true){
+                    onHoldClick(historyResponse)
+                }
+            }
+
+
             holder.itemBinding.root.setOnClickListener {
-                onItemClick(historyResponse)
+              onItemClick(historyResponse)
             }
 
             if(position==dataList1.size-1) {
@@ -73,7 +89,7 @@ class HistoryItemAdapter(val context: Context, private val onItemClick:(HistoryR
 
             if(dataList1[position].IsCancel==true) {
                 holder.itemBinding.price.text = "No Charge"
-                holder.itemBinding.status.text = "Cancellation"
+                holder.itemBinding.status.text = "Cancelled"
                 holder.itemBinding.status.setBackgroundColor(Color.parseColor("#ff0000"))
                 holder.itemBinding.status.setTextColor(Color.WHITE)
              }else if(dataList1[position].IsOnHold==true){
@@ -90,6 +106,17 @@ class HistoryItemAdapter(val context: Context, private val onItemClick:(HistoryR
 
         }
 
+
+
+    if(dataList1[position].Shipments!=null) {
+        val layoutManager1 = GridLayoutManager(context, 2)
+        holder.itemBinding.docRecycler.layoutManager = layoutManager1
+        (holder.itemBinding.docRecycler.itemAnimator as SimpleItemAnimator).supportsChangeAnimations =
+            false
+        docAdapter = DocItemListShowAdapter(context, dataList1[position].Shipments!!)
+        holder.itemBinding.docRecycler.adapter = docAdapter
+
+    }
 
     }
 
@@ -123,7 +150,13 @@ class HistoryItemAdapter(val context: Context, private val onItemClick:(HistoryR
                 holder.itemBinding.status.setBackgroundColor(Color.parseColor("#00A7E2"))
                 holder.itemBinding.status.setTextColor(Color.WHITE)
             }
-           else -> {
+            "Tried to deliver" -> {
+                holder.itemBinding.status.text ="Tried to deliver"
+                holder.itemBinding.status.setBackgroundColor(Color.parseColor("#00A7E2"))
+                holder.itemBinding.status.setTextColor(Color.WHITE)
+            }
+
+            else -> {
                 holder.itemBinding.status.text ="Accepted"
                 holder.itemBinding.status.setBackgroundColor(Color.parseColor("#FFD100"))
                 holder.itemBinding.status.setTextColor(Color.BLACK)

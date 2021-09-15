@@ -14,6 +14,7 @@ import com.zoom2u_customer.apiclient.ApiClient.Companion.getServices
 import com.zoom2u_customer.apiclient.ServiceApi
 import com.zoom2u_customer.databinding.FragmentHistoryBinding
 import com.zoom2u_customer.ui.application.bottom_navigation.history.history_details.HistoryDetailsActivity
+import com.zoom2u_customer.ui.application.bottom_navigation.home.booking_confirmation.order_confirm_hold.OnHoldActivity
 import com.zoom2u_customer.utility.AppUtility
 import kotlin.collections.ArrayList
 
@@ -43,7 +44,7 @@ class HistoryFragment : Fragment() {
         currentPage = 1
         viewModel.getHistory(currentPage)
         if(mergeHistoryList.size>0)
-        mergeHistoryList.clear()
+            mergeHistoryList.clear()
 
         viewModel.getHistoryList()?.observe(viewLifecycleOwner) {
             if (it != null) {
@@ -111,6 +112,7 @@ class HistoryFragment : Fragment() {
         adapter = HistoryItemAdapter(
             context,
             onItemClick = ::onItemClick,
+            onHoldClick = ::onHoldClick,
             onApiCall = ::onApiCall
         )
         binding.deliveryHistoryRecycler.adapter = adapter
@@ -128,12 +130,20 @@ class HistoryFragment : Fragment() {
         intent.putExtra("HistoryItem", historyResponse)
         intent.putParcelableArrayListExtra("mergeHistoryList", ArrayList(mergeHistoryList.toList()))
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
-        startActivityForResult(intent,3)
+        startActivityForResult(intent,85)
     }
+
+    private fun onHoldClick(historyResponse: HistoryResponse) {
+        val intentOnHold = Intent(context, OnHoldActivity::class.java)
+        intentOnHold.putExtra("historyResponse", historyResponse)
+        intentOnHold.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivityForResult(intentOnHold,85)
+    }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 3 ) {
+        if (requestCode == 85 ) {
             val updatedHistoryItem: HistoryResponse? = data?.getParcelableExtra<HistoryResponse>("historyItem")
             adapter?.updateItem(updatedHistoryItem)
         }

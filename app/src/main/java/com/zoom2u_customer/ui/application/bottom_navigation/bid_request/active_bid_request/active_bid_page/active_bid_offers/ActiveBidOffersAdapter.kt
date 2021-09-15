@@ -43,15 +43,15 @@ class ActiveBidOffersAdapter(
         holder.itemBinding.name.text = activeBidOffers.Courier.toString()
         holder.itemBinding.price.text = "$" + activeBidOffers.Price.toString()
 
-        if (!TextUtils.isEmpty(activeBidOffers.CustomerImage)) {
-            holder.itemBinding.dp.setImageBitmap(AppUtility.getBitmapFromURL(activeBidOffers.CustomerImage))
+        if (!TextUtils.isEmpty(activeBidOffers.CourierImage)) {
+            holder.itemBinding.dp.setImageBitmap(AppUtility.getBitmapFromURL(activeBidOffers.CourierImage))
         }
 
         holder.itemBinding.acceptBid.setOnClickListener {
             if (isBidAvailable)
                 onItemClick(dataList[position])
             else
-                Toast.makeText(context, "This bid offer is expired.", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "This bid offer is expired.", Toast.LENGTH_SHORT).show()
         }
 
         /**extra details data*/

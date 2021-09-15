@@ -23,7 +23,7 @@ class ProfileRepository(private var serviceApi: ServiceApi, var context: Context
     ) {
         if (AppUtility.isInternetConnected()) {
 
-            // AppUtility.progressBarShow(context)
+           //AppUtility.progressBarShow(context)
             disposable.add(
                 serviceApi.getWithJsonArray("breeze/customer/Customers", AppUtility.getApiHeaders())
                     .subscribeOn(Schedulers.io())

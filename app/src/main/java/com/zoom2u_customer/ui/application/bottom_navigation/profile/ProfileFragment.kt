@@ -8,9 +8,12 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.google.gson.Gson
+import com.squareup.picasso.Picasso
 import com.zoom2u_customer.R
 import com.zoom2u_customer.apiclient.ServiceApi
 import com.zoom2u_customer.databinding.FragmentProfileBinding
@@ -40,7 +43,7 @@ class ProfileFragment : Fragment(), View.OnClickListener {
         binding.changePass.setOnClickListener(this)
         binding.signOut.setOnClickListener(this)
         binding.edit.setOnClickListener(this)
-        viewModel = ViewModelProviders.of(requireActivity()).get(ProfileViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(ProfileViewModel::class.java)
         val serviceApi: ServiceApi = com.zoom2u_customer.apiclient.ApiClient.getServices()
         repository = ProfileRepository(serviceApi, activity)
         viewModel.repository = repository
@@ -63,26 +66,26 @@ class ProfileFragment : Fragment(), View.OnClickListener {
     private fun setDataToView(profileResponse: ProfileResponse?) {
         this.profileResponse = profileResponse
         binding.email.text = profileResponse?.Email
-        if(!TextUtils.isEmpty(profileResponse?.Company))
-        binding.company.text = profileResponse?.Company
+        if (!TextUtils.isEmpty(profileResponse?.Company))
+            binding.company.text = profileResponse?.Company
         else
             binding.company.text = "Company"
         binding.phone.text = profileResponse?.Mobile
         binding.name.text = profileResponse?.FirstName + " " + profileResponse?.LastName
 
-        if(!TextUtils.isEmpty(profileResponse?.Photo)) {
-            binding.dp.setImageBitmap(AppUtility.getBitmapFromURL(profileResponse?.Photo))
+        if (!TextUtils.isEmpty(profileResponse?.Photo)) {
+            // binding.dp.setImageBitmap(AppUtility.getBitmapFromURL(profileResponse?.Photo))        }
+            Picasso.get().load(profileResponse?.Photo).into(binding.dp)
+
         }
-
-
     }
-
     private fun onOkClick() {
         val loginResponse: LoginResponce? = AppPreference.getSharedPrefInstance().getLoginResponse()
         loginResponse?.access_token = ""
         AppPreference.getSharedPrefInstance().setLoginResponse(Gson().toJson(loginResponse))
 
         val intent = Intent(activity, LogInSignupMainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         startActivity(intent)
         activity?.finish()
     }

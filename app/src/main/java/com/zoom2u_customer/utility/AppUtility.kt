@@ -50,6 +50,7 @@ class AppUtility {
             AppPreference.getSharedPrefInstance().setLoginResponse(Gson().toJson(loginResponse))
 
             val intent = Intent(context, LogInSignupMainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
             context?.startActivity(intent)
             (context as Activity).finish()
         }
@@ -314,7 +315,7 @@ class AppUtility {
         }
 
 
-        fun getImageUri(inContext: Context, inImage: Bitmap): Uri? {
+        fun getImageUri(inContext: Context, inImage: Bitmap): Uri {
             val bytes = ByteArrayOutputStream()
             inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
             val path = MediaStore.Images.Media.insertImage(

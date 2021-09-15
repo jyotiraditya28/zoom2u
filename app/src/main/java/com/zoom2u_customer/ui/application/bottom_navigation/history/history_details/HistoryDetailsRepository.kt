@@ -10,6 +10,7 @@ import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
 import com.zoom2u_customer.R
 import com.zoom2u_customer.apiclient.ServiceApi
+import com.zoom2u_customer.ui.application.bottom_navigation.history.HistoryResponse
 import com.zoom2u_customer.utility.AppUtility
 import com.zoom2u_customer.utility.DialogActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -89,15 +90,15 @@ class HistoryDetailsRepository(private var serviceApi: ServiceApi, var context: 
 
 
     fun cancelBooking(
-        bookingID: String?,
+        historyItem: HistoryResponse?,
         disposable: CompositeDisposable = CompositeDisposable(),
-        onSuccess: (msg: String) -> Unit
+        onSuccess: (historyItem: HistoryResponse) -> Unit
     ) {
         if (AppUtility.isInternetConnected()) {
             AppUtility.progressBarShow(context)
             disposable.add(
                 serviceApi.cancelBooking(
-                    "breeze/customer/CancelBooking?bookingId=$bookingID",
+                    "breeze/customer/CancelBooking?bookingId=${historyItem?.BookingId}",
                     AppUtility.getApiHeaders()
                 ).subscribeOn(
                     Schedulers.io()
@@ -105,7 +106,48 @@ class HistoryDetailsRepository(private var serviceApi: ServiceApi, var context: 
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeWith(object : DisposableSingleObserver<Response<Void>>() {
                         override fun onSuccess(responce: Response<Void>) {
-                            onSuccess("true")
+                            if (historyItem != null) {
+                                onSuccess(historyItem)
+                            }
+                        }
+
+                        override fun onError(e: Throwable) {
+                            AppUtility.progressBarDissMiss()
+                            Toast.makeText(
+                                context,
+                                "something went wrong please try again.",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    })
+            )
+        } else {
+            DialogActivity.alertDialogSingleButton(
+                context,
+                "No Network !",
+                "No network connection, Please try again later."
+            )
+        }
+    }
+
+    fun cancelBooking(
+        bookingId: String?,
+        disposable: CompositeDisposable = CompositeDisposable(),
+        onSuccessMAB: (bookingId: String) -> Unit
+    ) {
+        if (AppUtility.isInternetConnected()) {
+            AppUtility.progressBarShow(context)
+            disposable.add(
+                serviceApi.cancelBooking(
+                    "breeze/customer/CancelBooking?bookingId=${bookingId}",
+                    AppUtility.getApiHeaders()
+                ).subscribeOn(
+                    Schedulers.io()
+                )
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeWith(object : DisposableSingleObserver<Response<Void>>() {
+                        override fun onSuccess(responce: Response<Void>) {
+                            onSuccessMAB("true")
                         }
 
                         override fun onError(e: Throwable) {

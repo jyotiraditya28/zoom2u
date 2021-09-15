@@ -139,17 +139,17 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
         val time6Pm = "06:00 PM"
         val time6PM: Date = timeFormat.parse(time6Pm)
 
-        if (time6PM.before(currTimeInDateFormat)) {
+       /* if (time6PM.after(currTimeInDateFormat)) {
             val c = Calendar.getInstance()
             c.add(Calendar.DATE, 1)
             val d = c.time
             val dropTime = dateFormat.format(d)
             binding.pickDate.text = dropTime
             binding.pickTime.text = "8:00 AM"
-        } else {
+        } else {*/
             binding.pickDate.text = dateFormat.format(date)
             binding.pickTime.text = currentTime
-        }
+     //   }
 
 
         /**drop time*/
@@ -167,7 +167,7 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
         val time9PM: Date = timeFormat.parse(time9Pm)
 
 
-        if (time9PM.after(currTimeInDateFormat)) {
+        if (time9PM.before(currTimeInDateFormat)) {
             val c = Calendar.getInstance()
             c.add(Calendar.DATE, 1)
             val d = c.time
@@ -851,6 +851,8 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
                 }
             }
         }
+
+
     }
 
     private fun onDropDateClick(s: String?) {
@@ -861,30 +863,21 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
     private fun add3HourInPickTime(time: String?) {
         val serverDateTimeValue = binding.pickDate.text.toString() + " " +
                 time
-        val millisToAdd: Long = 3*60*60*1000
-        var timePlus3Hour:Long?=null
-
-
-
-
-        val pickDate: Date?
+        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZZZZ")
+        val pickDate: String?
         try {
         pickDate = DateTimeUtil.getTimeFromDateFormat(serverDateTimeValue)
 
-            val c = Calendar.getInstance(Locale.ENGLISH)
-            c.timeInMillis=pickDate?.time!!*1000
+        val date:Date?=sdf.parse(pickDate)
+
+
+
+            val c = Calendar.getInstance()
+            c.time = date
             c.add(Calendar.HOUR, 3)
             val d = c.time
             val f: DateFormat = SimpleDateFormat("hh:mm aaa")
             binding.dropTime.text=  f.format(d)
-
-
-
-         /*   timePlus3Hour = pickDate?.time!! + millisToAdd
-
-            val d = Date(timePlus3Hour.toLong() * 1000)*/
-
-
 
         } catch (e: Exception) {
             e.printStackTrace()
@@ -988,7 +981,7 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
                 binding.pickInstruction.text.toString(),
                 pickGpx, pickGpy, binding.pickUnit.text.toString(),
                 pickStreetNumber, pickStreet, pickSuburb,
-                pickState, pickPostCode, pickPremisesType, true,
+                pickState, pickPostCode, pickPremisesType, false,
                 binding.pickCompany.text.toString(), pickCountry
             )
 
@@ -1002,7 +995,7 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
                 binding.dropInstruction.text.toString(),
                 dropGpx, dropGpy, binding.dropUnit.text.toString(),
                 dropStreetNumber, dropStreet, dropSuburb,
-                dropState, dropPostCode, dropPremisesType, true,
+                dropState, dropPostCode, dropPremisesType, false,
                 binding.dropCompany.text.toString(), dropCountry
             )
 
@@ -1033,7 +1026,8 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
             deliveryRequest.put("AuthorityToLeave", binding.authorityToLeave.isChecked)
             deliveryRequest.put("Instructions", binding.other.text.toString())
             deliveryRequest.put("isCreatedFromQuotes", false)
-
+            deliveryRequest.put("PricingPlanChangeHistoryId",1)
+            deliveryRequest.put("DeclarationSignature","")
             /**put payment type */
             deliveryRequest.put("PricingScheme", accountType)
 
@@ -1051,6 +1045,7 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
                 authorityToLeaveForm.put("Instructions", binding.other.text.toString())
                 jObjOfQuotesItem.put("_authorityToLeaveForm", authorityToLeaveForm)
             } else {
+                jObjOfQuotesItem.put("_authorityToLeaveForm", null)
                 deliveryRequest.put("LeaveAt", "")
             }
 

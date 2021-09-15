@@ -3,21 +3,21 @@ package com.zoom2u_customer.ui.application.bottom_navigation.bid_request.active_
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.zoom2u_customer.apiclient.GetAddressFromGoogle.GoogleAddressRepository
-import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.complete_bid_request.completed_bid_page.CompletedDetailsRepository
-import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.complete_bid_request.completed_bid_page.CompletedDetailsResponse
+import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.active_bid_request.ActiveBidListRepository
 
 class BidDetailsViewModel :ViewModel() {
     var success: MutableLiveData<BidDetailsResponse>?=MutableLiveData()
     private var routeSuccess: MutableLiveData<String> = MutableLiveData("")
-    private var cancelSuccess: MutableLiveData<String> = MutableLiveData("")
     var repository: BidDetailsRepository? = null
     var repositoryGoogleAddress: GoogleAddressRepository? = null
 
+
+    var cancelSuccess:MutableLiveData<String>? = MutableLiveData("")
+    var cancelHeavySuccess:MutableLiveData<String>? = MutableLiveData("")
+    var repositoryActive: ActiveBidListRepository? = null
+
     fun getBidDetails(quoteId: Int?) =
         repository?.getBidDetails(quoteId, onSuccess = ::onBidDetailsSuccess)
-
-    fun cancelBooking(bookingId: String?) =
-        repository?.cancelBooking(bookingId, onSuccess = ::onCancelSuccess)
 
 
     fun getRoute(url: String?) =
@@ -29,10 +29,6 @@ class BidDetailsViewModel :ViewModel() {
 
     }
 
-    private fun onCancelSuccess(cancel: String) {
-        cancelSuccess.value = cancel
-
-    }
 
     private fun onSuccessRoute(route: String) {
         routeSuccess.value=route
@@ -46,7 +42,27 @@ class BidDetailsViewModel :ViewModel() {
         return routeSuccess
     }
 
-    fun getCancelBooking():MutableLiveData<String>{
+
+    fun getBidCancel(Id: Int?, pos: Int?) = repositoryActive?.getBidCancel(Id,pos,onSuccess = ::onBidCancelSuccess)
+
+    fun getHeavyBidCancel(Id: Int?, pos: Int?) = repositoryActive?.getHeavyBidCancel(Id,pos,onSuccess = ::onHeavyBidCancelSuccess)
+
+
+
+    private fun onBidCancelSuccess(success:String){
+        cancelSuccess?.value=success
+    }
+
+    private fun onHeavyBidCancelSuccess(success:String){
+        cancelHeavySuccess?.value=success
+    }
+
+
+    fun getBidCancelSuccess():MutableLiveData<String>?{
         return cancelSuccess
+    }
+
+    fun getHeavyBidCancelSuccess():MutableLiveData<String>?{
+        return cancelHeavySuccess
     }
 }

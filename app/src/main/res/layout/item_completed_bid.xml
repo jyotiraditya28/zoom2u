@@ -39,17 +39,67 @@
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:elevation="50dp">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/doc"
+                android:layout_width="match_parent"
+                android:visibility="gone"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/doc_recycler"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="horizontal"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="10dp"
+                    app:layout_constraintEnd_toStartOf="@id/more"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/more"
+                    style="@style/style_13_bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#979797"
+                    android:visibility="gone"
+                    android:textStyle="bold"
+                    android:text="more.."
+                    android:paddingTop="12dp"
+                    android:paddingStart="10dp"
+                    android:paddingBottom="10dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/less"
+                    style="@style/style_13_bold"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#979797"
+                    android:textStyle="bold"
+                    android:text="less.."
+                    android:paddingEnd="10dp"
+                    android:paddingTop="12dp"
+                    android:paddingStart="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <LinearLayout
                 android:id="@+id/ll1"
                 android:layout_width="wrap_content"
+                android:visibility="gone"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toBottomOf="@+id/doc">
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/icon"
@@ -140,7 +190,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
-                    android:text="@{completedbid.pickupSuburb}"
+                    android:singleLine="false"
+                    android:maxLines="2"
+                    android:maxWidth="200dp"
+                    android:text="@{completedbid.pickupAddress}"
                     android:textColor="@color/black"
                     app:layout_constraintStart_toEndOf="@+id/relMain"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -163,18 +216,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:text="@{completedbid.dropSuburb}"
+                    android:singleLine="false"
+                    android:maxLines="2"
+                    android:maxWidth="200dp"
+                    android:text="@{completedbid.dropAddress}"
                     android:textColor="@color/black"
-                    app:layout_constraintBottom_toTopOf="@+id/drop_time"
-                    app:layout_constraintStart_toEndOf="@+id/relMain" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/drop_time"
-                    style="@style/style_11_bold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginBottom="10dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/relMain" />
 
@@ -212,7 +258,7 @@
                         android:id="@+id/textViewJobStatus"
                         style="@style/style_9_regular"
                         android:layout_width="1dp"
-                        android:layout_height="50dp"
+                        android:layout_height="55dp"
                         android:layout_below="@id/imageViewStatus"
                         android:layout_centerHorizontal="true"
                         android:background="@drawable/vertical_dot_line" />
@@ -229,6 +275,14 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/drop_time"
+                style="@style/style_11_bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                app:layout_constraintTop_toBottomOf="@+id/cl"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/notes"
@@ -238,7 +292,7 @@
                 android:textColor="@color/black"
                 android:layout_marginTop="10dp"
                 android:text="@string/notes"
-                app:layout_constraintTop_toBottomOf="@+id/cl"
+                app:layout_constraintTop_toBottomOf="@+id/drop_time"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <com.google.android.material.textview.MaterialTextView
