@@ -10,7 +10,7 @@ class MyLocationViewModel :ViewModel() {
 
     var repository: MyLocationRepository? = null
 
-    fun getMyLocation() = repository?.getMyLocation(onSuccess = ::onSuccess)
+    fun getMyLocation(isFromMAB:Boolean) = repository?.getMyLocation(isFromMAB,onSuccess = ::onSuccess)
 
     fun onSuccess(myLocationList:List<MyLocationResAndEditLocationReq>){
         success?.value=myLocationList

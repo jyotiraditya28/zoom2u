@@ -29,6 +29,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.zoom2u_customer.R
+import com.zoom2u_customer.ui.application.bottom_navigation.profile.ProfileResponse
 import com.zoom2u_customer.ui.log_in.LoginResponce
 import com.zoom2u_customer.ui.splash_screen.LogInSignupMainActivity
 import java.io.ByteArrayOutputStream
@@ -133,53 +134,6 @@ class AppUtility {
             return headers
         }
 
-        fun askCameraTakePicture(context: Context?): Boolean {
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-                if (verifyPermissions(Zoom2uContractProvider.cameraPermissions)) {
-                    return true
-                } else {
-                    ActivityCompat.requestPermissions(
-                        (context as Activity?)!!,
-                        Zoom2uContractProvider.cameraPermissions,
-                        1
-                    )
-                }
-            } else {
-                return true
-            }
-            return false
-        }
-
-
-        fun askGalleryTakeImagePermission(context: Context?): Boolean {
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-                if (verifyPermissions(Zoom2uContractProvider.galleryPermissions)) {
-                    return true
-                } else {
-                    ActivityCompat.requestPermissions(
-                        (context as Activity?)!!,
-                        Zoom2uContractProvider.galleryPermissions,
-                        1
-                    )
-                }
-            } else {
-                return true
-            }
-            return false
-        }
-
-        fun verifyPermissions(grantResults: Array<String>): Boolean {
-            for (result in grantResults) {
-                if (ActivityCompat.checkSelfPermission(
-                        Zoom2u.getInstance()!!,
-                        result
-                    ) != PackageManager.PERMISSION_GRANTED
-                ) {
-                    return false
-                }
-            }
-            return true
-        }
 
         fun isInternetConnected(): Boolean {
             val cm = Zoom2u.getInstance()
@@ -298,6 +252,12 @@ class AppUtility {
             context?.startActivity(intent)
         }
 
+
+
+        fun getAccountType():String{
+            val profileResponse: ProfileResponse? = AppPreference.getSharedPrefInstance().getProfileData()
+            return profileResponse?.AccountType.toString()
+        }
 
 
       /**get current time ETA*/

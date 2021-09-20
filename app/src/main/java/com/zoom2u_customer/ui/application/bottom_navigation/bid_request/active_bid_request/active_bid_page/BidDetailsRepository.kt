@@ -9,6 +9,7 @@ import com.zoom2u_customer.apiclient.ServiceApi
 import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.complete_bid_request.completed_bid_page.CompletedDetailsResponse
 import com.zoom2u_customer.utility.AppUtility
 import com.zoom2u_customer.utility.DialogActivity
+import com.zoom2u_customer.utility.LogErrorsToAppCenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
@@ -39,6 +40,8 @@ class BidDetailsRepository(private var serviceApi: ServiceApi, var context: Cont
                             }
                             else if (responce.errorBody() != null) {
                                 AppUtility.progressBarDissMiss()
+                                LogErrorsToAppCenter().addLogToAppCenterOnAPIFail("breeze/ExtraLargeQuoteRequest/GetQuoteRequestsDetail?requestId=$quoteId",
+                                    responce.code(),responce.message(),"ActiveBid Details api","ErrorCode")
                                 if(responce.code()==401){
                                     DialogActivity.logoutDialog(
                                         context,
@@ -65,6 +68,9 @@ class BidDetailsRepository(private var serviceApi: ServiceApi, var context: Cont
 
                         override fun onError(e: Throwable) {
                             AppUtility.progressBarDissMiss()
+                            LogErrorsToAppCenter().addLogToAppCenterOnAPIFail("breeze/ExtraLargeQuoteRequest/GetQuoteRequestsDetail?requestId=$quoteId",
+                                0,e.message,"ActiveBid Details api","OnError")
+
                             Toast.makeText(
                                 context,
                                 "something went wrong please try again.",

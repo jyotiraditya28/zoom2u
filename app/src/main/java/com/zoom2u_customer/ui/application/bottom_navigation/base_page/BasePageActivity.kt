@@ -1,5 +1,6 @@
 package com.zoom2u_customer.ui.application.bottom_navigation.base_page
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
@@ -13,11 +14,13 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.messaging.FirebaseMessaging
-import com.zoom2u_customer.MainActivity
 import com.zoom2u_customer.R
 import com.zoom2u_customer.apiclient.ApiClient.Companion.getServices
 import com.zoom2u_customer.apiclient.ServiceApi
 import com.zoom2u_customer.databinding.ActivityBasepageBinding
+import com.zoom2u_customer.services.DialogActivity1
+import com.zoom2u_customer.services.MyFcmListenerService
+import com.zoom2u_customer.ui.application.bottom_navigation.profile.ProfileRepository
 import com.zoom2u_customer.ui.application.get_location.GetLocationClass
 import com.zoom2u_customer.utility.AppUtility
 import com.zoom2u_customer.utility.DialogActivity
@@ -26,32 +29,29 @@ class BasePageActivity : AppCompatActivity(),  BottomNavigationView.OnNavigation
 
     lateinit var viewModel: BasePageViewModel
     private var repository: BasePageRepository? = null
+    private var profileRepository:ProfileRepository?=null
     lateinit var binding: ActivityBasepageBinding
     private lateinit var mainPagerAdapter: MainPagerAdapter
     var mAuth_Firebase: FirebaseAuth? = null
     var firebase_CurrentUser: FirebaseUser? = null
     private var getLocationClass: GetLocationClass? = null
     /** get gcm token id*/
-    companion object {
-        var gcmTokenID: String? = null
-        var isMainActivityIsActive = false
-    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= DataBindingUtil.setContentView(this, R.layout.activity_basepage)
 
-        isMainActivityIsActive = true
         viewModel = ViewModelProvider(this).get(BasePageViewModel::class.java)
         val serviceApi: ServiceApi = getServices()
         repository = BasePageRepository(serviceApi, this)
+        profileRepository = ProfileRepository(serviceApi,this)
         viewModel.repository = repository
-
+        viewModel.profileRepository = profileRepository
 
         getLocationClass = GetLocationClass(this)
         getLocationClass?.getCurrentLocation(onAddress = ::getAddress)
 
-        // mAuth_Firebase = FirebaseAuth.getInstance()
-       // gcmTokenID = FirebaseMessaging.getInstance().token.toString()
+
         mainPagerAdapter = MainPagerAdapter(supportFragmentManager)
 
         mainPagerAdapter.setItems(arrayListOf(
@@ -89,7 +89,7 @@ class BasePageActivity : AppCompatActivity(),  BottomNavigationView.OnNavigation
             val token = task.result
 
             viewModel.sendDeviceTokenID(lat,lang,token)
-
+            viewModel.getProfile()
         })
 
 

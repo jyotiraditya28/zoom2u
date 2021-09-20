@@ -6,8 +6,6 @@ import com.zoom2u_customer.ui.log_in.LoginResponce
 
 interface SharedPref {
 
-
-
     fun setLoginResponse(res: String?)
 
     fun getLoginResponse(): LoginResponce?

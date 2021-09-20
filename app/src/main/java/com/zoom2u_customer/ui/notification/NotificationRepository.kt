@@ -3,10 +3,13 @@ package com.zoom2u_customer.ui.notification
 import android.content.Context
 import android.widget.Toast
 import com.google.gson.Gson
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
+import com.google.gson.reflect.TypeToken
 import com.zoom2u_customer.apiclient.ServiceApi
 import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.active_bid_request.active_bid_page.BidDetailsResponse
+import com.zoom2u_customer.ui.application.bottom_navigation.profile.ProfileResponse
 import com.zoom2u_customer.utility.AppUtility
 import com.zoom2u_customer.utility.DialogActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -19,23 +22,24 @@ import retrofit2.Response
 class NotificationRepository(private var serviceApi: ServiceApi, var context: Context?) {
 
     fun getRateDetails(bookingId:Int?, disposable: CompositeDisposable = CompositeDisposable(),
-                      onSuccess: (history:String) -> Unit) {
+                      onSuccess: (rateMe:RateMeResponse) -> Unit) {
         if (AppUtility.isInternetConnected()) {
             AppUtility.progressBarShow(context)
             disposable.add(
-                serviceApi.getWithJsonObject(
+                serviceApi.getWithJsonArray(
                     "breeze/customer/GetCompletedBookingDetail?bookingId=$bookingId",
                     AppUtility.getApiHeaders()
                 ).subscribeOn(
                     Schedulers.io()
                 )
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeWith(object : DisposableSingleObserver<Response<JsonObject>>() {
-                        override fun onSuccess(responce: Response<JsonObject>) {
+                    .subscribeWith(object : DisposableSingleObserver<Response<JsonArray>>() {
+                        override fun onSuccess(responce: Response<JsonArray>) {
                             if (responce.body() != null) {
-                                /*val bid: BidDetailsResponse =
-                                    Gson().fromJson(responce.body()?.get("data"), BidDetailsResponse::class.java)*/
-                                //onSuccess()
+                                val listType = object : TypeToken<List<RateMeResponse?>?>() {}.type
+                                val list: List<RateMeResponse> =
+                                    Gson().fromJson(responce.body(), listType)
+                                onSuccess(list[0])
 
                             }
                             else if (responce.errorBody() != null) {
@@ -101,7 +105,7 @@ class NotificationRepository(private var serviceApi: ServiceApi, var context: Co
                     .subscribeWith(object : DisposableSingleObserver<Response<JsonObject>>() {
                         override fun onSuccess(responce: Response<JsonObject>) {
                             if (responce.body() != null)
-                                onSuccess(Gson().toJson(responce.body()))
+                                onSuccess("true")
                             else if (responce.errorBody() != null) {
                                 AppUtility.progressBarDissMiss()
                                 if(responce.code()==401){

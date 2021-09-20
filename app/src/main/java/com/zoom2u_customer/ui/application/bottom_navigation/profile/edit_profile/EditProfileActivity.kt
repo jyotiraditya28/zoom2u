@@ -228,10 +228,20 @@ class EditProfileActivity : AppCompatActivity(), View.OnClickListener {
         if (ContextCompat.checkSelfPermission(this@EditProfileActivity, permission) == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(this@EditProfileActivity, arrayOf(permission), requestCode)
         } else {
-         takePhotoFromCamera()
+            checkStoragePermission(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                STORAGE_PERMISSION_CODE )
         }
     }
 
+
+    private fun checkStoragePermission(permission: String, requestCode: Int) {
+        if (ContextCompat.checkSelfPermission(this@EditProfileActivity, permission) == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(this@EditProfileActivity, arrayOf(permission), requestCode)
+        } else {
+            takePhotoFromCamera()
+        }
+    }
     private fun launchImageCrop(uri: Uri) {
         CropImage.activity(uri)
             .setGuidelines(CropImageView.Guidelines.ON)
@@ -342,6 +352,12 @@ class EditProfileActivity : AppCompatActivity(), View.OnClickListener {
                 Toast.makeText(this@EditProfileActivity, "Camera Permission Granted", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(this@EditProfileActivity, "Camera Permission Denied: Allow permission from app setting.", Toast.LENGTH_SHORT).show()
+            }
+        }else if(requestCode == STORAGE_PERMISSION_CODE){
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this@EditProfileActivity, "Storage Permission Granted", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this@EditProfileActivity, "Storage Permission Denied: Allow permission from app setting.", Toast.LENGTH_SHORT).show()
             }
         }
     }

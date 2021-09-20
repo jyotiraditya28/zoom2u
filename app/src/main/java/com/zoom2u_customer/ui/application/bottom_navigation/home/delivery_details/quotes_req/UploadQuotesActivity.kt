@@ -56,6 +56,7 @@ class UploadQuotesActivity : AppCompatActivity(), View.OnClickListener {
     var selectProfileImgDialog: Dialog? = null
     var count = 1
     var imageClicked=0
+    private val STORAGE_PERMISSION_CODE = 101
     var requestId:Int?=null
     var arrayOfImageFiles: MutableList<String> = ArrayList()
     lateinit var viewModel: UploadQuotesViewModel
@@ -250,6 +251,17 @@ class UploadQuotesActivity : AppCompatActivity(), View.OnClickListener {
         if (ContextCompat.checkSelfPermission(this@UploadQuotesActivity, permission) == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(this@UploadQuotesActivity, arrayOf(permission), requestCode)
         } else {
+            checkStoragePermission(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                STORAGE_PERMISSION_CODE )
+
+        }
+    }
+
+    private fun checkStoragePermission(permission: String, requestCode: Int) {
+        if (ContextCompat.checkSelfPermission(this@UploadQuotesActivity, permission) == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(this@UploadQuotesActivity, arrayOf(permission), requestCode)
+        } else {
             takePhotoFromCamera()
         }
     }
@@ -398,6 +410,12 @@ class UploadQuotesActivity : AppCompatActivity(), View.OnClickListener {
                 Toast.makeText(this@UploadQuotesActivity, "Camera Permission Granted", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(this@UploadQuotesActivity, "Camera Permission Denied: Allow permission from app setting.", Toast.LENGTH_SHORT).show()
+            }
+        }else if(requestCode == STORAGE_PERMISSION_CODE){
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this@UploadQuotesActivity, "Storage Permission Granted", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this@UploadQuotesActivity, "Storage Permission Denied: Allow permission from app setting.", Toast.LENGTH_SHORT).show()
             }
         }
     }

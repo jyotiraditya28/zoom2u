@@ -68,7 +68,6 @@
             android:layout_marginRight="15dp"
             android:layout_marginTop="3dp"
             android:gravity="center"
-            android:text="Pickup suburb"
             android:textColor="#000000"
             android:textSize="14sp" />
 
@@ -94,7 +93,6 @@
             android:layout_marginRight="15dp"
             android:layout_marginTop="3dp"
             android:gravity="center"
-            android:text="Delivery suburb"
             android:textColor="#000000"
             android:textSize="14sp" />
 
@@ -140,21 +138,14 @@
 
         <ImageView
             android:id="@+id/closeNotificatinView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_margin="5dp"
             android:src="@drawable/closemark" />
 
-        <ProgressBar
-            android:id="@+id/progressToLoadImg"
-            style="?android:attr/progressBarStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/courierPic"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="45dp" />
+
 
         <RelativeLayout
             android:id="@+id/rateMeNotificationViewSub"

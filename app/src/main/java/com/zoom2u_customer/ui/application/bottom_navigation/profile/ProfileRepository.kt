@@ -6,8 +6,10 @@ import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.reflect.TypeToken
 import com.zoom2u_customer.apiclient.ServiceApi
+import com.zoom2u_customer.utility.AppPreference
 import com.zoom2u_customer.utility.AppUtility
 import com.zoom2u_customer.utility.DialogActivity
+import com.zoom2u_customer.utility.LogErrorsToAppCenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
@@ -36,11 +38,13 @@ class ProfileRepository(private var serviceApi: ServiceApi, var context: Context
                                 val list: List<ProfileResponse> =
                                     Gson().fromJson(responce.body(), listType)
                                 onSuccess(list[0])
-                                //AppPreference.getSharedPrefInstance().setLoginResponse(Gson().toJson(list[0]))
+                                AppPreference.getSharedPrefInstance().setProfileData(Gson().toJson(list[0]))
 
                             }
                             else if (responce.errorBody() != null) {
                                 AppUtility.progressBarDissMiss()
+                                LogErrorsToAppCenter().addLogToAppCenterOnAPIFail("breeze/customer/Customers",
+                                    responce.code(),responce.message(),"Profile Api","ErrorCode")
                                 if(responce.code()==401){
                                     DialogActivity.alertDialogOnSessionExpire(
                                         context,
@@ -58,6 +62,9 @@ class ProfileRepository(private var serviceApi: ServiceApi, var context: Context
 
                         override fun onError(e: Throwable) {
                             AppUtility.progressBarDissMiss()
+                            LogErrorsToAppCenter().addLogToAppCenterOnAPIFail("breeze/customer/Customers",
+                                0,e.toString(),"Profile Api","OnError")
+
                             Toast.makeText(
                                 context,
                                 "something went wrong please try again.",

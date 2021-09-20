@@ -196,7 +196,7 @@ class InterStateSecondActivity : AppCompatActivity(), View.OnClickListener {
                 bookingDeliveryResponse?.getJSONObject("_deliveryRequestModel")?.remove("PricingScheme")
             }else  {
                 bookingDeliveryResponse?.getJSONObject("_deliveryRequestModel")?.remove("PricingScheme")
-                viewModel.getDeliveryRequest(bookingDeliveryResponse)
+                viewModel.getDeliveryRequest(false,bookingDeliveryResponse)
             }
         } catch (e: JSONException) {
             e.printStackTrace()
@@ -213,7 +213,7 @@ class InterStateSecondActivity : AppCompatActivity(), View.OnClickListener {
                 try {
                     bookingDeliveryResponse!!.getJSONObject("_deliveryRequestModel")
                         .put("paymentNonce", nonce)
-                    viewModel.getDeliveryRequest(bookingDeliveryResponse)
+                    viewModel.getDeliveryRequest(false,bookingDeliveryResponse)
                     getBrainTreeClientToken = null
                 } catch (e: JSONException) {
                     e.printStackTrace()

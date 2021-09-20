@@ -1,4 +1,4 @@
- package com.zoom2u_customer.services
+package com.zoom2u_customer.services
 
 
 import android.annotation.TargetApi
@@ -7,18 +7,29 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import android.util.Log
+import android.view.Gravity
+import android.view.ViewGroup
+import android.view.Window
+import android.view.WindowManager
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.zoom2u_customer.MainActivity
+import com.zoom2u_customer.R
+
 import com.zoom2u_customer.ui.notification.NotificationActivity
+import com.zoom2u_customer.ui.splash_screen.SplashScreenActivity
+import com.zoom2u_customer.utility.DialogActivity
 
 
- class MyFcmListenerService : FirebaseMessagingService() {
+class MyFcmListenerService : FirebaseMessagingService() {
     companion object {
         var prefrenceForGCM: SharedPreferences? = null
         var loginEditorForGCM: SharedPreferences.Editor? = null
@@ -41,25 +52,14 @@ import com.zoom2u_customer.ui.notification.NotificationActivity
 
         val data: Map<*, *> = message.data
         if (message.notification != null) {
+            notificationMessage = (data["message"] as String?).toString()
+            if(data["bookingId"]==null)
+                bookingID = "0"
+            else
+            bookingID = (data["bookingId"] as String)
+            isAppPresentInBG(this)
+            generateNotification(this, notificationMessage, data)
 
-            try {
-            notificationMessage =
-                (data["message"] as String?).toString()
-                bookingID = try {
-                    (data["bookingId"] as String?).toString()
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    "0"
-                }
-                isAppPresentInBG(this)
-                generateNotification(
-                    this,
-                    notificationMessage,
-                    data
-                )
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
         }
     }
 
@@ -70,16 +70,7 @@ import com.zoom2u_customer.ui.notification.NotificationActivity
         data: Map<*, *>
     ) {
         val isRunning: Boolean = appISRunning()
-        try {
-            try {
-                if (bookingID == "0" || bookingID == "") {
-                    bookingID = "0"
-                }
-            } catch (e: java.lang.Exception) {
-                e.printStackTrace()
-                bookingID = "0"
-            }
-            if (prefrenceForGCM == null)
+        if (prefrenceForGCM == null)
                 prefrenceForGCM = context.getSharedPreferences("bookingId", 0)
             if (loginEditorForGCM == null)
                 loginEditorForGCM = prefrenceForGCM?.edit()
@@ -88,8 +79,9 @@ import com.zoom2u_customer.ui.notification.NotificationActivity
             if (bookingID != "0") {
                 notificationMessage = ""
                 if (!isAppPresentInBG) {
-                    if (notificationIntent != null) notificationIntent = null
-                    notificationIntent = Intent(context, MainActivity::class.java)
+                    if (notificationIntent != null)
+                        notificationIntent = null
+                    notificationIntent = Intent(context, SplashScreenActivity::class.java)
                     notificationIntent?.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                     notificationIntent?.action = Intent.ACTION_MAIN
                     notificationIntent?.addCategory(Intent.CATEGORY_LAUNCHER)
@@ -145,9 +137,7 @@ import com.zoom2u_customer.ui.notification.NotificationActivity
                     }
                 }
             }
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace()
-        }
+
     }
     private fun makeNotificationSound(context: Context) {
         try {
@@ -252,15 +242,13 @@ import com.zoom2u_customer.ui.notification.NotificationActivity
             }
         }
         var notification: Notification? = builder.build()
-        mNotificationManager!!.notify(notificationId, notification)
-        mNotificationManager = null
-        notification = null
-        intent = null
+        mNotificationManager?.notify(notificationId, notification)
+
     }
     private fun getNotificationIcon(): Int {
         val useWhiteIcon = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
-        return if (useWhiteIcon) com.zoom2u_customer.R.drawable.notification_icon
-        else com.zoom2u_customer.R.drawable.appicon
+        return if (useWhiteIcon) R.drawable.notification_icon
+        else R.drawable.appicon
     }
 
     private fun isAppPresentInBG(context: MyFcmListenerService) {
@@ -281,21 +269,22 @@ import com.zoom2u_customer.ui.notification.NotificationActivity
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     fun callDialogNotification(context: Context, isRunning: Boolean, message: String?) {
-    /*    if (!isAppPresentInBG) {
+        if (!isAppPresentInBG) {
             if (notificationIntent != null) notificationIntent = null
-            notificationIntent = Intent(context, MainActivity::class.java)
-            notificationIntent!!.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            notificationIntent!!.action = Intent.ACTION_MAIN
-            notificationIntent!!.addCategory(Intent.CATEGORY_LAUNCHER)
+            notificationIntent = Intent(context, SplashScreenActivity::class.java)
+            notificationIntent?.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            notificationIntent?.action = Intent.ACTION_MAIN
+            notificationIntent?.addCategory(Intent.CATEGORY_LAUNCHER)
             passingNoificationIntent(notificationIntent, context, message, 0)
         } else {
             var i: Intent? = Intent("android.intent.action.MAIN")
-            i?.setClass(context, DialogActivity::class.java)
+            i?.setClass(context, DialogActivity1::class.java)
             i?.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             context.startActivity(i)
             i = null
             makeNotificationSound(context)
-        }*/
+
+        }
     }
 
 }

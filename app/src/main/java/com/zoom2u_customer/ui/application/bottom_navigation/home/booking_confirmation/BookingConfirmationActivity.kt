@@ -207,7 +207,7 @@ class BookingConfirmationActivity : AppCompatActivity(), View.OnClickListener {
                 bookingDeliveryResponse?.getJSONObject("_deliveryRequestModel")?.remove("PricingScheme")
             }  else  {
                 bookingDeliveryResponse?.getJSONObject("_deliveryRequestModel")?.remove("PricingScheme")
-                viewModel.getDeliveryRequest(bookingDeliveryResponse)
+                viewModel.getDeliveryRequest(true,bookingDeliveryResponse)
             }
         } catch (e: JSONException) {
             e.printStackTrace()
@@ -225,7 +225,7 @@ class BookingConfirmationActivity : AppCompatActivity(), View.OnClickListener {
                 try {
                     bookingDeliveryResponse!!.getJSONObject("_deliveryRequestModel")
                         .put("paymentNonce", nonce)
-                    viewModel.getDeliveryRequest(bookingDeliveryResponse)
+                    viewModel.getDeliveryRequest(true,bookingDeliveryResponse)
 
                 } catch (e: JSONException) {
                     e.printStackTrace()

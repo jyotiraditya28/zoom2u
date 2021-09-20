@@ -15,7 +15,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.zoom2u_customer.R
 
-class DialogActivity : Activity() {
+class DialogActivity1 : Activity() {
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         showNotificationDialog()
@@ -39,7 +39,7 @@ class DialogActivity : Activity() {
             if (MyFcmListenerService.defaultNotificDialog != null)
                 MyFcmListenerService.defaultNotificDialog = null
             MyFcmListenerService.defaultNotificDialog =
-                Dialog(this@DialogActivity, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen)
+                Dialog(this@DialogActivity1, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen)
             MyFcmListenerService.defaultNotificDialog?.setCancelable(false)
             MyFcmListenerService.defaultNotificDialog?.window?.setBackgroundDrawable(
                 ColorDrawable(

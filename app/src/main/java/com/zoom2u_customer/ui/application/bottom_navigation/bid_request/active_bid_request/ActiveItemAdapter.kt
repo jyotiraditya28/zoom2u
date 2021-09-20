@@ -85,11 +85,7 @@ class ActiveItemAdapter (val context: Context, private val onItemClick:(ActiveBi
         holder.itemBinding.dropTime.text =
             dropUpDateTimeSplit?.get(1) + " " + dropUpDateTimeSplit?.get(2) + " | " + dropUpDateTimeSplit?.get(0)
 
-        if(dataList[position].Notes.isNullOrEmpty()){
-            holder.itemBinding.notes.text="No notes available"
-        }else{
-            holder.itemBinding.notes.text=dataList[position].Notes.toString().trim()
-        }
+
 
 
         holder.itemBinding.ref.text= "Ref #:${dataList[position].QuoteRef.toString()}"

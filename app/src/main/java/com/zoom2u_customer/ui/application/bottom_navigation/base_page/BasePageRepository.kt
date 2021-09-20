@@ -23,7 +23,7 @@ class BasePageRepository(private var serviceApi: ServiceApi, var context: Contex
         lang: String,
         token: String,
         disposable: CompositeDisposable = CompositeDisposable(),
-        onSuccess: (msg: String) -> Unit
+
     ) {
         if (AppUtility.isInternetConnected()) {
             var locationStr: String = "$lat,$lang"
@@ -39,7 +39,11 @@ class BasePageRepository(private var serviceApi: ServiceApi, var context: Contex
                         .subscribeWith(object : DisposableSingleObserver<Response<JsonObject>>() {
                             override fun onSuccess(responce: Response<JsonObject>) {
                                 if (responce.body() != null)
-                                    onSuccess(Gson().toJson(responce.body()))
+                                    Toast.makeText(
+                                        context,
+                                        "Device token send",
+                                        Toast.LENGTH_LONG
+                                    ).show()
                                 else if (responce.errorBody() != null) {
                                     AppUtility.progressBarDissMiss()
                                     Toast.makeText(
@@ -72,7 +76,11 @@ class BasePageRepository(private var serviceApi: ServiceApi, var context: Contex
                         .subscribeWith(object : DisposableSingleObserver<Response<JsonObject>>() {
                             override fun onSuccess(responce: Response<JsonObject>) {
                                 if (responce.body() != null)
-                                    onSuccess(Gson().toJson(responce.body()))
+                                    Toast.makeText(
+                                        context,
+                                        "Device token send",
+                                        Toast.LENGTH_LONG
+                                    ).show()
                                 else if (responce.errorBody() != null) {
                                     AppUtility.progressBarDissMiss()
                                     Toast.makeText(

@@ -9,7 +9,7 @@ class BookingConfirmationViewModel : ViewModel() {
     private var deliveryRequestSuccess: MutableLiveData<String>? = MutableLiveData("")
 
 
-    fun getDeliveryRequest(jObjForPlaceBooking: JSONObject?) = repository?.getSaveDeliveryRequest(jObjForPlaceBooking,onSuccess = ::onDeliverySuccess)
+    fun getDeliveryRequest(isIntraStateBooking:Boolean,jObjForPlaceBooking: JSONObject?) = repository?.getSaveDeliveryRequest(isIntraStateBooking,jObjForPlaceBooking,onSuccess = ::onDeliverySuccess)
 
 
     private fun onDeliverySuccess(success : String){

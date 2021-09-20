@@ -9,6 +9,7 @@ import com.zoom2u_customer.ui.application.bottom_navigation.home.delivery_detail
 import com.zoom2u_customer.ui.application.bottom_navigation.home.delivery_details.model.IntraStateReq
 import com.zoom2u_customer.utility.AppUtility
 import com.zoom2u_customer.utility.DialogActivity
+import com.zoom2u_customer.utility.LogErrorsToAppCenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
@@ -39,6 +40,16 @@ class PricingPaymentRepository(private var serviceApi: ServiceApi, var context: 
                                 onSuccess(Gson().toJson(responce.body()))
                             else if (responce.errorBody() != null) {
                                 AppUtility.progressBarDissMiss()
+
+                                LogErrorsToAppCenter().addLogToAppCenterOnAPIFail(
+                                    "breeze/pricing/IntrastateQuote",
+                                    responce.code(),
+                                    responce.message(),
+                                    "Price Payment IntraState",
+                                    "ErrorCode$intraStateReq"
+                                )
+
+
                                 if(responce.code()==401){
                                     DialogActivity.alertDialogOnSessionExpire(
                                         context,
@@ -56,6 +67,15 @@ class PricingPaymentRepository(private var serviceApi: ServiceApi, var context: 
 
                         override fun onError(e: Throwable) {
                             AppUtility.progressBarDissMiss()
+                            LogErrorsToAppCenter().addLogToAppCenterOnAPIFail(
+                                "breeze/pricing/IntrastateQuote",
+                                0,
+                                e.toString(),
+                                "Price Payment IntraState",
+                                "OnError$intraStateReq"
+                            )
+
+
                             Toast.makeText(
                                 context,
                                 "Something went wrong please try again.",
@@ -95,6 +115,15 @@ class PricingPaymentRepository(private var serviceApi: ServiceApi, var context: 
                                 onSuccess(Gson().toJson(responce.body()))
                             else if (responce.errorBody() != null) {
                                 AppUtility.progressBarDissMiss()
+                                LogErrorsToAppCenter().addLogToAppCenterOnAPIFail(
+                                    "breeze/pricing/InterstateQuote",
+                                    responce.code(),
+                                    responce.message(),
+                                    "Price Payment InterState",
+                                    "ErrorCode$interStateReq"
+                                )
+
+
                                 if(responce.code()==401){
                                     DialogActivity.alertDialogOnSessionExpire(
                                         context,
@@ -112,6 +141,15 @@ class PricingPaymentRepository(private var serviceApi: ServiceApi, var context: 
 
                         override fun onError(e: Throwable) {
                             AppUtility.progressBarDissMiss()
+
+                            LogErrorsToAppCenter().addLogToAppCenterOnAPIFail(
+                                "breeze/pricing/InterstateQuote",
+                                0,
+                                e.toString(),
+                                "Price Payment InterState",
+                                "OnError$interStateReq"
+                            )
+
                             Toast.makeText(
                                 context,
                                 "Something went wrong please try again.",

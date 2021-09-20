@@ -8,6 +8,7 @@ import com.google.gson.JsonParser
 import com.zoom2u_customer.apiclient.ServiceApi
 import com.zoom2u_customer.utility.AppUtility
 import com.zoom2u_customer.utility.DialogActivity
+import com.zoom2u_customer.utility.LogErrorsToAppCenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
@@ -17,7 +18,7 @@ import retrofit2.Response
 
 class BookingConfirmationRepository(private var serviceApi: ServiceApi, var context: Context?) {
 
-    fun getSaveDeliveryRequest(
+    fun getSaveDeliveryRequest(isIntraStateBooking:Boolean,
         jObjForPlaceBooking: JSONObject?,
         disposable: CompositeDisposable = CompositeDisposable(),
         onSuccess: (msg: String) -> Unit
@@ -38,6 +39,13 @@ class BookingConfirmationRepository(private var serviceApi: ServiceApi, var cont
                                 onSuccess(Gson().toJson(responce.body()))
                             else if (responce.errorBody() != null) {
                                 AppUtility.progressBarDissMiss()
+                                if(isIntraStateBooking)
+                                    LogErrorsToAppCenter().addLogToAppCenterOnAPIFail("breeze/customer/SaveDeliveryRequest",
+                                        responce.code(),responce.message(),"intra state booking payment","ErrorCode$jObjForPlaceBooking")
+                                else
+                                    LogErrorsToAppCenter().addLogToAppCenterOnAPIFail("breeze/customer/SaveDeliveryRequest",
+                                        responce.code(),responce.message(),"inter state booking payment","ErrorCode$jObjForPlaceBooking")
+
                                 if(responce.code()==401){
                                     DialogActivity.logoutDialog(
                                         context,
@@ -64,6 +72,15 @@ class BookingConfirmationRepository(private var serviceApi: ServiceApi, var cont
 
                         override fun onError(e: Throwable) {
                             AppUtility.progressBarDissMiss()
+                            if(isIntraStateBooking)
+                                LogErrorsToAppCenter().addLogToAppCenterOnAPIFail("breeze/customer/SaveDeliveryRequest",
+                                    0,e.toString(),"intra state booking payment","OnError$jObjForPlaceBooking")
+                            else
+                                LogErrorsToAppCenter().addLogToAppCenterOnAPIFail("breeze/customer/SaveDeliveryRequest",
+                                    0,e.toString(),"inter state booking payment","OnError$jObjForPlaceBooking")
+
+
+
                             Toast.makeText(
                                 context,
                                 "Something went wrong please try again.",

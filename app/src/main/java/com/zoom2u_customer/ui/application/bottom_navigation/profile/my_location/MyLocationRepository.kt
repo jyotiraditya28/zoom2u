@@ -10,19 +10,24 @@ import com.zoom2u_customer.apiclient.ServiceApi
 import com.zoom2u_customer.ui.application.bottom_navigation.profile.my_location.model.MyLocationResAndEditLocationReq
 import com.zoom2u_customer.utility.AppUtility
 import com.zoom2u_customer.utility.DialogActivity
+import com.zoom2u_customer.utility.LogErrorsToAppCenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
 import retrofit2.Response
 
-class MyLocationRepository(private var serviceApi: ServiceApi, var context: Context){
+class MyLocationRepository(private var serviceApi: ServiceApi, var context: Context) {
 
-    fun getMyLocation( disposable: CompositeDisposable = CompositeDisposable(),  onSuccess: (myLocationList:List<MyLocationResAndEditLocationReq>) -> Unit) {
+    fun getMyLocation(
+        isFromMAB: Boolean,
+        disposable: CompositeDisposable = CompositeDisposable(),
+        onSuccess: (myLocationList: List<MyLocationResAndEditLocationReq>) -> Unit
+    ) {
         if (AppUtility.isInternetConnected()) {
             //CustomProgressBar.progressBarShow(context,"Loading...","Please wait a moment")
             AppUtility.progressBarShow(context)
-                disposable.add(
+            disposable.add(
                 serviceApi.getWithJsonArray(
                     "breeze/customer/GetPreferredLocations",
                     AppUtility.getApiHeaders()
@@ -34,32 +39,67 @@ class MyLocationRepository(private var serviceApi: ServiceApi, var context: Cont
                         override fun onSuccess(responce: Response<JsonArray>) {
                             if (responce.body() != null) {
                                 val listType =
-                                    object : TypeToken<List<MyLocationResAndEditLocationReq?>?>() {}.type
+                                    object :
+                                        TypeToken<List<MyLocationResAndEditLocationReq?>?>() {}.type
                                 val list: List<MyLocationResAndEditLocationReq> =
                                     Gson().fromJson(responce.body(), listType)
-                               // CustomProgressBar.dismissProgressBar()
                                 onSuccess(list)
                             } else if (responce.errorBody() != null) {
+                                if (isFromMAB)
+                                    LogErrorsToAppCenter().addLogToAppCenterOnAPIFail(
+                                        "breeze/customer/GetPreferredLocations",
+                                        responce.code(),
+                                        responce.message(),
+                                        "Delivery Details My Location api",
+                                        "ErrorCode"
+                                    )
+                                else
                                     AppUtility.progressBarDissMiss()
-                                    if(responce.code()==401){
-                                        DialogActivity.alertDialogOnSessionExpire(
-                                            context,
-                                            onItemClick = ::onOkClick)
-                                    }
-                                    else{
-                                        Toast.makeText(context, "Something went wrong please try again.", Toast.LENGTH_LONG).show() }
-
+                                    LogErrorsToAppCenter().addLogToAppCenterOnAPIFail(
+                                        "breeze/customer/GetPreferredLocations",
+                                        responce.code(),
+                                        responce.message(),
+                                        "My location page My Location api",
+                                        "ErrorCode"
+                                    )
+                                if (responce.code() == 401) {
+                                    DialogActivity.alertDialogOnSessionExpire(
+                                        context,
+                                        onItemClick = ::onOkClick
+                                    )
+                                } else {
+                                    Toast.makeText(
+                                        context,
+                                        "Something went wrong please try again.",
+                                        Toast.LENGTH_LONG
+                                    ).show()
                                 }
+
                             }
-                            private fun onOkClick(){
-                                AppUtility.onLogoutCall(context)
-                            }
+                        }
+
+                        private fun onOkClick() {
+                            AppUtility.onLogoutCall(context)
+                        }
 
 
-                            override fun onError(e: Throwable) {
+                        override fun onError(e: Throwable) {
                             //CustomProgressBar.dismissProgressBar()
+
                             AppUtility.progressBarDissMiss()
-                            Toast.makeText(context, "Something went wrong please try again.", Toast.LENGTH_LONG).show()
+                            if(isFromMAB)
+                                LogErrorsToAppCenter().addLogToAppCenterOnAPIFail("breeze/customer/GetPreferredLocations",
+                                    0,e.toString(),"Delivery Details My Location api","OnError")
+                            else
+                                LogErrorsToAppCenter().addLogToAppCenterOnAPIFail("breeze/customer/GetPreferredLocations",
+                                    0,e.toString(),"My location page My Location api","OnError")
+
+
+                            Toast.makeText(
+                                context,
+                                "Something went wrong please try again.",
+                                Toast.LENGTH_LONG
+                            ).show()
                         }
                     })
             )

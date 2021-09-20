@@ -32,7 +32,7 @@ class MyLocationActivity : AppCompatActivity() , View.OnClickListener {
         val serviceApi: ServiceApi = com.zoom2u_customer.apiclient.ApiClient.getServices()
         repository = MyLocationRepository(serviceApi, this)
         viewModel.repository = repository
-        viewModel.getMyLocation()
+        viewModel.getMyLocation(false)
 
         binding.addNewCard.setOnClickListener(this)
         binding.backIcon.setOnClickListener(this)
@@ -87,7 +87,7 @@ class MyLocationActivity : AppCompatActivity() , View.OnClickListener {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 3 || requestCode==4) {
-            viewModel.getMyLocation()
+            viewModel.getMyLocation(false)
         }
     }
 }

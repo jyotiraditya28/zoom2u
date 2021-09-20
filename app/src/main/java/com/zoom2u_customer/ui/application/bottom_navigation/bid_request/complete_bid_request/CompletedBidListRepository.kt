@@ -9,6 +9,7 @@ import com.google.gson.reflect.TypeToken
 import com.zoom2u_customer.apiclient.ServiceApi
 import com.zoom2u_customer.utility.AppUtility
 import com.zoom2u_customer.utility.DialogActivity
+import com.zoom2u_customer.utility.LogErrorsToAppCenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
@@ -42,6 +43,8 @@ class CompletedBidListRepository(private var serviceApi: ServiceApi, var context
                             }
                             else if (responce.errorBody() != null) {
                                 AppUtility.progressBarDissMiss()
+                                LogErrorsToAppCenter().addLogToAppCenterOnAPIFail( "breeze/HeavyFreight/GetAllRequests?page=$page&type=completed&searchText=",
+                                    responce.code(),responce.message(),"CompleteBid List api","ErrorCode")
                                 if(responce.code()==401){
                                     DialogActivity.alertDialogOnSessionExpire(
                                         context,
@@ -58,6 +61,10 @@ class CompletedBidListRepository(private var serviceApi: ServiceApi, var context
 
                         override fun onError(e: Throwable) {
                             AppUtility.progressBarDissMiss()
+                            LogErrorsToAppCenter().addLogToAppCenterOnAPIFail( "breeze/HeavyFreight/GetAllRequests?page=$page&type=completed&searchText=",
+                                0,e.toString(),"CompleteBid List api","OnError")
+
+
                             Toast.makeText(
                                 context,
                                 "something went wrong please try again.",

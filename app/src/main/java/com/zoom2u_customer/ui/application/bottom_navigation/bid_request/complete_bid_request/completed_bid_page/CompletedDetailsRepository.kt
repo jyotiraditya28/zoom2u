@@ -8,6 +8,7 @@ import com.google.gson.JsonObject
 import com.zoom2u_customer.apiclient.ServiceApi
 import com.zoom2u_customer.utility.AppUtility
 import com.zoom2u_customer.utility.DialogActivity
+import com.zoom2u_customer.utility.LogErrorsToAppCenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
@@ -37,6 +38,9 @@ class CompletedDetailsRepository(private var serviceApi: ServiceApi, var context
                             }
                             else if (responce.errorBody() != null) {
                                 AppUtility.progressBarDissMiss()
+                                LogErrorsToAppCenter().addLogToAppCenterOnAPIFail("breeze/ExtraLargeQuoteRequest/GetQuoteRequestsDetail?requestId=$quoteId",
+                                    responce.code(),responce.message(),"CompletedBid Details api","ErrorCode")
+
                                 if(responce.code()==401){
                                     DialogActivity.logoutDialog(
                                         context,
@@ -63,6 +67,9 @@ class CompletedDetailsRepository(private var serviceApi: ServiceApi, var context
 
                         override fun onError(e: Throwable) {
                             AppUtility.progressBarDissMiss()
+                            LogErrorsToAppCenter().addLogToAppCenterOnAPIFail("breeze/ExtraLargeQuoteRequest/GetQuoteRequestsDetail?requestId=$quoteId",
+                                0,e.toString(),"CompletedBid Details api","OnError")
+
                             Toast.makeText(
                                 context,
                                 "something went wrong please try again.",
@@ -81,42 +88,5 @@ class CompletedDetailsRepository(private var serviceApi: ServiceApi, var context
     }
 
 
-    fun cancelBooking(
-        bookingID: String?,
-        disposable: CompositeDisposable = CompositeDisposable(),
-        onSuccess: (msg: String) -> Unit
-    ) {
-        if (AppUtility.isInternetConnected()) {
-            AppUtility.progressBarShow(context)
-            disposable.add(
-                serviceApi.cancelBooking(
-                    "breeze/customer/CancelBooking?bookingId=$bookingID",
-                    AppUtility.getApiHeaders()
-                ).subscribeOn(
-                    Schedulers.io()
-                )
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeWith(object : DisposableSingleObserver<Response<Void>>() {
-                        override fun onSuccess(responce: Response<Void>) {
-                            onSuccess("true")
-                        }
 
-                        override fun onError(e: Throwable) {
-                            AppUtility.progressBarDissMiss()
-                            Toast.makeText(
-                                context,
-                                "something went wrong please try again.",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-                    })
-            )
-        } else {
-            DialogActivity.alertDialogSingleButton(
-                context,
-                "No Network !",
-                "No network connection, Please try again later."
-            )
-        }
-    }
 }

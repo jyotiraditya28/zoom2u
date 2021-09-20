@@ -13,9 +13,16 @@ import com.zoom2u_customer.utility.AppPreference
 import com.zoom2u_customer.utility.AppUtility
 
 class SplashScreenActivity : AppCompatActivity() {
+
+    companion object {
+        var gcmTokenID: String? = null
+        var isMainActivityIsActive = false
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_spalsh_screen)
+
+        isMainActivityIsActive = true
         AppUtility.fullScreenMode(window)
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,

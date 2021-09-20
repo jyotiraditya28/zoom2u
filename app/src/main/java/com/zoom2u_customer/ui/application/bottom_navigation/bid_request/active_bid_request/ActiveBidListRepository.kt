@@ -10,6 +10,7 @@ import com.zoom2u_customer.apiclient.ServiceApi
 import com.zoom2u_customer.ui.application.bottom_navigation.history.HistoryResponse
 import com.zoom2u_customer.utility.AppUtility
 import com.zoom2u_customer.utility.DialogActivity
+import com.zoom2u_customer.utility.LogErrorsToAppCenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
@@ -43,6 +44,8 @@ class ActiveBidListRepository(private var serviceApi: ServiceApi, var context: C
                             }
                             else if (responce.errorBody() != null) {
                                 AppUtility.progressBarDissMiss()
+                                LogErrorsToAppCenter().addLogToAppCenterOnAPIFail("breeze/HeavyFreight/GetAllRequests?page=$page&type=active&searchText=",
+                                    responce.code(),responce.message(),"ActiveBid List api","ErrorCode")
                                 if(responce.code()==401){
                                     DialogActivity.alertDialogOnSessionExpire(
                                         context,
@@ -61,7 +64,10 @@ class ActiveBidListRepository(private var serviceApi: ServiceApi, var context: C
 
                         override fun onError(e: Throwable) {
                             AppUtility.progressBarDissMiss()
-                            Toast.makeText(
+                            LogErrorsToAppCenter().addLogToAppCenterOnAPIFail("breeze/HeavyFreight/GetAllRequests?page=$page&type=active&searchText=",
+                                0,e.message,"ActiveBid List api","OnError")
+
+                           Toast.makeText(
                                 context,
                                 "something went wrong please try again.",
                                 Toast.LENGTH_LONG

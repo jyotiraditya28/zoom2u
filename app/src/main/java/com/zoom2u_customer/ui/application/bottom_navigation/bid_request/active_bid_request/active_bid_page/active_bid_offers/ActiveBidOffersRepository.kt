@@ -8,6 +8,7 @@ import com.zoom2u_customer.R
 import com.zoom2u_customer.apiclient.ServiceApi
 import com.zoom2u_customer.utility.AppUtility
 import com.zoom2u_customer.utility.DialogActivity
+import com.zoom2u_customer.utility.LogErrorsToAppCenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
@@ -41,6 +42,9 @@ class ActiveBidOffersRepository(private var serviceApi: ServiceApi, var context:
                                 onSuccess(Gson().toJson(responce.body()))
                             else if (responce.errorBody() != null) {
                                 AppUtility.progressBarDissMiss()
+                                LogErrorsToAppCenter().addLogToAppCenterOnAPIFail("breeze/ExtraLargeQuoteRequest/AcceptQuoteOffer?requestId=$requestId&offerId=$offerId&paymentNonce=$nonce&purchaseOrderNumber=$orderNo",
+                                    responce.code(),responce.message(),"ActiveBid List api","")
+
                                 DialogActivity.alertDialogSingleButton(
                                     context,
                                     "Sorry!",

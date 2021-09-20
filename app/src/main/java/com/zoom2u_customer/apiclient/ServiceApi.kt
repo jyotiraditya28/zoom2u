@@ -62,4 +62,9 @@ interface ServiceApi {
     @POST
     fun quoteImageUpload(@Url url:String, @HeaderMap  map:Map<String, String>, @Part image: MutableList<MultipartBody.Part>):Single<Response<JsonObject>>
 
+
+
+    @GET
+    fun getWithJsonArrayNoHeader(@Url url:String):Single<Response<JsonArray>>
+
 }

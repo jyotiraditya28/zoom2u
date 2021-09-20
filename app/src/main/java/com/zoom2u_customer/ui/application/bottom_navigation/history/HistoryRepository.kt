@@ -10,6 +10,7 @@ import com.google.gson.reflect.TypeToken
 import com.zoom2u_customer.apiclient.ServiceApi
 import com.zoom2u_customer.utility.AppUtility
 import com.zoom2u_customer.utility.DialogActivity
+import com.zoom2u_customer.utility.LogErrorsToAppCenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
@@ -43,6 +44,8 @@ class HistoryRepository(private var serviceApi: ServiceApi, var context: Context
                             }
                             else if (responce.errorBody() != null) {
                                 AppUtility.progressBarDissMiss()
+                                LogErrorsToAppCenter().addLogToAppCenterOnAPIFail("breeze/customer/DeliveriesForCustomer?currentPage=$page&searchText=",
+                                    responce.code(),responce.message(),"History List api","ErrorCode")
                                 if(responce.code()==401){
                                     DialogActivity.alertDialogOnSessionExpire(
                                         context,
@@ -59,6 +62,8 @@ class HistoryRepository(private var serviceApi: ServiceApi, var context: Context
 
                         override fun onError(e: Throwable) {
                             AppUtility.progressBarDissMiss()
+                            LogErrorsToAppCenter().addLogToAppCenterOnAPIFail("breeze/customer/DeliveriesForCustomer?currentPage=$page&searchText=",
+                                0,e.toString(),"History List api","OnError")
                             Toast.makeText(
                                 context,
                                 "something went wrong please try again.",
