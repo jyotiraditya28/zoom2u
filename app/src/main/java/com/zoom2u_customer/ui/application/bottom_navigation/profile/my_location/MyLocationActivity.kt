@@ -35,7 +35,7 @@ class MyLocationActivity : AppCompatActivity() , View.OnClickListener {
         viewModel.getMyLocation(false)
 
         binding.addNewCard.setOnClickListener(this)
-        binding.backIcon.setOnClickListener(this)
+        binding.zoom2uHeader.backBtn.setOnClickListener(this)
 
         viewModel.getMySuccess()?.observe(this) {
 
@@ -44,12 +44,17 @@ class MyLocationActivity : AppCompatActivity() , View.OnClickListener {
                 if (it.isNotEmpty()) {
                     adapter?.updateRecords(it)
                     binding.noLocationText.visibility=View.GONE
-                } else
-                    binding.noLocationText.visibility=View.VISIBLE
-
+                    binding.noLocationText1.visibility=View.GONE
+                } else {
+                    adapter?.updateRecords(it)
+                    binding.noLocationText.visibility = View.VISIBLE
+                    binding.noLocationText1.visibility = View.VISIBLE
+                }
 
             }
         }
+
+
 
     }
 
@@ -78,7 +83,7 @@ class MyLocationActivity : AppCompatActivity() , View.OnClickListener {
                 startActivityForResult(intent,4)
 
             }
-            R.id.back_icon -> {
+            R.id.back_btn -> {
                finish()
             }
         }
@@ -87,6 +92,7 @@ class MyLocationActivity : AppCompatActivity() , View.OnClickListener {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 3 || requestCode==4) {
+          if(data!=null)
             viewModel.getMyLocation(false)
         }
     }

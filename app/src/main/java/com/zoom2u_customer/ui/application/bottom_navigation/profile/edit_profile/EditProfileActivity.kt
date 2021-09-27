@@ -27,6 +27,7 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.google.gson.Gson
+import com.google.gson.JsonArray
 import com.squareup.picasso.Picasso
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
@@ -90,16 +91,14 @@ class EditProfileActivity : AppCompatActivity(), View.OnClickListener {
         viewModel.dpSuccess?.observe(this) {
             if (!TextUtils.isEmpty(it)) {
                 AppUtility.progressBarDissMiss()
+                profileResponse?.Photo= it
                 DialogActivity.alertDialogSingleButton(this, "Well done!", "Image updated successfully.")
-                val intent = Intent()
-                intent.putExtra("UpdateProfileData", profileResponse)
-                setResult(2, intent)
-                finish()
+
             }
         }
         binding.editDp.setOnClickListener(this)
         binding.saveBtn.setOnClickListener(this)
-        binding.backBtn.setOnClickListener(this)
+        binding.zoom2uHeader.backBtn.setOnClickListener(this)
         binding.dp.setOnClickListener(this)
 
     }
@@ -111,7 +110,8 @@ class EditProfileActivity : AppCompatActivity(), View.OnClickListener {
         binding.phone.setText(profileResponse?.Mobile)
         binding.company.setText(profileResponse?.Company)
         if (!TextUtils.isEmpty(profileResponse?.Photo)) {
-            Picasso.get().load(profileResponse?.Photo).into(binding.dp)
+            binding.dp.setImageBitmap(AppUtility.getBitmapFromURL(profileResponse?.Photo))
+            // Picasso.get().load(profileResponse?.Photo).into(binding.dp)
         }
     }
 
@@ -122,6 +122,9 @@ class EditProfileActivity : AppCompatActivity(), View.OnClickListener {
 
             }
             R.id.back_btn -> {
+                val intent = Intent()
+                intent.putExtra("UpdateProfileData", profileResponse)
+                setResult(2, intent)
                 finish()
             }
             /*  R.id.dp -> {
@@ -318,7 +321,12 @@ class EditProfileActivity : AppCompatActivity(), View.OnClickListener {
 
 */
 
-
+    override fun onBackPressed() {
+        val intent = Intent()
+        intent.putExtra("UpdateProfileData", profileResponse)
+        setResult(2, intent)
+        finish()
+    }
 
 
 

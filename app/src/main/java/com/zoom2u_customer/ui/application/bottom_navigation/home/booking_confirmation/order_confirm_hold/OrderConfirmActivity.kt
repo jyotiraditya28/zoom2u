@@ -35,7 +35,11 @@ class OrderConfirmActivity : AppCompatActivity(), View.OnClickListener {
             binding.yourBookingNumberTxt.text = intent.getStringExtra("BookingRefFromBid")
         }else if(intent.hasExtra("historyResponse")) {
             historyResponse = intent.getParcelableExtra("historyResponse")
-            binding.yourBookingNumberTxt.text = historyResponse?.BookingRef
+            binding.yourBookingNumberTxt.text=historyResponse?.BookingRef
+            historyResponse?.IsOnHold=false
+            binding.close.visibility=View.GONE
+
+
         }
         val importantTxtStr =
             "Important: Please make sure your parcel is ready to go at your designated pickup time as you could be charged $1 a minute waiting time. This includes time waiting in the loading dock or reception."
@@ -63,12 +67,21 @@ class OrderConfirmActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(view: View?) {
         when (view!!.id) {
             R.id.view_delivery_details -> {
-                DialogActivity.logoutDialog(
+                if(intent.hasExtra("historyResponse")){
+                    val intent = Intent()
+                    intent.putExtra("historyItem",historyResponse)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                    setResult(23,intent)
+                    finish()
+                }
+                else
+                 /*   DialogActivity.logoutDialog(
                     this, "Are you sure!", "Are you want make a new Booking?",
                     "Ok", "Cancel",
                     onCancelClick = ::onCancelClick,
                     onOkClick = ::onOkClick
-                )
+                )*/
+                    newBooking()
             }
             R.id.close -> {
                 if (intent.hasExtra("BookingResponse")) {
@@ -79,6 +92,7 @@ class OrderConfirmActivity : AppCompatActivity(), View.OnClickListener {
                 }else
                     newBooking()
             }
+
         }
     }
 
@@ -90,12 +104,21 @@ class OrderConfirmActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onBackPressed() {
-        DialogActivity.logoutDialog(
+        if(intent.hasExtra("historyResponse")){
+            val intent = Intent()
+            intent.putExtra("historyItem",historyResponse)
+            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+            setResult(23,intent)
+            finish()
+        }
+        else
+       /* DialogActivity.logoutDialog(
             this, "Are you sure!", "Are you want make a new Booking?",
             "Ok", "Cancel",
             onCancelClick = ::onCancelClick,
             onOkClick = ::onOkClick
-        )
+        )*/
+           newBooking()
     }
 
     private fun onCancelClick() {}

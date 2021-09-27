@@ -122,7 +122,7 @@ class UploadQuotesActivity : AppCompatActivity(), View.OnClickListener {
                 startActivity(intent)
             }
         }
-
+        binding.zoom2uHeader.backBtn.setOnClickListener(this)
         binding.uploadImage.setOnClickListener(this)
         binding.submitQuotesReq.setOnClickListener(this)
         binding.imv1.setOnClickListener(this)
@@ -190,7 +190,9 @@ class UploadQuotesActivity : AppCompatActivity(), View.OnClickListener {
                 showPictureDialog()
                 imageClicked=5
             }
-
+            R.id.back_btn -> {
+               finish()
+            }
         }
     }
 

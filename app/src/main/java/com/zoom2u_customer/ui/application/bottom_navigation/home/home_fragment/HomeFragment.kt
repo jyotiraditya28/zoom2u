@@ -14,9 +14,10 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.zoom2u_customer.R
-import com.zoom2u_customer.ui.application.bottom_navigation.home.map_page.MapActivity
 import com.zoom2u_customer.databinding.FragmentHomeBinding
+import com.zoom2u_customer.ui.application.bottom_navigation.home.map_page.MapActivity
 import com.zoom2u_customer.utility.AppPreference
+import com.zoom2u_customer.utility.AppUtility
 import com.zoom2u_customer.utility.DialogActivity
 
 
@@ -36,9 +37,14 @@ class HomeFragment : Fragment(), View.OnClickListener{
         }
         binding.getQuoteBtn.setOnClickListener(this)
         //binding.chatBtn.setOnClickListener(this)
-        binding.nameHeader.text= "Hi "+AppPreference.getSharedPrefInstance().getLoginResponse()?.firstName.toString()
+        binding.nameHeader.text= "Hi "+AppUtility.upperCaseFirst(AppPreference.getSharedPrefInstance().getProfileData()?.FirstName.toString())
         return binding.root
     }
+
+
+
+
+
 
     fun setAdapterView(binding: FragmentHomeBinding, context: Context) {
         val layoutManager = GridLayoutManager(activity, 2)
@@ -65,7 +71,9 @@ class HomeFragment : Fragment(), View.OnClickListener{
                     intent.putParcelableArrayListExtra("icon_data", ArrayList(itemList.toList()))
                     startActivityForResult(intent,11)
                 }else{
-                    DialogActivity.alertDialogOkCallback(activity, "Oops!", "Please select the type of parcel you want to send.",onItemClick = ::onItemClick)
+                    DialogActivity.alertDialogOkCallbackWithoutHeader(activity,  "You’ll need to select what you’re trying to send first!" +
+                            "\n" +
+                            "Please select the type of parcels you want to send and we’ll sort out the rest.",onItemClick = ::onItemClick)
 
                 }
 

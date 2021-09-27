@@ -18,7 +18,7 @@ class Location : AppCompatActivity() {
 
 
         if (!Places.isInitialized()) {
-            val apiKey = this.getString(R.string.google_api_key)
+            val apiKey = this.getString(R.string.Acgoogle_api_key)
             Places.initialize(this.applicationContext, apiKey)
         }
         sessionToken = AutocompleteSessionToken.newInstance()

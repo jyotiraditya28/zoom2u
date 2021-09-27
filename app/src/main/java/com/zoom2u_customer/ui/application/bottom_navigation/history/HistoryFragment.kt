@@ -143,9 +143,14 @@ class HistoryFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 85 ) {
-            val updatedHistoryItem: HistoryResponse? = data?.getParcelableExtra<HistoryResponse>("historyItem")
-            adapter?.updateItem(updatedHistoryItem)
+        if (resultCode== 85 ) {
+            if (data?.hasExtra("historyItem") == true) {
+                val updatedHistoryItem: HistoryResponse? = data.getParcelableExtra<HistoryResponse>("historyItem")
+                adapter?.updateItem(updatedHistoryItem)
+            }else if(data?.hasExtra("historyItem1") == true){
+                val updatedHistoryItem: HistoryResponse? = data.getParcelableExtra<HistoryResponse>("historyItem1")
+                adapter?.updateItem1(updatedHistoryItem)
+            }
         }
     }
 }

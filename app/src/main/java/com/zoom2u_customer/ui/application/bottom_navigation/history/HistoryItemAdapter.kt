@@ -44,7 +44,7 @@ class HistoryItemAdapter(val context: Context, private val onItemClick:(HistoryR
 
 
     @SuppressLint("SetTextI18n")
-    override fun onBindViewHolder(holder: BindingViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: BindingViewHolder, @SuppressLint("RecyclerView") position: Int) {
 
         if(dataList1[position].type==1){
             if(dataList1[position].count>0) {
@@ -69,8 +69,8 @@ class HistoryItemAdapter(val context: Context, private val onItemClick:(HistoryR
             holder.itemBinding.historyitem= historyResponse
 
 
-            holder.itemBinding.status.setOnClickListener{
-                if(dataList1[position].IsOnHold==true&&dataList1[position].IsCancel!=true){
+            holder.itemBinding.onHoldBtn.setOnClickListener{
+                if(dataList1[position].IsOnHold==true){
                     onHoldClick(historyResponse)
                 }
             }
@@ -87,19 +87,32 @@ class HistoryItemAdapter(val context: Context, private val onItemClick:(HistoryR
                 }
             }
 
-            if(dataList1[position].IsCancel==true) {
+            if(dataList1[position].IsCancel==true &&dataList1[position].IsOnHold==false) {
                 holder.itemBinding.price.text = "No Charge"
                 holder.itemBinding.status.text = "Cancelled"
+                holder.itemBinding.name.text = "-"
+                holder.itemBinding.status.visibility=View.VISIBLE
+                holder.itemBinding.onHoldBtn.visibility=View.GONE
                 holder.itemBinding.status.setBackgroundColor(Color.parseColor("#ff0000"))
                 holder.itemBinding.status.setTextColor(Color.WHITE)
-             }else if(dataList1[position].IsOnHold==true){
+             }else if(dataList1[position].IsOnHold==true &&dataList1[position].IsCancel==false){
                 holder.itemBinding.price.text = "$" + dataList1[position].Price.toString()
-                 holder.itemBinding.status.text = "On Hold"
+                holder.itemBinding.status.visibility=View.GONE
+                holder.itemBinding.onHoldBtn.visibility=View.VISIBLE
+                holder.itemBinding.name.text = "Awaiting confirmation"
+                holder.itemBinding.status.setBackgroundColor(Color.parseColor("#ff0000"))
+                holder.itemBinding.status.setTextColor(Color.WHITE)
+            }else if(dataList1[position].IsOnHold==true &&dataList1[position].IsCancel==true){
+                holder.itemBinding.price.text = "No Charge"
+                holder.itemBinding.status.visibility=View.GONE
+                holder.itemBinding.onHoldBtn.visibility=View.VISIBLE
+                holder.itemBinding.name.text = "-"
                 holder.itemBinding.status.setBackgroundColor(Color.parseColor("#ff0000"))
                 holder.itemBinding.status.setTextColor(Color.WHITE)
             }
             else {
                 holder.itemBinding.price.text = "$" + dataList1[position].Price.toString()
+                holder.itemBinding.name.text = dataList1[position].CourierFirstName+" "+dataList1[position].CourierLastName
                 setStatus(dataList1[position].Status,holder)
             }
 
@@ -160,6 +173,7 @@ class HistoryItemAdapter(val context: Context, private val onItemClick:(HistoryR
                 holder.itemBinding.status.text ="Accepted"
                 holder.itemBinding.status.setBackgroundColor(Color.parseColor("#FFD100"))
                 holder.itemBinding.status.setTextColor(Color.BLACK)
+                holder.itemBinding.name.text = "Awaiting confirmation"
             }
         }
 
@@ -181,6 +195,17 @@ class HistoryItemAdapter(val context: Context, private val onItemClick:(HistoryR
         }
     }
 
+    fun updateItem1(updatedHistoryItem: HistoryResponse?) {
+        dataList1.forEachIndexed { index, pod ->
+            if (pod.BookingRef == updatedHistoryItem?.BookingRef) {
+                pod.apply {
+                    IsOnHold=updatedHistoryItem?.IsOnHold
+                }
+                notifyItemChanged(index)
+
+            }
+        }
+    }
     class BindingViewHolder(val itemBinding: ItemDeliveryHistoryBinding) :
         RecyclerView.ViewHolder(itemBinding.root)
 

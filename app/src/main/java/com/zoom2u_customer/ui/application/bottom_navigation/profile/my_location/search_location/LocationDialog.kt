@@ -32,7 +32,7 @@ class LocationDialog(private val context: Context){
 
    init {
        if (!Places.isInitialized()) {
-           val apiKey = context.getString(R.string.google_api_key)
+           val apiKey = context.getString(R.string.google_api_ke)
            Places.initialize(context.applicationContext, apiKey)
        }
        sessionToken = AutocompleteSessionToken.newInstance()

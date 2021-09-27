@@ -77,6 +77,10 @@ class CompletedBidActivity : AppCompatActivity(), OnMapReadyCallback {
             if (!it.isNullOrEmpty())
                RouteParser.parserTask(this,map,it)
         }
+
+        binding.zoom2uHeader.backBtn.setOnClickListener{
+            finish()
+        }
     }
 
 

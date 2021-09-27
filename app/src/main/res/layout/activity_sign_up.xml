@@ -279,24 +279,18 @@
             <CheckBox
                 android:id="@+id/chk_terms"
                 style="@style/style_13_bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:buttonTint="@color/base_color"
-                android:gravity="center_vertical"
-                android:text="@string/term_con"
-                android:textColor="@color/black" />
+                />
 
-            <TextView
-                android:id="@+id/terms"
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/terms_con"
                 style="@style/style_13_bold"
+                android:layout_marginStart="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
-                android:gravity="center_vertical"
-                android:text=" Terms and Conditions."
-                android:textColor="@color/base_color"
-                android:fontFamily="@font/montserrat_medium"
+                android:textColor="@color/black"
                 />
 
         </LinearLayout>
@@ -348,9 +342,9 @@
                     android:id="@+id/signup"
                     style="@style/style_15_bold"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="@string/sign_in"
+                    android:text=" Sign in"
                     android:textColor="@color/black" />
 
             </LinearLayout>

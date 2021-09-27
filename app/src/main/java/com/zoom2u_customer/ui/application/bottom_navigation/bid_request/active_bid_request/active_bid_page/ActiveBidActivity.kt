@@ -3,6 +3,7 @@ package com.zoom2u_customer.ui.application.bottom_navigation.bid_request.active_
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -49,6 +50,10 @@ class ActiveBidActivity : AppCompatActivity(), OnMapReadyCallback {
             quoteID = intent.getStringExtra("QuoteId")?.toInt()
             ItemType =intent.getStringExtra("ItemType")
             pos = intent.getStringExtra("pos")?.toInt()
+        }else{
+            quoteID = intent.getStringExtra("QuoteId1")?.toInt()
+            binding.cancel.visibility= View.GONE
+
         }
 
         viewModel = ViewModelProvider(this).get(BidDetailsViewModel::class.java)
@@ -91,7 +96,7 @@ class ActiveBidActivity : AppCompatActivity(), OnMapReadyCallback {
                RouteParser.parserTask(this,map,it)
         }
 
-        binding.back.setOnClickListener{
+        binding.backBtn.setOnClickListener{
             finish()
         }
 
@@ -99,7 +104,7 @@ class ActiveBidActivity : AppCompatActivity(), OnMapReadyCallback {
             DialogActivity.logoutDialog(
                 this,
                 "Confirm!",
-                "Are you sure you want to cancel your request?",
+                "Are you sure you want to cancel your bid request?",
                 "Yes", "No",
                 onCancelClick = ::onNoClick,
                 onOkClick = ::onYesClick

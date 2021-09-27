@@ -2,6 +2,7 @@ package com.zoom2u_customer.ui.application.bottom_navigation.home.delivery_detai
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.location.Geocoder
 import android.os.Bundle
 import android.text.TextUtils
@@ -191,15 +192,16 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
         binding.itemWeNotSend.setOnClickListener(this)
         binding.noContactDrop.setOnClickListener(this)
         binding.authorityToLeave.setOnClickListener(this)
-        binding.backBtn.setOnClickListener(this)
+        binding.zoom2uHeader.backBtn.setOnClickListener(this)
         binding.pickDateCl.setOnClickListener(this)
         binding.pickTimeCl.setOnClickListener(this)
         binding.dropDateCl.setOnClickListener(this)
         binding.dropTimeCl.setOnClickListener(this)
         binding.dropTime.setOnClickListener(this)
         binding.dropDate.setOnClickListener(this)
+        binding.isNoContactPickup.setOnClickListener(this)
         if (!Places.isInitialized()) {
-            val apiKey = getString(R.string.google_api_key)
+            val apiKey = getString(R.string.google_api_ke)
             Places.initialize(applicationContext, apiKey)
         }
 
@@ -515,6 +517,20 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
 
     override fun onClick(view: View?) {
         when (view!!.id) {
+           R.id.is_no_contact_pickup->{
+               if(binding.isNoContactPickup.isChecked)
+                   AppUtility.validateEditTextField(
+                       binding.pickInstruction,
+                       "Notes are required for the pickup location."
+                   )
+               else{
+                       binding.pickInstruction.hint= getString(R.string.instruction)
+                       binding.pickInstruction.setHintTextColor(Color.parseColor("#8C9293"))
+               }
+           }
+
+
+
             R.id.next_btn -> {
                 /*  binding.nextBtn.isClickable=false
                 Handler(Looper.getMainLooper()).postDelayed({
@@ -555,15 +571,17 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
                         }
                     }
                     else if(pickGpx==dropGpx&&pickGpy==dropGpy){
-                        DialogActivity.alertDialogSingleButton(
+                       /* DialogActivity.alertDialogSingleButton(
                             this,
                             "Oops!",
                             "Please select different pick and drop address."+"\n"+"Sorry!"
-                        )
+                        )*/
+                        binding.dropAddressError.visibility=View.VISIBLE
+                        binding.dropAddressError.text="Please select different pick and drop address."
                     }
 
                     else {
-
+                        binding.dropAddressError.visibility=View.GONE
                         val intent = Intent(this, PricingPaymentActivity::class.java)
                         /**for Intra State**/
                         if (pickState == dropState) {

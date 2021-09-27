@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Zoom2u</string>
     <string name="place_api_key">AIzaSyBKwJd0d1w6Bpi1yfE_MRY3MuHmkG7fEWE</string>
-
+    <string name="google_api_ke">AIzaSyDXy3Z6OzAQ3siNfARS3Y54-sbhNQSBL0U</string>
 
     <!--common-->
     <string name="plus">+</string>
@@ -18,7 +18,7 @@
     <string name="pass_header">Password</string>
     <string name="login">Login</string>
     <string name="forget_pass">Forgot password?</string>
-    <string name="register">Register</string>
+    <string name="register"> Register</string>
 
     <!--sign text-->
     <string name="create_acc">Create a New Account</string>
@@ -34,7 +34,7 @@
     <string name="term_con1">I Accept the customer terms and conditions.</string>
     <string name="sign_up">Sign up</string>
     <string name="already_acc">Already have an account?</string>
-    <string name="sign_in">Sign in</string>
+    <string name="sign_in"> Sign in</string>
     <string name="signup_error_msg">Something went wrong Please try again.</string>
 
     <!--home page-->
@@ -45,12 +45,12 @@
     <string name="make_a_booking">Make another booking</string>
     <!--profile page-->
     <string name="my_profile">My Profile</string>
-    <string name="my_location">My Location</string>
+    <string name="my_location">Saved Locations</string>
     <string name="change_pass">Change Password</string>
     <string name="sign_out">Sign Out</string>
 
     <!--my location-->
-    <string name="no_my_location">No my location found</string>
+    <string name="no_my_location">No locations saved yet.</string>
     <string name="default_drop">| DEFAULT DROP-OFF</string>
     <string name="default_pick">| DEFAULT PICK-UP</string>
     <string name="save_your_place">Save your favourite places</string>
@@ -75,8 +75,8 @@
 
 
     <!--Delivery History-->
-    <string name="delivery_history">Delivery history</string>
-    <string name="no_delivery_history">No Delivery History</string>
+    <string name="delivery_history">Delivery History</string>
+    <string name="no_delivery_history">Delivery history is empty!</string>
 
     <!--history status-->
     <string name="picked_up">Picked Up</string>
@@ -112,7 +112,7 @@
     <string name="pick_check1">Send SMS Tracking Link to Pickup Person</string>
     <string name="pick_check2">This is no-contact pickup</string>
     <string name="pick_check2_desc">(please provide a phone number above and provide notes regarding the location of the package)</string>
-    <string name="dropOff_details1">DropOff details</string>
+    <string name="dropOff_details1">Drop off details</string>
     <string name="drop_check1">This is a no-contact delivery (please provide authority to leave details below)</string>
     <string name="drop_check2">Authority to Leave (ATL)</string>
     <string name="drop_check2_desc">(please provide a phone number above and provide notes regarding the location of the package)</string>
@@ -257,7 +257,7 @@
     <string name="quote_request">Quote Request</string>
     <string name="describe_shipment">Describe Shipment</string>
 
-    <string name="image_of_freight_png_jpg_or_pdf">Image of Freight (.png, .jpg or .pdf)</string>
+    <string name="image_of_freight_png_jpg_or_pdf">Image of Freight (.png, .jpg)</string>
     <string name="click_hear_upload_photos">Click here to upload photos</string>
     <string name="submit_quote_req">Submit quote request</string>
     <string name="the_appropriate_label_has_been_attached_label_for_laptops_and_mobile_phones_can_be_downloaded_here">The appropriate label has been attached (Label for laptops and mobile phones can be downloaded here).</string>
@@ -287,7 +287,7 @@
     <string name="last_completed_a_delivery_on">Last completed a delivery on</string>
     <string name="drop_eta">Drop ETA</string>
     <string name="registered_with_zoom2u_on">Registered with Zoom2u on</string>
-    <string name="no_active_bid_found">No active bid found</string>
+    <string name="no_active_bid_found">You have no bookings with active bid.</string>
     <string name="delivery_notes">Delivery notes</string>
     <string name="package_notes">Package notes</string>
     <string name="update_details">Update details</string>
@@ -300,5 +300,8 @@
     <string name="pickup_address">Pickup address</string>
     <string name="deliver_address">Deliver address</string>
     <string name="how_did_we_do_today">How did we do today?</string>
+    <string name="no_my_location1">Create them above for a \nfaster booking process!</string>
+    <string name="my_location1">Save your most common sending and receiving \nlocations here, and then select them when creating \nnew bookings for faster, smoother experience.</string>
+    <string name="you_have_no_bookings_with_completed_bid">You have no bookings with completed bid.</string>
 
 </resources>

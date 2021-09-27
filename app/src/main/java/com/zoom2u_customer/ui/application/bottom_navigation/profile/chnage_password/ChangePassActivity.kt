@@ -31,7 +31,7 @@ open class ChangePassActivity : AppCompatActivity(), View.OnClickListener {
         AppUtility.hideKeyBoardClickOutside(binding.scrollView,this)
         AppUtility.hideKeyboardActivityLunched(this)
         binding.changePassBtn.setOnClickListener(this)
-        binding.backIcon.setOnClickListener(this)
+       binding.zoom2uHeader.backBtn.setOnClickListener(this)
 
         viewModel = ViewModelProvider(this).get(ChangePassViewModel::class.java)
         val serviceApi: ServiceApi = com.zoom2u_customer.apiclient.ApiClient.getServices()
@@ -71,7 +71,7 @@ open class ChangePassActivity : AppCompatActivity(), View.OnClickListener {
                 }
 
             }
-            R.id.back_icon->{
+            R.id.back_btn->{
                 finish()
             }
 

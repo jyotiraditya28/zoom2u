@@ -66,7 +66,7 @@ class BookingConfirmationActivity : AppCompatActivity(), View.OnClickListener {
         }
         setAdapterView()
         binding.bookingConfirmation.setOnClickListener(this)
-        binding.backBtn.setOnClickListener(this)
+        binding.zoom2uHeader.backBtn.setOnClickListener(this)
         binding.bookingConfirmation.isEnabled = true
         viewModel.getDeliverySuccess()?.observe(this) {
             if (it != null) {
@@ -106,8 +106,8 @@ class BookingConfirmationActivity : AppCompatActivity(), View.OnClickListener {
             @RequiresApi(Build.VERSION_CODES.Q)
             override fun updateDrawState(ds: TextPaint) {
                 super.updateDrawState(ds)
-                ds.color=resources.getColor(R.color.black)
-                ds.underlineColor=resources.getColor(R.color.black)
+                ds.color=resources.getColor(R.color.base_color)
+                ds.underlineColor=resources.getColor(R.color.base_color)
                 ds.isUnderlineText = true
             }
 

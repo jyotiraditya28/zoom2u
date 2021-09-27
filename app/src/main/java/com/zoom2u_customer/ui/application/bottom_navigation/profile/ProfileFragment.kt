@@ -54,7 +54,7 @@ class ProfileFragment : Fragment(), View.OnClickListener {
             if (it != null)
                 AppUtility.progressBarDissMiss()
                 binding.parentCl.visibility=View.VISIBLE
-                binding.edit.visibility=View.VISIBLE
+                //binding.edit.visibility=View.VISIBLE
                 setDataToView(it)
 
         }
@@ -71,11 +71,11 @@ class ProfileFragment : Fragment(), View.OnClickListener {
         else
             binding.company.text = "Company"
         binding.phone.text = profileResponse?.Mobile
-        binding.name.text = profileResponse?.FirstName + " " + profileResponse?.LastName
+        binding.name.text = AppUtility.upperCaseFirst(profileResponse?.FirstName.toString()) + " " + AppUtility.upperCaseFirst(profileResponse?.LastName.toString())
 
         if (!TextUtils.isEmpty(profileResponse?.Photo)) {
-            // binding.dp.setImageBitmap(AppUtility.getBitmapFromURL(profileResponse?.Photo))        }
-            Picasso.get().load(profileResponse?.Photo).into(binding.dp)
+            binding.dp.setImageBitmap(AppUtility.getBitmapFromURL(profileResponse?.Photo))
+           // Picasso.get().load(profileResponse?.Photo).into(binding.dp)
 
         }
     }

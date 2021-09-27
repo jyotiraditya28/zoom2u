@@ -13,44 +13,71 @@
         android:background="@color/white"
         tools:context=".ui.application.bottom_navigation.home.booking_confirmation.order_confirm_hold.OrderConfirmActivity">
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/close"
-            style="@style/style_15_bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:padding="5dp"
-            android:text="@string/close"
-            android:textColor="@color/base_color"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-
-            />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl1"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:background="@color/base_color"
+            app:layout_constraintTop_toTopOf="parent">
 
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/header_txt"
-            style="@style/style_15_bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:text="@string/request_confirmed"
-            android:textColor="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/close"
+                style="@style/style_15_bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:text="@string/close"
+                android:textColor="@color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+
+                />
+
+
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/zoom2u_header"
+                android:layout_width="90dp"
+                android:layout_height="25dp"
+                android:layout_marginTop="15dp"
+                android:src="@drawable/zoom2u_icon_black_white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
 
         <LinearLayout
             android:id="@+id/rl1"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="80dp"
             android:background="@drawable/shadow_top"
             android:elevation="10dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@+id/cl"
-            app:layout_constraintTop_toBottomOf="@+id/header_txt">
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/header_txt"
+                style="@style/style_15_bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="@string/request_confirmed"
+                android:textColor="@color/black"
+                android:layout_gravity="center_horizontal"
+                />
+
+
+
 
             <TextView
                 android:id="@+id/yourQuotetext"

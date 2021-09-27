@@ -175,8 +175,11 @@ class AppUtility {
             }
         }
 
-
-
+        fun upperCaseFirst(`val`: String): String {
+            val arr = `val`.toCharArray()
+            arr[0] = Character.toUpperCase(arr[0])
+            return String(arr)
+        }
 
 
 

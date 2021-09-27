@@ -2,13 +2,17 @@ package com.zoom2u_customer.ui.sign_up
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.TextPaint
 import android.text.TextUtils
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ListPopupWindow
-import android.widget.Spinner
-import android.widget.Toast
+import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -114,7 +118,33 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener,
         binding.signupBtn.setOnClickListener(this)
         binding.signup.setOnClickListener(this)
         binding.findUs.setOnClickListener(this)
-        binding.terms.setOnClickListener(this)
+        val text =  getString(R.string.term_con1)
+        val spannableString = SpannableString(text)
+        val clickableSpan: ClickableSpan = object : ClickableSpan() {
+            @RequiresApi(Build.VERSION_CODES.Q)
+            override fun updateDrawState(ds: TextPaint) {
+                super.updateDrawState(ds)
+                ds.color=resources.getColor(R.color.base_color)
+                ds.underlineColor=resources.getColor(R.color.base_color)
+                ds.isUnderlineText = true
+            }
+
+            override fun onClick(p0: View) {
+                try {
+                    val browserIntent: Intent = Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://www.zoom2u.com.au/customer-terms/")
+                    )
+                    startActivity(browserIntent)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        }
+        spannableString.setSpan(clickableSpan, 22, text.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        binding.termsCon.setText(spannableString, TextView.BufferType.SPANNABLE)
+        binding.termsCon.movementMethod = LinkMovementMethod.getInstance()
+
     }
 
 
@@ -132,17 +162,7 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener,
             R.id.find_us -> {
                 binding.spinner.performClick()
             }
-            R.id.terms -> {
-                try {
-                    val browserIntent: Intent = Intent(
-                        Intent.ACTION_VIEW,
-                        Uri.parse("https://www.zoom2u.com.au/customer-terms/")
-                    )
-                    startActivity(browserIntent)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            }
+
         }
     }
 

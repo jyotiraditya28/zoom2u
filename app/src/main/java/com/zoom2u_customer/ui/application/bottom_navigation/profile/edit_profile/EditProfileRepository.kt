@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import com.google.gson.Gson
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.zoom2u_customer.apiclient.ServiceApi
@@ -112,7 +113,7 @@ class EditProfileRepository (private var serviceApi: ServiceApi, var context: Co
                     .subscribeWith(object : DisposableSingleObserver<Response<JsonObject>>() {
                         override fun onSuccess(responce: Response<JsonObject>) {
                             if (responce.body() != null) {
-                                onSuccess(Gson().toJson(responce.body()))
+                                onSuccess((responce.body()?.get("image") as JsonArray).get(0).asString)
                             } else if (responce.errorBody() != null) {
                                 AppUtility.progressBarDissMiss()
                                 LogErrorsToAppCenter().addLogToAppCenterOnAPIFail( "api/upload",

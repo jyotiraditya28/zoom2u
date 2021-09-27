@@ -1,11 +1,16 @@
 package com.zoom2u_customer.ui.application.bottom_navigation.base_page
 
-import android.content.Intent
+import android.Manifest
+import android.app.AlertDialog
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
@@ -18,15 +23,13 @@ import com.zoom2u_customer.R
 import com.zoom2u_customer.apiclient.ApiClient.Companion.getServices
 import com.zoom2u_customer.apiclient.ServiceApi
 import com.zoom2u_customer.databinding.ActivityBasepageBinding
-import com.zoom2u_customer.services.DialogActivity1
-import com.zoom2u_customer.services.MyFcmListenerService
 import com.zoom2u_customer.ui.application.bottom_navigation.profile.ProfileRepository
 import com.zoom2u_customer.ui.application.get_location.GetLocationClass
 import com.zoom2u_customer.utility.AppUtility
 import com.zoom2u_customer.utility.DialogActivity
 
 class BasePageActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItemSelectedListener {
-
+    val APP_PERMISSION_REQUEST_CODE = 1010
     lateinit var viewModel: BasePageViewModel
     private var repository: BasePageRepository? = null
     private var profileRepository:ProfileRepository?=null
@@ -47,10 +50,23 @@ class BasePageActivity : AppCompatActivity(),  BottomNavigationView.OnNavigation
         profileRepository = ProfileRepository(serviceApi,this)
         viewModel.repository = repository
         viewModel.profileRepository = profileRepository
+        viewModel.getProfile()
+
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                return@OnCompleteListener
+            }
+
+            val token = task.result
+            viewModel.sendDeviceTokenIDWithOutLocation(token)
+
+        })
+
+
 
         getLocationClass = GetLocationClass(this)
-        getLocationClass?.getCurrentLocation(onAddress = ::getAddress)
-
+      //  getLocationClass?.getCurrentLocation(onAddress = ::getAddress)
+         checkToEnableAppPermissions()
 
         mainPagerAdapter = MainPagerAdapter(supportFragmentManager)
 
@@ -89,7 +105,7 @@ class BasePageActivity : AppCompatActivity(),  BottomNavigationView.OnNavigation
             val token = task.result
 
             viewModel.sendDeviceTokenID(lat,lang,token)
-            viewModel.getProfile()
+
         })
 
 
@@ -102,7 +118,53 @@ class BasePageActivity : AppCompatActivity(),  BottomNavigationView.OnNavigation
         firebase_CurrentUser = mAuth_Firebase?.currentUser
         Log.i("", "---  Current firebase user --- $firebase_CurrentUser")
     }
-
+    fun checkToEnableAppPermissions() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            val permission = arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA
+            )
+            if (ContextCompat.checkSelfPermission(
+                    this@BasePageActivity,
+                    permission[0]
+                ) === PackageManager.PERMISSION_DENIED || ContextCompat.checkSelfPermission(
+                    this@BasePageActivity,
+                    permission[1]
+                ) === PackageManager.PERMISSION_DENIED || ContextCompat.checkSelfPermission(
+                    this@BasePageActivity,
+                    permission[2]
+                ) === PackageManager.PERMISSION_DENIED || ContextCompat.checkSelfPermission(
+                    this@BasePageActivity,
+                    permission[3]
+                ) === PackageManager.PERMISSION_DENIED
+            ) {
+                val alertDialog = AlertDialog.Builder(this@BasePageActivity)
+                alertDialog.setTitle("Permission required!")
+                alertDialog.setMessage(
+                    "Zoom2u is a location based application" +
+                            " based on location services where we need to accessyour location" +
+                            " and access to your images for picture post and profile picture upload."
+                )
+                alertDialog.setPositiveButton(
+                    "Okay"
+                ) { dialog, _ ->
+                    ActivityCompat.requestPermissions(
+                        this@BasePageActivity , arrayOf(
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.CAMERA
+                        ),
+                        APP_PERMISSION_REQUEST_CODE
+                    )
+                    dialog.dismiss()
+                }
+                alertDialog.show()
+            } else
+                getLocationClass?.getCurrentLocation(onAddress = ::getAddress)
+        } else
+            getLocationClass?.getCurrentLocation(onAddress = ::getAddress)
+    }
 
     private fun scrollToScreen(mainScreen: MainScreen) {
         val screenPosition = mainPagerAdapter.getItems().indexOf(mainScreen)

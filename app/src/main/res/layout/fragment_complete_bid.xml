@@ -18,13 +18,13 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/no_completed_bid_text"
-            style="@style/style_15_bold"
+            style="@style/style_13_bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="No completed bid found"
-            android:textColor="@color/black"
+            android:text="@string/you_have_no_bookings_with_completed_bid"
+            android:textColor="@color/base_color"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="150dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

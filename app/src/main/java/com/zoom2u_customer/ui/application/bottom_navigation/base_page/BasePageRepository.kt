@@ -26,7 +26,7 @@ class BasePageRepository(private var serviceApi: ServiceApi, var context: Contex
 
     ) {
         if (AppUtility.isInternetConnected()) {
-            var locationStr: String = "$lat,$lang"
+            val locationStr: String = "$lat,$lang"
             if (!TextUtils.isEmpty(locationStr)) {
                 disposable.add(
                     serviceApi.postWithJsonObject(
@@ -39,48 +39,11 @@ class BasePageRepository(private var serviceApi: ServiceApi, var context: Contex
                         .subscribeWith(object : DisposableSingleObserver<Response<JsonObject>>() {
                             override fun onSuccess(responce: Response<JsonObject>) {
                                 if (responce.body() != null)
-                                    Toast.makeText(
+                                   /* Toast.makeText(
                                         context,
                                         "Device token send",
                                         Toast.LENGTH_LONG
-                                    ).show()
-                                else if (responce.errorBody() != null) {
-                                    AppUtility.progressBarDissMiss()
-                                    Toast.makeText(
-                                        context,
-                                        "something went wrong please try again.",
-                                        Toast.LENGTH_LONG
-                                    ).show()
-                                }
-                            }
-
-                            override fun onError(e: Throwable) {
-                                AppUtility.progressBarDissMiss()
-                                Toast.makeText(
-                                    context,
-                                    "something went wrong please try again.",
-                                    Toast.LENGTH_LONG
-                                ).show()
-                            }
-                        })
-                )
-            } else {
-                disposable.add(
-                    serviceApi.postWithJsonObject(
-                        "breeze/customer/UpdateCustomerDeviceId?deviceId=$token&deviceType=Android",
-                        AppUtility.getApiHeaders()
-                    ).subscribeOn(
-                        Schedulers.io()
-                    )
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribeWith(object : DisposableSingleObserver<Response<JsonObject>>() {
-                            override fun onSuccess(responce: Response<JsonObject>) {
-                                if (responce.body() != null)
-                                    Toast.makeText(
-                                        context,
-                                        "Device token send",
-                                        Toast.LENGTH_LONG
-                                    ).show()
+                                    ).show()*/
                                 else if (responce.errorBody() != null) {
                                     AppUtility.progressBarDissMiss()
                                     Toast.makeText(
@@ -104,7 +67,60 @@ class BasePageRepository(private var serviceApi: ServiceApi, var context: Contex
             }
 
         }
+        else {
+            DialogActivity.alertDialogSingleButton(
+                context,
+                "No Network !",
+                "No network connection, Please try again later."
+            )
+        }
+    }
 
+
+
+    fun sendDeviceTokenIDWithOutLocation(
+        token: String,
+        disposable: CompositeDisposable = CompositeDisposable(),
+
+        ) {
+        if (AppUtility.isInternetConnected()) {
+            disposable.add(
+                    serviceApi.postWithJsonObject(
+                        "breeze/customer/UpdateCustomerDeviceId?deviceId=$token&deviceType=Android",
+                        AppUtility.getApiHeaders()
+                    ).subscribeOn(
+                        Schedulers.io()
+                    )
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeWith(object : DisposableSingleObserver<Response<JsonObject>>() {
+                            override fun onSuccess(responce: Response<JsonObject>) {
+                                if (responce.body() != null)
+                                   /* Toast.makeText(
+                                        context,
+                                        "Device token send",
+                                        Toast.LENGTH_LONG
+                                    ).show()*/
+                                else if (responce.errorBody() != null) {
+                                    AppUtility.progressBarDissMiss()
+                                    Toast.makeText(
+                                        context,
+                                        "something went wrong please try again.",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                }
+                            }
+
+                            override fun onError(e: Throwable) {
+                                AppUtility.progressBarDissMiss()
+                                Toast.makeText(
+                                    context,
+                                    "something went wrong please try again.",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+                        })
+                )
+            }
         else {
             DialogActivity.alertDialogSingleButton(
                 context,

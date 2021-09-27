@@ -1,4 +1,3 @@
-
 package com.zoom2u_customer.ui.application.bottom_navigation.home.pricing_payment
 
 import android.annotation.SuppressLint
@@ -114,7 +113,7 @@ class PricingPaymentActivity : AppCompatActivity(), View.OnClickListener {
 
 
         binding.nextBtn.setOnClickListener(this)
-        binding.backBtn.setOnClickListener(this)
+        binding.zoom2uHeader.backBtn.setOnClickListener(this)
 
 
         val text =  getString(R.string.expired_quote)
@@ -254,7 +253,7 @@ class PricingPaymentActivity : AppCompatActivity(), View.OnClickListener {
     private fun regenerateQuotes() {
         isGenerateQuotesBtn=false
         callApiForInterOrIntraState()
-        priceSelected = true
+        priceSelected = false
         binding.quotesExpiered.visibility = View.GONE
         binding.nextBtn.text="Next"
     }

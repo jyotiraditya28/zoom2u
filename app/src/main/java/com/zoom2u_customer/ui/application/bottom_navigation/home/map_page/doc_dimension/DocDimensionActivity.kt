@@ -31,7 +31,7 @@ class DocDimensionActivity : AppCompatActivity(), View.OnClickListener {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_doc_dimension)
         AppUtility.hideKeyboardActivityLunched(this)
         AppUtility.hideKeyBoardClickOutside(binding.parentCl,this)
-        AppUtility.hideKeyBoardClickOutside(binding.scrollView,this)
+        //AppUtility.hideKeyBoardClickOutside(binding.cl1,this)
         if (intent.hasExtra("Icon")) {
             icon = intent.getParcelableExtra("Icon")
         }
@@ -214,7 +214,7 @@ class DocDimensionActivity : AppCompatActivity(), View.OnClickListener {
 
 
         binding.confirmBtn.setOnClickListener(this)
-        binding.backBtn.setOnClickListener(this)
+        binding.zoom2uHeader.backBtn.setOnClickListener(this)
     }
 
    private fun getCountCheckResult(quantity:Int?){

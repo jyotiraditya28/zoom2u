@@ -20,6 +20,7 @@ import com.zoom2u_customer.getBrainTree.GetBrainTreeClientTokenOrBookDeliveryReq
 import com.zoom2u_customer.ui.application.bottom_navigation.base_page.BasePageActivity
 import com.zoom2u_customer.ui.application.bottom_navigation.history.HistoryResponse
 import com.zoom2u_customer.ui.application.bottom_navigation.history.history_details.HistoryDetailsRepository
+import com.zoom2u_customer.ui.application.bottom_navigation.history.history_details.HistoryDetailsResponse
 import com.zoom2u_customer.ui.application.bottom_navigation.home.booking_confirmation.BookingConfirmationRepository
 import com.zoom2u_customer.ui.application.bottom_navigation.home.booking_confirmation.BookingConfirmationViewModel
 import com.zoom2u_customer.ui.application.bottom_navigation.home.booking_confirmation.BookingResponse
@@ -31,11 +32,14 @@ class OnHoldActivity : AppCompatActivity() {
     lateinit var binding: ActivityOnHoldBinding
     private var request_Code = 1004
     var historyResponse: HistoryResponse?=null
+    var historyDetailsResponse: HistoryDetailsResponse? = null
     private var bookingResponse: BookingResponse? = null
     lateinit var viewModel: OnHoldViewModel
     private var getBrainTreeClientToken: GetBrainTreeClientTokenOrBookDeliveryRequest? = null
     private var repository: OnHoldRepository? = null
     var repositoryHistory: HistoryDetailsRepository? = null
+
+
     private var nonce: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +54,9 @@ class OnHoldActivity : AppCompatActivity() {
         }else if (intent.hasExtra("historyResponse")) {
             historyResponse = intent.getParcelableExtra("historyResponse")
             binding.txtBookingRefrence.text = historyResponse?.BookingRef
+        }else if (intent.hasExtra("historyDetailsResponse")) {
+            historyDetailsResponse = intent.getParcelableExtra("historyDetailsResponse")
+            binding.txtBookingRefrence.text = historyDetailsResponse?.BookingRef
         }
         viewModel = ViewModelProvider(this).get(OnHoldViewModel::class.java)
         val serviceApi: ServiceApi = ApiClient.getServices()
@@ -64,7 +71,7 @@ class OnHoldActivity : AppCompatActivity() {
                 binding.acceptBtn.isClickable=true
 
             }, 3000)
-
+            AppUtility.progressBarShow(this)
             getBrainTreeClientToken?.callServiceForGetClientToken()
         }
 
@@ -78,15 +85,15 @@ class OnHoldActivity : AppCompatActivity() {
                 onOkClick = ::onYesClick)
         }
 
-        binding.backIcon.setOnClickListener{
-            if (intent.hasExtra("BookingResponse")){
+        binding.zoom2uHeader.backBtn.setOnClickListener{
+           /* if (intent.hasExtra("BookingResponse")){
             DialogActivity.logoutDialog(
                 this, "Are you sure!", "Are you want make a new Booking?",
                 "Ok", "Cancel",
                 onCancelClick = ::onCancelClick,
                 onOkClick = ::onOkClick
             )}
-            else
+            else*/
                 finish()
         }
 
@@ -95,14 +102,21 @@ class OnHoldActivity : AppCompatActivity() {
             if (it != null) {
                 if (it == "true") {
                     AppUtility.progressBarDissMiss()
-                    val loginPage = Intent(this, OrderConfirmActivity::class.java)
-                    if (intent.hasExtra("BookingResponse"))
-                    loginPage.putExtra("BookingResponse", bookingResponse)
-                   else
-                        loginPage.putExtra("historyResponse", historyResponse)
-                    intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
-                    startActivity(loginPage)
-                    finish()
+                    if (intent.hasExtra("BookingResponse")){
+                        val intent = Intent(this, OrderConfirmActivity::class.java)
+                        intent.putExtra("BookingResponse", bookingResponse)
+                        intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
+                        startActivity(intent)
+                        finish()
+                    }
+                 else{
+                        val intent = Intent(this, OrderConfirmActivity::class.java)
+                        intent.putExtra("historyResponse", historyResponse)
+                        intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
+                        startActivityForResult(intent,23)
+
+                    }
+
 
                 }
             }
@@ -111,15 +125,10 @@ class OnHoldActivity : AppCompatActivity() {
             if (it != null) {
                 if (it == "true") {
                     AppUtility.progressBarDissMiss()
-
                     if (intent.hasExtra("BookingResponse")) {
                         val intent = Intent(this, BasePageActivity::class.java)
                         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
-                        Toast.makeText(
-                            this,
-                            "Booking cancellation successfully.",
-                            Toast.LENGTH_LONG
-                        ).show()
+                        Toast.makeText(this, "Booking cancellation successfully.", Toast.LENGTH_LONG).show()
                         startActivity(intent)
                         finish()
                     }
@@ -129,8 +138,7 @@ class OnHoldActivity : AppCompatActivity() {
                         historyResponse?.IsCancel = true
                         intent.putExtra("historyItem", historyResponse)
                         setResult(85, intent)
-                        Toast.makeText(this, "Booking cancellation successfully.", Toast.LENGTH_SHORT)
-                            .show()
+                        Toast.makeText(this, "Booking cancellation successfully.", Toast.LENGTH_SHORT).show()
                         finish()
                     }
 
@@ -149,8 +157,19 @@ class OnHoldActivity : AppCompatActivity() {
     private fun onYesClick() {
         if (intent.hasExtra("BookingResponse"))
           viewModel.cancelBooking(bookingResponse?.BookingId)
-       else
+        else if (intent.hasExtra("historyResponse")){
+            if(historyResponse?.IsCancel==true)
+                DialogActivity.alertDialogSingleButton(this, "Error", "Unfortunately your booking could not be cancelled: Validation Errors")
+            else
             viewModel.cancelBooking(historyResponse?.BookingId.toString())
+        }else if (intent.hasExtra("historyDetailsResponse")){
+            if(historyDetailsResponse?.IsCancel==true)
+                DialogActivity.alertDialogSingleButton(this, "Error", "Unfortunately your booking could not be cancelled: Validation Errors")
+            else
+                viewModel.cancelBooking(historyDetailsResponse?.BookingId.toString())
+        }
+
+
     }
 
 
@@ -165,20 +184,27 @@ class OnHoldActivity : AppCompatActivity() {
                 try {
                     if (intent.hasExtra("BookingResponse"))
                         viewModel.activateRequest(bookingResponse?.BookingRef, nonce)
-                    else
+                    else if (intent.hasExtra("historyResponse"))
                         viewModel.activateRequest(historyResponse?.BookingRef, nonce)
-
+                    else
+                        viewModel.activateRequest(historyDetailsResponse?.BookingRef, nonce)
                 } catch (e: JSONException) {
                     e.printStackTrace()
                 }
             }
+        }else if(requestCode==23){
+            val updatedHistoryItem: HistoryResponse? = data?.getParcelableExtra<HistoryResponse>("historyItem")
+            val intent = Intent()
+            intent.putExtra("historyItem1",updatedHistoryItem)
+            setResult(85,intent)
+            finish()
         }
     }
 
     override fun onBackPressed() {
         if (intent.hasExtra("BookingResponse")){
         DialogActivity.logoutDialog(
-            this, "Are you sure!", "Are you want make a new Booking?",
+            this, "Are you sure!", "Are you sure want make a new Booking?",
             "Ok", "Cancel",
             onCancelClick = ::onCancelClick,
             onOkClick = ::onOkClick

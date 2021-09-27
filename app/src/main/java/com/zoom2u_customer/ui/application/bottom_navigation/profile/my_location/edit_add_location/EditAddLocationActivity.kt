@@ -55,7 +55,7 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_edit_location)
         AppUtility.hideKeyBoardClickOutside(binding.parentCl,this)
-        AppUtility.hideKeyBoardClickOutside(binding.scrollView,this)
+        AppUtility.hideKeyBoardClickOutside(binding.ll1,this)
         AppUtility.hideKeyboardActivityLunched(this)
         getLocationClass = GetLocationClass(this)
 
@@ -76,7 +76,7 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
         binding.findMe.setOnClickListener(this)
 
         binding.saveChangeBtn.setOnClickListener(this)
-        binding.backBtn.setOnClickListener(this)
+        binding.zoom2uHeader.backBtn.setOnClickListener(this)
         binding.removeTxt.setOnClickListener(this)
         binding.address.setOnClickListener(this)
 
@@ -275,7 +275,7 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
         when (view!!.id) {
             R.id.address -> {
                 if (!Places.isInitialized()) {
-                    val apiKey = getString(R.string.google_api_key)
+                    val apiKey = getString(R.string.google_api_ke)
                     Places.initialize(applicationContext, apiKey)
                 }
 
@@ -415,6 +415,10 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
         val address = geoCoder.getFromLocation(lat, lang, 1)
         binding.address.setText(address[0].getAddressLine(0))
         viewModel.addFromGoogleLatLang(lat.toString(), lang.toString(), isEdit)
+    }
+
+    override fun onBackPressed() {
+        finish()
     }
 
 

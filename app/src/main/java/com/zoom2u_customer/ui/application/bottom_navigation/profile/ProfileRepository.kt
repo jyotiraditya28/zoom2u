@@ -39,7 +39,8 @@ class ProfileRepository(private var serviceApi: ServiceApi, var context: Context
                                     Gson().fromJson(responce.body(), listType)
                                 onSuccess(list[0])
                                 AppPreference.getSharedPrefInstance().setProfileData(Gson().toJson(list[0]))
-
+                                LogErrorsToAppCenter().addLogToAppCenterOnAPIFail("breeze/customer/Customers",
+                                    responce.code(),responce.message(),"Profile Api","Suc")
                             }
                             else if (responce.errorBody() != null) {
                                 AppUtility.progressBarDissMiss()

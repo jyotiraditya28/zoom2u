@@ -39,15 +39,16 @@ class QuoteConfirmationActivity : AppCompatActivity() {
         binding.txtAwaitingQuotes.text=ss
 
         binding.close.setOnClickListener(){
-            DialogActivity.logoutDialog(this, "Are you sure!", "Are you want make a new Booking?",
+         /*   DialogActivity.logoutDialog(this, "Are you sure!", "Are you want make a new Booking?",
                 "Ok","Cancel",
                 onCancelClick=::onCancelClick,
-                onOkClick = ::onOkClick)
+                onOkClick = ::onOkClick)*/
+            newBooking()
         }
 
         binding.getQuoteBtn.setOnClickListener(){
             val intent = Intent(this, ActiveBidActivity::class.java)
-            intent.putExtra("QuoteId",quoteID)
+            intent.putExtra("QuoteId1",quoteID)
             intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
             startActivity(intent)
 
@@ -63,10 +64,7 @@ class QuoteConfirmationActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        DialogActivity.logoutDialog(this, "Are you sure!", "Are you want make a new Booking?",
-            "Ok","Cancel",
-            onCancelClick=::onCancelClick,
-            onOkClick = ::onOkClick)
+       newBooking()
     }
     private fun onCancelClick(){}
     private fun onOkClick() {
