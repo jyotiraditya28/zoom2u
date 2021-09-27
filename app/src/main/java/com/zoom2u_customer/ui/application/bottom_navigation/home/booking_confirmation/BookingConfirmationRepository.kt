@@ -40,11 +40,11 @@ class BookingConfirmationRepository(private var serviceApi: ServiceApi, var cont
                             else if (responce.errorBody() != null) {
                                 AppUtility.progressBarDissMiss()
                                 if(isIntraStateBooking)
-                                    LogErrorsToAppCenter().addLogToAppCenterOnAPIFail("breeze/customer/SaveDeliveryRequest",
-                                        responce.code(),responce.message(),"intra state booking payment","ErrorCode$jObjForPlaceBooking")
+                                    LogErrorsToAppCenter().addLogToAppCenterOnAPIFail("breeze/customer/SaveDeliveryRequest$jObjForPlaceBooking",
+                                        responce.code(),responce.message(),"intra state booking payment","ErrorCode")
                                 else
-                                    LogErrorsToAppCenter().addLogToAppCenterOnAPIFail("breeze/customer/SaveDeliveryRequest",
-                                        responce.code(),responce.message(),"inter state booking payment","ErrorCode$jObjForPlaceBooking")
+                                    LogErrorsToAppCenter().addLogToAppCenterOnAPIFail("breeze/customer/SaveDeliveryRequest$jObjForPlaceBooking",
+                                        responce.code(),responce.message(),"inter state booking payment","ErrorCode")
 
                                 if(responce.code()==401){
                                     DialogActivity.logoutDialog(
@@ -73,11 +73,11 @@ class BookingConfirmationRepository(private var serviceApi: ServiceApi, var cont
                         override fun onError(e: Throwable) {
                             AppUtility.progressBarDissMiss()
                             if(isIntraStateBooking)
-                                LogErrorsToAppCenter().addLogToAppCenterOnAPIFail("breeze/customer/SaveDeliveryRequest",
-                                    0,e.toString(),"intra state booking payment","OnError$jObjForPlaceBooking")
+                                LogErrorsToAppCenter().addLogToAppCenterOnAPIFail("breeze/customer/SaveDeliveryRequest$jObjForPlaceBooking",
+                                    0,e.toString(),"intra state booking payment","OnError")
                             else
-                                LogErrorsToAppCenter().addLogToAppCenterOnAPIFail("breeze/customer/SaveDeliveryRequest",
-                                    0,e.toString(),"inter state booking payment","OnError$jObjForPlaceBooking")
+                                LogErrorsToAppCenter().addLogToAppCenterOnAPIFail("breeze/customer/SaveDeliveryRequest$jObjForPlaceBooking",
+                                    0,e.toString(),"inter state booking payment","OnError")
 
 
 

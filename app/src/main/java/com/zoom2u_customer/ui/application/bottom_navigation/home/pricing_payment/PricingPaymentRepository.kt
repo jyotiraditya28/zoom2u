@@ -42,11 +42,11 @@ class PricingPaymentRepository(private var serviceApi: ServiceApi, var context: 
                                 AppUtility.progressBarDissMiss()
 
                                 LogErrorsToAppCenter().addLogToAppCenterOnAPIFail(
-                                    "breeze/pricing/IntrastateQuote",
+                                    "breeze/pricing/IntrastateQuote$intraStateReq",
                                     responce.code(),
                                     responce.message(),
                                     "Price Payment IntraState",
-                                    "ErrorCode$intraStateReq"
+                                    "ErrorCode"
                                 )
 
 
@@ -68,11 +68,11 @@ class PricingPaymentRepository(private var serviceApi: ServiceApi, var context: 
                         override fun onError(e: Throwable) {
                             AppUtility.progressBarDissMiss()
                             LogErrorsToAppCenter().addLogToAppCenterOnAPIFail(
-                                "breeze/pricing/IntrastateQuote",
+                                "breeze/pricing/IntrastateQuote$intraStateReq",
                                 0,
                                 e.toString(),
                                 "Price Payment IntraState",
-                                "OnError$intraStateReq"
+                                "OnError"
                             )
 
 
@@ -116,11 +116,11 @@ class PricingPaymentRepository(private var serviceApi: ServiceApi, var context: 
                             else if (responce.errorBody() != null) {
                                 AppUtility.progressBarDissMiss()
                                 LogErrorsToAppCenter().addLogToAppCenterOnAPIFail(
-                                    "breeze/pricing/InterstateQuote",
+                                    "breeze/pricing/InterstateQuote$interStateReq",
                                     responce.code(),
                                     responce.message(),
                                     "Price Payment InterState",
-                                    "ErrorCode$interStateReq"
+                                    "ErrorCode"
                                 )
 
 
@@ -143,11 +143,11 @@ class PricingPaymentRepository(private var serviceApi: ServiceApi, var context: 
                             AppUtility.progressBarDissMiss()
 
                             LogErrorsToAppCenter().addLogToAppCenterOnAPIFail(
-                                "breeze/pricing/InterstateQuote",
+                                "breeze/pricing/InterstateQuote$interStateReq",
                                 0,
                                 e.toString(),
                                 "Price Payment InterState",
-                                "OnError$interStateReq"
+                                "OnError"
                             )
 
                             Toast.makeText(

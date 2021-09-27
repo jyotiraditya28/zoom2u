@@ -39,7 +39,7 @@ class LogInActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_log_in)
-        AppUtility.hideKeyBoardClickOutside(binding.cl5,this)
+        AppUtility.hideKeyBoardClickOutside(binding.parentCl,this)
         AppUtility.hideKeyboardActivityLunched(this)
         binding.loginBtn.setOnClickListener(this)
         binding.register.setOnClickListener(this)

@@ -54,7 +54,7 @@ class ProfileFragment : Fragment(), View.OnClickListener {
             if (it != null)
                 AppUtility.progressBarDissMiss()
                 binding.parentCl.visibility=View.VISIBLE
-                //binding.edit.visibility=View.VISIBLE
+                binding.edit.visibility=View.VISIBLE
                 setDataToView(it)
 
         }

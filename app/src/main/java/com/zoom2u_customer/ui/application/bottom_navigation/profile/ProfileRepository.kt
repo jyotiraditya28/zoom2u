@@ -39,8 +39,7 @@ class ProfileRepository(private var serviceApi: ServiceApi, var context: Context
                                     Gson().fromJson(responce.body(), listType)
                                 onSuccess(list[0])
                                 AppPreference.getSharedPrefInstance().setProfileData(Gson().toJson(list[0]))
-                                LogErrorsToAppCenter().addLogToAppCenterOnAPIFail("breeze/customer/Customers",
-                                    responce.code(),responce.message(),"Profile Api","Suc")
+
                             }
                             else if (responce.errorBody() != null) {
                                 AppUtility.progressBarDissMiss()
@@ -52,7 +51,7 @@ class ProfileRepository(private var serviceApi: ServiceApi, var context: Context
                                         onItemClick = ::onOkClick)
                                 }
                                 else{
-                                     Toast.makeText(context, "Something went wrong please try again.", Toast.LENGTH_LONG).show() }
+                                     Toast.makeText(context, "Something went wrong please try again.", Toast.LENGTH_SHORT).show() }
 
                             }
                         }
@@ -69,7 +68,7 @@ class ProfileRepository(private var serviceApi: ServiceApi, var context: Context
                             Toast.makeText(
                                 context,
                                 "something went wrong please try again.",
-                                Toast.LENGTH_LONG
+                                Toast.LENGTH_SHORT
                             ).show()
                         }
                     })

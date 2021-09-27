@@ -51,7 +51,7 @@ class CompletedBidListRepository(private var serviceApi: ServiceApi, var context
                                         onItemClick = ::onOkClick)
                                 }
                                 else{
-                                    Toast.makeText(context, "Something went wrong please try again.", Toast.LENGTH_LONG).show() }
+                                    Toast.makeText(context, "Something went wrong please try again.", Toast.LENGTH_SHORT).show() }
 
                             }
                         }
@@ -68,7 +68,7 @@ class CompletedBidListRepository(private var serviceApi: ServiceApi, var context
                             Toast.makeText(
                                 context,
                                 "something went wrong please try again.",
-                                Toast.LENGTH_LONG
+                                Toast.LENGTH_SHORT
                             ).show()
                         }
                     })

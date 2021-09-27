@@ -328,6 +328,7 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
                         getAddress?.get("country")?.toString()
 
                 }
+                showErrorForSamePickAndDropAddress()
             }
         }
         viewModel.googleSuccessUsingLatLang()?.observe(this) { isGoogleAdd ->
@@ -385,6 +386,7 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
                     dropCountry =
                         getAddress?.get("country")?.toString()
                 }
+                showErrorForSamePickAndDropAddress()
             }
         }
 
@@ -498,6 +500,8 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
         binding.dropName.threshold = 0
         binding.dropName.setAdapter(dropAdapter)
         showHideWeight(pickState, dropState)
+        showErrorForSamePickAndDropAddress()
+
     }
 
 
@@ -514,6 +518,16 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
         return true
     }
 
+
+    private fun showErrorForSamePickAndDropAddress(){
+        if(pickGpx==dropGpx&&pickGpy==dropGpy){
+            binding.dropAddressError.visibility=View.VISIBLE
+            binding.dropAddressError.text="*Please select different pick and drop address."
+        }
+        else
+            binding.dropAddressError.visibility=View.GONE
+
+    }
 
     override fun onClick(view: View?) {
         when (view!!.id) {
