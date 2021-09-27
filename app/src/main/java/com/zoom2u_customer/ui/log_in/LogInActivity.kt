@@ -40,6 +40,7 @@ class LogInActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_log_in)
         AppUtility.hideKeyBoardClickOutside(binding.parentCl,this)
+        AppUtility.hideKeyBoardClickOutside(binding.cl1,this)
         AppUtility.hideKeyboardActivityLunched(this)
         binding.loginBtn.setOnClickListener(this)
         binding.register.setOnClickListener(this)

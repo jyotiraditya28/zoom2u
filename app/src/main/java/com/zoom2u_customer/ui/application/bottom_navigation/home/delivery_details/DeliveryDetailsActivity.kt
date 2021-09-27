@@ -520,13 +520,14 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
 
 
     private fun showErrorForSamePickAndDropAddress(){
-        if(pickGpx==dropGpx&&pickGpy==dropGpy){
-            binding.dropAddressError.visibility=View.VISIBLE
-            binding.dropAddressError.text="*Please select different pick and drop address."
-        }
-        else
-            binding.dropAddressError.visibility=View.GONE
-
+        if (!pickGpx.isNullOrBlank()&&!dropGpx.isNullOrBlank()) {
+            if (pickGpx == dropGpx && pickGpy == dropGpy) {
+                binding.dropAddressError.visibility = View.VISIBLE
+                binding.dropAddressError.text = "*Please select different pick and drop address."
+            } else
+                binding.dropAddressError.visibility = View.GONE
+        }else
+            binding.dropAddressError.visibility = View.GONE
     }
 
     override fun onClick(view: View?) {

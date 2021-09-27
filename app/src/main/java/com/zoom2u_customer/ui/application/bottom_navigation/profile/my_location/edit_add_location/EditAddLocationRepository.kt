@@ -10,6 +10,7 @@ import com.zoom2u_customer.ui.application.bottom_navigation.profile.my_location.
 import com.zoom2u_customer.ui.application.bottom_navigation.profile.my_location.model.MyLocationResAndEditLocationReq
 import com.zoom2u_customer.utility.AppUtility
 import com.zoom2u_customer.utility.DialogActivity
+import com.zoom2u_customer.utility.LogErrorsToAppCenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
@@ -44,6 +45,8 @@ class EditAddLocationRepository(
                                 onSuccess(Gson().toJson(responce.body()))
                             } else if (responce.errorBody() != null) {
                                 AppUtility.progressBarDissMiss()
+                                LogErrorsToAppCenter().addLogToAppCenterOnAPIFail("breeze/customer/SavePreferredLocations$myLocationResponse",
+                                    responce.code(),responce.message(),"Edit my location Api","OnError")
                                 if(responce.code()==401){
                                     DialogActivity.logoutDialog(
                                         context,
@@ -70,7 +73,9 @@ class EditAddLocationRepository(
 
                         override fun onError(e: Throwable) {
                             AppUtility.progressBarDissMiss()
-                            Log.d("", "")
+                            LogErrorsToAppCenter().addLogToAppCenterOnAPIFail("breeze/customer/SavePreferredLocations$myLocationResponse",
+                                0,e.toString(),"Edit my location Api","OnError")
+
                             Toast.makeText(
                                 context,
                                 "Something went wrong please try again.",
@@ -111,17 +116,20 @@ class EditAddLocationRepository(
                                 onSuccess(Gson().toJson(responce.body()))
                             } else if (responce.errorBody() != null) {
                                 AppUtility.progressBarDissMiss()
+                                LogErrorsToAppCenter().addLogToAppCenterOnAPIFail("breeze/customer/SavePreferredLocations$addLocationReq",
+                                    responce.code(),responce.message(),"Add my location Api","OnError")
                                 Toast.makeText(
                                     context,
                                     "something went wrong please try again.",
-                                    Toast.LENGTH_LONG
+                                    Toast.LENGTH_SHORT
                                 ).show()
                             }
                         }
 
                         override fun onError(e: Throwable) {
                             AppUtility.progressBarDissMiss()
-                            Log.d("", "")
+                            LogErrorsToAppCenter().addLogToAppCenterOnAPIFail("breeze/customer/SavePreferredLocations$addLocationReq",
+                                0,e.toString(),"Add my location Api","OnError")
                             Toast.makeText(context, "something went wrong please try again.", Toast.LENGTH_LONG).show()
                         }
                     })
@@ -158,12 +166,15 @@ class EditAddLocationRepository(
                                 onSuccess(Gson().toJson(responce.body()))
                             } else if (responce.errorBody() != null) {
                                 AppUtility.progressBarDissMiss()
+                                LogErrorsToAppCenter().addLogToAppCenterOnAPIFail("breeze/customer/DeleteCustomerPreferredLocation?locationId=$locationId",
+                                    responce.code(),responce.message(),"delete my location Api","OnError")
                                 Toast.makeText(context, "something went wrong please try again.", Toast.LENGTH_LONG).show()
                             }
                         }
                         override fun onError(e: Throwable) {
                             AppUtility.progressBarDissMiss()
-                            Log.d("", "")
+                            LogErrorsToAppCenter().addLogToAppCenterOnAPIFail("breeze/customer/DeleteCustomerPreferredLocation?locationId=$locationId",
+                                0,e.toString(),"delete my location Api","OnError")
                             Toast.makeText(context, "something went wrong please try again.", Toast.LENGTH_LONG).show()
                         }
                     })

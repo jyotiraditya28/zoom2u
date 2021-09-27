@@ -29,7 +29,7 @@
             android:layout_marginTop="80dp"
             android:background="@drawable/shadow_top"
             android:elevation="10dp"
-            app:layout_constraintBottom_toTopOf="@+id/next_ll"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
 
@@ -52,6 +52,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:scrollbars="vertical"
+                app:layout_constraintBottom_toTopOf="@+id/next_ll"
                 app:layout_constraintTop_toBottomOf="@+id/header">
 
 
@@ -201,8 +202,6 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </ScrollView>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
             <LinearLayout
                 android:id="@+id/next_ll"
                 android:layout_width="match_parent"
@@ -227,6 +226,8 @@
 
 
             </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,6 +8,7 @@ import com.zoom2u_customer.R
 import com.zoom2u_customer.apiclient.ServiceApi
 import com.zoom2u_customer.utility.AppUtility
 import com.zoom2u_customer.utility.DialogActivity
+import com.zoom2u_customer.utility.LogErrorsToAppCenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
@@ -37,18 +38,23 @@ class ChangePassRepository(private var serviceApi: ServiceApi, var context: Cont
                         override fun onSuccess(responce: Response<JsonObject>) {
                             if (responce.body() != null)
                                 onSuccess(responce.body().toString())
-                                else if (responce.errorBody() != null) {
-                                    AppUtility.progressBarDissMiss()
+                            else if (responce.errorBody() != null) {
+                                AppUtility.progressBarDissMiss()
+                                LogErrorsToAppCenter().addLogToAppCenterOnAPIFail("api/account/changePassword?OldPassword=$oldPass&NewPassword=$newPass",
+                                    responce.code(),responce.message(),"Change Password Api","ErrorCode")
                                 DialogActivity.alertDialogSingleButton(
                                     context,
                                     "Sorry!",
                                     "May be you entered wrong password, Please try again"
                                 )
-                                }
+                            }
                         }
 
                         override fun onError(e: Throwable) {
                             AppUtility.progressBarDissMiss()
+
+                            LogErrorsToAppCenter().addLogToAppCenterOnAPIFail("api/account/changePassword?OldPassword=$oldPass&NewPassword=$newPass",
+                                0,e.toString(),"Change Password Api","ErrorCode")
                             Toast.makeText(
                                 context,
                                 R.string.signup_error_msg.toString(),
