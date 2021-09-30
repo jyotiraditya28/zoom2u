@@ -116,23 +116,31 @@ class LogInActivity : AppCompatActivity(), View.OnClickListener {
             AppUtility.validateTextField(binding.pass)
             DialogActivity.alertDialogSingleButton(this, "Alert!", "Please enter valid email address and password")
             return false
-        } else if (TextUtils.isEmpty(email) || TextUtils.isEmpty(pass)) {
+        } else{
             if (TextUtils.isEmpty(email)) {
                 DialogActivity.alertDialogSingleButton(this, "Alert!", "Please enter your email address")
                 AppUtility.validateTextField(binding.email)
-                return false
-            } else if (TextUtils.isEmpty(pass)) {
-                DialogActivity.alertDialogSingleButton(this, "Alert!", "Please enter your password")
-                AppUtility.validateTextField(binding.pass)
+                if (pass!="")
+                    AppUtility.removeErrorBackGround(binding.pass)
                 return false
             }
-        } else if (!email.matches(AppUtility.emailPattern)) {
-            AppUtility.validateTextField(binding.email)
-            DialogActivity.alertDialogSingleButton(this, "Alert!", "Please enter your valid email")
-            return false
+            else if (!email.matches(("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$").toRegex())) {
+                AppUtility.validateTextField(binding.email)
+                DialogActivity.alertDialogSingleButton(this, "Alert!", "Please enter your valid email")
+                if (pass!="")
+                    AppUtility.removeErrorBackGround(binding.pass)
+                return false
+            }
+            else if (TextUtils.isEmpty(pass)) {
+                DialogActivity.alertDialogSingleButton(this, "Alert!", "Please enter your password")
+                AppUtility.validateTextField(binding.pass)
+                if (email!=""&&email.matches(("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$").toRegex()))
+                    AppUtility.removeErrorBackGround(binding.email)
+                return false
+            }
         }
-            binding.pass.setBackgroundResource(R.drawable.default_normal)
-            binding.email.setBackgroundResource(R.drawable.default_normal)
+        AppUtility.removeErrorBackGround(binding.email)
+        AppUtility.removeErrorBackGround(binding.pass)
             return true
 
     }

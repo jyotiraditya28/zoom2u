@@ -59,7 +59,7 @@ class BasePageActivity : AppCompatActivity(),  BottomNavigationView.OnNavigation
 
             val token = task.result
             viewModel.sendDeviceTokenIDWithOutLocation(token)
-
+            Log.d("Fcm","$token")
         })
 
 
@@ -105,7 +105,7 @@ class BasePageActivity : AppCompatActivity(),  BottomNavigationView.OnNavigation
             val token = task.result
 
             viewModel.sendDeviceTokenID(lat,lang,token)
-
+            Log.d("Fcm",token)
         })
 
 
@@ -142,7 +142,7 @@ class BasePageActivity : AppCompatActivity(),  BottomNavigationView.OnNavigation
                 alertDialog.setTitle("Permission required!")
                 alertDialog.setMessage(
                     "Zoom2u is a location based application" +
-                            " based on location services where we need to accessyour location" +
+                            " based on location services where we need to access your location" +
                             " and access to your images for picture post and profile picture upload."
                 )
                 alertDialog.setPositiveButton(

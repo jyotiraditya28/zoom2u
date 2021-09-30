@@ -263,13 +263,20 @@ class EditProfileActivity : AppCompatActivity(), View.OnClickListener {
             DialogActivity.alertDialogSingleButton(this, "Alert!", "Please enter your first name")
             AppUtility.validateTextField(binding.fname)
             return false
-        } else if (last_name == "") {
+        }
+        else if (last_name == "") {
             DialogActivity.alertDialogSingleButton(this, "Alert!", "Please enter your last name")
             AppUtility.validateTextField(binding.lname)
+            if(first_name != "")
+                AppUtility.removeErrorBackGround(binding.fname)
             return false
         } else if (phone == "") {
             DialogActivity.alertDialogSingleButton(this, "Alert!", "Please enter your phone number")
             AppUtility.validateTextField(binding.phone)
+            if(first_name != "")
+                AppUtility.removeErrorBackGround(binding.fname)
+            if(last_name != "")
+                AppUtility.removeErrorBackGround(binding.lname)
             return false
         } else if (phone.length > 20) {
             DialogActivity.alertDialogSingleButton(
@@ -285,6 +292,12 @@ class EditProfileActivity : AppCompatActivity(), View.OnClickListener {
                 "Alert!",
                 "Please enter valid phone number"
             )
+            if(first_name != "")
+                AppUtility.removeErrorBackGround(binding.fname)
+            if(last_name != "")
+                AppUtility.removeErrorBackGround(binding.lname)
+            if (phone!="")
+                AppUtility.removeErrorBackGround(binding.phone)
             AppUtility.validateTextField(binding.phone)
             return false
         }

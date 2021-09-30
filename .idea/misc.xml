@@ -3,45 +3,22 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Zoom2u16Aug/app/src/main/res/drawable/chip_background.xml" value="0.1" />
-        <entry key="..\:/Zoom2u16Aug/app/src/main/res/drawable/lode_more_icon.xml" value="0.14907407407407408" />
-        <entry key="..\:/Zoom2u16Aug/app/src/main/res/drawable/lode_more_icon1.xml" value="0.14907407407407408" />
-        <entry key="..\:/Zoom2u16Aug/app/src/main/res/drawable/red_button.xml" value="0.1" />
-        <entry key="..\:/Zoom2u16Aug/app/src/main/res/drawable/shadow_top.xml" value="0.14907407407407408" />
-        <entry key="..\:/Zoom2u16Aug/app/src/main/res/layout/a.xml" value="0.12" />
-        <entry key="..\:/Zoom2u16Aug/app/src/main/res/layout/activity_active_bid.xml" value="0.11548913043478261" />
-        <entry key="..\:/Zoom2u16Aug/app/src/main/res/layout/activity_booking_confirmation.xml" value="0.1" />
-        <entry key="..\:/Zoom2u16Aug/app/src/main/res/layout/activity_chnage_pass.xml" value="0.13333333333333333" />
-        <entry key="..\:/Zoom2u16Aug/app/src/main/res/layout/activity_completed_bid.xml" value="0.11548913043478261" />
-        <entry key="..\:/Zoom2u16Aug/app/src/main/res/layout/activity_delivery_datails.xml" value="0.12" />
-        <entry key="..\:/Zoom2u16Aug/app/src/main/res/layout/activity_doc_dimension.xml" value="0.10371376811594203" />
-        <entry key="..\:/Zoom2u16Aug/app/src/main/res/layout/activity_edit_location.xml" value="0.1" />
-        <entry key="..\:/Zoom2u16Aug/app/src/main/res/layout/activity_edit_profile.xml" value="0.11548913043478261" />
-        <entry key="..\:/Zoom2u16Aug/app/src/main/res/layout/activity_history_details.xml" value="0.16666666666666666" />
-        <entry key="..\:/Zoom2u16Aug/app/src/main/res/layout/activity_log_in.xml" value="0.1" />
-        <entry key="..\:/Zoom2u16Aug/app/src/main/res/layout/activity_map.xml" value="0.1" />
-        <entry key="..\:/Zoom2u16Aug/app/src/main/res/layout/activity_my_location.xml" value="0.12" />
-        <entry key="..\:/Zoom2u16Aug/app/src/main/res/layout/activity_on_hold.xml" value="0.1" />
-        <entry key="..\:/Zoom2u16Aug/app/src/main/res/layout/activity_order_confirm.xml" value="0.1" />
-        <entry key="..\:/Zoom2u16Aug/app/src/main/res/layout/activity_pricing_payment.xml" value="0.1" />
-        <entry key="..\:/Zoom2u16Aug/app/src/main/res/layout/activity_quote_confirmation.xml" value="0.1" />
-        <entry key="..\:/Zoom2u16Aug/app/src/main/res/layout/activity_sign_up.xml" value="0.12" />
-        <entry key="..\:/Zoom2u16Aug/app/src/main/res/layout/activity_upload_quotes.xml" value="0.10960144927536232" />
-        <entry key="..\:/Zoom2u16Aug/app/src/main/res/layout/dialogview.xml" value="0.1796875" />
-        <entry key="..\:/Zoom2u16Aug/app/src/main/res/layout/dialogview1.xml" value="0.3333333333333333" />
-        <entry key="..\:/Zoom2u16Aug/app/src/main/res/layout/fragment_active_bid.xml" value="0.1" />
-        <entry key="..\:/Zoom2u16Aug/app/src/main/res/layout/fragment_bid_details.xml" value="0.1" />
-        <entry key="..\:/Zoom2u16Aug/app/src/main/res/layout/fragment_bid_request.xml" value="0.1" />
-        <entry key="..\:/Zoom2u16Aug/app/src/main/res/layout/fragment_complete_bid.xml" value="0.11548913043478261" />
-        <entry key="..\:/Zoom2u16Aug/app/src/main/res/layout/fragment_history.xml" value="0.1" />
-        <entry key="..\:/Zoom2u16Aug/app/src/main/res/layout/fragment_home.xml" value="0.1" />
-        <entry key="..\:/Zoom2u16Aug/app/src/main/res/layout/fragment_profile.xml" value="0.15217391304347827" />
-        <entry key="..\:/Zoom2u16Aug/app/src/main/res/layout/item_delivery_history.xml" value="0.11548913043478261" />
-        <entry key="..\:/Zoom2u16Aug/app/src/main/res/layout/zoom2u_buttom_header.xml" value="0.1" />
-        <entry key="..\:/Zoom2u16Aug/app/src/main/res/layout/zoom2u_top_header.xml" value="0.1" />
-        <entry key="..\:/Zoom2u16Aug/app/src/main/res/layout/zoom2u_top_header1.xml" value="0.15217391304347827" />
+        <entry key="..\:/Zoom2u16Aug/Zoom2u16Aug/app/src/main/res/layout/a.xml" value="0.1" />
+        <entry key="..\:/Zoom2u16Aug/Zoom2u16Aug/app/src/main/res/layout/aa.xml" value="0.10144927536231885" />
+        <entry key="..\:/Zoom2u16Aug/Zoom2u16Aug/app/src/main/res/layout/activity_delivery_datails.xml" value="0.1" />
+        <entry key="..\:/Zoom2u16Aug/Zoom2u16Aug/app/src/main/res/layout/activity_doc_dimension.xml" value="0.1" />
+        <entry key="..\:/Zoom2u16Aug/Zoom2u16Aug/app/src/main/res/layout/activity_log_in_signup_main.xml" value="0.1" />
+        <entry key="..\:/Zoom2u16Aug/Zoom2u16Aug/app/src/main/res/layout/activity_main_activitykk.xml" value="0.1" />
+        <entry key="..\:/Zoom2u16Aug/Zoom2u16Aug/app/src/main/res/layout/activity_spalsh_screen.xml" value="0.10144927536231885" />
+        <entry key="..\:/Zoom2u16Aug/Zoom2u16Aug/app/src/main/res/layout/dialog_time_picker.xml" value="0.10144927536231885" />
+        <entry key="..\:/Zoom2u16Aug/Zoom2u16Aug/app/src/main/res/layout/dialog_time_picker1.xml" value="0.10144927536231885" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_15_PREVIEW" project-jdk-name="Android Studio java home" project-jdk-type="JavaSDK" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
 </project>

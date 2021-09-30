@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.location.Geocoder
+import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -42,6 +43,7 @@ import com.zoom2u_customer.utility.utility_custom_class.MySpinnerAdapter
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import java.io.File
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -58,6 +60,7 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
     lateinit var binding: ActivityDeliveryDatailsBinding
     private var datePicker: DatePicker? = null
     private var timePicker: TimePicker? = null
+    private var timePicker2 :TimePicker2?=null
     lateinit var viewModel: DeliveryDetailsViewModel
     private var categories: MutableList<String> = mutableListOf()
     private var repositoryGoogleAddress: GoogleAddressRepository? = null
@@ -136,42 +139,51 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
         val time6Pm = "06:00 PM"
         val time6PM: Date = timeFormat.parse(time6Pm)
 
-       /* if (time6PM.after(currTimeInDateFormat)) {
+        if (time6PM.before(currTimeInDateFormat)) {
             val c = Calendar.getInstance()
             c.add(Calendar.DATE, 1)
             val d = c.time
             val dropTime = dateFormat.format(d)
             binding.pickDate.text = dropTime
             binding.pickTime.text = "8:00 AM"
-        } else {*/
+            binding.dropDate.text = dropTime
+            binding.dropTime.text = "12:00 PM"
+
+        } else {
             binding.pickDate.text = dateFormat.format(date)
             binding.pickTime.text = currentTime
-     //   }
 
 
-        /**drop time*/
-        val c = Calendar.getInstance()
-        c.add(Calendar.HOUR, 3)
-        val d = c.time
-        val dropTime = timeFormat.format(d)
-        binding.dropTime.text = dropTime
+            /**drop time*/
+            val c = Calendar.getInstance()
+            c.add(Calendar.HOUR, 3)
+            val d = c.time
+            val dropTime = timeFormat.format(d)
+            binding.dropTime.text = dropTime
+
+
+
+           /* *//**check if current time after 9pm *//*
+            val time9Pm = "09:00 PM"
+            val time9PM: Date = timeFormat.parse(time9Pm)
+
+
+            if (time9PM.before(currTimeInDateFormat)) {
+                val c = Calendar.getInstance()
+                c.add(Calendar.DATE, 1)
+                val d = c.time
+                val dropTime = dateFormat.format(d)
+                binding.dropDate.text = dropTime
+            } else*/
+                binding.dropDate.text = dateFormat.format(date)
+        }
+
+
 
         datePicker = DatePicker()
         timePicker = TimePicker()
+        timePicker2 = TimePicker2()
 
-        /**check if current time after 9pm */
-        val time9Pm = "09:00 PM"
-        val time9PM: Date = timeFormat.parse(time9Pm)
-
-
-        if (time9PM.before(currTimeInDateFormat)) {
-            val c = Calendar.getInstance()
-            c.add(Calendar.DATE, 1)
-            val d = c.time
-            val dropTime = dateFormat.format(d)
-            binding.dropDate.text = dropTime
-        } else
-            binding.dropDate.text = dateFormat.format(date)
 
         categories.add("Front door")
         categories.add("Back door")
@@ -651,14 +663,14 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
                 )
             }
             R.id.pick_time -> {
-                timePicker?.timePickerDialog(
+                timePicker2?.timePickerDialog(
                     this, false,
                     binding.pickTime.text.toString(),
                     onItemClick = ::onPickTimeClick
                 )
             }
             R.id.pick_time_cl -> {
-                timePicker?.timePickerDialog(
+                timePicker2?.timePickerDialog(
                     this, false,
                     binding.pickTime.text.toString(),
                     onItemClick = ::onPickTimeClick
@@ -679,23 +691,23 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
                 )
             }
             R.id.drop_time -> {
-                timePicker?.timePickerDialog(
+                timePicker2?.timePickerDialog(
                     this, true,
                     binding.dropTime.text.toString(),
                     onItemClick = ::onDropTimeClick
                 )
             }
             R.id.drop_time_cl -> {
-                timePicker?.timePickerDialog(
+                timePicker2?.timePickerDialog(
                     this, true,
                     binding.dropTime.text.toString(),
                     onItemClick = ::onDropTimeClick
                 )
             }
             R.id.item_we_not_send -> {
-                /*   val pdfUri = Uri.fromFile(File(filesDir.parent + "/raw/item_not_send.pdf"))
+                  val pdfUri = Uri.fromFile(File(filesDir.parent + "/raw/item_not_send.pdf"))
                    val browserIntent = Intent(Intent.ACTION_VIEW, pdfUri)
-                   startActivity(browserIntent)*/
+                   startActivity(browserIntent)
             }
             R.id.authority_to -> {
                 binding.spinner.performClick()
@@ -859,14 +871,14 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
     private fun onPickDateClick(s: String?) {
         if (!TextUtils.isEmpty(s))
             binding.pickDate.text = s.toString()
+             isPickTimeSelectedFromTimeWindow=true
     }
 
     private fun onDropTimeClick(time: String?) {
         if (!TextUtils.isEmpty(time)) {
             if (checkDropFutureTime(time)) {
-                if (check3HourTime(time)) {
-                    binding.dropTime.text = time
-                }
+                binding.dropTime.text = time
+
             }
         }
 

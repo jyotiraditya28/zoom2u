@@ -59,7 +59,21 @@ class TimePicker : WheelPicker.OnItemSelectedListener {
             "5:15 PM",
             "5:30 PM",
             "5:45 PM",
-            "6:00 PM"
+            "6:00 PM",
+            "7:00 PM",
+            "7:15 PM",
+            "7:30 PM",
+            "7:45 PM",
+            "8:00 PM",
+            "8:15 PM",
+            "8:30 PM",
+            "8:45 PM",
+            "9:00 PM",
+            "9:15 PM",
+            "9:30 PM",
+            "9:45 PM",
+            "10:00 PM",
+            ""
         )
     private val dropTimeArray =
         arrayOf(

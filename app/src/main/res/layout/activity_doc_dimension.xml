@@ -73,7 +73,7 @@
                     android:minLines="4"
                     android:paddingStart="30dp"
                     android:paddingEnd="30dp"
-                    android:text="We'll assume some default dimension based on the parcel selected. however if the size and weight of your parcel id higher,please adjust the dimension and weight below."
+                    android:text="We'll assume some default dimension based on the parcel selected. However if the size and weight of your parcel is higher, please adjust the dimension and weight below."
                     android:textColor="@color/base_color"
                     />
 

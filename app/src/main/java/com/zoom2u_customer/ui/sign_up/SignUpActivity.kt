@@ -215,6 +215,8 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener,
         }*/ else if (last_name == "") {
             DialogActivity.alertDialogSingleButton(this, "Alert!", "Please enter your last name")
             AppUtility.validateTextField(binding.lastName)
+            if (first_name!="")
+                AppUtility.removeErrorBackGround(binding.firstName)
             return false
         } /*else if (!last_name.matches(("[a-zA-Z ]+").toRegex())) {
             DialogActivity.alertDialogSingleButton(this, "Alert!", "Please enter alphabets in last name")
@@ -223,21 +225,41 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener,
         }*/ else if (email == "") {
             DialogActivity.alertDialogSingleButton(this, "Alert!", "Please enter your email")
             AppUtility.validateTextField(binding.email)
+            if (first_name!="")
+                AppUtility.removeErrorBackGround(binding.firstName)
+            if (last_name!="")
+                AppUtility.removeErrorBackGround(binding.lastName)
             return false
         } else if (!email.matches(("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$").toRegex())) {
             DialogActivity.alertDialogSingleButton(this, "Alert!", "Please enter vaild email")
             AppUtility.validateTextField(binding.email)
+            if (first_name!="")
+                AppUtility.removeErrorBackGround(binding.firstName)
+            if (last_name!="")
+                AppUtility.removeErrorBackGround(binding.lastName)
             return false
         } else if (phone == "") {
             DialogActivity.alertDialogSingleButton(this, "Alert!", "Please enter your phone number")
             AppUtility.validateTextField(binding.phone)
-            return false
+            if (first_name!="")
+                AppUtility.removeErrorBackGround(binding.firstName)
+            if (last_name!="")
+                AppUtility.removeErrorBackGround(binding.lastName)
+            if (email!=""&&email.matches(("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$").toRegex()))
+                 AppUtility.removeErrorBackGround(binding.email)
+                return false
         } else if (phone.length > 20) {
             DialogActivity.alertDialogSingleButton(
                 this,
                 "Alert!",
                 "Please enter valid phone number"
             )
+            if (first_name!="")
+                AppUtility.removeErrorBackGround(binding.firstName)
+            if (last_name!="")
+                AppUtility.removeErrorBackGround(binding.lastName)
+            if (email!=""&&email.matches(("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$").toRegex()))
+                AppUtility.removeErrorBackGround(binding.email)
             AppUtility.validateTextField(binding.phone)
             return false
         } else if (!phone.matches(("^[\\s0-9\\()\\-\\+]+$").toRegex())) {
@@ -246,6 +268,12 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener,
                 "Alert!",
                 "Please enter valid phone number"
             )
+            if (first_name!="")
+                AppUtility.removeErrorBackGround(binding.firstName)
+            if (last_name!="")
+                AppUtility.removeErrorBackGround(binding.lastName)
+            if (email!=""&&email.matches(("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$").toRegex()))
+                AppUtility.removeErrorBackGround(binding.email)
             AppUtility.validateTextField(binding.phone)
             return false
         } else if (pass == "") {
@@ -254,6 +282,14 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener,
                 "Alert!",
                 "Password must be at least 6 characters long"
             )
+            if (first_name!="")
+                AppUtility.removeErrorBackGround(binding.firstName)
+            if (last_name!="")
+                AppUtility.removeErrorBackGround(binding.lastName)
+            if (email!=""&&email.matches(("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$").toRegex()))
+                AppUtility.removeErrorBackGround(binding.email)
+            if (phone.length <= 20 && phone!="")
+                AppUtility.removeErrorBackGround(binding.phone)
             AppUtility.validateTextField(binding.pass)
             return false
         } else if (pass.length < 6) {
@@ -262,11 +298,29 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener,
                 "Alert!",
                 "Password must be at least 6 characters long"
             )
+            if (first_name!="")
+                AppUtility.removeErrorBackGround(binding.firstName)
+            if (last_name!="")
+                AppUtility.removeErrorBackGround(binding.lastName)
+            if (email!=""&&email.matches(("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$").toRegex()))
+                AppUtility.removeErrorBackGround(binding.email)
+            if (phone.length <= 20 && phone!="")
+                AppUtility.removeErrorBackGround(binding.phone)
             AppUtility.validateTextField(binding.pass)
             return false
         } else if (confirmPass == "") {
             DialogActivity.alertDialogSingleButton(this, "Alert!", "Please enter confirm password")
             AppUtility.validateTextField(binding.confirmPass)
+            if (first_name!="")
+                AppUtility.removeErrorBackGround(binding.firstName)
+            if (last_name!="")
+                AppUtility.removeErrorBackGround(binding.lastName)
+            if (email!=""&&email.matches(("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$").toRegex()))
+                AppUtility.removeErrorBackGround(binding.email)
+            if (phone.length <= 20 && phone!="")
+                AppUtility.removeErrorBackGround(binding.phone)
+            if (pass.length >= 6)
+                AppUtility.removeErrorBackGround(binding.pass)
             return false
         } else if (confirmPass != pass) {
             DialogActivity.alertDialogSingleButton(
@@ -276,6 +330,16 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener,
             )
             AppUtility.validateTextField(binding.pass)
             AppUtility.validateTextField(binding.confirmPass)
+            if (first_name!="")
+                AppUtility.removeErrorBackGround(binding.firstName)
+            if (last_name!="")
+                AppUtility.removeErrorBackGround(binding.lastName)
+            if (email!=""&&email.matches(("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$").toRegex()))
+                AppUtility.removeErrorBackGround(binding.email)
+            if (phone.length <= 20 && phone!="")
+                AppUtility.removeErrorBackGround(binding.phone)
+
+
             return false
         } else if (!isChecked) {
             //DialogActivity.alertDialogSingleButton(this, "Alert!", "Please Accept the customer Terms and Conditions.")
@@ -284,6 +348,18 @@ class SignUpActivity : AppCompatActivity(), View.OnClickListener,
                 "Please Accept the customer Terms and Conditions.",
                 Toast.LENGTH_LONG
             ).show()
+            if (first_name!="")
+                AppUtility.removeErrorBackGround(binding.firstName)
+            if (last_name!="")
+                AppUtility.removeErrorBackGround(binding.lastName)
+            if (email!=""&&email.matches(("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$").toRegex()))
+                AppUtility.removeErrorBackGround(binding.email)
+            if (phone.length <= 20 && phone!="")
+                AppUtility.removeErrorBackGround(binding.phone)
+            if (confirmPass == pass) {
+                AppUtility.removeErrorBackGround(binding.pass)
+                AppUtility.removeErrorBackGround(binding.confirmPass)
+            }
             return false
         }
         return true

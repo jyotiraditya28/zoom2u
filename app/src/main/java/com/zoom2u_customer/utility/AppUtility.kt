@@ -101,6 +101,12 @@ class AppUtility {
         }
 
 
+        fun removeErrorBackGround(validateTxtField: TextInputEditText) {
+            validateTxtField.setBackgroundResource(R.drawable.text_background)
+        }
+
+
+
         fun progressBarShow(context: Context?) {
             progressDialog = ProgressDialog(context as Activity, R.style.progressbarstyle)
             progressDialog?.setMessage(

@@ -37,7 +37,12 @@ class HomeFragment : Fragment(), View.OnClickListener{
         }
         binding.getQuoteBtn.setOnClickListener(this)
         //binding.chatBtn.setOnClickListener(this)
+
+       if (!AppPreference.getSharedPrefInstance().getProfileData()?.FirstName.isNullOrBlank())
         binding.nameHeader.text= "Hi "+AppUtility.upperCaseFirst(AppPreference.getSharedPrefInstance().getProfileData()?.FirstName.toString())
+        else
+           binding.nameHeader.text= "Hi "+AppUtility.upperCaseFirst(AppPreference.getSharedPrefInstance().getLoginResponse()?.firstName.toString())
+
         return binding.root
     }
 

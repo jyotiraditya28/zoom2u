@@ -46,14 +46,15 @@ class BasePageRepository(private var serviceApi: ServiceApi, var context: Contex
                                     ).show()*/
                                 else if (responce.errorBody() != null) {
                                     AppUtility.progressBarDissMiss()
-                                    Toast.makeText(
-                                        context,
-                                        "something went wrong please try again.",
-                                        Toast.LENGTH_LONG
-                                    ).show()
+                                    if(responce.code()==401){
+                                       /* DialogActivity.alertDialogOnSessionExpire(
+                                            context,
+                                            onItemClick = ::onOkClick)*/
+                                    }
+                                    else
+                                    Toast.makeText(context, "something went wrong please try again.", Toast.LENGTH_LONG).show()
                                 }
                             }
-
                             override fun onError(e: Throwable) {
                                 AppUtility.progressBarDissMiss()
                                 Toast.makeText(
@@ -102,7 +103,13 @@ class BasePageRepository(private var serviceApi: ServiceApi, var context: Contex
                                     ).show()*/
                                 else if (responce.errorBody() != null) {
                                     AppUtility.progressBarDissMiss()
-                                    Toast.makeText(
+                                    if(responce.code()==401){
+                                   /* DialogActivity.alertDialogOnSessionExpire(
+                                        context,
+                                        onItemClick = ::onOkClick)*/
+                                }
+                               else
+                                Toast.makeText(
                                         context,
                                         "something went wrong please try again.",
                                         Toast.LENGTH_LONG
@@ -128,5 +135,9 @@ class BasePageRepository(private var serviceApi: ServiceApi, var context: Contex
                 "No network connection, Please try again later."
             )
         }
+    }
+
+    private fun onOkClick(){
+        AppUtility.onLogoutCall(context)
     }
 }
