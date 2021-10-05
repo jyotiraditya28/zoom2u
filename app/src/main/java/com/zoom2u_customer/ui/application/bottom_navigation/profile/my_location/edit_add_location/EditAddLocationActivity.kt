@@ -316,11 +316,17 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
             }
             R.id.save_change_btn -> {
                 if (isEdit) {
+
+                    val address = if(binding.unit.text.toString().trim().isNullOrBlank())
+                        myLocationResponse?.Location?.Street.toString()
+                    else
+                        binding.unit.text.toString().trim()+"/"+ myLocationResponse?.Location?.Street.toString()
+
+
                     myLocationResponse?.DefaultPickup = binding.pickupCheckBox.isChecked
                     myLocationResponse?.DefaultDropoff = binding.dropOffCheckBox.isChecked
 
-                    myLocationResponse?.Location?.Address =
-                        binding.address.text.toString().trim()
+                    myLocationResponse?.Location?.Address = address
 
                     myLocationResponse?.Location?.ContactName =
                         binding.name.text.toString().trim()
@@ -343,8 +349,14 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
                     viewModel.editLocation(myLocationResponse)
                 } else {
 
+                    val address = if(binding.unit.text.toString().trim().isNullOrBlank())
+                        street.toString()
+                    else
+                        binding.unit.text.toString().trim()+"/"+street.toString()
+
+
                     val location2 = AddLocationReq.Location2(
-                        binding.address.text.toString().trim(),
+                        address,
                         binding.company.text.toString().trim(),
                         binding.name.text.toString().trim(),
                         country,

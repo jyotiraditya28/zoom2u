@@ -27,12 +27,12 @@ class LogInSignupMainActivity : AppCompatActivity(), View.OnClickListener {
         when (view!!.id) {
             R.id.loginWithEmailBtn -> {
                 val intent = Intent(this, LogInActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
                 startActivity(intent)
             }
             R.id.signUpBtn -> {
                 val intent = Intent(this, SignUpActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
                 startActivity(intent)
             }
         }

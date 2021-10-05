@@ -17,10 +17,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Zoom2u">
         <activity
+            android:name=".ui.application.chat.message.MessageActivity"
+            android:exported="true" />
+        <activity
             android:name=".ui.application.bottom_navigation.MainActivitykk"
             android:exported="true" />
         <activity android:name=".ui.notification.NotificationActivity" />
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity" />
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -127,6 +130,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.application.bottom_navigation.home.map_page.MapActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.application.bottom_navigation.home.map_page1.MapActivity1"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.application.bottom_navigation.home.delivery_details.DeliveryDetailsActivity"

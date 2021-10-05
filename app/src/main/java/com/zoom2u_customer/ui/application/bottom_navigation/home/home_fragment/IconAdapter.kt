@@ -9,7 +9,8 @@ import com.zoom2u_customer.R
 import com.zoom2u_customer.databinding.IconItemBinding
 
 
-class IconAdapter(private val context: Context, private var dataList: MutableList<Icon>) :
+class IconAdapter(private val context: Context, private var dataList: MutableList<Icon>,
+                  private val isItemClick: (MutableList<Icon>)->Unit) :
     RecyclerView.Adapter<IconAdapter.BindingViewHolder>() {
 
     override fun getItemCount(): Int {
@@ -46,9 +47,11 @@ class IconAdapter(private val context: Context, private var dataList: MutableLis
            if(dataList[position].quantity==0){
                dataList[position].quantity+=1
                notifyItemChanged(position)
+               isItemClick(dataList)
            }else if(dataList[position].quantity==1){
                dataList[position].quantity-=1
                notifyItemChanged(position)
+               isItemClick(dataList)
            }
 
         }
@@ -69,11 +72,13 @@ class IconAdapter(private val context: Context, private var dataList: MutableLis
         holder.itemBinding.increment.setOnClickListener{
             dataList[position].quantity+=1
             notifyItemChanged(position)
+            isItemClick(dataList)
         }
         holder.itemBinding.decrement.setOnClickListener{
             if(dataList[position].quantity>0)
             dataList[position].quantity-=1
             notifyItemChanged(position)
+            isItemClick(dataList)
         }
 
 

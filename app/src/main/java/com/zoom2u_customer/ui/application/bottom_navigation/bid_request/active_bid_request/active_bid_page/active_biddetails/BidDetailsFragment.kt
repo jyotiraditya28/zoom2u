@@ -41,8 +41,8 @@ class BidDetailsFragment(var bidDetails: BidDetailsResponse?) : Fragment() , Vie
 
     @SuppressLint("SetTextI18n")
     private fun setDataToView(bidDetail: BidDetailsResponse?) {
-        binding.pickAdd.text = bidDetail?.PickupLocation?.Street
-        binding.dropAdd.text = bidDetail?.DropLocation?.Street
+        binding.pickAdd.text = bidDetail?.PickupLocation?.Address
+        binding.dropAdd.text = bidDetail?.DropLocation?.Address
 
         val pickDateTime = AppUtility.getDateTimeFromDeviceToServerForDate(bidDetail?.PickupDateTime)
         val pickUpDateTimeSplit: Array<String>? = pickDateTime?.split(" ")?.toTypedArray()

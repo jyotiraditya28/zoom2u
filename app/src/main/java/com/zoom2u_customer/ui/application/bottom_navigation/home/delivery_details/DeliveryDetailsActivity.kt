@@ -803,6 +803,7 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
     }
 
     private fun getIntraState(): IntraStateReq? {
+
         val dropLocation = IntraStateReq.DropLocationClass(dropGpx, dropGpy)
         val pickLocation = IntraStateReq.PickupLocationClass(pickGpx, pickGpy)
         intraStateReq = IntraStateReq(
@@ -991,7 +992,7 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
     }
 
 
-    fun countTotalWeight(): String {
+    private fun countTotalWeight(): String {
         var totalWeight = 0.0
         for (item in itemDataList) {
             totalWeight += item.weight * item.quantity
@@ -1000,14 +1001,20 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
     }
 
 
-    fun createJsonForSaveRequest(): JSONObject {
+    private fun createJsonForSaveRequest(): JSONObject {
+
+        val pickAdd = if(binding.pickUnit.text.toString().trim().isNullOrBlank())
+            pickStreet.toString()
+        else
+            binding.pickUnit.text.toString().trim()+"/"+ pickStreet.toString()
+
 
         val pickLocation: SaveDeliveryRequestReq.DeliveryRequestModel.PickupLocationClass =
             SaveDeliveryRequestReq.DeliveryRequestModel.PickupLocationClass(
                 binding.pickName.text.toString(),
                 binding.pickPhone.text.toString(),
                 binding.pickEmail.text.toString(),
-                binding.pickAddress.text.toString(),
+                pickAdd,
                 binding.pickInstruction.text.toString(),
                 pickGpx, pickGpy, binding.pickUnit.text.toString(),
                 pickStreetNumber, pickStreet, pickSuburb,
@@ -1016,12 +1023,19 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
             )
 
 
+        val dropAdd = if(binding.dropUnit.text.toString().trim().isNullOrBlank())
+            dropStreet.toString()
+        else
+            binding.dropUnit.text.toString().trim()+"/"+ dropStreet.toString()
+
+
+
         val dropLocation: SaveDeliveryRequestReq.DeliveryRequestModel.DropLocationClass =
             SaveDeliveryRequestReq.DeliveryRequestModel.DropLocationClass(
                 binding.dropName.text.toString(),
                 binding.dropPhone.text.toString(),
                 binding.dropEmail.text.toString(),
-                binding.dropAddress.text.toString(),
+                dropAdd,
                 binding.dropInstruction.text.toString(),
                 dropGpx, dropGpy, binding.dropUnit.text.toString(),
                 dropStreetNumber, dropStreet, dropSuburb,
@@ -1148,11 +1162,26 @@ class DeliveryDetailsActivity : AppCompatActivity(), View.OnClickListener, View.
             }
         }
         /**update current time when user back from price screen*/
-        else if(requestCode == 3){
+        else if(requestCode == 3) {
+            val dateFormat: DateFormat = SimpleDateFormat("EEE dd MMM yyyy")
             val date = Date()
+
             val timeFormat: DateFormat = SimpleDateFormat("hh:mm aaa")
             val currentTime = timeFormat.format(date)
-            binding.pickTime.text = currentTime
+
+            val currTimeInDateFormat: Date = timeFormat.parse(currentTime)
+
+
+            /**check if current time after 9pm */
+            val time6Pm = "06:00 PM"
+            val time6PM: Date = timeFormat.parse(time6Pm)
+
+            if (time6PM.after(currTimeInDateFormat))  {
+                val date = Date()
+                val timeFormat: DateFormat = SimpleDateFormat("hh:mm aaa")
+                val currentTime = timeFormat.format(date)
+                binding.pickTime.text = currentTime
+            }
         }
     }
 

@@ -84,12 +84,12 @@ class OrderConfirmActivity : AppCompatActivity(), View.OnClickListener {
                     newBooking()
             }
             R.id.close -> {
-                if (intent.hasExtra("BookingResponse")) {
+               /* if (intent.hasExtra("BookingResponse")) {
                     val intent = Intent(this, HistoryDetailsActivity::class.java)
                     intent.putExtra("BookingRef", bookingResponse)
                     intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
                     startActivity(intent)
-                }else
+                }else*/
                     newBooking()
             }
 

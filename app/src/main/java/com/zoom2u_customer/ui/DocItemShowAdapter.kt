@@ -69,6 +69,11 @@ class DocItemShowAdapter(val context : Context?,
                 holder.itemBinding.docTxt.text="Large box"
                 holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_largebox_low)
             }
+            "XL" ->{
+                holder.itemBinding.docTxt.text="Large items"
+                holder.itemBinding.icon.setBackgroundResource(R.drawable.ic_large_items)
+            }
+
 
         }
         holder.itemBinding.count.text= "${dataList[position].Quantity.toString()}x"

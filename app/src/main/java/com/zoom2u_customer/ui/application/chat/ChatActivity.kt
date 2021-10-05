@@ -1,11 +1,13 @@
 package com.zoom2u_customer.ui.application.chat
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import com.zoom2u_customer.R
 import com.zoom2u_customer.databinding.ActivityChatBinding
+import com.zoom2u_customer.ui.application.chat.message.MessageActivity
 
 
 class ChatActivity : AppCompatActivity() {
@@ -29,8 +31,8 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun onItemClick(chat:Chat){
-       /* val intent = Intent(this, MessageActivity::class.java)
-        startActivity(intent)*/
+        val intent = Intent(this, MessageActivity::class.java)
+        startActivity(intent)
     }
 
 }
