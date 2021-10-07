@@ -10,6 +10,7 @@ import android.text.Spanned
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.text.HtmlCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
 
@@ -23,6 +24,7 @@ import com.zoom2u_customer.ui.application.bottom_navigation.home.map_page.doc_di
 import com.zoom2u_customer.utility.AppUtility
 import com.zoom2u_customer.utility.CustomTypefaceSpan
 import com.zoom2u_customer.utility.DialogActivity
+import java.text.DecimalFormat
 
 class MapActivity1 : AppCompatActivity(), View.OnClickListener{
     private lateinit var binding: ActivityMap1Binding
@@ -47,6 +49,13 @@ class MapActivity1 : AppCompatActivity(), View.OnClickListener{
         val getTotalWeightSum= getTotalWeight(dataList).toString()
         binding.weight.text= "$getTotalWeightSum Kg"
         checkQuotesWhenFirstTimeLunch(getTotalWeightSum)
+
+        val text = "<font color=#ff0000>Please login with your account details on</font> " +
+                "<font color=#00A7E2>https://deliveries.zoom2u.com/#/register-login  </font>" +
+                "<font color=#ff0000>to create Heavy and Large freight bookings.</font>"
+        binding.errorText.text = HtmlCompat.fromHtml(text, HtmlCompat.FROM_HTML_MODE_LEGACY)
+
+
         val importantTxtStr =
             "Important: Items weighing over 30kg each or 100kg in total will need to be placed through our Bid Request services. The same goes for items with measurements exceeding 200cm and multiple number of items exceeding the limit per booking. This is to maintain the safety and good health of our drivers."
         val ss = SpannableStringBuilder(importantTxtStr)
@@ -60,7 +69,7 @@ class MapActivity1 : AppCompatActivity(), View.OnClickListener{
             CustomTypefaceSpan("", ResourcesCompat.getFont(this, R.font.arimo_regular)!!), 10,
             importantTxtStr.length, Spanned.SPAN_EXCLUSIVE_INCLUSIVE
         )
-        binding.noteText.text = ss
+        binding.noteText1.text = ss
 
 
 
@@ -76,9 +85,10 @@ class MapActivity1 : AppCompatActivity(), View.OnClickListener{
     }
 
 
-    private fun onTotalWeight(totalWeight:String,length:Int,height:Int,width:Int,icon: Icon,quantity:Int){
-        binding.weight.text= "$totalWeight Kg"
-        if(totalWeight.toDouble()>100 || icon.length > 200 || icon.height > 200 || icon.width > 200 || !getCountCheck(icon,icon.quantity)) {
+    private fun onTotalWeight(totalWeight:String,icon: Icon){
+        val df = DecimalFormat("#.###")
+        binding.weight.text= df.format(totalWeight.toDouble()).toString() + "Kg"
+        if(totalWeight.toDouble()>100 ||  !getLengthHeightWidthCheck() || !getCountCheck()) {
             binding.noteText.visibility = View.VISIBLE
             isQuotesRequest = true
         }else{
@@ -89,20 +99,19 @@ class MapActivity1 : AppCompatActivity(), View.OnClickListener{
 
 
     private fun checkQuotesWhenFirstTimeLunch(totalWeight:String){
-        isQuotesRequest = totalWeight.toDouble()>100 || !getCountCheck()
+        if(totalWeight.toDouble()>100 || !getCountCheck()){
+            binding.noteText.visibility = View.VISIBLE
+            isQuotesRequest = true
+        }else{
+            binding.noteText.visibility=View.GONE
+            isQuotesRequest = false
+        }
     }
 
 
-    private fun getCountCheck(icon: Icon,quantity:Int): Boolean {
-        if(icon.Value==10&& quantity > 30){
-            return false
-        }else if(icon.Value==11&& quantity >15){
-            return false
-        }else if(icon.Value==12&& quantity >15){
-            return false
-        }else if(icon.Value==13&& quantity >15){
-            return false
-        }else if(icon.Value==14&& quantity >4){
+    private fun getLengthHeightWidthCheck() : Boolean{
+        for (icon in dataList) {
+            if(icon.length > 200 || icon.height > 200 || icon.width > 200 )
             return false
         }
         return true
@@ -129,7 +138,7 @@ class MapActivity1 : AppCompatActivity(), View.OnClickListener{
     private fun checkAllFieldAreFilled():Boolean{
         for (item in dataList) {
             if(item.quantity==0){
-                Toast.makeText(this,"item quantity can not be 0",Toast.LENGTH_LONG).show()
+                Toast.makeText(this,"Selected item quantity could not be a 0",Toast.LENGTH_LONG).show()
                 return false
             }
             else if(item.quantity==-1 || item.weight==-1.0 || item.length==-1 || item.height==-1 || item.width==-1){

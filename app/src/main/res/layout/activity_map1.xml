@@ -51,8 +51,9 @@
                 android:gravity="center"
                 android:paddingStart="30dp"
                 android:paddingEnd="30dp"
-                android:text="Adjust your parcel size if they are not matching default size."
-                android:textColor="@color/black"
+                android:minLines="4"
+                android:text="We'll assume some default dimension based on the parcel selected. However if the size and weight of your parcel is higher, please adjust the dimension and weight below."
+                android:textColor="@color/base_color"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/header_txt" />
@@ -79,7 +80,6 @@
                         android:layout_marginTop="10dp"
                         android:layout_weight="1"
                         android:maxHeight="350dp"
-                        android:minHeight="100dp"
                         android:scrollbars="vertical"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
@@ -105,24 +105,12 @@
 
 
 
-
-                    <TextView
-                        android:id="@+id/note_text"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:minHeight="82dp"
-                        android:textColor="@color/red"
-                        android:visibility="gone"
-                        style="@style/style_11_bold"
-                        app:layout_constraintTop_toBottomOf="@+id/line" />
-
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/weight_cl"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/note_text">
+                        app:layout_constraintTop_toBottomOf="@id/line">
 
 
                         <com.google.android.material.textview.MaterialTextView
@@ -202,6 +190,49 @@
 
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/note_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toBottomOf="@+id/weight_cl">
+
+
+                        <TextView
+                            android:id="@+id/note_text1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:textColor="@color/gun_metal"
+                            style="@style/style_11_bold"
+                            />
+
+
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/error_text"
+                            style="@style/style_11_bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:textColor="@color/red"
+                            />
+
+
+                    </LinearLayout>
+
+
+
+
+
+
+
+
+
+
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

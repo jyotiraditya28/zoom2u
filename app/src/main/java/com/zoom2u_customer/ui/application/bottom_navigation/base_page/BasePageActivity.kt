@@ -2,6 +2,7 @@ package com.zoom2u_customer.ui.application.bottom_navigation.base_page
 
 import android.Manifest
 import android.app.AlertDialog
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -13,6 +14,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.viewpager.widget.ViewPager
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -23,6 +25,7 @@ import com.zoom2u_customer.R
 import com.zoom2u_customer.apiclient.ApiClient.Companion.getServices
 import com.zoom2u_customer.apiclient.ServiceApi
 import com.zoom2u_customer.databinding.ActivityBasepageBinding
+import com.zoom2u_customer.ui.application.bottom_navigation.home.home_fragment.HomeFragment
 import com.zoom2u_customer.ui.application.bottom_navigation.profile.ProfileRepository
 import com.zoom2u_customer.ui.application.get_location.GetLocationClass
 import com.zoom2u_customer.utility.AppUtility
@@ -35,8 +38,8 @@ class BasePageActivity : AppCompatActivity(),  BottomNavigationView.OnNavigation
     private var profileRepository:ProfileRepository?=null
     lateinit var binding: ActivityBasepageBinding
     private lateinit var mainPagerAdapter: MainPagerAdapter
-    var mAuth_Firebase: FirebaseAuth? = null
-    var firebase_CurrentUser: FirebaseUser? = null
+    private var mAuth_Firebase: FirebaseAuth? = null
+    private var firebase_CurrentUser: FirebaseUser? = null
     private var getLocationClass: GetLocationClass? = null
     /** get gcm token id*/
 
@@ -90,6 +93,14 @@ class BasePageActivity : AppCompatActivity(),  BottomNavigationView.OnNavigation
                 val selectedScreen = mainPagerAdapter.getItems()[position]
                 selectBottomNavigationViewMenuItem(selectedScreen.menuItemId)
                 supportActionBar?.setTitle(selectedScreen.titleStringId)
+
+             if(position==0){
+                 val intent = Intent("home_page")
+                  intent.putExtra("message","from_active_bid")
+                 LocalBroadcastManager.getInstance(this@BasePageActivity).sendBroadcast(intent)
+             }
+
+
             }
         })
     }
@@ -118,7 +129,7 @@ class BasePageActivity : AppCompatActivity(),  BottomNavigationView.OnNavigation
         firebase_CurrentUser = mAuth_Firebase?.currentUser
         Log.i("", "---  Current firebase user --- $firebase_CurrentUser")
     }
-    fun checkToEnableAppPermissions() {
+    private fun checkToEnableAppPermissions() {
         if (Build.VERSION.SDK_INT >= 23) {
             val permission = arrayOf(
                 Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.READ_EXTERNAL_STORAGE,

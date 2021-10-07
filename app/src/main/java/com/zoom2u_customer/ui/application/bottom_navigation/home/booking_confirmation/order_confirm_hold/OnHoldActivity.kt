@@ -9,6 +9,7 @@ import android.text.TextUtils
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.braintreepayments.api.BraintreePaymentActivity
 import com.braintreepayments.api.models.PaymentMethodNonce
 import com.zoom2u_customer.R
@@ -86,15 +87,7 @@ class OnHoldActivity : AppCompatActivity() {
         }
 
         binding.zoom2uHeader.backBtn.setOnClickListener{
-           /* if (intent.hasExtra("BookingResponse")){
-            DialogActivity.logoutDialog(
-                this, "Are you sure!", "Are you want make a new Booking?",
-                "Ok", "Cancel",
-                onCancelClick = ::onCancelClick,
-                onOkClick = ::onOkClick
-            )}
-            else*/
-                finish()
+          newBooking()
         }
 
 
@@ -202,25 +195,18 @@ class OnHoldActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (intent.hasExtra("BookingResponse")){
-        DialogActivity.logoutDialog(
-            this, "Are you sure!", "Are you sure want make a new Booking?",
-            "Ok", "Cancel",
-            onCancelClick = ::onCancelClick,
-            onOkClick = ::onOkClick
-        )
-        }
-        else{
-            finish()
-        }
+         newBooking()
+
     }
 
-    private fun onCancelClick() {}
-    private fun onOkClick() {
-        newBooking()
-    }
+
 
     private fun newBooking() {
+        val intent1 = Intent("home_page")
+        intent1.putExtra("message","form_on_hold_page")
+        LocalBroadcastManager.getInstance(this@OnHoldActivity).sendBroadcast(intent1)
+
+
         val intent = Intent(this, BasePageActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
         startActivity(intent)

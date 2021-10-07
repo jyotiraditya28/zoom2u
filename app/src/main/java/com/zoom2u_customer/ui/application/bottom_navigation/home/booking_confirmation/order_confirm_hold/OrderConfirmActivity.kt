@@ -8,6 +8,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.zoom2u_customer.R
 import com.zoom2u_customer.databinding.ActivityOrderConfirmBinding
 import com.zoom2u_customer.ui.application.bottom_navigation.base_page.BasePageActivity
@@ -21,7 +22,7 @@ import com.zoom2u_customer.utility.DialogActivity
 class OrderConfirmActivity : AppCompatActivity(), View.OnClickListener {
     lateinit var binding: ActivityOrderConfirmBinding
     private var bookingResponse: BookingResponse? = null
-    var historyResponse: HistoryResponse?=null
+    var historyResponse: HistoryResponse? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,11 +34,11 @@ class OrderConfirmActivity : AppCompatActivity(), View.OnClickListener {
             setData(bookingResponse)
         } else if (intent.hasExtra("BookingRefFromBid")) {
             binding.yourBookingNumberTxt.text = intent.getStringExtra("BookingRefFromBid")
-        }else if(intent.hasExtra("historyResponse")) {
+        } else if (intent.hasExtra("historyResponse")) {
             historyResponse = intent.getParcelableExtra("historyResponse")
-            binding.yourBookingNumberTxt.text=historyResponse?.BookingRef
-            historyResponse?.IsOnHold=false
-            binding.close.visibility=View.GONE
+            binding.yourBookingNumberTxt.text = historyResponse?.BookingRef
+            historyResponse?.IsOnHold = false
+            binding.close.visibility = View.GONE
 
 
         }
@@ -67,58 +68,62 @@ class OrderConfirmActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(view: View?) {
         when (view!!.id) {
             R.id.view_delivery_details -> {
-                if(intent.hasExtra("historyResponse")){
+                if (intent.hasExtra("historyResponse")) {
                     val intent = Intent()
-                    intent.putExtra("historyItem",historyResponse)
+                    intent.putExtra("historyItem", historyResponse)
                     intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
-                    setResult(23,intent)
+                    setResult(23, intent)
                     finish()
-                }
-                else
-                 /*   DialogActivity.logoutDialog(
-                    this, "Are you sure!", "Are you want make a new Booking?",
-                    "Ok", "Cancel",
-                    onCancelClick = ::onCancelClick,
-                    onOkClick = ::onOkClick
-                )*/
+                } else
+                /*   DialogActivity.logoutDialog(
+                   this, "Are you sure!", "Are you want make a new Booking?",
+                   "Ok", "Cancel",
+                   onCancelClick = ::onCancelClick,
+                   onOkClick = ::onOkClick
+               )*/
                     newBooking()
             }
             R.id.close -> {
-               /* if (intent.hasExtra("BookingResponse")) {
-                    val intent = Intent(this, HistoryDetailsActivity::class.java)
-                    intent.putExtra("BookingRef", bookingResponse)
-                    intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
-                    startActivity(intent)
-                }else*/
-                    newBooking()
+                /* if (intent.hasExtra("BookingResponse")) {
+                     val intent = Intent(this, HistoryDetailsActivity::class.java)
+                     intent.putExtra("BookingRef", bookingResponse)
+                     intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
+                     startActivity(intent)
+                 }else*/
+                newBooking()
             }
 
         }
     }
 
     private fun newBooking() {
+
+        val intent1 = Intent("home_page")
+        intent1.putExtra("message","from_booking_confirmation")
+        LocalBroadcastManager.getInstance(this@OrderConfirmActivity).sendBroadcast(intent1)
+
         val intent = Intent(this, BasePageActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
-        startActivity(intent)
-        finish()
+            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+            startActivity(intent)
+            finish()
+
     }
 
     override fun onBackPressed() {
-        if(intent.hasExtra("historyResponse")){
+        if (intent.hasExtra("historyResponse")) {
             val intent = Intent()
-            intent.putExtra("historyItem",historyResponse)
+            intent.putExtra("historyItem", historyResponse)
             intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
-            setResult(23,intent)
+            setResult(23, intent)
             finish()
-        }
-        else
-       /* DialogActivity.logoutDialog(
-            this, "Are you sure!", "Are you want make a new Booking?",
-            "Ok", "Cancel",
-            onCancelClick = ::onCancelClick,
-            onOkClick = ::onOkClick
-        )*/
-           newBooking()
+        } else
+        /* DialogActivity.logoutDialog(
+             this, "Are you sure!", "Are you want make a new Booking?",
+             "Ok", "Cancel",
+             onCancelClick = ::onCancelClick,
+             onOkClick = ::onOkClick
+         )*/
+            newBooking()
     }
 
     private fun onCancelClick() {}

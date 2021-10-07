@@ -17,7 +17,7 @@ import java.text.DecimalFormat
 class ItemMapDocCountAdapter1(
     val context: Context,
     private val dataList: MutableList<Icon>,
-    private val onTotalWeight: (String,Int,Int,Int,Icon,Int) -> Unit,
+    private val onTotalWeight: (String,Icon) -> Unit,
     ) : RecyclerView.Adapter<ItemMapDocCountAdapter1.BindingViewHolder>() {
 
     override fun getItemCount(): Int {
@@ -57,7 +57,7 @@ class ItemMapDocCountAdapter1(
         holder.itemBinding.root.setOnClickListener {
             if (!holder.itemBinding.ll1.isVisible) {
                 holder.itemBinding.ll1.visibility = View.VISIBLE
-                holder.itemBinding.forward.animate().rotation(90F).start()
+                holder.itemBinding.forward.animate().rotation(180F).start()
             } else {
                 holder.itemBinding.ll1.visibility = View.GONE
                 holder.itemBinding.forward.animate().rotation(-0F).start()
@@ -82,9 +82,6 @@ class ItemMapDocCountAdapter1(
                         icon, holder.itemBinding,
                         s.toString().toInt(),
                         holder.itemBinding.itemWeight.text.toString().toDouble(),
-                        icon.length,
-                        icon.height,
-                        icon.width,
                         )
 
                 }else if(s.toString() == "0"){
@@ -111,7 +108,7 @@ class ItemMapDocCountAdapter1(
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (s.toString() != "" && holder.itemBinding.quantity.text.toString() != "") {
+                if (s.toString() != "" &&s.toString() !="." && holder.itemBinding.quantity.text.toString() != "") {
                     icon.weight = s.toString().toDouble()
                     holder.itemBinding.itemWeightTxt.setTextColor(Color.BLACK)
                     showRedErrorInHeader(icon,holder.itemBinding)
@@ -119,10 +116,7 @@ class ItemMapDocCountAdapter1(
                         icon,
                         holder.itemBinding,
                         holder.itemBinding.quantity.text.toString().toInt(),
-                        s.toString().toDouble(),
-                        icon.length,
-                        icon.height,
-                        icon.width,
+                        s.toString().toDouble()
                         )
 
 
@@ -150,8 +144,7 @@ class ItemMapDocCountAdapter1(
                     icon.length = length
                     showRedErrorInHeader(icon,holder.itemBinding)
                     getTotalWeight(
-                        icon, holder.itemBinding, icon.quantity, icon.weight,
-                        length, icon.height, icon.width)
+                        icon, holder.itemBinding, icon.quantity, icon.weight)
 
                 }else if (s.toString() == "") {
                     icon.length=-1
@@ -173,8 +166,7 @@ class ItemMapDocCountAdapter1(
                     val height = s.toString().toInt()
                     holder.itemBinding.heightTxt.setTextColor(Color.BLACK)
                     icon.height =height
-                    getTotalWeight(icon, holder.itemBinding, icon.quantity, icon.weight, icon
-                            .length, height, icon.width)
+                    getTotalWeight(icon, holder.itemBinding, icon.quantity, icon.weight)
                     showRedErrorInHeader(icon,holder.itemBinding)
                 }else if (s.toString() == "") {
                     icon.height =-1
@@ -198,9 +190,7 @@ class ItemMapDocCountAdapter1(
                     icon.width = width
                     showRedErrorInHeader(icon,holder.itemBinding)
                     getTotalWeight(
-                        icon, holder.itemBinding, icon.quantity, icon.weight, icon
-                            .length, icon.height, width
-                    )
+                        icon, holder.itemBinding, icon.quantity, icon.weight)
                 }else if (s.toString() == "") {
                     icon.width = -1
                     showRedErrorInHeader(icon,holder.itemBinding)
@@ -222,18 +212,15 @@ class ItemMapDocCountAdapter1(
         holder: ItemMapDoc1Binding,
         quantity: Int?,
         weight: Double?,
-        length: Int,
-        height: Int,
-        width: Int,
-
-    ){
+        )
+    {
         var totalWight = 0.0
         if (quantity != null && weight != null) {
             val df = DecimalFormat("#.###")
             totalWight = quantity * weight
             holder.totalWeight.text = df.format(totalWight).toString() + " " + "Kg"
             val totalWightSum = countTotalWeight()
-            onTotalWeight(totalWightSum,length,height,width,icon,quantity)
+            onTotalWeight(totalWightSum,icon)
         }
     }
 

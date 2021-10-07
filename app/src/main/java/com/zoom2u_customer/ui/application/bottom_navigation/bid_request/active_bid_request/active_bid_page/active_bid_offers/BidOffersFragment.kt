@@ -128,15 +128,17 @@ class BidOffersFragment(private val bidDetails: BidDetailsResponse?) : Fragment(
             else {
                 purOrderNo = orderNo.text.toString().trim()
               /**check account type for payment*/
-                if (AppUtility.getAccountType() == "Standard")
+                if (AppUtility.getAccountType() == "Standard") {
+                    AppUtility.progressBarShow(activity)
                     getBrainTreeClientToken?.callServiceForGetClientToken()
-                else
+                }else if(AppUtility.getAccountType() == "OnAccount"){
                     viewModel.quotePayment(
                         "",
                         bidDetails?.Id.toString(),
                         offers?.OfferId.toString(),
                         purOrderNo.toString()
                     )
+                }
                 alertDialog.dismiss()
             }
         }

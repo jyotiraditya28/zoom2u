@@ -1,7 +1,9 @@
 package com.zoom2u_customer.ui.application.bottom_navigation.bid_request.active_bid_request
 
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.text.TextUtils
 import androidx.fragment.app.Fragment
@@ -9,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.zoom2u_customer.apiclient.ApiClient
@@ -29,6 +32,18 @@ class ActiveBidFragment : Fragment() {
     private var adapter: ActiveItemAdapter? = null
     private var currentPage: Int = 1
     val listData: MutableList<ActiveBidListResponse> = ArrayList()
+
+    private val broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+
+        override fun onReceive(context: Context, intent: Intent) {
+            listData.clear()
+            viewModel.getActiveBidList(1)
+
+        }
+    }
+
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,6 +51,7 @@ class ActiveBidFragment : Fragment() {
 
         binding = FragmentActiveBidBinding.inflate(inflater, container, false)
 
+        LocalBroadcastManager.getInstance(requireActivity()).registerReceiver(broadcastReceiver, IntentFilter("bid_refresh1"))
         if (container != null) {
             setAdapterView(binding, container.context)
         }
@@ -154,4 +170,10 @@ class ActiveBidFragment : Fragment() {
            }
        }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(broadcastReceiver)
+    }
+
 }

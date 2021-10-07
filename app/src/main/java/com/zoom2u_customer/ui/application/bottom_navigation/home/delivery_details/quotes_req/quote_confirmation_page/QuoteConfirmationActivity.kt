@@ -7,6 +7,7 @@ import android.text.SpannableStringBuilder
 import android.text.Spanned
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.zoom2u_customer.R
 import com.zoom2u_customer.databinding.ActivityQuoteConfirmationBinding
 import com.zoom2u_customer.databinding.ActivityUploadQuotesBinding
@@ -39,10 +40,6 @@ class QuoteConfirmationActivity : AppCompatActivity() {
         binding.txtAwaitingQuotes.text=ss
 
         binding.close.setOnClickListener(){
-         /*   DialogActivity.logoutDialog(this, "Are you sure!", "Are you want make a new Booking?",
-                "Ok","Cancel",
-                onCancelClick=::onCancelClick,
-                onOkClick = ::onOkClick)*/
             newBooking()
         }
 
@@ -57,6 +54,11 @@ class QuoteConfirmationActivity : AppCompatActivity() {
     }
 
     private fun newBooking(){
+
+        val intent1 = Intent("home_page")
+        intent1.putExtra("message","from_quote_confirmation")
+        LocalBroadcastManager.getInstance(this@QuoteConfirmationActivity).sendBroadcast(intent1)
+
         val intent = Intent(this, BasePageActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
         startActivity(intent)
@@ -66,8 +68,5 @@ class QuoteConfirmationActivity : AppCompatActivity() {
     override fun onBackPressed() {
        newBooking()
     }
-    private fun onCancelClick(){}
-    private fun onOkClick() {
-        newBooking()
-    }
+
 }

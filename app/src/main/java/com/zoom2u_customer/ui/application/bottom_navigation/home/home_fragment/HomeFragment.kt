@@ -2,8 +2,10 @@ package com.zoom2u_customer.ui.application.bottom_navigation.home.home_fragment
 
 
 import android.annotation.SuppressLint
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -21,12 +23,48 @@ import com.zoom2u_customer.ui.application.chat.ChatActivity
 import com.zoom2u_customer.utility.AppPreference
 import com.zoom2u_customer.utility.AppUtility
 import com.zoom2u_customer.utility.DialogActivity
+import com.zoom2u_customer.MainActivity
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
+
+
+
 
 
 class HomeFragment : Fragment(), View.OnClickListener {
     lateinit var binding: FragmentHomeBinding
     private var itemList: MutableList<Icon> = ArrayList()
     lateinit var adapter: IconAdapter
+
+
+    private val broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+
+        override fun onReceive(context: Context, intent: Intent) {
+            when (intent.getStringExtra("message")) {
+                "from_active_bid" -> {
+                    setDefaultData()
+                    binding.blankView.visibility = View.VISIBLE
+                    binding.getQuoteBtn.visibility = View.GONE
+                }
+                "from_booking_confirmation" -> {
+                    binding.blankView.visibility = View.VISIBLE
+                    binding.getQuoteBtn.visibility = View.GONE
+                }
+                "from_quote_confirmation" -> {
+                    binding.blankView.visibility = View.VISIBLE
+                    binding.getQuoteBtn.visibility = View.GONE
+                    val intent = Intent("bid_refresh")
+                    LocalBroadcastManager.getInstance(requireActivity()).sendBroadcast(intent)
+                }
+                "form_on_hold_page" -> {
+                    binding.blankView.visibility = View.VISIBLE
+                    binding.getQuoteBtn.visibility = View.GONE
+                }
+            }
+        }
+    }
+
+
 
     @SuppressLint("SetTextI18n")
     override fun onCreateView(
@@ -35,6 +73,8 @@ class HomeFragment : Fragment(), View.OnClickListener {
     ): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
+
+        LocalBroadcastManager.getInstance(requireActivity()).registerReceiver(broadcastReceiver, IntentFilter("home_page"))
 
         if (container != null) {
             setAdapterView(binding, container.context)
@@ -136,6 +176,8 @@ class HomeFragment : Fragment(), View.OnClickListener {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode === 11) {
+            binding.blankView.visibility = View.VISIBLE
+            binding.getQuoteBtn.visibility=View.GONE
             setDefaultData()
         }
     }
@@ -153,5 +195,9 @@ class HomeFragment : Fragment(), View.OnClickListener {
         setDefaultData()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(broadcastReceiver)
+    }
 
 }
