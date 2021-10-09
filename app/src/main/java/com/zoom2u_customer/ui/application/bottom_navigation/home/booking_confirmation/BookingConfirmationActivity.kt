@@ -204,9 +204,7 @@ class BookingConfirmationActivity : AppCompatActivity(), View.OnClickListener {
                 getBrainTreeClientToken = GetBrainTreeClientTokenOrBookDeliveryRequest(this, Request_Code)
             if ( bookingDeliveryResponse?.getJSONObject("_deliveryRequestModel")?.get("PricingScheme") =="Standard") {
                 getBrainTreeClientToken?.callServiceForGetClientToken()
-                bookingDeliveryResponse?.getJSONObject("_deliveryRequestModel")?.remove("PricingScheme")
             }  else  {
-                bookingDeliveryResponse?.getJSONObject("_deliveryRequestModel")?.remove("PricingScheme")
                 viewModel.getDeliveryRequest(true,bookingDeliveryResponse)
             }
         } catch (e: JSONException) {
@@ -223,8 +221,9 @@ class BookingConfirmationActivity : AppCompatActivity(), View.OnClickListener {
                     data?.getParcelableExtra(BraintreePaymentActivity.EXTRA_PAYMENT_METHOD_NONCE)
                 nonce = paymentMethodNonce?.nonce
                 try {
-                    bookingDeliveryResponse!!.getJSONObject("_deliveryRequestModel")
-                        .put("paymentNonce", nonce)
+                    bookingDeliveryResponse?.getJSONObject("_deliveryRequestModel")?.remove("PricingScheme")
+                    bookingDeliveryResponse?.getJSONObject("_deliveryRequestModel")
+                        ?.put("paymentNonce", nonce)
                     viewModel.getDeliveryRequest(true,bookingDeliveryResponse)
 
                 } catch (e: JSONException) {
@@ -265,9 +264,6 @@ class BookingConfirmationActivity : AppCompatActivity(), View.OnClickListener {
                         //interStateHeaderTxt.setText(R.string.interstateAlertHeaderroadinterstate)
                         //interStateMsgTxt.setText(R.string.interstateMsgTxtroadInterstate)
                     }
-
-
-
 
                 } else
                     callServiceForBookingRequest()

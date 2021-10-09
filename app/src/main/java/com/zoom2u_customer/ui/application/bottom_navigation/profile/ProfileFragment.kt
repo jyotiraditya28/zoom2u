@@ -131,8 +131,10 @@ class ProfileFragment : Fragment(), View.OnClickListener {
         if (requestCode === 2) {
             val profile: ProfileResponse? =
                 data?.getParcelableExtra<ProfileResponse>("UpdateProfileData")
-            if (profile != null)
+            if (profile != null) {
                 setDataToView(profile)
+                viewModel.getProfile()
+            }
         }
     }
 

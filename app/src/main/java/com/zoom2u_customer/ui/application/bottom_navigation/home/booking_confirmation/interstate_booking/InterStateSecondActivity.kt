@@ -193,9 +193,7 @@ class InterStateSecondActivity : AppCompatActivity(), View.OnClickListener {
 
             if ( bookingDeliveryResponse!!.getJSONObject("_deliveryRequestModel").get("PricingScheme") =="Standard") {
                 getBrainTreeClientToken?.callServiceForGetClientToken()
-                bookingDeliveryResponse?.getJSONObject("_deliveryRequestModel")?.remove("PricingScheme")
             }else  {
-                bookingDeliveryResponse?.getJSONObject("_deliveryRequestModel")?.remove("PricingScheme")
                 viewModel.getDeliveryRequest(false,bookingDeliveryResponse)
             }
         } catch (e: JSONException) {
@@ -211,8 +209,9 @@ class InterStateSecondActivity : AppCompatActivity(), View.OnClickListener {
                     data?.getParcelableExtra(BraintreePaymentActivity.EXTRA_PAYMENT_METHOD_NONCE)
                 val nonce = paymentMethodNonce?.nonce
                 try {
-                    bookingDeliveryResponse!!.getJSONObject("_deliveryRequestModel")
-                        .put("paymentNonce", nonce)
+                    bookingDeliveryResponse?.getJSONObject("_deliveryRequestModel")?.remove("PricingScheme")
+                    bookingDeliveryResponse?.getJSONObject("_deliveryRequestModel")
+                        ?.put("paymentNonce", nonce)
                     viewModel.getDeliveryRequest(false,bookingDeliveryResponse)
                     getBrainTreeClientToken = null
                 } catch (e: JSONException) {

@@ -108,7 +108,7 @@ class ItemMapDocCountAdapter1(
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (s.toString() != "" &&s.toString() !="." && holder.itemBinding.quantity.text.toString() != "") {
+                if (s.toString() != "" && s.toString() !="." && holder.itemBinding.quantity.text.toString() != "") {
                     icon.weight = s.toString().toDouble()
                     holder.itemBinding.itemWeightTxt.setTextColor(Color.BLACK)
                     showRedErrorInHeader(icon,holder.itemBinding)
@@ -120,7 +120,7 @@ class ItemMapDocCountAdapter1(
                         )
 
 
-                } else if (s.toString() == "") {
+                } else if (s.toString() == "" || s.toString() =="." ) {
                     icon.weight= -1.0
                     holder.itemBinding.totalWeight.text = "0.0" + " " + "Kg"
                     showRedErrorInHeader(icon,holder.itemBinding)
@@ -138,7 +138,7 @@ class ItemMapDocCountAdapter1(
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (!s.isNullOrEmpty()) {
+                if (!s.isNullOrEmpty() && s.toString() !="0") {
                     val length = s.toString().toInt()
                     holder.itemBinding.lengthTxt.setTextColor(Color.BLACK)
                     icon.length = length
@@ -146,7 +146,12 @@ class ItemMapDocCountAdapter1(
                     getTotalWeight(
                         icon, holder.itemBinding, icon.quantity, icon.weight)
 
-                }else if (s.toString() == "") {
+                }else if(s.toString() == "0"){
+                    icon.length= 0
+                    showRedErrorInHeader(icon,holder.itemBinding)
+                    holder.itemBinding.lengthTxt.setTextColor(Color.RED)
+                }
+                else if (s.toString() == "") {
                     icon.length=-1
                     showRedErrorInHeader(icon,holder.itemBinding)
                     holder.itemBinding.lengthTxt.setTextColor(Color.RED)
@@ -162,13 +167,18 @@ class ItemMapDocCountAdapter1(
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (!s.isNullOrEmpty()) {
+                if (!s.isNullOrEmpty() && s.toString() !="0") {
                     val height = s.toString().toInt()
                     holder.itemBinding.heightTxt.setTextColor(Color.BLACK)
                     icon.height =height
                     getTotalWeight(icon, holder.itemBinding, icon.quantity, icon.weight)
                     showRedErrorInHeader(icon,holder.itemBinding)
-                }else if (s.toString() == "") {
+                }else if(s.toString() == "0"){
+                    icon.height= 0
+                    showRedErrorInHeader(icon,holder.itemBinding)
+                    holder.itemBinding.heightTxt.setTextColor(Color.RED)
+                }
+                else if (s.toString() == "") {
                     icon.height =-1
                     showRedErrorInHeader(icon,holder.itemBinding)
                     holder.itemBinding.heightTxt.setTextColor(Color.RED)
@@ -184,13 +194,17 @@ class ItemMapDocCountAdapter1(
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (!s.isNullOrEmpty()) {
+                if (!s.isNullOrEmpty() && s.toString() !="0") {
                     val width = s.toString().toInt()
                     holder.itemBinding.widthTxt.setTextColor(Color.BLACK)
                     icon.width = width
                     showRedErrorInHeader(icon,holder.itemBinding)
                     getTotalWeight(
                         icon, holder.itemBinding, icon.quantity, icon.weight)
+                }else if(s.toString() == "0"){
+                    icon.width= 0
+                    showRedErrorInHeader(icon,holder.itemBinding)
+                    holder.itemBinding.widthTxt.setTextColor(Color.RED)
                 }else if (s.toString() == "") {
                     icon.width = -1
                     showRedErrorInHeader(icon,holder.itemBinding)
@@ -236,7 +250,8 @@ class ItemMapDocCountAdapter1(
 
   fun showRedErrorInHeader(icon: Icon,holder: ItemMapDoc1Binding){
       if(icon.quantity==0 || icon.quantity==-1 || icon.weight==-1.0 || icon.length == -1
-          || icon.height == -1 || icon.width == -1)
+          || icon.height == -1 || icon.width == -1 ||icon.length==0 || icon.height ==0 ||
+              icon.width ==0)
           holder.documentTxt.setTextColor(Color.RED)
       else
           holder.documentTxt.setTextColor(Color.BLACK)

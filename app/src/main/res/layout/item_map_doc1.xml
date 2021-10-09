@@ -93,8 +93,8 @@
                 android:id="@+id/forward"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_margin="5dp"
-                android:src="@drawable/ic_arrow_up" />
+                android:layout_margin="10dp"
+                android:src="@drawable/ic_arrow_down" />
 
         </LinearLayout>
 

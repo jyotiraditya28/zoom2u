@@ -138,7 +138,10 @@ class MapActivity1 : AppCompatActivity(), View.OnClickListener{
     private fun checkAllFieldAreFilled():Boolean{
         for (item in dataList) {
             if(item.quantity==0){
-                Toast.makeText(this,"Selected item quantity could not be a 0",Toast.LENGTH_LONG).show()
+                Toast.makeText(this,"Selected item quantity can't be zero",Toast.LENGTH_LONG).show()
+                return false
+            }else if(item.length==0 || item.height==0 || item.width==0){
+                Toast.makeText(this,"Shipment dimensions can’t be zero.",Toast.LENGTH_LONG).show()
                 return false
             }
             else if(item.quantity==-1 || item.weight==-1.0 || item.length==-1 || item.height==-1 || item.width==-1){

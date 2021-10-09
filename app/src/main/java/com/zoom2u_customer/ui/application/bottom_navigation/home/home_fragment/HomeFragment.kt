@@ -47,16 +47,19 @@ class HomeFragment : Fragment(), View.OnClickListener {
                     binding.getQuoteBtn.visibility = View.GONE
                 }
                 "from_booking_confirmation" -> {
+                    setDefaultData()
                     binding.blankView.visibility = View.VISIBLE
                     binding.getQuoteBtn.visibility = View.GONE
                 }
                 "from_quote_confirmation" -> {
+                    setDefaultData()
                     binding.blankView.visibility = View.VISIBLE
                     binding.getQuoteBtn.visibility = View.GONE
                     val intent = Intent("bid_refresh")
                     LocalBroadcastManager.getInstance(requireActivity()).sendBroadcast(intent)
                 }
                 "form_on_hold_page" -> {
+                    setDefaultData()
                     binding.blankView.visibility = View.VISIBLE
                     binding.getQuoteBtn.visibility = View.GONE
                 }
@@ -147,9 +150,9 @@ class HomeFragment : Fragment(), View.OnClickListener {
                         activity,
                         "You’ll need to select what you’re trying to send first!" +
                                 "\n" +
-                                "Please select the type of parcels you want to send and we’ll sort out the rest.",
+                                "Please select type of parcels you want to send and we’ll sort out the rest.",
                         onItemClick = ::onItemClick
-                    )
+                    )he t
 
                 }*/
 
@@ -192,6 +195,8 @@ class HomeFragment : Fragment(), View.OnClickListener {
 
     override fun onResume() {
         super.onResume()
+        binding.blankView.visibility = View.VISIBLE
+        binding.getQuoteBtn.visibility=View.GONE
         setDefaultData()
     }
 
