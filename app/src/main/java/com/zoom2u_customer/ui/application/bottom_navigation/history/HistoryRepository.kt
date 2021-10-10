@@ -20,7 +20,7 @@ import retrofit2.Response
 class HistoryRepository(private var serviceApi: ServiceApi, var context: Context?) {
 
     fun getHistoryList(page:Int,disposable: CompositeDisposable = CompositeDisposable(),
-                       onSuccess: (history:List<HistoryResponse>) -> Unit) {
+                       onSuccess: (history:String) -> Unit) {
         if (AppUtility.isInternetConnected()) {
          // AppUtility.progressBarShow(context)
             disposable.add(
@@ -34,15 +34,11 @@ class HistoryRepository(private var serviceApi: ServiceApi, var context: Context
                     .subscribeWith(object : DisposableSingleObserver<Response<JsonObject>>() {
                         override fun onSuccess(responce: Response<JsonObject>) {
                             if (responce.body() != null) {
-                                val convert =
-                                    Gson().toJson(responce.body()?.get("data")?.asJsonArray)
-                                val listType = object : TypeToken<List<HistoryResponse?>?>() {}.type
-                                val list: List<HistoryResponse> =
-                                    Gson().fromJson(convert, listType)
-                                onSuccess(list)
+                                onSuccess(responce.body().toString())
 
                             }
                             else if (responce.errorBody() != null) {
+                                onSuccess("false")
                                 AppUtility.progressBarDissMiss()
                                 LogErrorsToAppCenter().addLogToAppCenterOnAPIFail("breeze/customer/DeliveriesForCustomer?currentPage=$page&searchText=",
                                     responce.code(),responce.message(),"History List api","ErrorCode")
@@ -61,6 +57,7 @@ class HistoryRepository(private var serviceApi: ServiceApi, var context: Context
                         }
 
                         override fun onError(e: Throwable) {
+                            onSuccess("false")
                             AppUtility.progressBarDissMiss()
                             LogErrorsToAppCenter().addLogToAppCenterOnAPIFail("breeze/customer/DeliveriesForCustomer?currentPage=$page&searchText=",
                                 0,e.toString(),"History List api","OnError")
@@ -73,6 +70,7 @@ class HistoryRepository(private var serviceApi: ServiceApi, var context: Context
                     })
             )
         } else {
+            onSuccess("false")
             DialogActivity.alertDialogSingleButton(
                 context,
                 "No Network !",

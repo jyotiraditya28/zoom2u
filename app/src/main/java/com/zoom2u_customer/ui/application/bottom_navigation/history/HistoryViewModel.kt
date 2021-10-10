@@ -5,18 +5,18 @@ import androidx.lifecycle.ViewModel
 
 class HistoryViewModel: ViewModel() {
 
-    var success:MutableLiveData<List<HistoryResponse>>? =MutableLiveData(null)
+    var success:MutableLiveData<String> =MutableLiveData("")
     var repository: HistoryRepository? = null
 
     fun getHistory(page:Int) = repository?.getHistoryList(page,onSuccess = ::onSuccess)
 
-    fun onSuccess(history:List<HistoryResponse>){
-        success?.value=history
+    fun onSuccess(history:String){
+        success.value=history
 
     }
 
 
-    fun getHistoryList(): MutableLiveData<List<HistoryResponse>>?{
+    fun getHistoryList(): MutableLiveData<String>{
         return success
     }
 }

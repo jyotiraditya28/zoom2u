@@ -21,7 +21,7 @@ class ProfileRepository(private var serviceApi: ServiceApi, var context: Context
 
     fun getProflie(
         disposable: CompositeDisposable = CompositeDisposable(),
-        onSuccess: (profile: ProfileResponse) -> Unit
+        onSuccess: (profile:String) -> Unit
     ) {
         if (AppUtility.isInternetConnected()) {
 
@@ -37,11 +37,12 @@ class ProfileRepository(private var serviceApi: ServiceApi, var context: Context
                                 val listType = object : TypeToken<List<ProfileResponse?>?>() {}.type
                                 val list: List<ProfileResponse> =
                                     Gson().fromJson(responce.body(), listType)
-                                onSuccess(list[0])
+                                onSuccess(responce.body().toString())
                                 AppPreference.getSharedPrefInstance().setProfileData(Gson().toJson(list[0]))
 
                             }
                             else if (responce.errorBody() != null) {
+                                onSuccess("false")
                                 AppUtility.progressBarDissMiss()
                                 LogErrorsToAppCenter().addLogToAppCenterOnAPIFail("breeze/customer/Customers",
                                     responce.code(),responce.message(),"Profile Api","ErrorCode")
@@ -61,6 +62,7 @@ class ProfileRepository(private var serviceApi: ServiceApi, var context: Context
 
 
                         override fun onError(e: Throwable) {
+                            onSuccess("false")
                             AppUtility.progressBarDissMiss()
                             LogErrorsToAppCenter().addLogToAppCenterOnAPIFail("breeze/customer/Customers",
                                 0,e.toString(),"Profile Api","OnError")
@@ -74,6 +76,7 @@ class ProfileRepository(private var serviceApi: ServiceApi, var context: Context
                     })
             )
         } else {
+            onSuccess("false")
             DialogActivity.alertDialogSingleButton(
                 context,
                 "No Network !",

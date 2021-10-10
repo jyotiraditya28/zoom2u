@@ -19,7 +19,7 @@ import retrofit2.Response
 class CompletedBidListRepository(private var serviceApi: ServiceApi, var context: Context?) {
 
     fun getCompletedBidList(page:Int, disposable: CompositeDisposable = CompositeDisposable(),
-                       onSuccess: (history:List<CompletedBidListResponse>) -> Unit) {
+                       onSuccess: (history:String) -> Unit) {
         if (AppUtility.isInternetConnected()) {
             // AppUtility.progressBarShow(context)
             disposable.add(
@@ -33,15 +33,10 @@ class CompletedBidListRepository(private var serviceApi: ServiceApi, var context
                     .subscribeWith(object : DisposableSingleObserver<Response<JsonObject>>() {
                         override fun onSuccess(responce: Response<JsonObject>) {
                             if (responce.body() != null) {
-                                val convert =
-                                    Gson().toJson(responce.body()?.get("data")?.asJsonArray)
-                                val listType = object : TypeToken<List<CompletedBidListResponse?>?>() {}.type
-                                val list: List<CompletedBidListResponse> =
-                                    Gson().fromJson(convert, listType)
-                                onSuccess(list)
-
+                                onSuccess(responce.body().toString())
                             }
                             else if (responce.errorBody() != null) {
+                                onSuccess("false")
                                 AppUtility.progressBarDissMiss()
                                 LogErrorsToAppCenter().addLogToAppCenterOnAPIFail( "breeze/HeavyFreight/GetAllRequests?page=$page&type=completed&searchText=",
                                     responce.code(),responce.message(),"CompleteBid List api","ErrorCode")
@@ -60,10 +55,10 @@ class CompletedBidListRepository(private var serviceApi: ServiceApi, var context
                         }
 
                         override fun onError(e: Throwable) {
+                            onSuccess("false")
                             AppUtility.progressBarDissMiss()
                             LogErrorsToAppCenter().addLogToAppCenterOnAPIFail( "breeze/HeavyFreight/GetAllRequests?page=$page&type=completed&searchText=",
                                 0,e.toString(),"CompleteBid List api","OnError")
-
 
                             Toast.makeText(
                                 context,
@@ -74,6 +69,7 @@ class CompletedBidListRepository(private var serviceApi: ServiceApi, var context
                     })
             )
         } else {
+            onSuccess("false")
             DialogActivity.alertDialogSingleButton(
                 context,
                 "No Network !",

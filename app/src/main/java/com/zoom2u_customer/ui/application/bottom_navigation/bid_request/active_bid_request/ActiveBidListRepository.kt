@@ -20,7 +20,7 @@ import retrofit2.Response
 class ActiveBidListRepository(private var serviceApi: ServiceApi, var context: Context?) {
 
     fun getActiveBidList(page:Int, disposable: CompositeDisposable = CompositeDisposable(),
-                       onSuccess: (history:List<ActiveBidListResponse>) -> Unit) {
+                       onSuccess: (String) -> Unit) {
         if (AppUtility.isInternetConnected()) {
             // AppUtility.progressBarShow(context)
             disposable.add(
@@ -34,15 +34,10 @@ class ActiveBidListRepository(private var serviceApi: ServiceApi, var context: C
                     .subscribeWith(object : DisposableSingleObserver<Response<JsonObject>>() {
                         override fun onSuccess(responce: Response<JsonObject>) {
                             if (responce.body() != null) {
-                                val convert =
-                                    Gson().toJson(responce.body()?.get("data")?.asJsonArray)
-                                val listType = object : TypeToken<List<ActiveBidListResponse?>?>() {}.type
-                                val list: List<ActiveBidListResponse> =
-                                    Gson().fromJson(convert, listType)
-                                onSuccess(list)
-
+                                onSuccess(responce.body().toString())
                             }
                             else if (responce.errorBody() != null) {
+                                onSuccess("false")
                                 AppUtility.progressBarDissMiss()
                                 LogErrorsToAppCenter().addLogToAppCenterOnAPIFail("breeze/HeavyFreight/GetAllRequests?page=$page&type=active&searchText=",
                                     responce.code(),responce.message(),"ActiveBid List api","ErrorCode")
@@ -63,6 +58,7 @@ class ActiveBidListRepository(private var serviceApi: ServiceApi, var context: C
 
 
                         override fun onError(e: Throwable) {
+                            onSuccess("false")
                             AppUtility.progressBarDissMiss()
                             LogErrorsToAppCenter().addLogToAppCenterOnAPIFail("breeze/HeavyFreight/GetAllRequests?page=$page&type=active&searchText=",
                                 0,e.message,"ActiveBid List api","OnError")
@@ -76,6 +72,7 @@ class ActiveBidListRepository(private var serviceApi: ServiceApi, var context: C
                     })
             )
         } else {
+            onSuccess("false")
             DialogActivity.alertDialogSingleButton(
                 context,
                 "No Network !",

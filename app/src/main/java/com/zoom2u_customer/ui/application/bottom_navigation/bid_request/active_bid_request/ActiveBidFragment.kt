@@ -14,6 +14,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
+import com.google.gson.Gson
+import com.google.gson.JsonObject
+import com.google.gson.reflect.TypeToken
 import com.zoom2u_customer.apiclient.ApiClient
 import com.zoom2u_customer.apiclient.ServiceApi
 import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.complete_bid_request.completed_bid_page.CompletedBidActivity
@@ -43,7 +46,6 @@ class ActiveBidFragment : Fragment() {
     }
 
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -51,7 +53,8 @@ class ActiveBidFragment : Fragment() {
 
         binding = FragmentActiveBidBinding.inflate(inflater, container, false)
 
-        LocalBroadcastManager.getInstance(requireActivity()).registerReceiver(broadcastReceiver, IntentFilter("bid_refresh1"))
+        LocalBroadcastManager.getInstance(requireActivity())
+            .registerReceiver(broadcastReceiver, IntentFilter("bid_refresh1"))
         if (container != null) {
             setAdapterView(binding, container.context)
         }
@@ -67,35 +70,46 @@ class ActiveBidFragment : Fragment() {
             viewModel.getActiveBidList(1)
         })
 
-        viewModel.getActiveBidListSuccess()?.observe(viewLifecycleOwner) {
-            if (it != null) {
-                AppUtility.progressBarDissMiss()
-                binding.swipeRefresh.isRefreshing = false
-                if (it.isNotEmpty()) {
-                    updateRecord(it.toMutableList())
-                    binding.noActiveBidText.visibility = View.GONE
-                }else{
-                    binding.noActiveBidText.visibility = View.VISIBLE
+        viewModel.getActiveBidListSuccess().observe(viewLifecycleOwner) {
+            if (!it.isNullOrBlank()) {
+                if (it == "false") {
+                    AppUtility.progressBarDissMiss()
+                    binding.swipeRefresh.isRefreshing = false
+                } else {
+                    AppUtility.progressBarDissMiss()
+                    binding.swipeRefresh.isRefreshing = false
+                    val convertedObject: JsonObject = Gson().fromJson(it, JsonObject::class.java)
+                    val convert =
+                        Gson().toJson(convertedObject.get("data")?.asJsonArray)
+                    val listType = object : TypeToken<List<ActiveBidListResponse?>?>() {}.type
+                    val list: List<ActiveBidListResponse> =
+                        Gson().fromJson(convert, listType)
+                    if (list.isNotEmpty()) {
+                        updateRecord(list.toMutableList())
+                        binding.noActiveBidText.visibility = View.GONE
+                    } else {
+                        binding.noActiveBidText.visibility = View.VISIBLE
+                    }
                 }
             }
         }
 
-      /*  viewModel.getBidCancelSuccess()?.observe(viewLifecycleOwner) {
-            if (!TextUtils.isEmpty(it)) {
-                AppUtility.progressBarDissMiss()
-                listData.clear()
-                viewModel.getActiveBidList(1)
-            }
-        }
+        /*  viewModel.getBidCancelSuccess()?.observe(viewLifecycleOwner) {
+              if (!TextUtils.isEmpty(it)) {
+                  AppUtility.progressBarDissMiss()
+                  listData.clear()
+                  viewModel.getActiveBidList(1)
+              }
+          }
 
 
-        viewModel.getHeavyBidCancelSuccess()?.observe(viewLifecycleOwner) {
-            if (!TextUtils.isEmpty(it)) {
-                AppUtility.progressBarDissMiss()
-                listData.clear()
-                viewModel.getActiveBidList(1)
-            }
-        }*/
+          viewModel.getHeavyBidCancelSuccess()?.observe(viewLifecycleOwner) {
+              if (!TextUtils.isEmpty(it)) {
+                  AppUtility.progressBarDissMiss()
+                  listData.clear()
+                  viewModel.getActiveBidList(1)
+              }
+          }*/
 
         return binding.root
 
@@ -127,18 +141,18 @@ class ActiveBidFragment : Fragment() {
 
     private fun onApiCall() {
         currentPage++
-        if(listData.size>9) {
+        if (listData.size > 9) {
             AppUtility.progressBarShow(activity)
             viewModel.getActiveBidList(currentPage)
         }
     }
 
-    private fun onItemClick(activeBidItem: ActiveBidListResponse,pos:Int) {
+    private fun onItemClick(activeBidItem: ActiveBidListResponse, pos: Int) {
         val intent = Intent(activity, ActiveBidActivity::class.java)
         intent.putExtra("QuoteId", activeBidItem.Id.toString())
-        intent.putExtra("ItemType",activeBidItem.ItemType.toString())
-        intent.putExtra("pos",pos.toString())
-        startActivityForResult(intent,3)
+        intent.putExtra("ItemType", activeBidItem.ItemType.toString())
+        intent.putExtra("pos", pos.toString())
+        startActivityForResult(intent, 3)
     }
 
     private fun onCancelClick(Id: Int, itemType: String) {
@@ -156,19 +170,20 @@ class ActiveBidFragment : Fragment() {
 
     fun onNoClick() {}
     private fun onYesClick() {
-       /* if (selectForCancelItemType == "Freight")
-            viewModel.getHeavyBidCancel(selectForCancel)
-        else if (selectForCancelItemType == "ExtraLargeItem")
-            viewModel.getBidCancel(selectForCancel)*/
+        /* if (selectForCancelItemType == "Freight")
+             viewModel.getHeavyBidCancel(selectForCancel)
+         else if (selectForCancelItemType == "ExtraLargeItem")
+             viewModel.getBidCancel(selectForCancel)*/
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-       if(data!=null) {
-           if (requestCode == 3) {
-               val pos: Int = data.getStringExtra("pos")!!.toInt()
-               adapter?.removeItem(pos)
-           }
-       }
+        if (data != null) {
+            if (requestCode == 3) {
+                val pos: Int = data.getStringExtra("pos")!!.toInt()
+                adapter?.removeItem(pos)
+            }
+        }
     }
 
     override fun onDestroy() {

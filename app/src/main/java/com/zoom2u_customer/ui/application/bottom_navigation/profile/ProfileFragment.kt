@@ -11,8 +11,10 @@ import android.view.ViewGroup
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.squareup.picasso.Picasso
 import com.zoom2u_customer.R
 import com.zoom2u_customer.apiclient.ServiceApi
@@ -50,14 +52,32 @@ class ProfileFragment : Fragment(), View.OnClickListener {
 
         viewModel.getProfile()
 
-        viewModel.getProfileSuccess()?.observe(viewLifecycleOwner) {
-            if (it != null)
-                AppUtility.progressBarDissMiss()
-                binding.parentCl.visibility=View.VISIBLE
-                binding.edit.visibility=View.VISIBLE
-                setDataToView(it)
+        viewModel.getProfileSuccess().observe(viewLifecycleOwner) {
+            if (!it.isNullOrBlank()) {
+               if(it=="false"){
+                   AppUtility.progressBarDissMiss()
+                   binding.swipeRefresh.isRefreshing = false
+               }else{
+                   AppUtility.progressBarDissMiss()
+                   val listType = object : TypeToken<List<ProfileResponse?>?>() {}.type
+                   val list: List<ProfileResponse> =
+                       Gson().fromJson(it, listType)
+                   binding.swipeRefresh.isRefreshing = false
+                   binding.parentCl.visibility = View.VISIBLE
+                   binding.edit.visibility = View.VISIBLE
+                   setDataToView(list[0])
+               }
 
+
+            }
         }
+
+        binding.swipeRefresh.setOnRefreshListener(OnRefreshListener {
+            viewModel.getProfile()
+        })
+
+
+
 
         return binding.root
     }

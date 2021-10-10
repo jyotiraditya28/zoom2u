@@ -9,7 +9,7 @@ import com.zoom2u_customer.ui.application.bottom_navigation.profile.ProfileRespo
 class BasePageViewModel : ViewModel(){
 
     var success: MutableLiveData<String>? = MutableLiveData("")
-    var userDataSuccess: MutableLiveData<ProfileResponse>? = MutableLiveData()
+    var userDataSuccess: MutableLiveData<String>? = MutableLiveData("")
     var profileRepository: ProfileRepository? = null
 
     var repository: BasePageRepository? = null
@@ -20,7 +20,7 @@ class BasePageViewModel : ViewModel(){
 
     fun getProfile() = profileRepository?.getProflie(onSuccess = ::onSuccess)
 
-    fun onSuccess(msg:ProfileResponse){
+    fun onSuccess(msg:String){
         userDataSuccess?.value=msg
 
     }

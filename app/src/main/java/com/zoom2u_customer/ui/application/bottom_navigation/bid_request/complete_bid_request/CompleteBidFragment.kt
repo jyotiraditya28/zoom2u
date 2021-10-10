@@ -13,6 +13,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.zoom2u_customer.apiclient.ApiClient
 import com.zoom2u_customer.apiclient.ServiceApi
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
+import com.google.gson.Gson
+import com.google.gson.JsonObject
+import com.google.gson.reflect.TypeToken
 import com.zoom2u_customer.databinding.FragmentCompleteBidBinding
 import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.active_bid_request.ActiveBidListResponse
 import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.complete_bid_request.completed_bid_page.CompletedBidActivity
@@ -24,7 +27,7 @@ class CompleteBidFragment : Fragment() {
     private var  repository: CompletedBidListRepository? = null
     private var adapter:CompletedItemAdapter? = null
     private var currentPage: Int = 1
-    val listData: MutableList<CompletedBidListResponse> = ArrayList()
+    private val listData: MutableList<CompletedBidListResponse> = ArrayList()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -47,16 +50,25 @@ class CompleteBidFragment : Fragment() {
         })
 
         viewModel.getCompletedBidListSuccess()?.observe(viewLifecycleOwner) {
-            if (it != null) {
-
-                AppUtility.progressBarDissMiss()
-                binding.swipeRefresh.isRefreshing = false
-                if (it.isNotEmpty()) {
-                    updateRecord(it.toMutableList())
-                    binding.noCompletedBidText.visibility = View.GONE
-                }else{
-
-                    binding.noCompletedBidText.visibility = View.VISIBLE
+            if (!it.isNullOrBlank()) {
+                if (it == "false") {
+                    AppUtility.progressBarDissMiss()
+                    binding.swipeRefresh.isRefreshing = false
+                } else {
+                    AppUtility.progressBarDissMiss()
+                    binding.swipeRefresh.isRefreshing = false
+                    val convertedObject: JsonObject = Gson().fromJson(it, JsonObject::class.java)
+                    val convert =
+                        Gson().toJson(convertedObject.get("data")?.asJsonArray)
+                    val listType = object : TypeToken<List<CompletedBidListResponse?>?>() {}.type
+                    val list: List<CompletedBidListResponse> =
+                        Gson().fromJson(convert, listType)
+                    if (list.isNotEmpty()) {
+                        updateRecord(list.toMutableList())
+                        binding.noCompletedBidText.visibility = View.GONE
+                    } else {
+                        binding.noCompletedBidText.visibility = View.VISIBLE
+                    }
                 }
             }
         }

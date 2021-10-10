@@ -8,17 +8,17 @@ import com.zoom2u_customer.ui.application.bottom_navigation.history.HistoryRespo
 
 class CompletedBidListViewModel : ViewModel() {
 
-    var success: MutableLiveData<List<CompletedBidListResponse>>? = MutableLiveData(null)
+    var success: MutableLiveData<String> = MutableLiveData("")
     var repository: CompletedBidListRepository? = null
 
     fun getCompletedBidList(page:Int) = repository?.getCompletedBidList(page,onSuccess = ::onSuccess)
 
-    fun onSuccess(history:List<CompletedBidListResponse>){
-        success?.value=history
+    fun onSuccess(history:String){
+        success.value=history
 
     }
 
-    fun getCompletedBidListSuccess(): MutableLiveData<List<CompletedBidListResponse>>?{
+    fun getCompletedBidListSuccess(): MutableLiveData<String>{
         return success
     }
 }

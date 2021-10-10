@@ -7,7 +7,7 @@ import com.zoom2u_customer.ui.application.bottom_navigation.history.HistoryRespo
 
 class ActiveBidListViewModel : ViewModel() {
 
-    var success: MutableLiveData<List<ActiveBidListResponse>>? = MutableLiveData(null)
+    var success: MutableLiveData<String> = MutableLiveData("")
     private var cancelSuccess:MutableLiveData<String>? = MutableLiveData("")
     var cancelHeavySuccess:MutableLiveData<String>? = MutableLiveData("")
     var repository: ActiveBidListRepository? = null
@@ -18,8 +18,8 @@ class ActiveBidListViewModel : ViewModel() {
 
     fun getHeavyBidCancel(Id:Int?) = repository?.getHeavyBidCancel(Id,onSuccess = ::onHeavyBidCancelSuccess)*/
 
-    fun onSuccess(history:List<ActiveBidListResponse>){
-        success?.value=history
+    fun onSuccess(history:String){
+        success.value=history
 
     }
 
@@ -31,7 +31,7 @@ class ActiveBidListViewModel : ViewModel() {
         cancelHeavySuccess?.value=success
     }*/
 
-    fun getActiveBidListSuccess(): MutableLiveData<List<ActiveBidListResponse>>?{
+    fun getActiveBidListSuccess(): MutableLiveData<String>{
         return success
     }
 

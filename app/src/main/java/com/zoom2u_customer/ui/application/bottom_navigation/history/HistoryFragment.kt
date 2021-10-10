@@ -10,6 +10,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
+import com.google.gson.Gson
+import com.google.gson.JsonObject
+import com.google.gson.reflect.TypeToken
 import com.zoom2u_customer.apiclient.ApiClient.Companion.getServices
 import com.zoom2u_customer.apiclient.ServiceApi
 import com.zoom2u_customer.databinding.FragmentHistoryBinding
@@ -46,48 +49,60 @@ class HistoryFragment : Fragment() {
         if(mergeHistoryList.size>0)
             mergeHistoryList.clear()
 
-        viewModel.getHistoryList()?.observe(viewLifecycleOwner) {
-            if (it != null) {
-                AppUtility.progressBarDissMiss()
-                binding.swipeRefresh.isRefreshing = false
-                if (it.isNotEmpty()) {
+        viewModel.getHistoryList().observe(viewLifecycleOwner) {
+            if (!it.isNullOrBlank()) {
+                if (it == "false") {
                     AppUtility.progressBarDissMiss()
+                    binding.swipeRefresh.isRefreshing = false
+                } else {
+                    AppUtility.progressBarDissMiss()
+                    binding.swipeRefresh.isRefreshing = false
+                    val convertedObject: JsonObject = Gson().fromJson(it, JsonObject::class.java)
+                    val convert =
+                        Gson().toJson(convertedObject.get("data")?.asJsonArray)
+                    val listType = object : TypeToken<List<HistoryResponse?>?>() {}.type
+                    val list: List<HistoryResponse> =
+                        Gson().fromJson(convert, listType)
 
-                    val onGoingList: MutableList<HistoryResponse> = ArrayList()
-                    val pastList: MutableList<HistoryResponse> = ArrayList()
+                    if (list.isNotEmpty()) {
+                        AppUtility.progressBarDissMiss()
 
-                    /**count ongoing*/
-                    for (item in it) {
-                        if (System.currentTimeMillis() < AppUtility.getDateTime(item.DropDateTime).time) {
-                            onGoingList.add(item)
-                        } else {
-                            pastList.add(item)
+                        val onGoingList: MutableList<HistoryResponse> = ArrayList()
+                        val pastList: MutableList<HistoryResponse> = ArrayList()
+
+                        /**count ongoing*/
+                        for (item in list) {
+                            if (System.currentTimeMillis() < AppUtility.getDateTime(item.DropDateTime).time) {
+                                onGoingList.add(item)
+                            } else {
+                                pastList.add(item)
+                            }
                         }
-                    }
-                    if(mergeHistoryList.size>0) {
-                        /**when pagination work*/
-                        mergeHistoryList.addAll(onGoingList)
-                        mergeHistoryList.addAll(pastList)
+                        if (mergeHistoryList.size > 0) {
+                            /**when pagination work*/
+                            mergeHistoryList.addAll(onGoingList)
+                            mergeHistoryList.addAll(pastList)
 
-                    }else{
-                        /**when first time and swipe refresh activity lunch*/
-                        mergeHistoryList.clear()
-                        mergeHistoryList.add(HistoryResponse().apply {
-                            count = onGoingList.size
-                            type = 1
-                        })
-                        mergeHistoryList.addAll(onGoingList)
+                        } else {
+                            /**when first time and swipe refresh activity lunch*/
+                            mergeHistoryList.clear()
+                            mergeHistoryList.add(HistoryResponse().apply {
+                                count = onGoingList.size
+                                type = 1
+                            })
+                            mergeHistoryList.addAll(onGoingList)
 
-                        mergeHistoryList.add(HistoryResponse().apply {
-                            count=pastList.size
-                            type=2
-                        })
-                        mergeHistoryList.addAll(pastList)
-                    }
-                    adapter?.updateRecords(mergeHistoryList)
-                    binding.noHistoryText.visibility = View.GONE
-                } else
-                    binding.noHistoryText.visibility = View.VISIBLE
+                            mergeHistoryList.add(HistoryResponse().apply {
+                                count = pastList.size
+                                type = 2
+                            })
+                            mergeHistoryList.addAll(pastList)
+                        }
+                        adapter?.updateRecords(mergeHistoryList)
+                        binding.noHistoryText.visibility = View.GONE
+                    } else
+                        binding.noHistoryText.visibility = View.VISIBLE
+                }
             }
 
         }
