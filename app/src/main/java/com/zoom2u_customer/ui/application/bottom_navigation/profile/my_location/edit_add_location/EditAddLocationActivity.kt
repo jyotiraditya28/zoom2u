@@ -261,6 +261,7 @@ class EditAddLocationActivity : AppCompatActivity(), View.OnClickListener {
         binding.dropOffCheckBox.isChecked = myLocationResponse?.DefaultDropoff == true
         binding.company.setText(myLocationResponse?.Location?.CompanyName)
         binding.unit.setText(myLocationResponse?.Location?.UnitNumber)
+       binding.notes.setText(myLocationResponse?.Location?.Notes)
     }
 
     private fun onOkClick() {

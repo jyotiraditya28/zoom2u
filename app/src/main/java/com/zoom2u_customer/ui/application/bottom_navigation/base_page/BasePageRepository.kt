@@ -69,11 +69,11 @@ class BasePageRepository(private var serviceApi: ServiceApi, var context: Contex
 
         }
         else {
-            DialogActivity.alertDialogSingleButton(
+           /* DialogActivity.alertDialogSingleButton(
                 context,
                 "No Network !",
                 "No network connection, Please try again later."
-            )
+            )*/
         }
     }
 
@@ -129,11 +129,11 @@ class BasePageRepository(private var serviceApi: ServiceApi, var context: Contex
                 )
             }
         else {
-            DialogActivity.alertDialogSingleButton(
+         /*   DialogActivity.alertDialogSingleButton(
                 context,
                 "No Network !",
                 "No network connection, Please try again later."
-            )
+            )*/
         }
     }
 

@@ -38,13 +38,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/titleDialog"
-        android:layout_margin="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
         android:lineSpacingExtra="3dp"
         android:paddingLeft="15dp"
         android:paddingTop="20dp"
         android:paddingRight="15dp"
         android:paddingBottom="25dp"
-        android:text="Looks like your session is expired.login again to enjoy the features of app."
+        android:text="Looks like your session is expired.Login again to enjoy the features of app."
         android:textColor="@color/text_color1"
         android:textSize="15dp" />
 
