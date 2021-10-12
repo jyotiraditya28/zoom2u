@@ -312,6 +312,11 @@ class HistoryDetailsActivity : AppCompatActivity(), OnMapReadyCallback, View.OnC
                 binding.status.setBackgroundColor(Color.parseColor("#00A7E2"))
                 binding.status.setTextColor(Color.WHITE)
             }
+            "Returned"  ->{
+                binding.status.text ="Returned"
+                binding.status.setBackgroundColor(Color.parseColor("#ff0000"))
+                binding.status.setTextColor(Color.WHITE)
+            }
             "Tried to deliver" -> {
                 binding.cancelBook.visibility = View.GONE
                 binding.status.text ="Tried to deliver"

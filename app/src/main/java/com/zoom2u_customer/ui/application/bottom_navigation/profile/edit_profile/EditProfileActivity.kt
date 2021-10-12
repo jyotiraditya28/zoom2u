@@ -132,17 +132,17 @@ class EditProfileActivity : AppCompatActivity(), View.OnClickListener {
                 launchImageCrop(profileData?.Photo?.toUri()!!)
             }*/
             R.id.save_btn -> {
-                profileResponse?.FirstName = binding.fname.text.toString().trim()
-                profileResponse?.LastName = binding.lname.text.toString().trim()
-                profileResponse?.Company = binding.company.text.toString().trim()
-                profileResponse?.Mobile = binding.phone.text.toString().trim()
                 if (checkValidation(
                         binding.fname.text.toString().trim(),
                         binding.lname.text.toString().trim(),
-                        binding.phone.text.toString().trim()
-                    )
-                )
+                        binding.phone.text.toString().trim())){
+                    profileResponse?.FirstName = binding.fname.text.toString().trim()
+                    profileResponse?.LastName = binding.lname.text.toString().trim()
+                    profileResponse?.Company = binding.company.text.toString().trim()
+                    profileResponse?.Mobile = binding.phone.text.toString().trim()
                     viewModel.setProfile(profileResponse)
+                }
+
             }
 
 
@@ -176,15 +176,16 @@ class EditProfileActivity : AppCompatActivity(), View.OnClickListener {
 
                 CAMERA -> {
                     if (data != null) {
-                        val thumbnail = data.extras?.get("data") as Bitmap
-
-                        launchImageCrop(AppUtility.getImageUri(this, thumbnail))
-                        saveImage(thumbnail)
+                        if (data.extras?.get("data") != null) {
+                            val thumbnail = data.extras?.get("data") as Bitmap
+                            launchImageCrop(AppUtility.getImageUri(this, thumbnail))
+                            saveImage(thumbnail)
+                        }
                     }
                 }
 
                 CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE -> {
-                    val result = CropImage.getActivityResult(data)
+                    val result  = CropImage.getActivityResult(data)
                     if (resultCode == Activity.RESULT_OK) {
                         val resultUri = result.uri
                         Picasso.get().load(resultUri).into(binding.dp)
@@ -304,35 +305,6 @@ class EditProfileActivity : AppCompatActivity(), View.OnClickListener {
         return true
     }
 
-  /*  fun saveImage(myBitmap: Bitmap): String {
-        val bytes = ByteArrayOutputStream()
-        myBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes)
-        val wallpaperDirectory = File(
-            Environment.getExternalStorageState() + IMAGE_DIRECTORY
-        )
-        // have the object build the directory structure, if needed.
-        if (!wallpaperDirectory.exists()) {
-            wallpaperDirectory.mkdirs()
-        }
-        try {
-            val f = File(
-                wallpaperDirectory, Calendar.getInstance()
-                    .timeInMillis.toString() + ".jpg"
-            )
-            f.createNewFile()
-            val fo = FileOutputStream(f)
-            fo.write(bytes.toByteArray())
-            MediaScannerConnection.scanFile(this, arrayOf(f.path), arrayOf("image/jpeg"), null)
-            fo.close()
-            Log.d("TAG", "File Saved::--->" + f.absolutePath)
-            return f.absolutePath
-        } catch (e1: IOException) {
-            e1.printStackTrace()
-        }
-        return ""
-    }
-
-*/
 
     override fun onBackPressed() {
         val intent = Intent()
@@ -344,7 +316,7 @@ class EditProfileActivity : AppCompatActivity(), View.OnClickListener {
 
 
 
-    fun saveImage(bitmap: Bitmap){
+    private fun saveImage(bitmap: Bitmap){
             val cw = ContextWrapper(applicationContext)
             val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
             val directory = cw.getDir("Zoom2u", Context.MODE_PRIVATE)

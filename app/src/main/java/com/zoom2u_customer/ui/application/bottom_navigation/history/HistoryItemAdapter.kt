@@ -168,7 +168,11 @@ class HistoryItemAdapter(val context: Context, private val onItemClick:(HistoryR
                 holder.itemBinding.status.setBackgroundColor(Color.parseColor("#00A7E2"))
                 holder.itemBinding.status.setTextColor(Color.WHITE)
             }
-
+            "Returned"  ->{
+                holder.itemBinding.status.text ="Returned"
+                holder.itemBinding.status.setBackgroundColor(Color.parseColor("#ff0000"))
+                holder.itemBinding.status.setTextColor(Color.WHITE)
+            }
             else -> {
                 holder.itemBinding.status.text ="Accepted"
                 holder.itemBinding.status.setBackgroundColor(Color.parseColor("#FFD100"))

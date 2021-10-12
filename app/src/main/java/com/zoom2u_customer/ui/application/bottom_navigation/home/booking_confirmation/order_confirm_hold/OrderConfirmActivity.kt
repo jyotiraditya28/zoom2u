@@ -75,21 +75,9 @@ class OrderConfirmActivity : AppCompatActivity(), View.OnClickListener {
                     setResult(23, intent)
                     finish()
                 } else
-                /*   DialogActivity.logoutDialog(
-                   this, "Are you sure!", "Are you want make a new Booking?",
-                   "Ok", "Cancel",
-                   onCancelClick = ::onCancelClick,
-                   onOkClick = ::onOkClick
-               )*/
                     newBooking()
             }
             R.id.close -> {
-                /* if (intent.hasExtra("BookingResponse")) {
-                     val intent = Intent(this, HistoryDetailsActivity::class.java)
-                     intent.putExtra("BookingRef", bookingResponse)
-                     intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
-                     startActivity(intent)
-                 }else*/
                 newBooking()
             }
 
@@ -102,11 +90,17 @@ class OrderConfirmActivity : AppCompatActivity(), View.OnClickListener {
         intent1.putExtra("message","from_booking_confirmation")
         LocalBroadcastManager.getInstance(this@OrderConfirmActivity).sendBroadcast(intent1)
 
-        val intent = Intent(this, BasePageActivity::class.java)
+        if (intent.hasExtra("BookingRefFromBid")){
+            val intent1 = Intent("open_home_from_bid")
+            LocalBroadcastManager.getInstance(this@OrderConfirmActivity).sendBroadcast(intent1)
+            finish()
+        }
+        else {
+            val intent = Intent(this, BasePageActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
             startActivity(intent)
             finish()
-
+        }
     }
 
     override fun onBackPressed() {
@@ -117,18 +111,9 @@ class OrderConfirmActivity : AppCompatActivity(), View.OnClickListener {
             setResult(23, intent)
             finish()
         } else
-        /* DialogActivity.logoutDialog(
-             this, "Are you sure!", "Are you want make a new Booking?",
-             "Ok", "Cancel",
-             onCancelClick = ::onCancelClick,
-             onOkClick = ::onOkClick
-         )*/
             newBooking()
     }
 
-    private fun onCancelClick() {}
-    private fun onOkClick() {
-        newBooking()
-    }
+
 
 }

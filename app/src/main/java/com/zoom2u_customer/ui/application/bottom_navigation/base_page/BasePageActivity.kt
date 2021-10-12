@@ -2,7 +2,10 @@ package com.zoom2u_customer.ui.application.bottom_navigation.base_page
 
 import android.Manifest
 import android.app.AlertDialog
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -11,6 +14,7 @@ import android.view.MenuItem
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -31,29 +35,48 @@ import com.zoom2u_customer.ui.application.get_location.GetLocationClass
 import com.zoom2u_customer.utility.AppUtility
 import com.zoom2u_customer.utility.DialogActivity
 
-class BasePageActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItemSelectedListener {
+class BasePageActivity : AppCompatActivity(),
+    BottomNavigationView.OnNavigationItemSelectedListener {
     val APP_PERMISSION_REQUEST_CODE = 1010
     lateinit var viewModel: BasePageViewModel
     private var repository: BasePageRepository? = null
-    private var profileRepository:ProfileRepository?=null
+    private var profileRepository: ProfileRepository? = null
     lateinit var binding: ActivityBasepageBinding
     private lateinit var mainPagerAdapter: MainPagerAdapter
     private var mAuth_Firebase: FirebaseAuth? = null
     private var firebase_CurrentUser: FirebaseUser? = null
     private var getLocationClass: GetLocationClass? = null
+
     /** get gcm token id*/
+
+    private val broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+
+        override fun onReceive(context: Context, intent: Intent) {
+            val defaultScreen = MainScreen.LOGS
+            scrollToScreen(defaultScreen)
+            selectBottomNavigationViewMenuItem(defaultScreen.menuItemId)
+            supportActionBar?.setTitle(defaultScreen.titleStringId)
+
+            val intent1 = Intent("home_page")
+            intent1.putExtra("message","from_quote_confirmation")
+            LocalBroadcastManager.getInstance(this@BasePageActivity).sendBroadcast(intent1)
+        }}
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding= DataBindingUtil.setContentView(this, R.layout.activity_basepage)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_basepage)
+        LocalBroadcastManager.getInstance(this)
+            .registerReceiver(broadcastReceiver, IntentFilter("open_home_from_bid"))
 
         viewModel = ViewModelProvider(this).get(BasePageViewModel::class.java)
         val serviceApi: ServiceApi = getServices()
         repository = BasePageRepository(serviceApi, this)
-        profileRepository = ProfileRepository(serviceApi,this)
+        profileRepository = ProfileRepository(serviceApi, this)
         viewModel.repository = repository
         viewModel.profileRepository = profileRepository
         viewModel.getProfile()
+
 
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
@@ -62,23 +85,24 @@ class BasePageActivity : AppCompatActivity(),  BottomNavigationView.OnNavigation
 
             val token = task.result
             viewModel.sendDeviceTokenIDWithOutLocation(token)
-            Log.d("Fcm","$token")
+            Log.d("Fcm", "$token")
         })
 
 
-
         getLocationClass = GetLocationClass(this)
-      //  getLocationClass?.getCurrentLocation(onAddress = ::getAddress)
-         checkToEnableAppPermissions()
+        //  getLocationClass?.getCurrentLocation(onAddress = ::getAddress)
+        checkToEnableAppPermissions()
 
         mainPagerAdapter = MainPagerAdapter(supportFragmentManager)
 
-        mainPagerAdapter.setItems(arrayListOf(
-            MainScreen.LOGS,
-            MainScreen.PROGRESS,
-            MainScreen.PROFILE,
-            MainScreen.WORK
-        ))
+        mainPagerAdapter.setItems(
+            arrayListOf(
+                MainScreen.LOGS,
+                MainScreen.PROGRESS,
+                MainScreen.PROFILE,
+                MainScreen.WORK
+            )
+        )
 
         val defaultScreen = MainScreen.LOGS
         scrollToScreen(defaultScreen)
@@ -94,11 +118,11 @@ class BasePageActivity : AppCompatActivity(),  BottomNavigationView.OnNavigation
                 selectBottomNavigationViewMenuItem(selectedScreen.menuItemId)
                 supportActionBar?.setTitle(selectedScreen.titleStringId)
 
-             if(position==0){
-                 val intent = Intent("home_page")
-                  intent.putExtra("message","from_active_bid")
-                 LocalBroadcastManager.getInstance(this@BasePageActivity).sendBroadcast(intent)
-             }
+                if (position == 0) {
+                    val intent = Intent("home_page")
+                    intent.putExtra("message", "from_active_bid")
+                    LocalBroadcastManager.getInstance(this@BasePageActivity).sendBroadcast(intent)
+                }
 
 
             }
@@ -115,13 +139,13 @@ class BasePageActivity : AppCompatActivity(),  BottomNavigationView.OnNavigation
             // Get new FCM registration token
             val token = task.result
 
-            viewModel.sendDeviceTokenID(lat,lang,token)
-            Log.d("Fcm",token)
+            viewModel.sendDeviceTokenID(lat, lang, token)
+            Log.d("Fcm", token)
         })
 
 
-
     }
+
     override fun onStart() {
         super.onStart()
         //Batch.onStart(this)
@@ -129,6 +153,7 @@ class BasePageActivity : AppCompatActivity(),  BottomNavigationView.OnNavigation
         firebase_CurrentUser = mAuth_Firebase?.currentUser
         Log.i("", "---  Current firebase user --- $firebase_CurrentUser")
     }
+
     private fun checkToEnableAppPermissions() {
         if (Build.VERSION.SDK_INT >= 23) {
             val permission = arrayOf(
@@ -160,7 +185,7 @@ class BasePageActivity : AppCompatActivity(),  BottomNavigationView.OnNavigation
                     "Okay"
                 ) { dialog, _ ->
                     ActivityCompat.requestPermissions(
-                        this@BasePageActivity , arrayOf(
+                        this@BasePageActivity, arrayOf(
                             Manifest.permission.ACCESS_FINE_LOCATION,
                             Manifest.permission.READ_EXTERNAL_STORAGE,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -189,6 +214,7 @@ class BasePageActivity : AppCompatActivity(),  BottomNavigationView.OnNavigation
         binding.navigation.selectedItemId = menuItemId
         binding.navigation.setOnNavigationItemSelectedListener(this)
     }
+
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         getMainScreenForMenuItem(item.itemId)?.let {
             scrollToScreen(it)
@@ -197,21 +223,28 @@ class BasePageActivity : AppCompatActivity(),  BottomNavigationView.OnNavigation
         }
         return false
     }
+
     override fun onBackPressed() {
         DialogActivity.logoutDialog(
             this,
             "Are you sure!",
             "Are you want Logout?",
-            "Ok","Cancel",
-            onCancelClick=::onCancelClick,
+            "Ok", "Cancel",
+            onCancelClick = ::onCancelClick,
             onOkClick = ::onOkClick
         )
     }
-    private fun onCancelClick(){
+
+    private fun onCancelClick() {
 
     }
 
     private fun onOkClick() {
         AppUtility.onLogoutCall(this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver)
     }
 }

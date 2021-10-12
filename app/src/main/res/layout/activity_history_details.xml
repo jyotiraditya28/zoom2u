@@ -236,10 +236,12 @@
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/pick_add"
                             style="@style/style_11_regular"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:textColor="@color/black"
+                            android:paddingEnd="10dp"
+                            app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/relMain"
                             app:layout_constraintTop_toBottomOf="@+id/pickup_txt" />
 
@@ -351,10 +353,12 @@
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/drop_add"
                         style="@style/style_11_regular"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="40dp"
                         android:textColor="@color/black"
+                        android:paddingEnd="10dp"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/cl" />
 

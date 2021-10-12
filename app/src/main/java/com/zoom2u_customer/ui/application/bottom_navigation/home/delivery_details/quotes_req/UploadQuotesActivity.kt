@@ -191,7 +191,9 @@ class UploadQuotesActivity : AppCompatActivity(), View.OnClickListener {
                 imageClicked=5
             }
             R.id.back_btn -> {
-               finish()
+                val intent = Intent()
+                setResult(3, intent)
+                finish()
             }
         }
     }
@@ -323,9 +325,11 @@ class UploadQuotesActivity : AppCompatActivity(), View.OnClickListener {
 
             CAMERA ->{
                 if(data!=null) {
-                    val thumbnail = data.extras?.get("data") as Bitmap
-                    launchImageCrop(AppUtility.getImageUri(this, thumbnail))
-                    saveImage(thumbnail)
+                    if (data.extras?.get("data") != null) {
+                        val thumbnail = data.extras?.get("data") as Bitmap
+                        launchImageCrop(AppUtility.getImageUri(this, thumbnail))
+                        saveImage(thumbnail)
+                    }
                 }
             }
 
@@ -420,6 +424,13 @@ class UploadQuotesActivity : AppCompatActivity(), View.OnClickListener {
                 Toast.makeText(this@UploadQuotesActivity, "Storage Permission Denied: Allow permission from app setting.", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+
+    override fun onBackPressed() {
+        val intent = Intent()
+        setResult(3, intent)
+        finish()
     }
 
 }

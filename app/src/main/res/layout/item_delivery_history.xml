@@ -260,7 +260,7 @@
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/start_txt"
                     style="@style/style_13_bold"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
@@ -269,18 +269,23 @@
                     android:paddingEnd="10dp"
                     android:text="@{historyitem.pickupAddress}"
                     android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/relMain"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/end_txt"
                     style="@style/style_13_bold"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginBottom="10dp"
                     android:text="@{historyitem.dropAddress}"
                     android:textStyle="bold"
+                    android:maxLines="2"
+                    android:singleLine="false"
+                    android:paddingEnd="10dp"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/relMain" />
 
