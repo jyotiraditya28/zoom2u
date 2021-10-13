@@ -12,16 +12,31 @@ import com.zoom2u_customer.databinding.FragmentBidOffersBinding
 import com.zoom2u_customer.databinding.FragmentCompletedBidOffersBinding
 import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.complete_bid_request.completed_bid_page.CompletedDetailsResponse
 import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.active_bid_request.active_bid_page.Offer
+import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.complete_bid_request.completed_bid_page.completed_bid_details.CompletedDetailsFragment
 
-class CompletedBidOffersFragment(private val bidDetails: CompletedDetailsResponse?) : Fragment() {
+class CompletedBidOffersFragment() : Fragment() {
     lateinit var binding: FragmentCompletedBidOffersBinding
+
+    var bidDetail: CompletedDetailsResponse? = null
+
+    companion object {
+
+        var bidDetail1: CompletedDetailsResponse? = null
+
+        fun newInstance(bidDetails: CompletedDetailsResponse?): CompletedBidOffersFragment {
+            this.bidDetail1 = bidDetails
+            return CompletedBidOffersFragment()
+        }
+    }
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentCompletedBidOffersBinding.inflate(inflater, container, false)
-
+        this.bidDetail= bidDetail1
         if (container != null) {
             setAdapterView(binding, container.context)
         }
@@ -33,7 +48,7 @@ class CompletedBidOffersFragment(private val bidDetails: CompletedDetailsRespons
         val layoutManager = GridLayoutManager(activity, 1)
         binding.activeBidOffersRecycler.layoutManager = layoutManager
         val adapter =
-            CompletedBidOffersAdapter(context, bidDetails?.Offers?.toList()!!, onItemClick = ::onBidOfferSelected)
+            CompletedBidOffersAdapter(context, bidDetail?.Offers?.toList()!!, onItemClick = ::onBidOfferSelected)
         binding.activeBidOffersRecycler.adapter = adapter
 
     }

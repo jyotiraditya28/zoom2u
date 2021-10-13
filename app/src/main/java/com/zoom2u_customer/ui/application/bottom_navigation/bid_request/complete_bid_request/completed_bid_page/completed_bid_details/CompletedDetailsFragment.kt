@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.zoom2u_customer.R
-import com.zoom2u_customer.databinding.FragmentBidDetailsBinding
 import com.zoom2u_customer.databinding.FragmentCompletedBidDetailsBinding
 import com.zoom2u_customer.ui.DocItemShowAdapter
 import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.ShowBidImageAdapter
@@ -19,11 +18,22 @@ import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.complete
 import com.zoom2u_customer.utility.AppUtility
 
 
-class CompletedDetailsFragment(var bidDetails: CompletedDetailsResponse?) : Fragment(), View.OnClickListener {
+class CompletedDetailsFragment() : Fragment(), View.OnClickListener {
     lateinit var binding: FragmentCompletedBidDetailsBinding
     var bidDetail: CompletedDetailsResponse? = null
     private var imageAdapter: ShowBidImageAdapter?=null
     private var docAdapter: DocItemShowAdapter?=null
+
+    companion object {
+
+       var bidDetail1: CompletedDetailsResponse? = null
+
+        fun newInstance(bidDetails: CompletedDetailsResponse?): CompletedDetailsFragment {
+            this.bidDetail1 = bidDetails
+            return CompletedDetailsFragment()
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -32,7 +42,8 @@ class CompletedDetailsFragment(var bidDetails: CompletedDetailsResponse?) : Frag
         binding =
 
             FragmentCompletedBidDetailsBinding.inflate(inflater, container, false)
-        this.bidDetail = bidDetails
+
+        this.bidDetail= bidDetail1
 
         setDataToView(bidDetail)
         setAdapterView(container?.context)

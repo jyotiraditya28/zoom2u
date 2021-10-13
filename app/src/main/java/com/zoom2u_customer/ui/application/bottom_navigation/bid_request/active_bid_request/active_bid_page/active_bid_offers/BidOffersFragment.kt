@@ -28,13 +28,14 @@ import com.zoom2u_customer.databinding.FragmentBidOffersBinding
 import com.zoom2u_customer.getBrainTree.GetBrainTreeClientTokenOrBookDeliveryRequest
 import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.active_bid_request.active_bid_page.BidDetailsResponse
 import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.active_bid_request.active_bid_page.Offer
+import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.complete_bid_request.completed_bid_page.completed_bid_details.CompletedDetailsFragment
 import com.zoom2u_customer.ui.application.bottom_navigation.home.booking_confirmation.BookingResponse
 import com.zoom2u_customer.ui.application.bottom_navigation.home.booking_confirmation.order_confirm_hold.OnHoldActivity
 import com.zoom2u_customer.ui.application.bottom_navigation.home.booking_confirmation.order_confirm_hold.OrderConfirmActivity
 import com.zoom2u_customer.utility.AppUtility
 import org.json.JSONException
 
-class BidOffersFragment(private val bidDetails: BidDetailsResponse?) : Fragment() {
+class BidOffersFragment() : Fragment() {
     lateinit var binding: FragmentBidOffersBinding
     lateinit var viewModel: ActiveBidOffersViewModel
     private var repository: ActiveBidOffersRepository? = null
@@ -42,11 +43,26 @@ class BidOffersFragment(private val bidDetails: BidDetailsResponse?) : Fragment(
     private var request_Code = 1002
     private var offers: Offer? = null
     private var purOrderNo: String? = null
+    var bidDetails: BidDetailsResponse? = null
+
+    companion object {
+
+        var bidDetail1: BidDetailsResponse? = null
+
+        fun newInstance(bidDetails: BidDetailsResponse?): BidOffersFragment{
+            this.bidDetail1 = bidDetails
+            return BidOffersFragment()
+        }
+    }
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentBidOffersBinding.inflate(inflater, container, false)
+        this.bidDetails=bidDetail1
+
         getBrainTreeClientToken =
             GetBrainTreeClientTokenOrBookDeliveryRequest(activity, request_Code)
         if (container != null) {
@@ -95,7 +111,7 @@ class BidOffersFragment(private val bidDetails: BidDetailsResponse?) : Fragment(
             binding.activeBidOffersRecycler.layoutManager = layoutManager
             val adapter = ActiveBidOffersAdapter(
                 context,
-                bidDetails.Offers?.toList()!!,
+                bidDetails?.Offers?.toList()!!,
                 onItemClick = ::onBidOfferSelected
             )
             binding.activeBidOffersRecycler.adapter = adapter

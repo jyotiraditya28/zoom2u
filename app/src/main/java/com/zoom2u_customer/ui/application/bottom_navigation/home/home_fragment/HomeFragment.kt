@@ -22,8 +22,8 @@ import com.zoom2u_customer.ui.application.bottom_navigation.home.map_page1.MapAc
 import com.zoom2u_customer.ui.application.chat.ChatActivity
 import com.zoom2u_customer.utility.AppPreference
 import com.zoom2u_customer.utility.AppUtility
-import com.zoom2u_customer.utility.DialogActivity
-import com.zoom2u_customer.MainActivity
+
+
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 

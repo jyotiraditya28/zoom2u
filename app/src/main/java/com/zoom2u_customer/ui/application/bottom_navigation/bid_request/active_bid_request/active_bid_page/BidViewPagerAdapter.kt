@@ -3,20 +3,16 @@ package com.zoom2u_customer.ui.application.bottom_navigation.bid_request.active_
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.active_bid_request.ActiveBidListResponse
 import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.active_bid_request.active_bid_page.active_bid_offers.BidOffersFragment
 import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.active_bid_request.active_bid_page.active_biddetails.BidDetailsFragment
-import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.complete_bid_request.completed_bid_page.CompletedDetailsResponse
-import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.complete_bid_request.completed_bid_page.completed_bid_offers.CompletedBidOffersFragment
-import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.complete_bid_request.completed_bid_page.completed_bid_details.CompletedDetailsFragment
 
 class BidViewPagerAdapter (fm: FragmentManager, var bidDetails: BidDetailsResponse?) : FragmentPagerAdapter(fm) {
     override fun getItem(position: Int): Fragment {
         var fragment: Fragment? = null
         if (position == 0) {
-            fragment =BidDetailsFragment(bidDetails)
+            fragment =BidDetailsFragment.newInstance(bidDetails)
         } else if (position == 1) {
-            fragment = BidOffersFragment(bidDetails)
+            fragment = BidOffersFragment.newInstance(bidDetails)
         }
         return fragment!!
     }

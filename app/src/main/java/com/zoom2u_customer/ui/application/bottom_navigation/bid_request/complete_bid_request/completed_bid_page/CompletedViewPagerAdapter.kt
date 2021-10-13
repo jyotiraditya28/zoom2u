@@ -11,9 +11,9 @@ class CompletedViewPagerAdapter (fm: FragmentManager, var bidDetails: CompletedD
     override fun getItem(position: Int): Fragment {
         var fragment: Fragment? = null
         if (position == 0) {
-            fragment = CompletedDetailsFragment(bidDetails)
+            fragment = CompletedDetailsFragment.newInstance(bidDetails)
         } else if (position == 1) {
-            fragment = CompletedBidOffersFragment(bidDetails)
+            fragment = CompletedBidOffersFragment.newInstance(bidDetails)
         }
         return fragment!!
     }

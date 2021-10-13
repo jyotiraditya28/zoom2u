@@ -42,7 +42,7 @@ import java.util.*
 class HistoryDetailsActivity : AppCompatActivity(), OnMapReadyCallback, View.OnClickListener {
     private var arrayCourierPick: List<String>? = null
     private var arrayCourierDrop: List<String>? = null
-    private lateinit var map: GoogleMap
+    private var map: GoogleMap?=null
     var response: HistoryDetailsResponse? = null
     private var historyItem: HistoryResponse? = null
     lateinit var viewModel: HistoryDetailsViewModel
@@ -84,6 +84,7 @@ class HistoryDetailsActivity : AppCompatActivity(), OnMapReadyCallback, View.OnC
 
         viewModel.getRouteSuccess().observe(this) {
             if (!it.isNullOrEmpty())
+                if(map!=null)
                 RouteParser.parserTask(this, map, it)
         }
 
@@ -430,27 +431,21 @@ class HistoryDetailsActivity : AppCompatActivity(), OnMapReadyCallback, View.OnC
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
-        map = googleMap
-        //hide zoom in out button in map
-        map.uiSettings.isZoomControlsEnabled = false
-        //googleMap.setInfoWindowAdapter(new CustomInfoWindowAdapter());
-        map.mapType = GoogleMap.MAP_TYPE_NORMAL
-        //googleMap.setMyLocationEnabled(true);
-        // map.uiSettings.isZoomControlsEnabled = true
-        // Enable / Disable my location button
-        map.uiSettings.isMyLocationButtonEnabled = true
-        // Enable / Disable Compass icon
-        map.uiSettings.isCompassEnabled = true
-        // Enable / Disable Rotate gesture
-        map.uiSettings.isRotateGesturesEnabled = true
-        // Enable / Disable zooming functionality
-        map.uiSettings.isZoomGesturesEnabled = true
+        if (map != null) {
+            map = googleMap
+            map?.uiSettings?.isZoomControlsEnabled = false
+            map?.mapType = GoogleMap.MAP_TYPE_NORMAL
+            map?.uiSettings?.isMyLocationButtonEnabled = true
+            map?.uiSettings?.isCompassEnabled = true
+            map?.uiSettings?.isRotateGesturesEnabled = true
+            map?.uiSettings?.isZoomGesturesEnabled = true
+        }
     }
 
     private fun initializeMap() {
 
         try {
-            map.animateCamera(
+            map?.animateCamera(
                 CameraUpdateFactory.newLatLngZoom(
                     LatLng(
                         arrayCourierPick?.get(0)!!.toDouble(),
@@ -460,14 +455,6 @@ class HistoryDetailsActivity : AppCompatActivity(), OnMapReadyCallback, View.OnC
             )
         } catch (e: Exception) {
             e.printStackTrace()
-            map.animateCamera(
-                CameraUpdateFactory.newLatLngZoom(
-                    LatLng(
-                        -33.8619486,
-                        151.00586
-                    ), 12F
-                )
-            )
         }
         addMarkers1()
         try {
@@ -550,25 +537,25 @@ class HistoryDetailsActivity : AppCompatActivity(), OnMapReadyCallback, View.OnC
         return "https://maps.googleapis.com/maps/api/directions/$output?$parameters"
     }
 
-
+/*
     private fun addMarkers() {
         try {
             if (response?.Status == "Accepted" || response?.Status == "On Route to Pickup" || response?.Status == "On Route to Dropoff") {
                 when (response?.Vehicle) {
                         "Van" -> {
-                            map.addMarker(MarkerOptions().position(LatLng(response?.Latitude!!.toDouble(), response?.Longitude!!.toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.icontruck)))
-                            map.addMarker(MarkerOptions().position(LatLng(arrayCourierPick!![0].toDouble(), arrayCourierPick!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pickup_icon)))
-                            map.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon)))
+                            map?.addMarker(MarkerOptions().position(LatLng(response?.Latitude!!.toDouble(), response?.Longitude!!.toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.icontruck)))
+                            map?.addMarker(MarkerOptions().position(LatLng(arrayCourierPick!![0].toDouble(), arrayCourierPick!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pickup_icon)))
+                            map?.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon)))
                         }
                         "Bike" -> {
-                            map.addMarker(MarkerOptions().position(LatLng(response?.Latitude!!.toDouble(), response?.Longitude!!.toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.iconbike)))
-                            map.addMarker(MarkerOptions().position(LatLng(arrayCourierPick!![0].toDouble(), arrayCourierPick!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pickup_icon)))
-                            map.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon)))
+                            map?.addMarker(MarkerOptions().position(LatLng(response?.Latitude!!.toDouble(), response?.Longitude!!.toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.iconbike)))
+                            map?.addMarker(MarkerOptions().position(LatLng(arrayCourierPick!![0].toDouble(), arrayCourierPick!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pickup_icon)))
+                            map?.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon)))
                         }
                         "Car" -> {
-                            map.addMarker(MarkerOptions().position(LatLng(response?.Latitude!!.toDouble(), response?.Longitude!!.toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.iconcar)))
-                            map.addMarker(MarkerOptions().position(LatLng(arrayCourierPick!![0].toDouble(), arrayCourierPick!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pickup_icon)))
-                            map.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon))
+                            map?.addMarker(MarkerOptions().position(LatLng(response?.Latitude!!.toDouble(), response?.Longitude!!.toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.iconcar)))
+                            map?.addMarker(MarkerOptions().position(LatLng(arrayCourierPick!![0].toDouble(), arrayCourierPick!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pickup_icon)))
+                            map?.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon))
                             )
                         }
                     }
@@ -608,13 +595,13 @@ class HistoryDetailsActivity : AppCompatActivity(), OnMapReadyCallback, View.OnC
             e.printStackTrace()
         }
 
-    }
+    }*/
 
 
     private fun addMarkers1() {
         try {
-            map.addMarker(MarkerOptions().position(LatLng(arrayCourierPick!![0].toDouble(), arrayCourierPick!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pickup_icon)))
-            map.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon)))
+            map?.addMarker(MarkerOptions().position(LatLng(arrayCourierPick!![0].toDouble(), arrayCourierPick!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_pickup_icon)))
+            map?.addMarker(MarkerOptions().position(LatLng(arrayCourierDrop!![0].toDouble(), arrayCourierDrop!![1].toDouble())).title("").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_drop_off_icon)))
         } catch (e: JSONException) {
             e.printStackTrace()
         }

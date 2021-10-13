@@ -7,26 +7,17 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
 import android.util.Log
-import android.view.Gravity
-import android.view.ViewGroup
-import android.view.Window
-import android.view.WindowManager
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.zoom2u_customer.MainActivity
 import com.zoom2u_customer.R
-
 import com.zoom2u_customer.ui.notification.NotificationActivity
 import com.zoom2u_customer.ui.splash_screen.SplashScreenActivity
-import com.zoom2u_customer.utility.DialogActivity
+
 
 
 class MyFcmListenerService : FirebaseMessagingService() {

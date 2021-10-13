@@ -15,7 +15,7 @@ import java.util.concurrent.Executors
 
 class RouteParser {
     companion object {
-        fun parserTask(context: Context, map: GoogleMap, data: String) {
+        fun parserTask(context: Context, map: GoogleMap?, data: String) {
             val executor = Executors.newSingleThreadExecutor()
             val handler = Handler(Looper.getMainLooper())
             executor.execute {
@@ -71,7 +71,7 @@ class RouteParser {
                     }
 
                     // Drawing polyline in the Google Map for the i-th route
-                    map.addPolyline(lineOptions)
+                    map?.addPolyline(lineOptions)
                 }
             }
         }

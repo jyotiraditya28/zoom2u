@@ -16,21 +16,35 @@ import com.zoom2u_customer.ui.DocItemShowAdapter
 import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.ShowBidImageAdapter
 import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.active_bid_request.active_bid_page.BidDetailsResponse
 import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.complete_bid_request.completed_bid_page.CompletedDetailsResponse
+import com.zoom2u_customer.ui.application.bottom_navigation.bid_request.complete_bid_request.completed_bid_page.completed_bid_details.CompletedDetailsFragment
 import com.zoom2u_customer.utility.AppUtility
 
 
-class BidDetailsFragment(var bidDetails: BidDetailsResponse?) : Fragment() , View.OnClickListener{
+class BidDetailsFragment() : Fragment() , View.OnClickListener{
     lateinit var binding: FragmentBidDetailsBinding
     var bidDetail: BidDetailsResponse? = null
     private var imageAdapter: ShowBidImageAdapter?=null
     private var docAdapter: DocItemShowAdapter?=null
+
+    companion object {
+
+        var bidDetail1: BidDetailsResponse? = null
+
+        fun newInstance(bidDetails: BidDetailsResponse?): BidDetailsFragment {
+            this.bidDetail1 = bidDetails
+            return BidDetailsFragment()
+        }
+    }
+
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentBidDetailsBinding.inflate(inflater, container, false)
-        this.bidDetail = bidDetails
+        this.bidDetail = bidDetail1
 
         setDataToView(bidDetail)
         setAdapterView(container?.context)
