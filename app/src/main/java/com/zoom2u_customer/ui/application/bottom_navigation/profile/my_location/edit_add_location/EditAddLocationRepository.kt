@@ -117,7 +117,7 @@ class EditAddLocationRepository(
                             } else if (responce.errorBody() != null) {
                                 AppUtility.progressBarDissMiss()
                                 LogErrorsToAppCenter().addLogToAppCenterOnAPIFail("breeze/customer/SavePreferredLocations$addLocationReq",
-                                    responce.code(),responce.message(),"Add my location Api","OnError")
+                                    responce.code(),responce.message(),"Add my location Api","ErrorCode")
                                 Toast.makeText(
                                     context,
                                     "something went wrong please try again.",
@@ -167,7 +167,7 @@ class EditAddLocationRepository(
                             } else if (responce.errorBody() != null) {
                                 AppUtility.progressBarDissMiss()
                                 LogErrorsToAppCenter().addLogToAppCenterOnAPIFail("breeze/customer/DeleteCustomerPreferredLocation?locationId=$locationId",
-                                    responce.code(),responce.message(),"delete my location Api","OnError")
+                                    responce.code(),responce.message(),"delete my location Api","ErrorCode")
                                 Toast.makeText(context, "something went wrong please try again.", Toast.LENGTH_LONG).show()
                             }
                         }

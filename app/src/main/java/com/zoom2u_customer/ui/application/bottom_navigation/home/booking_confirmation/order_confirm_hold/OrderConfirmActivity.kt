@@ -93,6 +93,9 @@ class OrderConfirmActivity : AppCompatActivity(), View.OnClickListener {
         if (intent.hasExtra("BookingRefFromBid")){
             val intent1 = Intent("open_home_from_bid")
             LocalBroadcastManager.getInstance(this@OrderConfirmActivity).sendBroadcast(intent1)
+            val intent = Intent(this, BasePageActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+            startActivity(intent)
             finish()
         }
         else {
