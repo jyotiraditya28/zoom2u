@@ -71,7 +71,7 @@ class EditProfileRepository (private var serviceApi: ServiceApi, var context: Co
                         override fun onError(e: Throwable) {
                             AppUtility.progressBarDissMiss()
                             LogErrorsToAppCenter().addLogToAppCenterOnAPIFail("breeze/customer/UpdateCustomer$profileResponse",
-                                0,e.toString(),"Edit Profile Api","OnError")
+                                0,e.toString(),"Edit Profile Api","ErrorCode")
                             Toast.makeText(
                                 context,
                                 "Something went wrong please try again.",

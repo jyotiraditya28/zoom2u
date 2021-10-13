@@ -20,12 +20,11 @@ class Zoom2u : Application() {
         }
 
     }
-    /*mahedra sir app center key="7af9dd8b-f9b2-4c28-909d-99faeafd4cbb"*/
-    /*my app center key="c1415913-68da-4159-98a4-33f49149c349"*/
+
     override fun onCreate() {
         super.onCreate()
         FirebaseApp.initializeApp(this)
-        AppCenter.start(this,"7af9dd8b-f9b2-4c28-909d-99faeafd4cbb",
+        AppCenter.start(this, "c1415913-68da-4159-98a4-33f49149c349",
             Analytics::class.java, Crashes::class.java)
         mInstance = this
     }

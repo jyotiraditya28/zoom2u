@@ -54,7 +54,7 @@ class ChangePassRepository(private var serviceApi: ServiceApi, var context: Cont
                             AppUtility.progressBarDissMiss()
 
                             LogErrorsToAppCenter().addLogToAppCenterOnAPIFail("api/account/changePassword?OldPassword=$oldPass&NewPassword=$newPass",
-                                0,e.toString(),"Change Password Api","OnError")
+                                0,e.toString(),"Change Password Api","ErrorCode")
                             Toast.makeText(
                                 context,
                                 R.string.signup_error_msg.toString(),

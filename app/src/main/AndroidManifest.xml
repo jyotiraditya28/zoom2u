@@ -17,7 +17,9 @@
         android:requestLegacyExternalStorage="true"
         android:supportsRtl="true"
         android:theme="@style/Theme.Zoom2u">
-
+        <activity
+            android:name=".ui.application.bottom_navigation.viewPager2.BasePageActivity1"
+            android:exported="true" />
         <activity
             android:name=".ui.application.chat.message.MessageActivity"
             android:exported="true" />
